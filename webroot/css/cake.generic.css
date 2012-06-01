@@ -1,0 +1,934 @@
+/**
+ *
+ * Generic CSS for CakePHP
+ *
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.app.webroot.css
+ * @since         CakePHP(tm)
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+*/
+
+* {
+    margin:0;
+    padding:0;
+}
+
+/** General Style Info **/
+body {
+    background: #8E9397;
+    color: #fff;
+    font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
+    font-size:90%;
+    margin: 0;
+}
+a {
+    color: #003d4c;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+descartar {
+    color: white;
+    text-decoration: underline;
+    font-weight: bold;
+    background-color: #ff0000;
+}
+
+a:hover {
+    color: #367889;
+    text-decoration:none;
+}
+a img {
+    border:none;
+}
+h1, h2, h3, h4 {
+    font-weight: normal;
+    margin-bottom:0.5em;
+}
+h1 {
+    background:#fff;
+    color: #003d4c;
+    font-size: 100%;
+}
+h2 {
+    background:#fff;
+    color: #e32;
+    font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
+    font-size: 190%;
+}
+h3 {
+    color: #993;
+    font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
+    font-size: 165%;
+}
+h4 {
+    color: #993;
+    font-weight: bold;
+}
+ul, li {
+    margin: 0 12px;
+}
+
+/** Layout **/
+#container {
+    text-align: left;
+}
+
+#header{
+    padding: 10px 20px;
+
+}
+#header h1 {
+    line-height:50px;
+    background: #8E9397 url('../img/dafer.jpg') no-repeat left;
+    color: #fff;
+    padding: 0px 30px;
+    text-align:right;
+    font-weight:bold;
+
+}
+#header h1 a {
+    color: #fff;
+    background: #8E9397;
+    font-weight: normal;
+    text-decoration: none;
+
+}
+#header h1 a:hover {
+    color: #fff;
+    background: #8E9397;
+    text-decoration: underline;
+}
+#content{
+    background: #fff;
+    clear: both;
+    color: #333;
+    padding: 10px 20px 40px 20px;
+    overflow: auto;
+}
+#footer {
+    clear: both;
+    padding: 6px 10px;
+    text-align: right;
+}
+
+/** containers **/
+div.form,
+div.index,
+div.view {
+    float:right;
+    width:76%;
+    border-left:1px solid #666;
+    padding:10px 2%;
+}
+div.actions {
+    float:left;
+    width:16%;
+    padding:10px 1.5%;
+}
+div.actions h3 {
+    padding-top:0;
+    color:#777;
+}
+
+
+/** Tables **/
+table {
+    background: #fff;
+    border-right:0;
+    clear: both;
+    color: #333;
+    margin-bottom: 10px;
+    width: 100%;
+}
+th {
+    border:0;
+    border-bottom:2px solid #555;
+    text-align: left;
+    padding:4px;
+}
+th a {
+    display: block;
+    padding: 2px 4px;
+    text-decoration: none;
+}
+th a.asc:after {
+    content: ' �?�';
+}
+th a.desc:after {
+    content: ' �?�';
+}
+table tr td {
+    background: #fff;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom:1px solid #ddd;
+}
+table tr:nth-child(2n) td {
+    background: #f5f5f5;
+}
+table .altrow td {
+    background: #f5f5f5;
+}
+td.actions {
+    text-align: center;
+    white-space: nowrap;
+}
+table td.actions a {
+    margin: 0px 6px;
+    padding:2px 5px;
+}
+.cake-sql-log table {
+    background: #f4f4f4;
+}
+.cake-sql-log td {
+    padding: 4px 8px;
+    text-align: left;
+    font-family: Monaco, Consolas, "Courier New", monospaced;
+}
+.cake-sql-log caption {
+    color:#fff;
+}
+
+/** Paging **/
+div.paging {
+    background:#fff;
+    color: #ccc;
+    margin-top: 1em;
+    clear:both;
+}
+div.paging span.disabled {
+    color: #ddd;
+    display: inline;
+}
+div.paging span.current {
+    color: #c73e14;
+}
+div.paging span a {
+}
+
+/** Scaffold View **/
+dl {
+    line-height: 2em;
+    margin: 0em 0em;
+    width: 60%;
+}
+dl .altrow {
+    background: #f4f4f4;
+}
+dt {
+    font-weight: bold;
+    padding-left: 4px;
+    vertical-align: top;
+}
+dd {
+    margin-left: 14em;
+    margin-top: -2em;
+    vertical-align: top;
+}
+
+/** Forms **/
+form {
+    clear: both;
+    margin-right: 20px;
+    padding: 0;
+    width: 95%;
+}
+fieldset {
+    border: 1px solid #ccc;
+    margin-bottom: 1em;
+    padding: 16px 20px;
+}
+fieldset legend {
+    background:#fff;
+    color: #e32;
+    font-size: 160%;
+    font-weight: bold;
+}
+fieldset fieldset {
+    margin-top: 0px;
+    margin-bottom: 20px;
+    padding: 16px 10px;
+}
+fieldset fieldset legend {
+    font-size: 120%;
+    font-weight: normal;
+}
+fieldset fieldset div {
+    clear: left;
+    margin: 0 20px;
+}
+form div {
+    clear: both;
+    margin-bottom: 1em;
+    padding: .5em;
+    vertical-align: text-top;
+}
+form .input {
+    color: #444;
+}
+form .required {
+    font-weight: bold;
+}
+form .required label:after {
+    color: #e32;
+    content: '*';
+    display:inline;
+}
+form div.submit {
+    border: 0;
+    clear: both;
+    margin-top: 10px;
+}
+label {
+    display: block;
+    font-size: 110%;
+    margin-bottom:3px;
+}
+input, textarea {
+    clear: both;
+    font-size: 140%;
+    font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+    padding: 1%;
+    width:98%;
+}
+select {
+    clear: both;
+    font-size: 120%;
+    vertical-align: text-bottom;
+}
+select[multiple=multiple] {
+    width: 100%;
+}
+option {
+    font-size: 120%;
+    padding: 0 3px;
+}
+input[type=checkbox] {
+    clear: left;
+    float: left;
+    margin: 0px 6px 7px 2px;
+    width: auto;
+}
+div.checkbox label {
+    display: inline;
+}
+input[type=radio] {
+    float:left;
+    width:auto;
+    margin: 0 3px 7px 0;
+}
+div.radio label {
+    margin: 0 0 6px 20px;
+}
+input[type=submit] {
+    display: inline;
+    font-size: 110%;
+    width: auto;
+}
+form .submit input[type=submit] {
+    background:#62af56;
+    background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
+    background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);
+    border-color: #2d6324;
+    color: #000;
+    text-shadow: #8cee7c 0px 1px 0px;
+}
+form .submit input[type=submit]:hover {
+    background:#4ca83d;
+    background: -webkit-gradient(linear, left top, left bottom, from(#85e573), to(#4ca83d));
+    background-image: -moz-linear-gradient(top, #85e573, #4ca83d);
+}
+
+/** Notices and Errors **/
+div.message {
+    clear: both;
+    color: #fff;
+    font-size: 140%;
+    font-weight: bold;
+    margin: 0 0 1em 0;
+    background: #8cee7c;
+    padding: 5px;
+}
+div.error-message {
+    background: #c73e14;
+    clear: both;
+    color: #fff;
+    font-size: 140%;
+    font-weight: bold;
+    margin: 0 0 1em 0;
+    padding: 5px;
+}
+p.error {
+    background-color: #e32;
+    color: #fff;
+    font-family: Courier, monospace;
+    font-size: 120%;
+    line-height: 140%;
+    padding: 0.8em;
+    margin: 1em 0;
+}
+p.error em {
+    color: #000;
+    font-weight: normal;
+    line-height: 140%;
+}
+.notice {
+    background: #ffcc00;
+    color: #000;
+    display: block;
+    font-family: Courier, monospace;
+    font-size: 120%;
+    line-height: 140%;
+    padding: 0.8em;
+    margin: 1em 0;
+}
+.success {
+    background: green;
+    color: #fff;
+}
+
+/**  Actions  **/
+div.actions ul {
+    margin: 0;
+    padding: 0;
+}
+div.actions li {
+    margin:0 0 0.5em 0;
+    list-style-type: none;
+    white-space: nowrap;
+    padding: 0;
+}
+div.actions ul li a {
+    font-weight: normal;
+    display: block;
+    clear: both;
+}
+div.actions ul li a:hover {
+    text-decoration: underline;
+}
+
+input[type=submit],
+a.button_link ,
+div.actions ul li a,
+td.actions a {
+    font-weight:normal;
+    padding: 4px 8px;
+    background:#e6e49f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
+    background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
+    color:#333;
+    border:1px solid #aaac62;
+    -webkit-border-radius:8px;
+    -moz-border-radius:8px;
+    border-radius:8px;
+    text-decoration:none;
+    text-shadow: #fff 0px 1px 0px;
+    min-width: 0;
+}
+input[type=submit]:hover,
+div.actions ul li a:hover,
+td.actions a:hover {
+    background: #f0f09a;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));
+}
+
+/** Related **/
+div.related {
+    margin-top: 20px;
+    clear: both;
+    display: block;
+}
+
+/** Debugging **/
+pre {
+    color: #000;
+    background: #f0f0f0;
+    padding: 1em;
+}
+pre.cake-debug {
+    background: #ffcc00;
+    font-size: 120%;
+    line-height: 140%;
+    margin-top: 1em;
+    overflow: auto;
+    position: relative;
+}
+div.cake-stack-trace {
+    background: #fff;
+    color: #333;
+    margin: 0px;
+    padding: 6px;
+    font-size: 120%;
+    line-height: 140%;
+    overflow: auto;
+    position: relative;
+}
+div.cake-code-dump pre {
+    position: relative;
+    overflow: auto;
+}
+div.cake-stack-trace pre, div.cake-code-dump pre {
+    color: #000;
+    background-color: #F0F0F0;
+    margin: 0px;
+    padding: 1em;
+    overflow: auto;
+}
+div.cake-code-dump pre, div.cake-code-dump pre code {
+    clear: both;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 4px 2px;
+    padding: 4px;
+    overflow: auto;
+}
+div.cake-code-dump span.code-highlight {
+    background-color: #ff0;
+    padding: 4px;
+}
+div.code-coverage-results div.code-line {
+    padding-left:5px;
+    display:block;
+    margin-left:10px;
+}
+div.code-coverage-results div.uncovered span.content {
+    background:#ecc;
+}
+div.code-coverage-results div.covered span.content {
+    background:#cec;
+}
+div.code-coverage-results div.ignored span.content {
+    color:#aaa;
+}
+div.code-coverage-results span.line-num {
+    color:#666;
+    display:block;
+    float:left;
+    width:20px;
+    text-align:right;
+    margin-right:5px;
+}
+div.code-coverage-results span.line-num strong {
+    color:#666;
+}
+div.code-coverage-results div.start {
+    border:1px solid #aaa;
+    border-width:1px 1px 0px 1px;
+    margin-top:30px;
+    padding-top:5px;
+}
+div.code-coverage-results div.end {
+    border:1px solid #aaa;
+    border-width:0px 1px 1px 1px;
+    margin-bottom:30px;
+    padding-bottom:5px;
+}
+div.code-coverage-results div.realstart {
+    margin-top:0px;
+}
+div.code-coverage-results p.note {
+    color:#bbb;
+    padding:5px;
+    margin:5px 0 10px;
+    font-size:10px;
+}
+div.code-coverage-results span.result-bad {
+    color: #a00;
+}
+div.code-coverage-results span.result-ok {
+    color: #fa0;
+}
+div.code-coverage-results span.result-good {
+    color: #0a0;
+}
+
+/*Estilo del mapas*/
+.acciones{
+    vertical-align: top;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+    background-color: #ffdb6f;
+    border: 1px solid;
+    border-color: #f18813;
+    background-repeat:no-repeat;
+    font-size:0;
+    height:5px;
+    position:absolute;
+    width:5px;
+}
+
+.acciones_title{
+    float: left;
+    margin-top: 10px;
+    font-weight: bold;
+    display: inline;
+    font-size: 14px;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.acciones_menu ul{
+    list-style: square;
+    text-align: justify;
+    background-color: #F18813;
+}
+.acciones_menu a{
+    color: #000;
+    text-decoration: none;
+}
+.acciones_menu a:hover{
+    text-decoration: underline;
+}
+.acciones_menu li{
+    display: inline;
+}
+.acciones_menu li:hover{
+}
+
+#infodate{
+    text-align: right;
+    padding: 5px;
+    margin: 0;
+}
+
+.accion_contenido{
+    float: left;
+    width: 100%;
+}
+
+/*Estilo de Imagenes y Botones*/
+.botonmas{ margin: 0 20px; }
+.botonmas:hover{ cursor: pointer }
+
+.pasoaccion{
+    margin: 0 10px;
+}
+
+.formulariodiv{
+    width: 58px;
+}
+
+/*Estilo de Buscador Acciones Y Listar acciones*/
+#buscador_avisos, #lista_acciones,
+#buscador_repuestos,#lista_maquinas,buscador_concreto{
+    margin: 20px 5px;
+}
+
+#lista_acciones table,#lista_maquinas table, #articulos_albarancompra table{
+    background-color: #eee;
+    border-collapse: collapse;
+    border: 2px solid #000000;
+    margin-bottom: 20px;
+}
+
+#lista_acciones th,#lista_acciones td,#lista_maquinas th,#lista_maquinas
+td, #articulos_albarancompra td{
+    border: 1px solid #000000;
+}
+#lista_acciones th,#lista_maquinas th, #articulos_albarancompra th{
+    background-color: #ccc;
+    border: 1px solid #000000;
+}
+
+.mapa_avisos{
+    width: 100%;
+}
+
+.mapa_ordenes{
+    float: left;
+}
+
+/*Estilo del mapas*/
+
+.mapa{
+    vertical-align: top;
+    max-width: 200px;
+    min-width: 200px;	
+    width: 200px;
+    max-height: 240px;
+    min-height: 240px;
+    height: 240px;
+    position: relative;
+    display: inline-block;
+    margin: 3px;
+    background-color: #FFDB6F;
+    border: 1px solid #f18813;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;	
+}
+
+.observados{
+    vertical-align: top;
+    width: 190px;
+    max-width: 190px;
+    position: absolute;
+    display: none;
+    margin: 0px;
+    margin-left: -6px;
+    margin-top: -3px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 12px;
+    text-align: left;
+    background-color: #ffdb6f;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-color: #f18813;
+    -moz-border-radius: 0 0 7px 7px;
+    -webkit-border-radius: 0 0  7px 7px;
+    z-index: 1;
+}
+
+.observados2{
+    vertical-align: top;
+    width: 180px;
+    max-width: 180px;
+    position: absolute;
+    display: none;
+    margin: 0px;
+    margin-left: -6px;
+    margin-top: -3px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 12px;
+    text-align: left;
+    background-color: #ddd;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-color: #333;
+    z-index: 1;
+}
+
+.titulo_mapa{
+    margin: 0;
+    padding-top: 5px;
+    -moz-border-radius: 7px 7px 0 0;
+    -webkit-border-radius: 7px 7px 0 0;	
+    background-color: #f18813;
+    font-weight: bold;
+    display: block;
+    height: 25px;
+}
+
+.mapa ul{
+    margin: 0;
+    margin-bottom: 10px;
+    list-style: circle;
+    text-align: justify;
+    background-color: #f18813;
+}
+
+.mapa a{
+    color: #000;
+    text-decoration: none;
+}
+.mapa a:hover{
+    text-decoration: underline;
+}
+.mapa li{
+    font-size: 12px;
+    padding: 2px;
+}
+.mapa li:hover{
+    background-color: #ffaa55;
+}
+.content_orden_mapa_ordenes ul li select{
+    width: 120px;
+}
+
+/*Estilo del informe de los avisos*/
+#informe_avisos table{
+    background-color: #eee;
+    border-collapse: collapse;
+    border: 2px solid #000000;
+    margin-bottom: 20px;
+}
+#informe_avisos th,#informe_avisos td{
+    border: 1px solid #000000;
+}
+#informe_avisos th{
+    background-color: #ccc;
+}
+
+#aviso_urgente a, #aviso_urgente{
+    border-color: #ff0000;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #FF8888;
+    /*color: white;*/
+    text-align: center;
+}
+
+#aviso_normal a, #aviso_normal{
+    background-color: #88FF88;
+    border-color: #00ff00;
+    border-width: 1px;
+    border-style: solid;
+    /*color: white;*/
+    text-align: center;
+
+}
+
+#mapa_aviso_urgente{
+    color: red;
+    font-weight: bold;
+}
+
+#mapa_aviso_normal{
+    color: green;
+    font-weight: bold;
+}
+
+.accesos_directos a {
+    text-decoration: none;
+    font-weight: bold;
+    color: grey;
+}
+
+.nomenulateral{
+    width: 100%;
+}
+.textoderecha{
+    text-align: right;
+}
+.destacado{
+    background-color: #ffe45c;
+    font-weight: bold;
+    font-size: small;
+}
+
+.miniinfo_mapa{
+    text-align: left;
+    font-size: 12px;
+    margin: 0;
+    padding: 5px;
+}
+
+.miniinfo_mapa p{
+    text-align: left;
+    font-size: 12px;
+    margin: 0;
+    padding: 2px;
+    padding-left: 10px;
+}
+
+
+#boton_izquierda{
+    margin-top: 40px;
+    float: left;
+    width: 40%;
+    text-align: center;
+}
+
+#boton_derecha{
+    margin-top: 40px;
+    float: right;
+    width: 60%;
+    text-align: center;
+}
+
+.boton_entrada{
+    width: 300px;
+    height: 120px;
+    color: #000;
+    font-size: 16px;
+}
+.add_articulo_img:hover
+{
+    cursor: pointer;
+}
+.delete_articulo_img:hover
+{
+    cursor: pointer;
+}
+
+.orden_mapa h3{
+    text-align: center;
+    background-color: #F18813;
+}
+.orden_mapa{
+    width: 300px;
+    height: 300px;
+    float: left;
+    background-color: #FFDB6F;
+    border: 1px solid #F18813;
+    margin: 5px;
+    text-align: justify;
+}
+.avisot_mapa h3{
+    text-align: center;
+    background-color: #F18813;
+}
+.avisot_mapa{
+    width: 300px;
+    height: 300px;
+    float: left;
+    background-color: #FFDB6F;
+    border: 1px solid #F18813;
+    margin: 5px;
+    text-align: justify;
+}
+
+
+table#articulos_autotable thead tr{
+    font-weight: bold;
+}
+
+
+/* Make a div that's 100% of the browser's viewable area and load an image to dim the page */
+#loading_background {
+    min-height: 100%; /* needed for some browsers */
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/screen.png');
+    display: block;
+    z-index: 98; /* show this div in front of everything, but one level below the loading animation */
+    position: fixed; /* this is the most important line */
+    top: 0;
+    left: 0;
+}
+
+/* Make a div to load the loading animation */
+#loading_animation {
+    min-height: 100%; /* needed for some browsers */
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/loading.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: block;
+    z-index: 99; /* Put this one level above the "loading_background" div */
+}
+
+/* CSS de Link con recuadro*/
+.linkbutton {
+    color: white;
+    background-color: #98BF21;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    padding: 3px 5px 4px 5px;
+    border: 1px solid white;
+    outline: 1px solid #98BF21;
+    text-decoration: none;
+    margin-bottom: 100px;
+}
+#cliente_list {
+    margin-top: 25px;
+}
