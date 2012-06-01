@@ -38,8 +38,8 @@ class AvisosrepuestosController extends AppController {
         $maquinas = $this->Avisosrepuesto->Maquina->find('list');
         $almacenes = $this->Avisosrepuesto->Almacene->find('list');
         $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('list');
-
-        $this->set(compact('clientes', 'centrostrabajos', 'maquinas', 'estadosavisos','almacenes'));
+        $numero = $this->Avisosrepuesto->dime_siguiente_numero();
+        $this->set(compact('clientes', 'centrostrabajos', 'maquinas', 'estadosavisos','almacenes','numero'));
     }
 
     function edit($id = null) {

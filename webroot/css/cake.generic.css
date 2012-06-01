@@ -932,3 +932,11 @@ table#articulos_autotable thead tr{
 #cliente_list {
     margin-top: 25px;
 }
+
+.avisosrepuestos input,.avisosrepuestos textarea {
+clear: both;
+font-size: 100%;
+font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+padding: 0;
+width: 98%;
+}

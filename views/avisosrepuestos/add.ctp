@@ -1,12 +1,9 @@
-<div class="avisosrepuestos form">
-    <?php
-    echo $crumb->getHtml();
-    echo '<br /><br />';
-    ?>
+<div class="avisosrepuestos">
     <?php echo $this->Form->create('Avisosrepuesto'); ?>
     <fieldset>
-        <legend><?php __('Añadir Aviso de repuesto'); ?></legend>
+        <legend><?php __('Nuevo Aviso de repuesto'); ?></legend>
         <?php
+        echo $this->Form->input('numero', array('label' => 'Numero','value'=>$numero));
         echo $this->Form->input('fechahora', array('label' => 'Fecha', 'dateFormat' => 'DMY', 'timeFormat' => '24'));
         echo $this->Form->input('almacene_id', array('label' => 'Almacen de los Materiales'));
         echo $this->Form->input('avisotelefonico', array('label' => 'Aviso Telefónico'));
@@ -54,19 +51,4 @@
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Guardar', true)); ?>
-</div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-
-        <li><?php echo $this->Html->link(__('Listar Avisos de repuestos', true), array('action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Clientes', true), array('controller' => 'clientes', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Cliente', true), array('controller' => 'clientes', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Listar Centros de trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Centro de trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Listar Máquinas', true), array('controller' => 'maquinas', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nueva Máquina', true), array('controller' => 'maquinas', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Listar Artículos', true), array('controller' => 'articulos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Artículo', true), array('controller' => 'articulos', 'action' => 'add')); ?> </li>
-    </ul>
 </div>

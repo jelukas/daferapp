@@ -99,6 +99,21 @@ class Avisosrepuesto extends AppModel {
         ),
     );
 
+    function beforeSave($options) {
+        if (empty($this->data['Avisosrepuesto']['id'])) {
+            $query = 'SELECT MAX(a.numero)+1 as siguiente_factura_id  FROM avisosrepuestos a ';
+            $resultado = $this->query($query);
+            $this->data['Avisosrepuesto']['numero'] = $resultado[0][0]['siguiente_factura_id'];
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(a.numero)+1 as siguiente_factura_id  FROM avisosrepuestos a ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente_factura_id'];
+    }
+
 }
 
 ?>

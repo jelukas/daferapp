@@ -8,6 +8,7 @@
         <legend><?php __('Editar Avisos de repuesto'); ?></legend>
         <?php
         echo $this->Form->input('id');
+        echo $this->Form->input('numero');
         echo $this->Form->input('fechahora', array('label' => 'Fecha', 'dateFormat' => 'DMY', 'timeFormat' => '24'));
         echo $this->Form->input('almacene_id', array('label' => 'Almacen de los Materiales'));
         echo $this->Form->input('avisotelefonico', array('label' => 'Aviso Telefónico'));
