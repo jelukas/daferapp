@@ -40,7 +40,7 @@
 		<td><?php echo $partestallere['Partestallere']['observaciones']; ?>&nbsp;</td>
 		<td><?php echo $partestallere['Partestallere']['firmadopor']; ?>&nbsp;</td>
 		<td><?php echo $partestallere['Partestallere']['DNI']; ?>&nbsp;</td>
-		<td><?php echo $partestallere['Partestallere']['parteescaneado']; ?>&nbsp;</td>
+		<td><?php echo $this->Html->link(__($partestallere['Partestallere']['parteescaneado'], true), '/files/partestallere/' . $partestallere['Partestallere']['parteescaneado']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $partestallere['Partestallere']['id'])); ?>
 			<?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $partestallere['Partestallere']['id'])); ?>

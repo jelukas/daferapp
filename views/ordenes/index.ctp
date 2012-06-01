@@ -57,8 +57,6 @@
 <div class="actions">
     <h3><?php __('Acciones'); ?></h3>
     <ul>
-        <li><a href="#?">Buscar Ordenes</a></li>
         <li><?php echo $this->Html->link(__('Listar Ordenes', true), array('controller' => 'ordenes', 'action' => 'index')); ?> </li>
-        <li><a href="#?">Nueva Orden Directa?</a></li>
     </ul>
 </div>

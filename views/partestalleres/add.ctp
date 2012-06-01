@@ -25,10 +25,10 @@
         echo $this->Form->input('firmadopor', array('label' => 'Parte firmado por'));
         echo $this->Form->input('DNI', array('label' => 'DNI'));
         echo $this->Form->input('Mecanico', array('label' => 'Mecánicos (Seleccione uno o varios mecánicos pulsando Ctrl + Click):'));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte escaneado'));
+        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
         ?>
     </fieldset>
-<?php echo $this->Form->end(__('Enviar', true)); ?>
+<?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>
 <div class="actions">
     <h3><?php __('Acciones'); ?></h3>

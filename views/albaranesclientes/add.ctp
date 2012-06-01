@@ -6,7 +6,7 @@
 		echo $this->Form->input('fecha');
 		echo $this->Form->input('numeroalbaran');
 		echo $this->Form->input('observaciones');
-		echo $this->Form->input('albaranescaneado');
+		echo $this->Form->input('file', array('type' => 'file', 'label' => 'Albaran Escaneado'));
 		echo $this->Form->input('avisosrepuesto_id');
 		echo $this->Form->input('almacene_id');
 		echo $this->Form->input('ordene_id');

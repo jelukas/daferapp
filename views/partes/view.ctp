@@ -71,7 +71,7 @@ $class = ' class="altrow"';
         </dd>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Parte escaneado'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-<?php echo $this->Html->link('/files/'.$parte['Parte']['parteescaneado'],'/files/'.$parte['Parte']['parteescaneado']); ?>
+<?php echo $this->Html->link(__($parte['Parte']['parteescaneado'], true), '/files/parte/' . $parte['Parte']['parteescaneado']); ?>
             &nbsp;
         </dd>
     </dl>

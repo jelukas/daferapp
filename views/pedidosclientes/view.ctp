@@ -32,7 +32,7 @@ $class = ' class="altrow"';
 
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Pedidoescaneado'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $pedidoscliente['Pedidoscliente']['pedidoescaneado']; ?>
+            <?php echo $this->Html->link(__($pedidoscliente['Pedidoscliente']['pedidoescaneado'], true), '/files/pedidoscliente/' . $pedidoscliente['Pedidoscliente']['pedidoescaneado']); ?>
             &nbsp;
         </dd>
     </dl>
@@ -150,10 +150,6 @@ $class = ' class="altrow"';
         <li><?php echo $this->Html->link(__('Edit Pedidoscliente', true), array('action' => 'edit', $pedidoscliente['Pedidoscliente']['id'])); ?> </li>
         <li><?php echo $this->Html->link(__('Delete Pedidoscliente', true), array('action' => 'delete', $pedidoscliente['Pedidoscliente']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pedidoscliente['Pedidoscliente']['id'])); ?> </li>
         <li><?php echo $this->Html->link(__('List Pedidosclientes', true), array('action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Pedidoscliente', true), array('action' => 'add')); ?> </li>
         <li><?php echo $this->Html->link(__('List Presupuestos Clientes', true), array('controller' => 'presupuestos_clientes', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Presupuestos Cliente', true), array('controller' => 'presupuestos_clientes', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('List Avisosrepuestos', true), array('controller' => 'avisosrepuestos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Avisosrepuesto', true), array('controller' => 'avisosrepuestos', 'action' => 'add')); ?> </li>
     </ul>
 </div>

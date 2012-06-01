@@ -29,10 +29,10 @@
         echo $this->Form->input('firmadopor');
         echo $this->Form->input('DNI');
         echo $this->Form->input('Mecanico', array('label' => 'Mecánicos (Seleccione uno o varios mecánicos pulsando Ctrl + Click):'));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte escaneado'));
+        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Centro de Trabajo Escaneado'));
         ?>
     </fieldset>
-<?php echo $this->Form->end(__('Submit', true)); ?>
+    <?php echo $this->Form->end(__('Submit', true)); ?>
 </div>
 <div class="actions">
     <h3><?php __('Actions'); ?></h3>

@@ -36,7 +36,7 @@ $class = ' class="altrow"';
         </dd>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Factura Escaneada'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $facturasCliente['FacturasCliente']['facturaescaneada']; ?>
+            <?php echo $this->Html->link(__($facturasCliente['FacturasCliente']['facturaescaneada'], true), '/files/facturascliente/' . $facturasCliente['FacturasCliente']['facturaescaneada']); ?>
             &nbsp;
         </dd>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Total'); ?></dt>

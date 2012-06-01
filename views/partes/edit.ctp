@@ -1,17 +1,19 @@
 <div class="partes form">
-    <?php echo $this->Form->create('Parte'); ?>
+    <?php echo $this->Form->create('Parte', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Edit Parte'); ?></legend>
         <?php
+        echo $this->Form->input('id');
         echo $this->Form->input('fecha', array('label' => 'Fecha', 'dateFormat' => 'DMY'));
         echo $this->Form->input('horainicio', array('label' => 'Hora de inicio'));
         echo $this->Form->input('horafinal', array('label' => 'Hora de fin'));
         echo $this->Form->input('operacion', array('label' => 'Operación'));
-        echo $this->Form->input('id');
         echo $this->Form->input('observaciones');
         echo $this->Form->input('firmadopor');
         echo $this->Form->input('DNI');
-        echo $this->Form->input('parteescaneado',array('type' => 'file'));
+        echo $this->Html->link(__('Parte de Centro de Trabajo Escaneado Actual: ' . $this->Form->value('Parte.parteescaneado'), true), '/files/parte/' . $this->Form->value('Parte.parteescaneado'));
+        echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Centro de Trabajo Escaneado Actual', 'hiddenField' => false));
+        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Centro de Trabajo Escaneado'));
         echo $this->Form->input('Mecanico', array('label' => 'Mecánicos (Seleccione uno o varios mecánicos pulsando Ctrl + Click):'));
         ?>
     </fieldset>

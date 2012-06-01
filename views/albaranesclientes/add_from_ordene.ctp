@@ -7,7 +7,7 @@
         echo $this->Form->input('fecha');
         echo $this->Form->input('numeroalbaran');
         echo $this->Form->input('observaciones');
-        echo $this->Form->input('albaranescaneado'); 
+        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Factura Escaneada'));
         echo $this->Form->input('ordene_id', array('type' => 'hidden', 'value' => $ordene['Ordene']['id']));
         echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['cliente_id']));
         echo $this->Form->input('tiposiva_id');

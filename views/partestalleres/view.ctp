@@ -1,6 +1,7 @@
 <div class="partestalleres view">
     <h2><?php __('Partes de taller'); ?></h2>
-    <dl><?php $i = 0;
+    <dl><?php
+$i = 0;
 $class = ' class="altrow"';
 ?>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
@@ -65,7 +66,7 @@ $class = ' class="altrow"';
         </dd>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Parte escaneado'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-<?php echo $partestallere['Partestallere']['parteescaneado'] ?>
+<?php echo $this->Html->link(__($partestallere['Partestallere']['parteescaneado'], true), '/files/partestallere/' . $partestallere['Partestallere']['parteescaneado']); ?>
             &nbsp;
         </dd>
 

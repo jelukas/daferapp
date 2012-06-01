@@ -57,11 +57,12 @@ class AlbaranesclientesController extends AppController {
                     $tareasalbaranescliente['Tareasalbaranescliente']['albaranescliente_id'] = $this->Albaranescliente->id;
                     $this->Albaranescliente->Tareasalbaranescliente->save($tareasalbaranescliente);
                 }
-
+                /* Guardar fichero */
                 if ($this->FileUpload->finalFile != null) {
                     $this->Albaranescliente->saveField('albaranescaneado', $this->FileUpload->finalFile);
                 }
-
+                /* Fin de Guardar Fichero*/
+                
                 $this->Session->setFlash(__('El Albaran de Venta ha sido guardado', true));
                 $this->redirect(array('action' => 'view', $this->Albaranescliente->id));
             } else {
