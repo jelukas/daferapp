@@ -44,6 +44,7 @@ class PartestalleresController extends AppController {
                 if ($this->FileUpload->finalFile != null) {
                     $this->Partestallere->saveField('parteescaneado', $this->FileUpload->finalFile);
                 }
+                /*FIn Guardar Fichero*/
                 $this->Session->setFlash(__('El nuevo Parte de Taller ha sido creado correctamente', true));
                 $this->redirect(array('action' => 'view', $id));
             } else {

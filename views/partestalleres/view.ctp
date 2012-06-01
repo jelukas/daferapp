@@ -69,6 +69,11 @@ $class = ' class="altrow"';
 <?php echo $this->Html->link(__($partestallere['Partestallere']['parteescaneado'], true), '/files/partestallere/' . $partestallere['Partestallere']['parteescaneado']); ?>
             &nbsp;
         </dd>
+        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Parte escaneado'); ?></dt>
+        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
+<?php echo $this->Html->link(__($partestallere['Partestallere']['parteescaneado'], true), '/files/partestallere/' . $partestallere['Partestallere']['parteescaneado']); ?>
+            &nbsp;
+        </dd>
 
     </dl>
     <div class="related">

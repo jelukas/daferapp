@@ -4,8 +4,17 @@ class AvisosrepuestosController extends AppController {
 
     var $name = 'Avisosrepuestos';
     var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js','Crumb');
-    var $components = array('RequestHandler', 'Session');
+    var $components = array('RequestHandler', 'Session','FileUpload');
 
+function beforeFilter() {
+        parent::beforeFilter();
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Avisosrepuesto';
+            $this->FileUpload->uploadDir = 'files/avisosrepuesto';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
+    }    
+    
     function index() {
         $this->Avisosrepuesto->recursive = 0;
         $this->set('avisosrepuestos', $this->paginate());
@@ -27,6 +36,11 @@ class AvisosrepuestosController extends AppController {
             $this->Avisosrepuesto->create();
             $valid = $this->comprobarExistencias();
             if ($this->Avisosrepuesto->save($this->data)) {
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->Avisosrepuesto->saveField('documento', $this->FileUpload->finalFile);
+                }
+                /*FIn Guardar Fichero*/
                 $this->Session->setFlash(__('El Aviso de repuestos ha sido guardado' . $valid, true));
                 $this->redirect(array('action' => 'view', $this->Avisosrepuesto->id));
             } else {
@@ -51,6 +65,17 @@ class AvisosrepuestosController extends AppController {
         if (!empty($this->data)) {
             $valid = $this->comprobarExistencias();
             if ($this->Avisosrepuesto->save($this->data)) {
+                $id = $this->Avisosrepuesto->id;
+                $upload = $this->Avisosrepuesto->findById($id);
+                if (!empty($this->data['Avisosrepuesto']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Avisosrepuesto']['documento']);
+                    $this->Avisosrepuesto->saveField('documento', null);
+                }
+                if ($this->FileUpload->finalFile != null) {
+                    $this->FileUpload->RemoveFile($upload['Avisosrepuesto']['documento']);
+                    $this->Avisosrepuesto->saveField('documento', $this->FileUpload->finalFile);
+                }
+                
                 $this->Session->setFlash(__('El Aviso de repuestos ha sido guardado' . $valid, true));
                 $this->redirect(array('action' => 'view', $this->Avisosrepuesto->id));
             }else{

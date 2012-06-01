@@ -119,6 +119,11 @@
             <?php echo $avisosrepuesto['Avisosrepuesto']['descripcion']; ?>
             &nbsp;
         </dd>
+        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Documento Adjunto'); ?></dt>
+        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
+            <?php echo $this->Html->link(__($avisosrepuesto['Avisosrepuesto']['documento'], true), '/files/partestallere/' . $partestallere['Partestallere']['parteescaneado']); ?>
+            &nbsp;
+        </dd>
 
     </dl>
 
