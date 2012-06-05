@@ -7,8 +7,9 @@ class OrdenesController extends AppController {
     var $helpers = array('Javascript');
 
     function index() {
-        $this->Ordene->recursive = 0;
-        $this->set('ordenes', $this->paginate());
+        $this->paginate = array('limit' => 20, 'contain' => array('Estadosordene','Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')));
+        $ordenes = $this->paginate();
+        $this->set('ordenes', $ordenes);
     }
 
     function view($id = null) {
@@ -16,7 +17,7 @@ class OrdenesController extends AppController {
             $this->flashWarnings(__('Orden Inválida', true));
             $this->redirect(array('action' => 'index'));
         }
-        $orden = $this->Ordene->find('first', array('contain' => array('Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Avisostallere', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => 'Centrostrabajo', 'Partestallere')), 'conditions' => array('Ordene.id' => $id)));
+        $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => 'Centrostrabajo', 'Partestallere')), 'conditions' => array('Ordene.id' => $id)));
         $this->set('ordene', $orden);
         $avisostallere_id = $orden['Avisostallere']['id'];
 
@@ -44,10 +45,7 @@ class OrdenesController extends AppController {
             }
         }
         $avisotaller = $this->Ordene->Avisostallere->read(null, $idAvisoTaller);
-
         $this->set('avisotaller', $avisotaller, 'estadosordenes');
-
-
         if ($idAvisoTaller != null && $idAvisoTaller >= 0) {
             $this->loadModel('Avisostallere');
             $avisotallere = $this->Avisostallere->read(null, $idAvisoTaller);
@@ -56,7 +54,8 @@ class OrdenesController extends AppController {
         }
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
         $almacenes = $this->Ordene->Almacene->find('list');
-        $this->set(compact('avisostalleres', 'estadosordenes', 'almacenes'));
+        $numero = $this->Ordene->dime_siguiente_numero();
+        $this->set(compact('avisostalleres', 'estadosordenes', 'almacenes', 'numero'));
     }
 
     function edit($id = null) {
@@ -67,7 +66,7 @@ class OrdenesController extends AppController {
         if (!empty($this->data)) {
             if ($this->Ordene->save($this->data)) {
                 $this->Session->setFlash(__('The ordene has been saved', true));
-                $this->redirect(array('action' => 'view',$id));
+                $this->redirect(array('action' => 'view', $id));
             } else {
                 $this->Session->setFlash(__('The ordene could not be saved. Please, try again.', true));
             }
@@ -83,7 +82,7 @@ class OrdenesController extends AppController {
 
     function mapa() {
         //Estados de las ordenes a mostrar array("1", "2", "3")
-        $ordenes = $this->Ordene->find('all',array('contain'=>array('Avisostallere'=>array('Cliente','Centrostrabajo','Maquina'),'Almacene','Estadosordene'),'conditions'=>array('Ordene.estadosordene_id' =>array("1", "2", "3"))));
+        $ordenes = $this->Ordene->find('all', array('contain' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Almacene', 'Estadosordene'), 'conditions' => array('Ordene.estadosordene_id' => array("1", "2", "3"))));
         $this->set('ordenes', $ordenes);
         $this->set(compact('ordenes'));
     }
@@ -129,7 +128,7 @@ class OrdenesController extends AppController {
                             }
                         }
                     }
-                    /*Fin de la Imputacion*/
+                    /* Fin de la Imputacion */
                     $this->Session->setFlash(__('Se ha imputado material a la Orden', true));
                 } else {
                     $this->Session->setFlash(__('The ordene could not be saved. Please, try again.', true));
