@@ -38,15 +38,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="3">
                 <span>Presupuesto Escaneado</span>
                 <?php echo $this->Html->link(__($presupuestosproveedore['Presupuestosproveedore']['presupuestoescaneado'], true), '/files/presupuestosproveedore/' . $presupuestosproveedore['Presupuestosproveedore']['presupuestoescaneado']); ?>
             </td>
             <td>
                 <span>Plazo de Entrega</span>
                 <?php echo $presupuestosproveedore['Presupuestosproveedore']['fechaplazo']; ?>
-            </td>
-            <td style="background-color: #FFE773">
             </td>
         </tr>
     </table>
@@ -97,46 +95,62 @@
             ?>
         </table>
     <?php endif; ?>
-    <h3 style="margin-top: 20px;"><?php __('Pedidos relacionados con el Presupuesto de Proveedor'); ?></h3>
-    <?php if (!empty($presupuestosproveedore['Pedidosproveedore'])): ?>
-        <table cellpadding = "0" cellspacing = "0">
-            <tr>
-                <th><?php __('Id Pedido Proveedor'); ?></th>
-                <th><?php __('Fecha'); ?></th>
-                <th><?php __('Fecha Recepción'); ?></th>
-                <th><?php __('Observaciones'); ?></th>
-                <th class="actions"><?php __('Acciones'); ?></th>
-            </tr>
-            <?php
-            if (!empty($presupuestosproveedore['Pedidosproveedore'])) {
-                $i = 0;
-                foreach ($presupuestosproveedore['Pedidosproveedore'] as $pedidosproveedore):
-                    $class = null;
-                    if ($i++ % 2 == 0) {
-                        $class = ' class="altrow"';
-                    }
-                    ?>
-                    <tr<?php echo $class; ?>>
-                        <td><?php echo $pedidosproveedore['id']; ?></td>
-                        <td><?php echo $pedidosproveedore['fecha']; ?></td>
-                        <td><?php echo $pedidosproveedore['fecharecepcion']; ?></td>
-                        <td><?php echo $pedidosproveedore['observaciones']; ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'pedidosproveedores', 'action' => 'view', $pedidosproveedore['id'], $presupuestosproveedore['Presupuestosproveedore']['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'pedidosproveedores', 'action' => 'delete', $pedidosproveedore['id'], $presupuestosproveedore['Presupuestosproveedore']['id']), null, sprintf(__('Seguro que queires borrar el Pedido a Proveedor # %s CUIDADO: Esto borrarra tambien los Albaranes Relacionados!!?', true), $pedidosproveedore['id'])); ?>
-                        </td>
-                    </tr>
-                    <?php
-                endforeach;
-            }
-            ?>
-        </table>
-    <?php endif; ?>
-    <div class="actions">
-        <ul>   
-            <li><?php echo $this->Html->link(__('Nuevo Pedido a proveedores', true), array('controller' => 'pedidosproveedores', 'action' => 'add', $presupuestosproveedore['Presupuestosproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
-            <li><?php echo $this->Html->link(__('Nuevo Presupuesto a Clientes', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'presupuestosproveedore', $presupuestosproveedore['Presupuestosproveedore']['id'], $cliente_id), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?></li>
-        </ul>
+    <?php
+    if ($presupuestosproveedore['Avisosrepuesto']['id'] != null && $presupuestosproveedore['Avisosrepuesto']['id'] >= 0) {
+        $cliente_id = $presupuestosproveedore['Avisosrepuesto']['Cliente']['id'];
+    } elseif ($presupuestosproveedore['Avisostallere']['id'] != null) {
+        $cliente_id = $presupuestosproveedore['Avisostallere']['Cliente']['id'];
+    } elseif ($presupuestosproveedore['Ordene']['id'] != null) {
+        $cliente_id = $presupuestosproveedore['Ordene']['Avisostallere']['Cliente']['id'];
+    } elseif ($presupuestosproveedore['Pedidoscliente']['id'] != null) {
+        $cliente_id = $presupuestosproveedore['Pedidoscliente']['Presupuestoscliente']['cliente_id'];
+    }
+    ?>
+    <div style="margin-bottom: 40px; text-align: center;">
+        <?php echo $this->Html->link(__('Nuevo Pedido a proveedores', true), array('controller' => 'pedidosproveedores', 'action' => 'add', $presupuestosproveedore['Presupuestosproveedore']['id']), array('class' => 'button_link', 'style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?>
+        <?php echo $this->Html->link(__('Nuevo Presupuesto a Clientes', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'presupuestosproveedore', $presupuestosproveedore['Presupuestosproveedore']['id'], $cliente_id), array('class' => 'button_link', 'style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?>
     </div>
 </div>
-<script>$("dd:odd").css("background-color", "#F4F4F4"); $("dt:odd").css("background-color", "#F4F4F4");</script>
+<div>
+    <p style="text-align: center;"><?php echo $this->Html->link(__('Relacionados con el Presupuesto a Proveedor', true), '#', array('class' => 'button_link')); ?></p>
+    <div id="relations-presupuestoproveedor">
+        <h3 style="margin-top: 40px;"><?php __('Pedidos relacionados con el Presupuesto de Proveedor'); ?></h3>
+        <?php if (!empty($presupuestosproveedore['Pedidosproveedore'])): ?>
+            <table cellpadding = "0" cellspacing = "0">
+                <tr>
+                    <th><?php __('Id Pedido Proveedor'); ?></th>
+                    <th><?php __('Fecha'); ?></th>
+                    <th><?php __('Fecha Recepción'); ?></th>
+                    <th><?php __('Observaciones'); ?></th>
+                    <th class="actions"><?php __('Acciones'); ?></th>
+                </tr>
+                <?php
+                if (!empty($presupuestosproveedore['Pedidosproveedore'])) {
+                    $i = 0;
+                    foreach ($presupuestosproveedore['Pedidosproveedore'] as $pedidosproveedore):
+                        $class = null;
+                        if ($i++ % 2 == 0) {
+                            $class = ' class="altrow"';
+                        }
+                        ?>
+                        <tr<?php echo $class; ?>>
+                            <td><?php echo $pedidosproveedore['id']; ?></td>
+                            <td><?php echo $pedidosproveedore['fecha']; ?></td>
+                            <td><?php echo $pedidosproveedore['fecharecepcion']; ?></td>
+                            <td><?php echo $pedidosproveedore['observaciones']; ?></td>
+                            <td class="actions">
+                                <?php echo $this->Html->link(__('Ver', true), array('controller' => 'pedidosproveedores', 'action' => 'view', $pedidosproveedore['id'], $presupuestosproveedore['Presupuestosproveedore']['id'])); ?>
+                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'pedidosproveedores', 'action' => 'delete', $pedidosproveedore['id'], $presupuestosproveedore['Presupuestosproveedore']['id']), null, sprintf(__('Seguro que queires borrar el Pedido a Proveedor # %s CUIDADO: Esto borrarra tambien los Albaranes Relacionados!!?', true), $pedidosproveedore['id'])); ?>
+                            </td>
+                        </tr>
+                        <?php
+                    endforeach;
+                }
+                ?>
+            </table>
+        <?php endif; ?>
+    </div>
+</div>
+<script type="text/javascript">
+    $("dd:odd").css("background-color", "#F4F4F4"); $("dt:odd").css("background-color", "#F4F4F4");
+</script>
