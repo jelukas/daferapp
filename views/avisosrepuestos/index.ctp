@@ -1,5 +1,8 @@
 <div class="avisosrepuestos">
-    <h2><?php __('Avisos de repuestos'); ?><?php echo $this->Html->link(__('Nuevo Aviso de Repuestos', true), array('action' => 'add'), array('class' => 'button_link')); ?></h2>
+    <h2>
+        <?php __('Avisos de repuestos'); ?>
+        <?php echo $this->Html->link(__('Nuevo Aviso de Repuestos', true), array('action' => 'add'), array('class' => 'button_link')); ?>
+    </h2>
     <div class="buscador">
         <?php echo $this->Form->create(null, array('url' => array('controller' => 'avisosrepuestos', 'action' => 'search'))); ?>
         <?php echo $this->Form->input('query',array('type'=>'text','label'=>'Buscar')) ?>

@@ -418,7 +418,6 @@ div.actions ul li a:hover {
 }
 
 input[type=submit],
-a.button_link ,
 div.actions ul li a,
 td.actions a {
     font-weight:normal;
@@ -934,9 +933,39 @@ table#articulos_autotable thead tr{
 }
 
 .avisosrepuestos input,.avisosrepuestos textarea {
-clear: both;
-font-size: 100%;
-font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-padding: 0;
-width: 98%;
+    clear: both;
+    font-size: 100%;
+    font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+    padding: 0;
+    width: 98%;
+}
+a.button_link {
+    font-weight:normal;
+    padding: 4px 8px;
+    margin-left: 40px;
+    background:#e6e49f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
+    background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
+    color:#333;
+    border:1px solid #aaac62;
+    -webkit-border-radius:8px;
+    -moz-border-radius:8px;
+    border-radius:8px;
+    text-decoration:none;
+    text-shadow: #fff 0px 1px 0px;
+    min-width: 0;
+}
+
+table.view span {
+    font-weight: bold;
+    pading-left: 4px;
+    margin-left: 10px;
+}
+
+.avisostalleres input,.avisostalleres textarea {
+    clear: both;
+    font-size: 100%;
+    font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+    padding: 0;
+    width: 98%;
 }

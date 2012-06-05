@@ -1,5 +1,5 @@
 <div class="avisosrepuestos" style="width: 100%">
-    <?php echo $this->Form->create('Avisosrepuesto'); ?>
+    <?php echo $this->Form->create('Avisosrepuesto', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Nuevo Aviso de repuesto'); ?></legend>
         <table>
@@ -22,7 +22,7 @@
                     <?php echo $this->Form->input('avisoemail', array('label' => 'Aviso por email')); ?>
                 </td>
                 <td>
-                    <?php echo $this->Form->input('fechaaceptacion', array('label' => 'Fecha de aceptación', 'dateFormat' => 'DMY')); ?>
+                    <?php echo $this->Form->input('fechaaceptacion', array('label' => 'Fecha de aceptación', 'dateFormat' => 'DMY','empty' => '--')); ?>
                 </td>
             </tr>
             <tr>

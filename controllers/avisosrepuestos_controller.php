@@ -3,18 +3,18 @@
 class AvisosrepuestosController extends AppController {
 
     var $name = 'Avisosrepuestos';
-    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js','Crumb');
-    var $components = array('RequestHandler', 'Session','FileUpload');
+    var $components = array('RequestHandler', 'Session', 'FileUpload');
+    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js');
 
-function beforeFilter() {
+    function beforeFilter() {
         parent::beforeFilter();
         if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
             $this->FileUpload->fileModel = 'Avisosrepuesto';
             $this->FileUpload->uploadDir = 'files/avisosrepuesto';
             $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
         }
-    }    
-    
+    }
+
     function index() {
         $this->Avisosrepuesto->recursive = 0;
         $this->set('avisosrepuestos', $this->paginate());
@@ -22,25 +22,26 @@ function beforeFilter() {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid avisosrepuesto', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('Invalid avisosrepuesto', true));
+            $this->redirect($this->referer());
         }
         $articulo_aviso_repuesto = $this->Avisosrepuesto->ArticulosAvisosrepuesto->id;
         $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('list');
-        $this->set('avisosrepuesto', $this->Avisosrepuesto->find('first', array('contain' => array('ArticulosAvisosrepuesto' =>'Articulo','Cliente','Centrostrabajo','Maquina','Almacene','Estadosaviso' ), 'conditions' => array('Avisosrepuesto.id' => $id))), 'estadosaviso');
+        $this->set('avisosrepuesto', $this->Avisosrepuesto->find('first', array('contain' => array('ArticulosAvisosrepuesto' => 'Articulo', 'Cliente', 'Centrostrabajo', 'Maquina', 'Almacene', 'Estadosaviso'), 'conditions' => array('Avisosrepuesto.id' => $id))), 'estadosaviso');
         $this->Session->write('idAvisorepuesto', $this->Avisosrepuesto->id);
     }
 
     function add() {
         if (!empty($this->data)) {
             $this->Avisosrepuesto->create();
-            $valid = $this->comprobarExistencias();
+            $valid = '';
+            //$valid = $this->comprobarExistencias();
             if ($this->Avisosrepuesto->save($this->data)) {
                 /* Guarda fichero */
                 if ($this->FileUpload->finalFile != null) {
                     $this->Avisosrepuesto->saveField('documento', $this->FileUpload->finalFile);
                 }
-                /*FIn Guardar Fichero*/
+                /* FIn Guardar Fichero */
                 $this->Session->setFlash(__('El Aviso de repuestos ha sido guardado' . $valid, true));
                 $this->redirect(array('action' => 'view', $this->Avisosrepuesto->id));
             } else {
@@ -53,7 +54,7 @@ function beforeFilter() {
         $almacenes = $this->Avisosrepuesto->Almacene->find('list');
         $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('list');
         $numero = $this->Avisosrepuesto->dime_siguiente_numero();
-        $this->set(compact('clientes', 'centrostrabajos', 'maquinas', 'estadosavisos','almacenes','numero'));
+        $this->set(compact('clientes', 'centrostrabajos', 'maquinas', 'estadosavisos', 'almacenes', 'numero'));
     }
 
     function edit($id = null) {
@@ -75,13 +76,13 @@ function beforeFilter() {
                     $this->FileUpload->RemoveFile($upload['Avisosrepuesto']['documento']);
                     $this->Avisosrepuesto->saveField('documento', $this->FileUpload->finalFile);
                 }
-                
+
                 $this->Session->setFlash(__('El Aviso de repuestos ha sido guardado' . $valid, true));
                 $this->redirect(array('action' => 'view', $this->Avisosrepuesto->id));
-            }else{
+            } else {
                 $this->Session->setFlash(__('El aviso de repuesto no ha podido ser salvado.Inténtelo de nuevo.' . $valid, true));
             }
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         } else {
             
         }
@@ -100,19 +101,21 @@ function beforeFilter() {
             $articulos_aviso[$key]['Articulo'] = $articulo['Articulo'];
         }
         $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('list');
-        $this->set(compact('clientes', 'centrostrabajos', 'maquinas','almacenes', 'estadosavisos', 'articulos_aviso'));
+        $this->set(compact('clientes', 'centrostrabajos', 'maquinas', 'almacenes', 'estadosavisos', 'articulos_aviso'));
     }
 
     function delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid id for avisosrepuesto', true));
+            $this->flashWarnings(__('Invalid id for avisosrepuesto', true));
             $this->redirect(array('action' => 'index'));
         }
+        $upload = $this->Avisosrepuesto->findById($id);
+        $this->FileUpload->RemoveFile($upload['Avisosrepuesto']['documento']);
         if ($this->Avisosrepuesto->delete($id)) {
             $this->Session->setFlash(__('Avisosrepuesto deleted', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Avisosrepuesto was not deleted', true));
+        $this->flashWarnings(__('Avisosrepuesto was not deleted', true));
         $this->redirect(array('action' => 'index'));
     }
 
@@ -170,11 +173,13 @@ function beforeFilter() {
     private function comprobarExistencias() {
         /* Comprobacion de Stock */
         $warnings = "";
-        foreach ($this->data['ArticulosAvisosrepuesto'] as $articulo_aviso) {
-            $articulo = $this->Avisosrepuesto->ArticulosAvisosrepuesto->Articulo->find('first', array('conditions' => array('Articulo.id' => $articulo_aviso['articulo_id'])));
-            $existencias_al_final = intval($articulo['Articulo']['existencias']) - intval($articulo_aviso['cantidad']);
-            if ($existencias_al_final < 0) {
-                $warnings .= '<br/> No hay existencias suficientes del articulo ' . $articulo['Articulo']['ref'] . ' ---- ' . $articulo['Articulo']['nombre'];
+        if (!empty($this->data['ArticulosAvisosrepuesto'])) {
+            foreach ($this->data['ArticulosAvisosrepuesto'] as $articulo_aviso) {
+                $articulo = $this->Avisosrepuesto->ArticulosAvisosrepuesto->Articulo->find('first', array('conditions' => array('Articulo.id' => $articulo_aviso['articulo_id'])));
+                $existencias_al_final = intval($articulo['Articulo']['existencias']) - intval($articulo_aviso['cantidad']);
+                if ($existencias_al_final < 0) {
+                    $warnings .= '<br/> No hay existencias suficientes del articulo ' . $articulo['Articulo']['ref'] . ' ---- ' . $articulo['Articulo']['nombre'];
+                }
             }
         }
         /* Fin de comprobación de Stock */

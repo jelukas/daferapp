@@ -63,6 +63,7 @@ class FileUploadComponent extends Object {
         'image/png',
         'image/pjpeg',
         'image/x-png',
+        'P',
         'application/pdf'
     );
 

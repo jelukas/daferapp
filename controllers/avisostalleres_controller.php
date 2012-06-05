@@ -4,7 +4,17 @@ class AvisostalleresController extends AppController {
 
     var $name = 'Avisostalleres';
     var $helpers = array('Html', 'Form', 'Ajax', 'Js');
-    var $components = array('RequestHandler');
+    var $components = array('RequestHandler', 'FileUpload');
+
+    function beforeFilter() {
+        parent::beforeFilter();
+        $this->checkPermissions('Avisostallere', $this->params['action']);
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Avisostallere';
+            $this->FileUpload->uploadDir = 'files/avisostallere';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
+    }
 
     function index() {
         $this->Avisostallere->recursive = -2;
@@ -25,9 +35,13 @@ class AvisostalleresController extends AppController {
 
     function add() {
         if (!empty($this->data)) {
-
             $this->Avisostallere->create();
             if ($this->Avisostallere->save($this->data)) {
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->Avisostallere->saveField('documento', $this->FileUpload->finalFile);
+                }
+                /* FIn Guardar Fichero */
                 $this->Session->setFlash(__('El aviso de taller ha sido creado correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Avisostallere->id));
             } else {
@@ -38,8 +52,8 @@ class AvisostalleresController extends AppController {
         $maquinas = $this->Avisostallere->Maquina->find('list');
         $estadosavisostalleres = $this->Avisostallere->Estadosavisostallere->find('list');
         $centrostrabajos = $this->Avisostallere->Centrostrabajo->find('list');
-
-        $this->set(compact('clientes', 'maquinas', 'centrostrabajos', 'estadosavisostalleres'));
+        $numero = $this->Avisostallere->dime_siguiente_numero();
+        $this->set(compact('clientes', 'maquinas', 'centrostrabajos', 'estadosavisostalleres', 'numero'));
     }
 
     function edit($id = null) {
@@ -49,6 +63,16 @@ class AvisostalleresController extends AppController {
         }
         if (!empty($this->data)) {
             if ($this->Avisostallere->save($this->data)) {
+                $id = $this->Avisostallere->id;
+                $upload = $this->Avisostallere->findById($id);
+                if (!empty($this->data['Avisostallere']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Avisostallere']['documento']);
+                    $this->Avisostallere->saveField('documento', null);
+                }
+                if ($this->FileUpload->finalFile != null) {
+                    $this->FileUpload->RemoveFile($upload['Avisostallere']['documento']);
+                    $this->Avisostallere->saveField('documento', $this->FileUpload->finalFile);
+                }
                 $this->Session->setFlash(__('El aviso de taller ha sido guardaddo correctamente.', true));
                 $this->redirect($this->referer());
             } else {
@@ -71,6 +95,8 @@ class AvisostalleresController extends AppController {
             $this->Session->setFlash(__('ID no válido', true));
             $this->redirect(array('action' => 'index'));
         }
+        $upload = $this->Avisostallere->findById($id);
+        $this->FileUpload->RemoveFile($upload['Avisostallere']['documento']);
         if ($this->Avisostallere->delete($id)) {
             $this->Session->setFlash(__('Aviso de taller eliminado correctamente', true));
             $this->redirect(array('action' => 'index'));
@@ -117,10 +143,6 @@ class AvisostalleresController extends AppController {
 
         $this->set('avisostalleres', $avisostalleres);
         $this->set(compact('avisostalleres'));
-    }
-
-    function beforeFilter() {
-        $this->checkPermissions('Avisostallere', $this->params['action']);
     }
 
     function getComboData($cntrl = null, $id = "id", $desc = "name") {

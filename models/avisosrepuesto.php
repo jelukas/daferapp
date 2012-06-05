@@ -105,6 +105,13 @@ class Avisosrepuesto extends AppModel {
             $resultado = $this->query($query);
             $this->data['Avisosrepuesto']['numero'] = $resultado[0][0]['siguiente_factura_id'];
         }
+        /* Guardamos las horas de la maquina */
+        if (!empty($this->data['Avisosrepuesto']['maquina_id'])) {
+            $maquina = $this->Maquina->find('first', array('contain' => null, 'conditions' => array('Maquina.id' => $this->data['Avisosrepuesto']['maquina_id'])));
+            $this->data['Avisosrepuesto']['horas_maquina'] = $maquina['Maquina']['horas'];
+        }
+        /* Fin del guardados de las horas de la máquina */
+
         return true;
     }
 
