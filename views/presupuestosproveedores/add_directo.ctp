@@ -1,4 +1,4 @@
-<div class="presupuestosproveedores form">
+<div class="presupuestosproveedores">
     <?php echo $this->Form->create('Presupuestosproveedore', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Añadir Presupuesto de proveedor Directo ( De Almacen )'); ?></legend>

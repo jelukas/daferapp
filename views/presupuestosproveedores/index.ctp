@@ -10,12 +10,13 @@
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Paginator->sort('Nº Presupuesto', 'numero'); ?></th>
+            <th><?php echo $this->Paginator->sort('Fecha', 'fecha'); ?></th>
             <th style="width: 200px;"><?php echo $this->Paginator->sort('Proveedor'); ?></th>
             <th><?php echo $this->Paginator->sort('Almacén', 'almacene_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Aviso de Repuesto', 'avisosrepuesto_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Aviso de Taller', 'avisostallere_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Orden', 'ordene_id'); ?></th>
-            <th style="width: 150px;"><?php echo $this->Paginator->sort('Fecha Entrega', 'fechaplazo'); ?></th>
+            <th style="width: 150px;"><?php echo $this->Paginator->sort('Plazo de Entrega', 'fechaplazo'); ?></th>
             <th><?php echo $this->Paginator->sort('Observaciones', 'observaciones'); ?></th>
             <th><?php echo $this->Paginator->sort('Estado', 'confirmado'); ?></th>
             <th><?php echo $this->Paginator->sort('Presupuesto escaneado', 'presupuestoescaneado'); ?></th>
