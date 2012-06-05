@@ -5,6 +5,11 @@
         <table class="view">
             <tr>
                 <td>
+                    <?php echo $this->Form->input('numero', array('label' => 'Número', 'value' => $numero)); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <?php echo $this->Autocomplete->replace_select('Proveedore', 'Proveedor', true); ?>
                 </td>
                 <td>

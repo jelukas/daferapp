@@ -8,10 +8,12 @@ class PresupuestosproveedoresController extends AppController {
 
     function beforeFilter() {
         parent::beforeFilter();
-        //defaults to 'files', will be webroot/files, make sure webroot/files exists and is chmod 777 
         $this->FileUpload->fileModel = 'Presupuestosproveedore';
-        $this->FileUpload->uploadDir = 'files';
-        $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Presupuestosproveedore';
+            $this->FileUpload->uploadDir = 'files/presupuestosproveedore';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
         if ($this->params['action'] == 'index') {
             $this->__list();
         }
@@ -40,7 +42,7 @@ class PresupuestosproveedoresController extends AppController {
         }
 
         $presupuestosproveedores = $this->paginate('Presupuestosproveedore', $conditions);
-        $this->paginate = array('conditions' => $conditions, 'limit' => 20,'contains' => array('Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'));
+        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contains' => array('Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'));
         $this->set('presupuestosproveedores', $presupuestosproveedores);
 
         if (!empty($this->params['url']['pdf'])) {
@@ -63,8 +65,11 @@ class PresupuestosproveedoresController extends AppController {
             $this->Presupuestosproveedore->create();
             if ($this->Presupuestosproveedore->save($this->data)) {
                 $id = $this->Presupuestosproveedore->id;
-                if (!empty($this->FileUpload->finalFile))
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
                     $this->Presupuestosproveedore->saveField('presupuestoescaneado', $this->FileUpload->finalFile);
+                }
+                /* FIn Guardar Fichero */
                 if (!empty($this->data['Presupuestosproveedore']['avisosrepuesto_id'])) {
                     /* Convertimos los articulos del aviso de repuesto a articulos para pedir a proveedor */
                     $articulos_avisosrepuesto = $this->Presupuestosproveedore->Avisosrepuesto->ArticulosAvisosrepuesto->findAllByAvisosrepuestoId($this->data['Presupuestosproveedore']['avisosrepuesto_id']);
@@ -129,7 +134,8 @@ class PresupuestosproveedoresController extends AppController {
 
         $proveedores = $this->Presupuestosproveedore->Proveedore->find('list');
         $almacenes = $this->Presupuestosproveedore->Almacene->find('list');
-        $this->set(compact('proveedores', 'almacenes', 'ordene_id'));
+        $numero = $this->Presupuestosproveedore->dime_siguiente_numero();
+        $this->set(compact('proveedores', 'almacenes', 'ordene_id','numero'));
         if ($avisorepuestos_id == null && $avisostallere_id == null && $ordene_id == null) {
             $this->render('add_directo');
         } elseif ($avisorepuestos_id == 'devolucion' && !empty($avisostallere_id)) {
@@ -153,18 +159,22 @@ class PresupuestosproveedoresController extends AppController {
     function edit($id = null) {
         if (!$id && empty($this->data)) {
             $this->flashWarnings(__('Invalid presupuestosproveedore', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
             if ($this->Presupuestosproveedore->saveAll($this->data)) {
+                $id = $this->Presupuestosproveedore->id;
+                $upload = $this->Presupuestosproveedore->findById($id);
+                if (!empty($this->data['Presupuestosproveedore']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Presupuestosproveedore']['presupuestoescaneado']);
+                    $this->Presupuestosproveedore->saveField('presupuestoescaneado', null);
+                }
                 if ($this->FileUpload->finalFile != null) {
-                    $id = $this->Presupuestosproveedore->id;
-                    $upload = $this->Presupuestosproveedore->findById($id);
                     $this->FileUpload->RemoveFile($upload['Presupuestosproveedore']['presupuestoescaneado']);
                     $this->Presupuestosproveedore->saveField('presupuestoescaneado', $this->FileUpload->finalFile);
                 }
                 $this->Session->setFlash(__('El presupuesto de proveedor ha sido guardado correctamente', true));
-                $this->redirect(array('action' => 'edit', $id));
+                $this->redirect($this->referer());
             } else {
                 $this->flashWarnings(__('El presupuesto de proveedor no ha podido ser guardado. Por favor, intentalo de nuevo.', true));
             }
@@ -188,7 +198,6 @@ class PresupuestosproveedoresController extends AppController {
             $this->Session->setFlash(__('Id invalida del presupuesto de Proveedor', true));
             $this->redirect(array('action' => 'index'));
         }
-        $id = $this->Presupuestosproveedore->id;
         $upload = $this->Presupuestosproveedore->findById($id);
         $this->FileUpload->RemoveFile($upload['Presupuestosproveedore']['presupuestoescaneado']);
         if ($this->Presupuestosproveedore->delete($id)) {
@@ -197,22 +206,6 @@ class PresupuestosproveedoresController extends AppController {
         }
         $this->flashWarnings(__('No se pudo borrar el presupuesto de Proveedor', true));
         $this->redirect($this->referer());
-    }
-
-    function downloadFile($id = null) {
-        if (!$id) {
-            $this->flashWarnings(__('Id invalida del presupuesto de Proveedor', true));
-            $this->redirect(array('action' => 'index'));
-        } else {
-            $id = $this->Presupuestosproveedore->id;
-            $upload = $this->Presupuestosproveedore->findById($id);
-            $name = $upload['Presupuestosproveedore']['presupuestoescaneado'];
-            $ruta = '../webroot/files/' . $name;
-
-            header("Content-disposition: attachment; filename=$name");
-            header("Content-type: application/octet-stream");
-            readfile($ruta);
-        }
     }
 
     function pdf($id = null) {

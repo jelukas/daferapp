@@ -1,37 +1,50 @@
 <?php $cliente_id = null; ?>
-<div class="presupuestosproveedores form">
+<div class="presupuestosproveedores">
     <?php echo $this->Form->create('Presupuestosproveedore', array('type' => 'file')); ?>
     <fieldset>
-        <legend><?php __('Editar Presupuesto de Proveedor'); ?></legend>
-        <?php
-        echo '<h3>Id de Presupuesto ' . $this->data['Presupuestosproveedore']['id'] . '</h3>';
-        if (!empty($this->data['Avisosrepuesto']['id'])) {
-            echo $this->Html->link('Aviso de Repuesto ' . $this->data['Avisosrepuesto']['id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $this->data['Avisosrepuesto']['id']));
-            echo $this->Html->para(null, $this->Html->link('Cliente ' . $this->data['Avisosrepuesto']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $this->data['Avisosrepuesto']['Cliente']['id'])));$cliente_id = $this->data['Avisosrepuesto']['Cliente']['id'];
-            echo $this->Html->para(null, $this->Html->link('Centro de Trabajo: ' . $this->data['Avisosrepuesto']['Centrostrabajo']['direccion'], array('controller' => 'centrostrabajos', 'action' => 'view', $this->data['Avisosrepuesto']['Centrostrabajo']['id'])));
-            echo $this->Html->para(null, $this->Html->link('Máquina ' . $this->data['Avisosrepuesto']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $this->data['Avisosrepuesto']['Maquina']['id'])));
-        }
-        if (!empty($this->data['Avisostallere']['id'])) {
-            echo $this->Html->link('Aviso de Taller ' . $this->data['Avisostallere']['id'], array('controller' => 'avisostalleres', 'action' => 'view', $this->data['Avisostallere']['id']));
-            echo $this->Html->para(null, $this->Html->link('Cliente ' . $this->data['Avisostallere']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $this->data['Avisostallere']['Cliente']['id']))); ;$cliente_id = $this->data['Avisostallere']['Cliente']['id'];
-            echo $this->Html->para(null, $this->Html->link('Centro de Trabajo ' . $this->data['Avisostallere']['Centrostrabajo']['direccion'], array('controller' => 'centrostrabajos', 'action' => 'view', $this->data['Avisostallere']['Centrostrabajo']['id']))); 
-            echo $this->Html->para(null, $this->Html->link('Máquina ' . $this->data['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $this->data['Avisostallere']['Maquina']['id'])));
-        }
-        echo $this->Form->input('id');
-        ?>
-        <div class="input select required">
-            <label for="PresupuestosproveedoreProveedoreId">Proveedor</label>
-            <?php echo $this->Html->para(null, $this->Html->link('Proveedor ' . $this->data['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $this->data['Proveedore']['id']))); ?>
-            <?php echo $this->Form->input('proveedore_id', array('type' => 'hidden')); ?>
-            <p><input id="autocomplete-proveedores" type="text" value="" /></p>
-        </div>
-        <?php
-        echo $this->Form->input('almacene_id', array('label' => 'Almacén', 'empty' => '--- Seleccione un almacén ---'));
-        echo $this->Form->input('fechaplazo', array('label' => 'Fecha', 'dateFormat' => 'DMY'));
-        echo $this->Form->input('observaciones', array('label' => 'Observaciones'));
-        echo $this->Form->input('confirmado', array('Confirmado'));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Presupuesto escaneado'));
-        ?>
+        <legend>
+            <?php __('Presupuesto de Proveedor Nº '.$this->Form->value('Presupuestosproveedore.numero')); ?>
+            <?php echo $this->Html->link(__('Ver', true), array('action' => 'view',$this->Form->value('Presupuestosproveedore.id')), array('class' => 'button_link')); ?>
+            <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?>
+            <?php echo $this->Html->link(__('Nuevo (Directo)', true), array('action' => 'add'), array('class' => 'button_link')); ?>
+        </legend>
+        <?php echo $this->Form->input('id'); ?>
+        <table class="view">
+            <tr>
+                <td>
+                    <div class="input select required">
+                        <label for="PresupuestosproveedoreProveedoreId">Proveedor</label>
+                        <?php echo $this->Html->para(null, $this->Html->link('Proveedor ' . $this->data['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $this->data['Proveedore']['id']))); ?>
+                        <?php echo $this->Form->input('proveedore_id', array('type' => 'hidden')); ?>
+                        <p><input id="autocomplete-proveedores" type="text" value="" /></p>
+                    </div>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('fecha', array('label' => 'Fecha', 'dateFormat' => 'DMY', 'timeFormat' => '24')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('almacene_id', array('label' => 'Almacén')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('confirmado', array('Confirmado')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <?php echo $this->Form->input('observaciones', array('label' => 'Observaciones')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Presupuesto escaneado Actual: <?php echo $this->Html->link(__($this->Form->value('Presupuestosproveedore.presupuestoescaneado'), true), '/files/presupuestosproveedore/' . $this->Form->value('Presupuestosproveedore.presupuestoescaneado')); ?>
+                    <?php echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Documento Escaneado Actual', 'hiddenField' => false)); ?>
+                    <?php echo $this->Form->input('file', array('type' => 'file', 'label' => 'Presupuesto escaneado')); ?>
+                </td>
+                <td colspan="2">
+                    <?php echo $this->Form->input('fechaplazo', array('label' => 'Plazo de Entrega', 'dateFormat' => 'DMY', 'empty' => '--')); ?>
+                </td>
+            </tr>
+        </table>
         <div class="related">
             <h3>Artículos del Presupuesto del Proveedor</h3>
             <div class="actions">
@@ -84,20 +97,4 @@
         </div>
     </fieldset>
     <?php echo $this->Form->end(__('Guardar', true)); ?>
-    <div class="actions">
-        <ul>   
-            <li><?php echo $this->Html->link(__('Nuevo Pedido de Proveedor', true), array('controller' => 'pedidosproveedores', 'action' => 'add', $this->Form->value('Presupuestosproveedore.id')), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
-        </ul>
-    </div>
-</div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-        <li><?php echo $this->Html->link(__('Nuevo Pedido a proveedores', true), array('controller' => 'pedidosproveedores', 'action' => 'add', $this->Form->value('Presupuestosproveedore.id')), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
-        <li><?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $this->Form->value('Presupuestosproveedore.id'))); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Presupuestos de proveedores', true), array('action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Proveedores', true), array('controller' => 'proveedores', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Proveedor', true), array('controller' => 'proveedores', 'action' => 'add')); ?> </li>
-        <li style="margin-top: 40px;"><?php echo $this->Html->link(__('Nuevo Presupuesto a Clientes', true), array('controller' => 'presupuestosclientes', 'action' => 'add')); ?></li>
-    </ul>
 </div>

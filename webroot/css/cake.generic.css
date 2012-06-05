@@ -937,7 +937,6 @@ table#articulos_autotable thead tr{
     font-size: 100%;
     font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
     padding: 0;
-    width: 98%;
 }
 a.button_link {
     font-weight:normal;
@@ -967,14 +966,12 @@ table.view span {
     font-size: 100%;
     font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
     padding: 0;
-    width: 98%;
 }
 .presupuestosproveedores fieldset input,.presupuestosproveedores fieldset textarea {
     clear: both;
     font-size: 100%;
     font-family: Arial,Helvetica,sans-serif;
     padding: 0;
-    width: 98%;
 }
 
 div.submit {
