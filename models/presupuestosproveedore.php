@@ -65,6 +65,22 @@ class Presupuestosproveedore extends AppModel {
             'dependent' => true
         ),
     );
+    
+    
+    function beforeSave($options) {
+        if (empty($this->data['Presupuestosproveedore']['id'])) {
+            $query = 'SELECT MAX(p.numero)+1 as siguiente_factura_id  FROM presupuestosproveedores p ';
+            $resultado = $this->query($query);
+            $this->data['Presupuestosproveedore']['numero'] = $resultado[0][0]['siguiente_factura_id'];
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(p.numero)+1 as siguiente_factura_id  FROM presupuestosproveedores p ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente_factura_id'];
+    }
 
 }
 
