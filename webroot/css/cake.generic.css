@@ -939,6 +939,7 @@ table#articulos_autotable thead tr{
     padding: 0;
 }
 a.button_link {
+    font-size: 16px;
     font-weight:normal;
     padding: 4px 8px;
     margin-left: 40px;
