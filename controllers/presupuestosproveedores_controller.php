@@ -56,7 +56,16 @@ class PresupuestosproveedoresController extends AppController {
             $this->flashWarnings(__('Invalid presupuestosproveedore', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->set('presupuestosproveedore', $this->Presupuestosproveedore->find('first', array('contain' => array('Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'), 'conditions' => array('Presupuestosproveedore.id' => $id))));
+        $this->set('presupuestosproveedore', $this->Presupuestosproveedore->find(
+                'first',
+                array('contain' =>
+                    array('Pedidosproveedore',
+                        'Pedidoscliente',
+                        'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
+                        'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina','Estadosavisostallere'),
+                        'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina','Estadosaviso'),
+                        'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'),
+                    'conditions' => array('Presupuestosproveedore.id' => $id))));
         $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('all', array('contain' => array('Articulo'), 'conditions' => array('ArticulosPresupuestosproveedore.presupuestosproveedore_id' => $id))));
     }
 
