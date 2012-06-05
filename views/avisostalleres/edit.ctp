@@ -1,4 +1,4 @@
-<div class="avisostalleres">
+<div class="avisostalleres" style="max-width: 960px">
     <?php echo $this->Form->create('Avisostallere', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Editar Aviso de Taller Nº' . $this->Form->value('Avisostallere.numero')); ?><?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $this->Form->value('Avisostallere.id')), array('class' => 'button_link')); ?></legend>
@@ -29,7 +29,7 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('cliente_id', array('label' => 'Cliente', 'empty' => '--- Seleccione un cliente ---', 'options' => $clientes));
+                    echo $this->Form->input('cliente_id', array('label' => 'Cliente', 'empty' => '--- Seleccione un cliente ---', 'options' => $clientes, 'style' => 'width: 300px;'));
                     echo $ajax->observeField('AvisostallereClienteId', array(
                         'frequency' => '1',
                         'update' => 'CentrostrabajoSelectDiv',
@@ -47,6 +47,7 @@
                         'div' => array(
                             'id' => 'CentrostrabajoSelectDiv'
                         ),
+                        'style' => 'width: 350px;',
                         'empty' => '--- Seleccione un centro de trabajo ---'));
                     echo $ajax->observeField('AvisostallereCentrostrabajoId', array(
                         'frequency' => '1',

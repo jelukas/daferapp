@@ -28,7 +28,7 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('cliente_id', array('label' => 'Cliente', 'empty' => '--- Seleccione un cliente ---', 'options' => $clientes));
+                    echo $this->Form->input('cliente_id', array('label' => 'Cliente', 'empty' => '--- Seleccione un cliente ---', 'style' => 'width: 300px;', 'options' => $clientes));
                     echo $ajax->observeField('AvisostallereClienteId', array(
                         'frequency' => '1',
                         'update' => 'CentrostrabajoSelectDiv',
