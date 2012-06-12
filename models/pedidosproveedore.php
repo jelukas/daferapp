@@ -57,7 +57,10 @@ class Pedidosproveedore extends AppModel {
         if (empty($this->data['Pedidosproveedore']['id'])) {
             $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM pedidosproveedores p ';
             $resultado = $this->query($query);
-            $this->data['Pedidosproveedore']['numero'] = $resultado[0][0]['siguiente'];
+            if (!empty($resultado[0][0]['siguiente']))
+                $this->data['Pedidosproveedore']['numero'] = $resultado[0][0]['siguiente'];
+            else
+                $this->data['Pedidosproveedore']['numero'] = 1;
         }
         return true;
     }

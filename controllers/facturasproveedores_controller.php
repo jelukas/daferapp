@@ -7,10 +7,11 @@ class FacturasproveedoresController extends AppController {
 
     function beforeFilter() {
         parent::beforeFilter();
-        //defaults to 'files', will be webroot/files, make sure webroot/files exists and is chmod 777 
-        $this->FileUpload->fileModel = 'Facturasproveedore';
-        $this->FileUpload->uploadDir = 'files';
-        $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Facturasproveedore';
+            $this->FileUpload->uploadDir = 'files/facturasproveedore';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
         if ($this->params['action'] == 'index') {
             $this->__list();
         }
@@ -57,10 +58,8 @@ class FacturasproveedoresController extends AppController {
             $this->flashWarnings(__('Factura de Proveedor No Existe', true));
             $this->redirect($this->redirect());
         }
-        $facturasproveedore = $this->Facturasproveedore->read(null, $id);
-        $articulos_facturasproveedore = $this->Facturasproveedore->ArticulosFacturasproveedore->findAllByFacturasproveedoreId($id);
+        $facturasproveedore = $this->Facturasproveedore->find('first', array('conditions' => array('Facturasproveedore.id' => $id), 'contain' => array('Proveedore', 'Tiposiva', 'Formapago', 'Albaranesproveedore')));
         $this->set('facturasproveedore', $facturasproveedore);
-        $this->set('articulos_facturasproveedore', $articulos_facturasproveedore);
     }
 
     function add($albaranesproveedore_id = null) {
@@ -73,22 +72,6 @@ class FacturasproveedoresController extends AppController {
                 $this->Facturasproveedore->saveField('facturaescaneada', $this->FileUpload->finalFile);
                 // START validacion de articulosalabranes a articulosfactura
                 $data = array();
-                foreach ($this->data['ArticulosAlbaranesproveedore'] as $articulo_albaranesproveedore) {
-                    if ($articulo_albaranesproveedore['id'] != 0) {
-                        $this->Facturasproveedore->Albaranesproveedore->ArticulosAlbaranesproveedore->recursive = -1;
-                        $articulo_albaranesproveedore = $this->Facturasproveedore->Albaranesproveedore->ArticulosAlbaranesproveedore->find('first', array('conditions' => array('ArticulosAlbaranesproveedore.id' => $articulo_albaranesproveedore['id'])));
-                        $articulo_facturasproveedore = array();
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['facturasproveedore_id'] = $id;
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['articulo_id'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['articulo_id'];
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['cantidad'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'];
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['precio_proveedor'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor'];
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['descuento'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['descuento'];
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['neto'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['neto'];
-                        $articulo_facturasproveedore['ArticulosFacturasproveedore']['total'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['total'];
-                        $data[] = $articulo_facturasproveedore;
-                    }
-                }
-                $this->Facturasproveedore->ArticulosFacturasproveedore->saveAll($data);
                 // Fin de la validacion de ArticulosAlbaranesProveedore a ArticulosFacturasproveedore
                 $this->Session->setFlash(__('La Factura de Proveedor ha sido guardada correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Facturasproveedore->id));
@@ -108,9 +91,13 @@ class FacturasproveedoresController extends AppController {
         }
         if (!empty($this->data)) {
             if ($this->Facturasproveedore->save($this->data)) {
+                $id = $this->Facturasproveedore->id;
+                $upload = $this->Facturasproveedore->findById($id);
+                if (!empty($this->data['Facturasproveedore']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Facturasproveedore']['facturaescaneada']);
+                    $this->Facturasproveedore->saveField('facturaescaneada', null);
+                }
                 if ($this->FileUpload->finalFile != null) {
-                    $id = $this->Facturasproveedore->id;
-                    $upload = $this->Facturasproveedore->findById($id);
                     $this->FileUpload->RemoveFile($upload['Facturasproveedore']['facturaescaneada']);
                     $this->Facturasproveedore->saveField('facturaescaneada', $this->FileUpload->finalFile);
                 }
@@ -120,13 +107,8 @@ class FacturasproveedoresController extends AppController {
                 $this->flashWarnings(__('La Factura de Proveedor No ha podido ser guardada.', true));
             }
         }
-        if (empty($this->data)) {
-            $this->data = $this->Facturasproveedore->read(null, $id);
-        }
-        $this->Facturasproveedore->ArticulosFacturasproveedore->recursive = 4;
+        $this->data = $this->Facturasproveedore->find('first', array('contain' => array('Proveedore', 'Formapago', 'Tiposiva'), 'conditions' => array('Facturasproveedore.id' => $id)));
         $tiposivas = $this->Facturasproveedore->Tiposiva->find('list');
-        $articulos_facturasproveedore = $this->Facturasproveedore->ArticulosFacturasproveedore->findAllByFacturasproveedoreId($id);
-        $this->set('articulos_facturasproveedore', $articulos_facturasproveedore);
         $this->set(compact('tiposivas'));
     }
 
@@ -137,12 +119,12 @@ class FacturasproveedoresController extends AppController {
         }
         $id = $this->Facturasproveedore->id;
         $upload = $this->Facturasproveedore->findById($id);
-        $this->FileUpload->RemoveFile($upload['Facturasproveedore']['facturaescaneada']);
         if ($this->Facturasproveedore->delete($id)) {
+            $this->FileUpload->RemoveFile($upload['Facturasproveedore']['facturaescaneada']);
             $this->Session->setFlash(__('Facturasproveedore deleted', true));
             $this->redirect(array('controller' => 'facturasproveedores', 'action' => 'index'));
         }
-        $this->flashWarnings(__('Facturasproveedore was not deleted', true));
+        $this->flashWarnings(__('No se ha podido borrar la Factura de Proveedor. Posiblemente contenga Albaranes de Proveedor', true));
         $this->redirect($this->referer());
     }
 
@@ -261,6 +243,55 @@ class FacturasproveedoresController extends AppController {
     function select() {
         $facturasproveedores = $this->Facturasproveedore->find('list', array('conditions' => array('Facturasproveedore.proveedore_id' => $this->data['Devolucionesproveedore']['proveedore_id'])));
         $this->set(compact('facturasproveedores'));
+    }
+
+    function facturar() {
+        if (!empty($this->data)) {
+            $facturasproveedore_ids = array();
+            foreach ($this->data['facturable'] as $factura_id => $albaranes_id) {
+                $this->Facturasproveedore->create();
+                $facturasproveedore = array();
+                $proveedore_id = null;
+                $fecha = date('Y-m-d');
+                $baseimponible = 0;
+                $facturasproveedore['Facturasproveedore']['fechafactura'] = $fecha;
+                $facturasproveedore['Facturasproveedore']['baseimponible'] = $baseimponible;
+                $facturasproveedore['Facturasproveedore']['tiposiva_id'] = 1;
+                $this->Facturasproveedore->save($facturasproveedore);
+                if ($this->Facturasproveedore->save($facturasproveedore)) {
+                    foreach ($albaranes_id as $albarane_id) {
+                        $albaranesproveedore = $this->Facturasproveedore->Albaranesproveedore->find('first', array('contain' => array(), 'conditions' => array('Albaranesproveedore.id' => $albarane_id)));
+                        $this->Facturasproveedore->Albaranesproveedore->id = $albaranesproveedore['Albaranesproveedore']['id'];
+                        $this->Facturasproveedore->Albaranesproveedore->saveField('facturasproveedore_id', $this->Facturasproveedore->id);
+                        $proveedore_id = $albaranesproveedore['Albaranesproveedore']['proveedore_id'];
+                        $baseimponible += $albaranesproveedore['Albaranesproveedore']['baseimponible'];
+                    }
+                    $this->Facturasproveedore->saveField('proveedore_id', $proveedore_id);
+                    $this->Facturasproveedore->saveField('baseimponible', number_format($baseimponible, 5, '.', ''));
+                    $facturasproveedore_ids[] = $this->Facturasproveedore->id;
+                } else {
+                    $this->flashWarnings(__('La Facturacion no puede ser realizada', true));
+                    $this->redirect($this->referer());
+                }
+            }
+            $facturasproveedores = $this->Facturasproveedore->find('all', array('contain' => array('Proveedore', 'Tiposiva'), 'conditions' => array('Facturasproveedore.id' => $facturasproveedore_ids)));
+            $this->Session->setFlash(__('La Facturacion ha sido guardada correctamente', true));
+            $this->set(compact('facturasproveedores'));
+        } else {
+            $this->flashWarnings(__('La Facturacion no puede ser realizada', true));
+            $this->redirect($this->referer());
+        }
+    }
+
+    function quitar_albaran($albaranesproveedore_id) {
+        $albaranesproveedore = $this->Facturasproveedore->Albaranesproveedore->find('first', array('contain' => array(), 'conditions' => array('Albaranesproveedore.id' => $albaranesproveedore_id)));
+        $facturasproveedore = $this->Facturasproveedore->find('first', array('contain' => array(), 'conditions' => array('Facturasproveedore.id' => $albaranesproveedore['Albaranesproveedore']['facturasproveedore_id'])));
+        $this->Facturasproveedore->id = $facturasproveedore['Facturasproveedore']['id'];
+        $this->Facturasproveedore->saveField('baseimponible', number_format($facturasproveedore['Facturasproveedore']['baseimponible'] - $albaranesproveedore['Albaranesproveedore']['baseimponible'], 5, '.', ''));
+        $this->Facturasproveedore->Albaranesproveedore->id = $albaranesproveedore['Albaranesproveedore']['id'];
+        $this->Facturasproveedore->Albaranesproveedore->saveField('facturasproveedore_id', null);
+        $this->Session->setFlash(__('Albarán de proveedore Nº ' . $albaranesproveedore['Albaranesproveedore']['numero'] . ' quitado de la Factura de Proveedor correctamente', true));
+        $this->redirect($this->referer());
     }
 
 }

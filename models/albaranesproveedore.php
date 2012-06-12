@@ -28,6 +28,13 @@ class Albaranesproveedore extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Proveedore' => array(
+            'className' => 'Proveedore',
+            'foreignKey' => 'proveedore_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
     );
     var $hasMany = array(
         'ArticulosAlbaranesproveedore' => array(
@@ -41,7 +48,10 @@ class Albaranesproveedore extends AppModel {
         if (empty($this->data['Albaranesproveedore']['id'])) {
             $query = 'SELECT MAX(a.numero)+1 as siguiente  FROM albaranesproveedores a ';
             $resultado = $this->query($query);
-            $this->data['Albaranesproveedore']['numero'] = $resultado[0][0]['siguiente'];
+            if (!empty($resultado[0][0]['siguiente']))
+                $this->data['Albaranesproveedore']['numero'] = $resultado[0][0]['siguiente'];
+            else
+                $this->data['Albaranesproveedore']['numero'] = 1;
         }
         return true;
     }

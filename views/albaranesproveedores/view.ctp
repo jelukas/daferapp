@@ -32,8 +32,14 @@
         </tr>
         <tr>
             <td colspan="4">
+                <span>Base Imponible</span>
+                <?php echo $albaranesproveedore['Albaranesproveedore']['baseimponible'] ?> &euro;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
                 <span>Observaciones</span>
-                <?php $albaranesproveedore['Albaranesproveedore']['observaciones'] ?>
+                <?php echo $albaranesproveedore['Albaranesproveedore']['observaciones'] ?>
             </td>
         </tr>
         <tr>

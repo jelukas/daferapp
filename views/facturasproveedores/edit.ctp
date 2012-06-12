@@ -1,79 +1,56 @@
-<div class="facturasproveedores form">
+<div class="facturasproveedores">
     <?php echo $this->Form->create('Facturasproveedore', array('type' => 'file')); ?>
     <fieldset>
-        <legend><?php __('Editar Factura de proveedor'); ?></legend>
-        <?php
-        echo $this->Form->input('id');
-        echo $this->Form->input('fechafactura', array('label' => 'Fecha'));
-        echo $this->Form->input('tiposiva_id', array('label' => 'Tipo de IVA'));
-        echo $this->Form->input('observaciones', array('label' => 'Observaciones'));
-        echo $this->Form->input('fechalimitepago', array('label' => 'Feche Límite de pago'));
-        echo $this->Form->input('fechapagada', array('label' => 'Fecha de pago'));
-        echo $this->Form->input('albaranesproveedore_id', array('type' => 'hidden'));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Factura Escaneada'));
-        ?>
-        <div class="related">
-            <h3><?php __('Artículos en la Factura de Proveedor ' . $this->Form->value('Facturasproveedore.id')) ?></h3>
-            <div class="actions">
-                <ul>   
-                    <li><?php echo $this->Html->link(__('Añadir Artículo a la Factura de Proveedor', true), array('controller' => 'articulos_facturasproveedores', 'action' => 'add', $this->Form->value('Facturasproveedore.id')), array('class' => 'popup')); ?> </li>
-                </ul>
-            </div>
-            <?php if (!empty($articulos_facturasproveedore)): ?>
-                <table cellpadding = "0" cellspacing = "0">
-                    <tr>
-                        <th><?php __('Ref'); ?></th>
-                        <th><?php __('Nombre'); ?></th>
-                        <th><?php __('Cantidad'); ?></th>
-                        <th><?php __('Precio Proveedor €'); ?></th>
-                        <th><?php __('Descuento %'); ?></th>
-                        <th><?php __('Neto €'); ?></th>
-                        <th><?php __('Total €'); ?></th>
-                        <th class="actions"><?php __('Acciones'); ?></th>
-                    </tr>
-                    <?php
-                    if (!empty($articulos_facturasproveedore)) {
-                        $i = 0;
-                        foreach ($articulos_facturasproveedore as $articulo_facturasproveedore):
-                            $class = null;
-                            if ($i++ % 2 == 0) {
-                                $class = ' class="altrow"';
-                            }
-                            ?>
-                            <tr<?php echo $class; ?>>
-                                <td><?php echo $articulo_facturasproveedore['Articulo']['ref']; ?></td>
-                                <td><?php echo $articulo_facturasproveedore['Articulo']['nombre']; ?></td>
-                                <td><?php echo $articulo_facturasproveedore['ArticulosFacturasproveedore']['cantidad']; ?></td>
-                                <td><?php echo $articulo_facturasproveedore['ArticulosFacturasproveedore']['precio_proveedor']; ?></td>
-                                <td><?php echo $articulo_facturasproveedore['ArticulosFacturasproveedore']['descuento']; ?></td>
-                                <td><?php echo $articulo_facturasproveedore['ArticulosFacturasproveedore']['neto']; ?></td>
-                                <td><?php echo $articulo_facturasproveedore['ArticulosFacturasproveedore']['total']; ?></td>
-                                <td class="actions">
-                                    <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_facturasproveedores', 'action' => 'edit', $articulo_facturasproveedore['ArticulosFacturasproveedore']['id']),array('class'=>'popup')); ?>
-                                    <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_facturasproveedores', 'action' => 'delete', $articulo_facturasproveedore['ArticulosFacturasproveedore']['id']), null, sprintf(__('Seguro que quieres borrar el Artículo de la Factura de Proveedor # %s?', true), $articulo_facturasproveedore['ArticulosFacturasproveedore']['id'])); ?>
-                                </td>
-                            </tr>
-                            <?php
-                        endforeach;
-                    }
-                    ?>
-                </table>
-                <p>* Precios sin IVA</p>
-            <?php endif; ?>
-        </div>
+        <legend>
+            <?php __('Editar Factura de proveedor'); ?>
+            <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $this->Form->value('Facturasproveedore.id')), array('class' => 'button_link')); ?>
+            <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?>
+            <?php echo $this->Html->link(__('Eliminar Factura de proveedor', true), array('action' => 'delete', $this->Form->value('Facturasproveedore.id')), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete Nº %s?', true), $this->Form->value('Facturasproveedore.numero'))); ?>
+
+        </legend>
+        <table class="view">
+            <tr>
+                <td colspan="4">
+                    <?php echo $this->Form->input('id'); ?>
+                    <?php echo $this->Form->input('numero', array('readonly' => true)); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Proveedor</span>
+                    <?php echo $this->Form->value('Proveedore.nombre'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('fechafactura', array('label' => 'Fecha')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('fechapagada', array('label' => 'Fecha de pago','empty' => '--')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('fechalimitepago', array('label' => 'Feche Límite de pago','empty' => '--')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <?php echo $this->Form->input('baseimponible', array('label' => 'Base Imponible', 'readonly' => true)); ?>
+                </td>
+                <td colspan="2">
+                    <?php echo $this->Form->input('tiposiva_id', array('label' => 'Tipo de IVA')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <?php echo $this->Form->input('observaciones', array('label' => 'Observaciones')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    Factura escaneada Actual: <?php echo $this->Html->link(__($this->Form->value('Facturasproveedore.facturaescaneada'), true), '/files/facturasproveedore/' . $this->Form->value('Facturasproveedore.facturaescaneada')); ?>
+                    <?php echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Documento Escaneado Actual', 'hiddenField' => false)); ?>
+                    <?php echo $this->Form->input('file', array('type' => 'file', 'label' => 'Factura escaneada')); ?>
+                </td>
+            </tr>
+        </table>
     </fieldset>
     <?php echo $this->Form->end(__('Guardar', true)); ?>
-</div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-
-        <li><?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $this->Form->value('Facturasproveedore.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('Facturasproveedore.id'))); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Facturas de proveedores', true), array('action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Proveedores', true), array('controller' => 'proveedores', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Proveedor', true), array('controller' => 'proveedores', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Tipo de iva', true), array('controller' => 'tiposivas', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Listar Albaranes de proveedores', true), array('controller' => 'albaranesproveedores', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Albarán de proveedor', true), array('controller' => 'albaranesproveedores', 'action' => 'add')); ?> </li>
-    </ul>
 </div>

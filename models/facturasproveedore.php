@@ -37,20 +37,19 @@ class Facturasproveedore extends AppModel {
             'fields' => '',
             'order' => ''
         ),
-    );
-    var $hasMany = array(
-        'ArticulosFacturasproveedore' => array(
-            'className' => 'ArticulosFacturasproveedore',
-            'foreignKey' => 'facturasproveedore_id',
-            'dependent' => true,
+        'Formapago' => array(
+            'className' => 'Formapago',
+            'foreignKey' => 'formapago_id',
             'conditions' => '',
             'fields' => '',
-            'order' => '',
-            'limit' => '',
-            'offset' => '',
-            'exclusive' => '',
-            'finderQuery' => '',
-            'counterQuery' => ''
+            'order' => ''
+        ),
+    );
+    var $hasMany = array(
+        'Albaranesproveedore' => array(
+            'className' => 'Albaranesproveedore',
+            'foreignKey' => 'facturasproveedore_id',
+            'dependent' => false
         ),
     );
 
@@ -58,7 +57,10 @@ class Facturasproveedore extends AppModel {
         if (empty($this->data['Facturasproveedore']['id'])) {
             $query = 'SELECT MAX(f.numero)+1 as siguiente  FROM facturasproveedores f ';
             $resultado = $this->query($query);
-            $this->data['Facturasproveedore']['numero'] = $resultado[0][0]['siguiente'];
+            if (!empty($resultado[0][0]['siguiente']))
+                $this->data['Facturasproveedore']['numero'] = $resultado[0][0]['siguiente'];
+            else
+                $this->data['Facturasproveedore']['numero'] = 1;
         }
         return true;
     }
@@ -68,6 +70,7 @@ class Facturasproveedore extends AppModel {
         $resultado = $this->query($query);
         return $resultado[0][0]['siguiente'];
     }
+
 }
 
 ?>

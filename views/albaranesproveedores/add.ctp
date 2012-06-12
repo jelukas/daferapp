@@ -17,6 +17,7 @@
                     <?php
                     echo $this->Form->input('pedidosproveedore_id', array('label' => 'Pedido de proveedor', 'type' => 'text', 'value' => $pedidosproveedore_id, 'disabled' => 'true'));
                     echo $this->Form->input('pedidosproveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore_id));
+                    echo $this->Form->input('proveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore['Pedidosproveedore']['proveedore_id']));
                     ?>
                 </td>
                 <td>

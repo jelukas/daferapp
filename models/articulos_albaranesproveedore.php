@@ -62,14 +62,20 @@ class ArticulosAlbaranesproveedore extends AppModel {
             $articulos_albaranesproveedore = $this->find('first', array('contain' => '', 'conditions' => array('ArticulosAlbaranesproveedore.id' => $this->data['ArticulosAlbaranesproveedore']['id'])));
             $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosAlbaranesproveedore']['articulo_id'])));
             $this->Articulo->id = $this->data['ArticulosAlbaranesproveedore']['articulo_id'];
-            $cantidad =  $this->data['ArticulosAlbaranesproveedore']['cantidad'] - $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'] ;
+            $cantidad = $this->data['ArticulosAlbaranesproveedore']['cantidad'] - $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'];
             $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $cantidad);
+            $albaranesproveedore = $this->Albaranesproveedore->find('first', array('contain' => '', 'conditions' => array('Albaranesproveedore.id' => $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'])));
+            $this->Albaranesproveedore->id = $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'];
+            $this->Albaranesproveedore->saveField('baseimponible', $albaranesproveedore['Albaranesproveedore']['baseimponible'] - $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['total'] + $this->data['ArticulosAlbaranesproveedore']['total']);
         } else {
             /* Estmaos creando */
             /* Las existencias del Articulo original deben aumentar */
             $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosAlbaranesproveedore']['articulo_id'])));
             $this->Articulo->id = $this->data['ArticulosAlbaranesproveedore']['articulo_id'];
             $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $this->data['ArticulosAlbaranesproveedore']['cantidad']);
+            $albaranesproveedore = $this->Albaranesproveedore->find('first', array('contain' => '', 'conditions' => array('Albaranesproveedore.id' => $this->data['ArticulosAlbaranesproveedore']['albaranesproveedore_id'])));
+            $this->Albaranesproveedore->id = $this->data['ArticulosAlbaranesproveedore']['albaranesproveedore_id'];
+            $this->Albaranesproveedore->saveField('baseimponible', $albaranesproveedore['Albaranesproveedore']['baseimponible'] + $this->data['ArticulosAlbaranesproveedore']['total']);
         }
         return true;
     }
@@ -80,6 +86,9 @@ class ArticulosAlbaranesproveedore extends AppModel {
         $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['articulo_id'])));
         $this->Articulo->id = $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['articulo_id'];
         $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] - $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad']);
+        $albaranesproveedore = $this->Albaranesproveedore->find('first', array('contain' => '', 'conditions' => array('Albaranesproveedore.id' => $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'])));
+        $this->Albaranesproveedore->id = $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'];
+        $this->Albaranesproveedore->saveField('baseimponible', $albaranesproveedore['Albaranesproveedore']['baseimponible'] - $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['total']);
         return true;
     }
 

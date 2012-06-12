@@ -4,7 +4,7 @@ class AlbaranesproveedoresController extends AppController {
 
     var $name = 'Albaranesproveedores';
     var $components = array('FileUpload', 'Session');
-    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js');
+    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js', 'Autocomplete');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -58,7 +58,7 @@ class AlbaranesproveedoresController extends AppController {
             if ($this->Albaranesproveedore->save($this->data)) {
                 $pedidosproveedore_id = $this->data['Albaranesproveedore']['pedidosproveedore_id'];
                 $id = $this->Albaranesproveedore->id;
-                
+
                 /* Guarda fichero */
                 if ($this->FileUpload->finalFile != null) {
                     $this->Albaranesproveedore->saveField('albaranescaneado', $this->FileUpload->finalFile);
@@ -93,7 +93,7 @@ class AlbaranesproveedoresController extends AppController {
             $pedidosproveedore = $this->Albaranesproveedore->Pedidosproveedore->find('first', array('contain' => array('ArticulosPedidosproveedore' => 'Articulo'), 'conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
         }
         $numero = $this->Albaranesproveedore->dime_siguiente_numero();
-        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore','numero'));
+        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore', 'numero'));
     }
 
     function edit($id = null) {
@@ -202,6 +202,34 @@ class AlbaranesproveedoresController extends AppController {
         $this->Albaranesproveedore->recursive = 2;
         $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.facturasproveedore_id' => $this->data['Devolucionesproveedore']['facturasproveedore_id'])));
         $this->set(compact('albaranesproveedores'));
+    }
+
+    function facturacion() {
+        if (!empty($this->data)) {
+            $fecha_inicio = date('Y-m-d', strtotime($this->data['Filtro']['fecha_inicio']['year'] . '-' . $this->data['Filtro']['fecha_inicio']['month'] . '-' . $this->data['Filtro']['fecha_inicio']['day']));
+            $fecha_fin = date('Y-m-d', strtotime($this->data['Filtro']['fecha_fin']['year'] . '-' . $this->data['Filtro']['fecha_fin']['month'] . '-' . $this->data['Filtro']['fecha_fin']['day']));
+            if (!empty($this->data['Filtro']['todos'])) {
+                /* Obtenemos los alabranes de todos los proveedores comprendidos en el rango de fecha
+                 * y que se PUEDAN FACTURAR 
+                 */
+                $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.confirmado' => 0,'Albaranesproveedore.fecha BETWEEN ? AND ?' => array($fecha_inicio,$fecha_fin),'Albaranesproveedore.facturasproveedore_id' => NULL), 'contain' => 'Proveedore', 'order' => 'Albaranesproveedore.proveedore_id'));
+                $proveedore_list = array();
+                foreach ($albaranesproveedores as $albaranesproveedore) {
+                    $proveedore_list[$albaranesproveedore['Proveedore']['nombre']][] = $albaranesproveedore;
+                }
+            } elseif (!empty($this->data['Filtro']['Proveedore'])) {
+                /* Obtenemos los alabranes de los proveedore comprendidos en el rango de fecha
+                 * y que se PUEDAN FACTURAR 
+                 */
+                $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.confirmado' => 0,'Albaranesproveedore.fecha BETWEEN ? AND ?' => array($fecha_inicio,$fecha_fin), 'Albaranesproveedore.proveedore_id' => $this->data['Filtro']['Proveedore']), 'contain' => 'Proveedore', 'order' => 'Albaranesproveedore.proveedore_id'));
+                $proveedore_list = array();
+                foreach ($albaranesproveedores as $albaranesproveedore) {
+                    $proveedore_list[$albaranesproveedore['Proveedore']['nombre']][] = $albaranesproveedore;
+                }
+            }
+            $this->set(compact('proveedore_list'));
+            $this->render('facturacion_list');
+        }
     }
 
 }

@@ -27,6 +27,7 @@
                 <li><a href="/daferapp/presupuestosproveedores" title="Presupuestos a proveedores" target="_self" >Presupuestos a proveedores</a></li>
                 <li><a href="/daferapp/pedidosproveedores" title="Pedidos a proveedores" target="_self" >Pedidos a proveedores</a></li>
                 <li><a href="/daferapp/albaranesproveedores" title="Albaranes de compra" target="_self" >Albaranes de compra</a></li>
+                <li><a href="/daferapp/albaranesproveedores/facturacion" title="Facturación de Albaranes" target="_self" >Facturación de Albaranes</a></li>
                 <li><a href="/daferapp/facturasproveedores" title="Facturas de compra" target="_self" >Facturas de compra</a></li>
             </ul>
         </li>
