@@ -212,7 +212,7 @@ class AlbaranesproveedoresController extends AppController {
                 /* Obtenemos los alabranes de todos los proveedores comprendidos en el rango de fecha
                  * y que se PUEDAN FACTURAR 
                  */
-                $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.confirmado' => 0,'Albaranesproveedore.fecha BETWEEN ? AND ?' => array($fecha_inicio,$fecha_fin),'Albaranesproveedore.facturasproveedore_id' => NULL), 'contain' => 'Proveedore', 'order' => 'Albaranesproveedore.proveedore_id'));
+                $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.confirmado' => 1,'Albaranesproveedore.fecha BETWEEN ? AND ?' => array($fecha_inicio,$fecha_fin),'Albaranesproveedore.facturasproveedore_id' => NULL), 'contain' => 'Proveedore', 'order' => 'Albaranesproveedore.proveedore_id'));
                 $proveedore_list = array();
                 foreach ($albaranesproveedores as $albaranesproveedore) {
                     $proveedore_list[$albaranesproveedore['Proveedore']['nombre']][] = $albaranesproveedore;
@@ -221,7 +221,7 @@ class AlbaranesproveedoresController extends AppController {
                 /* Obtenemos los alabranes de los proveedore comprendidos en el rango de fecha
                  * y que se PUEDAN FACTURAR 
                  */
-                $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.confirmado' => 0,'Albaranesproveedore.fecha BETWEEN ? AND ?' => array($fecha_inicio,$fecha_fin), 'Albaranesproveedore.proveedore_id' => $this->data['Filtro']['Proveedore']), 'contain' => 'Proveedore', 'order' => 'Albaranesproveedore.proveedore_id'));
+                $albaranesproveedores = $this->Albaranesproveedore->find('all', array('conditions' => array('Albaranesproveedore.confirmado' => 1,'Albaranesproveedore.fecha BETWEEN ? AND ?' => array($fecha_inicio,$fecha_fin), 'Albaranesproveedore.proveedore_id' => $this->data['Filtro']['Proveedore']), 'contain' => 'Proveedore', 'order' => 'Albaranesproveedore.proveedore_id'));
                 $proveedore_list = array();
                 foreach ($albaranesproveedores as $albaranesproveedore) {
                     $proveedore_list[$albaranesproveedore['Proveedore']['nombre']][] = $albaranesproveedore;
