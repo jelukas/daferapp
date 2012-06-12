@@ -5,6 +5,8 @@
         <?php
         echo $this->Form->input('id', array('type' => 'text', 'disabled' => true));
         echo $this->Form->input('id', array('type' => 'hidden'));
+        $options = array('taller' => 'En taller', 'centro' => 'En el Centro de Trabajo');
+        echo $this->Form->select('tipo', $options);
         echo $this->Form->input('ordene_id', array('type' => 'text', 'disabled' => true));
         echo $this->Form->input('descripcion');
         ?>

@@ -72,17 +72,20 @@ class Ordene extends AppModel {
 
     function beforeSave($options) {
         if (empty($this->data['Ordene']['id'])) {
-            $query = 'SELECT MAX(o.numero)+1 as siguiente_factura_id  FROM ordenes o ';
+            $query = 'SELECT MAX(o.numero)+1 as siguiente  FROM ordenes o ';
             $resultado = $this->query($query);
-            $this->data['Ordene']['numero'] = $resultado[0][0]['siguiente_factura_id'];
+            if (!empty($resultado[0][0]['siguiente']))
+                $this->data['Ordene']['numero'] = $resultado[0][0]['siguiente'];
+            else
+                $this->data['Ordene']['numero'] = 1;
         }
         return true;
     }
 
     function dime_siguiente_numero() {
-        $query = 'SELECT MAX(o.numero)+1 as siguiente_factura_id  FROM ordenes o ';
+        $query = 'SELECT MAX(o.numero)+1 as siguiente  FROM ordenes o ';
         $resultado = $this->query($query);
-        return $resultado[0][0]['siguiente_factura_id'];
+        return $resultado[0][0]['siguiente'];
     }
 
 }

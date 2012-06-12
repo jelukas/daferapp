@@ -1,9 +1,39 @@
-<div class="ordenes view">
-    <h2><?php __('Orden'); ?></h2>
+<div class="ordenes">
+    <h2>
+        <?php __('Orden'); ?>
+        <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
+        <?php echo $this->Html->link(__('Listar Ordenes', true), array('action' => 'index'), array('class' => 'button_link')); ?>
+    </h2>
+    <table class="view">
+        <tr>
+            <td colspan="3" style="font-size: 120%;">
+                <span>Número</span>
+                <?php echo $ordene['Ordene']['numero']; ?>
+            </td>
+            <td>
+                <span>Aviso de Taller</span>
+                <?php echo $ordene['Avisostallere']['numero']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>Fecha</span>
+                <?php echo $ordene['Ordene']['fecha']; ?>
+            </td>
+            <td colspan="2">
+                <span>Estado</span>
+                <?php echo $ordene['Estadosordene']['estado']; ?>
+            </td>
+            <td>
+                <span>Reparación Prevista</span>
+                <?php echo $ordene['Ordene']['fecha_prevista_reparacion'] ?>
+            </td>
+        </tr>
+    </table>
     <dl><?php
-$i = 0;
-$class = ' class="altrow"';
-?>
+        $i = 0;
+        $class = ' class="altrow"';
+        ?>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('ID Orden'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
             <?php echo $ordene['Ordene']['id']; ?>
@@ -95,7 +125,7 @@ $class = ' class="altrow"';
     </dl>
     <div class="actions">
         <?php if ($ordene['Estadosordene']['id'] == '5'): ?>
-            <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientes', 'action' => 'add','ordene',$ordene['Ordene']['id'])) ?></li></ul>
+            <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id'])) ?></li></ul>
         <?php endif; ?>
     </div>
     <br/><br/><br/>
@@ -104,8 +134,7 @@ $class = ' class="altrow"';
         <?php if (!empty($ordene['Tarea'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
-                    <th><?php __('ID'); ?></th>
-                    <th><?php __('Nº Orden'); ?></th>
+                    <th><?php __('Tarea'); ?></th>
                     <th><?php __('Descripción'); ?></th>
                     <th class="actions"><?php __('Acciones'); ?></th>
                 </tr>
@@ -118,10 +147,15 @@ $class = ' class="altrow"';
                     }
                     ?>
                     <tr<?php echo $class; ?>>
-                        <td><?php echo $tarea['id']; ?></td>
-                        <td><?php echo $tarea['ordene_id']; ?></td>
+                        <td>Tarea <?php echo $i ?> - <?php echo $tarea['tipo'] ?></td>
                         <td><?php echo $tarea['descripcion']; ?></td>
                         <td class="actions">
+                            <?php echo $this->Html->link(__('Añadir Material', true), array('controller' => 'articulos_tareas', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?> 
+                            <?php if ($tarea['tipo'] == 'taller'): ?>
+                                <?php echo $this->Html->link(__('Añadir Parte Taller', true), array('controller' => 'partestalleres', 'action' => 'add', $tarea['id'])); ?>
+                            <?php elseif ($tarea['tipo'] == 'centro'): ?>
+                                <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'partes', 'action' => 'add', $tarea['id'])); ?>
+                            <?php endif; ?>
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'tareas', 'action' => 'view', $tarea['id'])); ?>
                             <?php echo $this->Html->link(__('Ver Relaciones', true), '#?', array('class' => 'ver-relaciones')); ?>
                             <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareas', 'action' => 'delete', $tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tarea['id'])); ?>
@@ -130,11 +164,6 @@ $class = ' class="altrow"';
                     <tr class="tarea-relations">
                         <td colspan="4" style="background-color: #FBEEE1;">
                             <h4>Articulos de la Tarea</h4>
-                            <div class="actions">
-                                <ul>
-                                    <li><?php echo $this->Html->link(__('Añadir Material', true), array('controller' => 'articulos_tareas', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?> </li>
-                                </ul>
-                            </div>
                             <table>
                                 <thead>
                                 <th>Ref.</th>
@@ -151,46 +180,50 @@ $class = ' class="altrow"';
                                     </tr>
                                 <?php endforeach; ?>
                             </table>
-                            <h4>Partes de Centro de Trabajo</h4>
-                            <table>
-                                <thead>
-                                <th>Centro Trabajo.</th>
-                                <th>Fecha</th>
-                                <th>Hora Inicio</th>
-                                <th>Hora  Final</th>
-                                <th>Horas Imputables</th>
-                                <th>Operación</th>
-                                </thead>
-                                <?php foreach ($tarea['Parte'] as $partecentro): ?>
-                                    <tr>
-                                        <td><?php echo (!empty($partecentro['Centrostrabajo'])) ? $partecentro['Centrostrabajo']['centrotrabajo'] : '' ?></td>
-                                        <td><?php echo $partecentro['fecha'] ?></td>
-                                        <td><?php echo $partecentro['horainicio'] ?></td>
-                                        <td><?php echo $partecentro['horafinal'] ?></td>
-                                        <td><?php echo $partecentro['horasimputables'] ?></td>
-                                        <td><?php echo $partecentro['operacion'] ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
-                            <h4>Partes de Taller</h4>
-                            <table>
-                                <thead>
-                                <th>Fecha</th>
-                                <th>Hora Inicio</th>
-                                <th>Hora  Final</th>
-                                <th>Horas Imputables</th>
-                                <th>Operación</th>
-                                </thead>
-                                <?php foreach ($tarea['Partestallere'] as $partetaller): ?>
-                                    <tr>
-                                        <td><?php echo $partetaller['fecha'] ?></td>
-                                        <td><?php echo $partetaller['horainicio'] ?></td>
-                                        <td><?php echo $partetaller['horafinal'] ?></td>
-                                        <td><?php echo $partetaller['horasimputables'] ?></td>
-                                        <td><?php echo $partetaller['operacion'] ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
+                            <?php if (!empty($tarea['Parte'])): ?>
+                                <h4>Partes de Centro de Trabajo</h4>
+                                <table>
+                                    <thead>
+                                    <th>Centro Trabajo.</th>
+                                    <th>Fecha</th>
+                                    <th>Hora Inicio</th>
+                                    <th>Hora  Final</th>
+                                    <th>Horas Imputables</th>
+                                    <th>Operación</th>
+                                    </thead>
+                                    <?php foreach ($tarea['Parte'] as $partecentro): ?>
+                                        <tr>
+                                            <td><?php echo (!empty($partecentro['Centrostrabajo'])) ? $partecentro['Centrostrabajo']['centrotrabajo'] : '' ?></td>
+                                            <td><?php echo $partecentro['fecha'] ?></td>
+                                            <td><?php echo $partecentro['horainicio'] ?></td>
+                                            <td><?php echo $partecentro['horafinal'] ?></td>
+                                            <td><?php echo $partecentro['horasimputables'] ?></td>
+                                            <td><?php echo $partecentro['operacion'] ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            <?php endif; ?>
+                            <?php if (!empty($tarea['Partestallere'])): ?>
+                                <h4>Partes de Taller</h4>
+                                <table>
+                                    <thead>
+                                    <th>Fecha</th>
+                                    <th>Hora Inicio</th>
+                                    <th>Hora  Final</th>
+                                    <th>Horas Imputables</th>
+                                    <th>Operación</th>
+                                    </thead>
+                                    <?php foreach ($tarea['Partestallere'] as $partetaller): ?>
+                                        <tr>
+                                            <td><?php echo $partetaller['fecha'] ?></td>
+                                            <td><?php echo $partetaller['horainicio'] ?></td>
+                                            <td><?php echo $partetaller['horafinal'] ?></td>
+                                            <td><?php echo $partetaller['horasimputables'] ?></td>
+                                            <td><?php echo $partetaller['operacion'] ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

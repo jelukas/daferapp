@@ -5,6 +5,7 @@ class OrdenesController extends AppController {
     var $name = 'Ordenes';
     var $uses = array('Ordene', 'Avisostallere');
     var $helpers = array('Javascript');
+    var $components = array('FileUpload');
 
     function index() {
         $this->paginate = array('limit' => 20, 'contain' => array('Estadosordene','Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')));

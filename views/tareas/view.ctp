@@ -18,6 +18,17 @@ $class = ' class="altrow"';
         <dt<?php
                 if ($i % 2 == 0)
                     echo $class;
+                ?>><?php __('Tipo de Tarea'); ?></dt>
+        <dd<?php
+            if ($i++ % 2 == 0)
+                echo $class;
+                ?>>
+                <?php echo $tarea['Tarea']['tipo']; ?>
+            &nbsp;
+        </dd>
+        <dt<?php
+                if ($i % 2 == 0)
+                    echo $class;
                 ?>><?php __('Nº Orden'); ?></dt>
         <dd<?php
             if ($i++ % 2 == 0)

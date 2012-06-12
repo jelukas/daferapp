@@ -11,9 +11,8 @@
                 <li><a href="/daferapp/avisosrepuestos/mapa" title="Mapa Avisos de Repuestos" target="_self" >Mapa de Avisos de Repuestos</a></li>
             </ul>
         </li>
-
         <li><span class="divider divider-vert" ></span></li>
-        <li><a class="item-primary" href="ordenesController.php?action=mapa" target="_self">&Oacute;rdenes</a>
+        <li><a class="item-primary" href="/daferapp/ordenes/mapa" target="_self">&Oacute;rdenes</a>
             <ul>
                 <li><a href="/daferapp/ordenes" target="_self">Listado de &oacute;rdenes</a></li>
                 <li><a href="/daferapp/ordenes/mapa" target="_self">Mapa de &oacute;rdenes</a></li>
@@ -48,19 +47,15 @@
                 <li><a href="/daferapp/articulos" title="Art&iacute;culos" target="_self" >Art&iacute;culos</a></li>
                 <li><a href="/daferapp/centrostrabajos" title="Centros de Trabajo" target="_self" >Centros de Trabajo</a></li>	
                 <li><a href="/daferapp/clientes" title="Clientes" target="_self" >Clientes</a></li>
-
                 <li><a href="/daferapp/comerciales" title="Comerciales" target="_self" >Comerciales</a></li>
                 <li><a href="/daferapp/comerciales_proveedores" title="Comerciales Proveedores" target="_self" >Comerciales Proveedores</a></li>
                 <li><a href="/daferapp/formapagos" title="Formas de Pago" target="_self" >Formas de pago</a></li>
                 <li><a href="/daferapp/maquinas" title="M&aacute;quinas" target="_self" >M&aacute;quinas</a></li>
                 <li><a href="/daferapp/mecanicos" title="Mec&aacute;nicos" target="_self" >Mec&aacute;nicos</a></li>
                 <li><a href="/daferapp/proveedores" title="Proveedores" target="_self" >Proveedores</a></li>
-
-
                 <li><a href="/daferapp/transportistas" title="Transportistas" target="_self" >Transportistas</a></li>
             </ul>
         </li>
-
         <li><span class="divider divider-vert" ></span></li>
         <li><a class="item-primary" href="#" target="_self">Opciones</a>
             <ul>

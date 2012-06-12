@@ -8,6 +8,10 @@
         echo '<input type="hidden" value="' . $ordene['Ordene']['id'] . '" name="ordene_id"/>';
     }
     ?>
+    <?php
+    $options = array('taller' => 'En taller', 'centro' => 'En el Centro de Trabajo');
+    echo $this->Form->select('tipo', $options);
+    ?>
     <br/><br/>
     <?php
     echo $this->Form->input('descripcion');
