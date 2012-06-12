@@ -18,7 +18,7 @@
         <tr>
             <td>
                 <span>Fecha</span>
-                <?php echo $ordene['Ordene']['fecha']; ?>
+                <?php echo $ordene['Ordene']['fecha'] ?>
             </td>
             <td colspan="2">
                 <span>Estado</span>
@@ -29,100 +29,64 @@
                 <?php echo $ordene['Ordene']['fecha_prevista_reparacion'] ?>
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <span>Fecha de Aceptación</span>
+                <?php echo $ordene['Avisostallere']['fechaaceptacion'] ?>
+            </td>
+            <td colspan="2">
+                <span>Urgente</span>
+                <?php echo!empty($ordene['Ordene']['urgente']) ? 'Sí' : 'No' ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>Cliente</span>
+                <?php echo $ordene['Avisostallere']['Cliente']['nombre'] ?>
+            </td>
+            <td>
+                <span>Centro</span>
+                <?php echo $ordene['Avisostallere']['Centrostrabajo']['centrotrabajo'] ?>
+            </td>
+            <td>
+                <p>
+                    <span>Máquina</span>
+                    <?php echo $ordene['Avisostallere']['Maquina']['nombre'] ?>
+                </p>
+                <p>
+                    <span>Horas</span>
+                    <?php echo $ordene['Avisostallere']['horas_maquina'] ?>
+                </p>
+            </td>
+            <td>
+                <p>
+                    <span>Nº Serie Máquina</span> 
+                    <?php echo $ordene['Avisostallere']['Maquina']['serie_maquina'] ?>
+                </p>
+                <p>
+                    <span>Nº Serie Motor</span> 
+                    <?php echo $ordene['Avisostallere']['Maquina']['serie_motor'] ?>
+                </p>
+                <p>
+                    <span>Nº Serie Transmisión</span> 
+                    <?php echo $ordene['Avisostallere']['Maquina']['serie_transmision'] ?>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <span>Descripción</span> 
+                <?php echo $ordene['Ordene']['descripcion'] ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <span>Observaciones</span> 
+                <?php echo $ordene['Ordene']['observaciones'] ?>
+            </td>
+        </tr>
     </table>
-    <dl><?php
-        $i = 0;
-        $class = ' class="altrow"';
-        ?>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('ID Orden'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $ordene['Ordene']['id']; ?>
-            &nbsp;
-        </dd>
-
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Aviso de Taller'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($ordene['Avisostallere']['id'], array('controller' => 'avisostalleres', 'action' => 'view', $ordene['Avisostallere']['id'])); ?>
-            &nbsp;
-        </dd>
-
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Fecha de aviso'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo date('d.m.Y H:i', strtotime($ordene['Avisostallere']['fechaaviso'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Reparación prevista'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo date('d.m.Y', strtotime($ordene['Ordene']['fecha_prevista_reparacion'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Urgente'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php
-            if ($ordene['Ordene']['urgente'])
-                echo "Sí";
-            else
-                echo "No";
-            ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Almacen de los Materiales'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $ordene['Almacene']['nombre']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Cliente'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($avisostallere['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $avisostallere['Cliente']['id'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Centro de trabajo'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($avisostallere['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $avisostallere['Centrostrabajo']['id'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Máquina'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($avisostallere['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $avisostallere['Maquina']['id'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Nº Serie Máquina'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $avisostallere['Maquina']['serie_maquina']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Nº Serie Motor'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $avisostallere['Maquina']['serie_motor']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Modelo Transmisión'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $avisostallere['Maquina']['modelo_transmision']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Horas'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $avisostallere['Maquina']['horas']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Observaciones Máquina'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $avisostallere['Maquina']['observaciones']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Observaciones'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $ordene['Ordene']['observaciones']; ?>
-            &nbsp;
-        </dd>
-
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Estado'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $ordene['Estadosordene']['estado']; ?>
-            &nbsp;
-        </dd>
-    </dl>
+    
     <div class="actions">
         <?php if ($ordene['Estadosordene']['id'] == '5'): ?>
             <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id'])) ?></li></ul>

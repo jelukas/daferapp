@@ -4,7 +4,7 @@ class OrdenesController extends AppController {
 
     var $name = 'Ordenes';
     var $uses = array('Ordene', 'Avisostallere');
-    var $helpers = array('Javascript');
+    var $helpers = array('Javascript','Time');
     var $components = array('FileUpload');
 
     function index() {
