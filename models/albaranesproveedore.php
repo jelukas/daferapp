@@ -37,6 +37,21 @@ class Albaranesproveedore extends AppModel {
         ),
     );
 
+    function beforeSave($options) {
+        if (empty($this->data['Albaranesproveedore']['id'])) {
+            $query = 'SELECT MAX(a.numero)+1 as siguiente  FROM albaranesproveedores a ';
+            $resultado = $this->query($query);
+            $this->data['Albaranesproveedore']['numero'] = $resultado[0][0]['siguiente'];
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(a.numero)+1 as siguiente  FROM albaranesproveedores a ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente'];
+    }
+
 }
 
 ?>

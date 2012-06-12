@@ -4,7 +4,7 @@ class Facturasproveedore extends AppModel {
 
     var $name = 'Facturasproveedore';
     var $validate = array(
-        'numerofactura' => array(
+        'numero' => array(
             'notempty' => array(
                 'rule' => array('notempty'),
             ),
@@ -15,11 +15,6 @@ class Facturasproveedore extends AppModel {
             ),
         ),
         'tiposiva_id' => array(
-            'numeric' => array(
-                'rule' => array('numeric'),
-            ),
-        ),
-        'albaranesproveedore_id' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
             ),
@@ -35,9 +30,9 @@ class Facturasproveedore extends AppModel {
             'fields' => '',
             'order' => ''
         ),
-        'Albaranesproveedore' => array(
-            'className' => 'Albaranesproveedore',
-            'foreignKey' => 'albaranesproveedore_id',
+        'Proveedore' => array(
+            'className' => 'Proveedore',
+            'foreignKey' => 'proveedore_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''
@@ -59,6 +54,20 @@ class Facturasproveedore extends AppModel {
         ),
     );
 
+    function beforeSave($options) {
+        if (empty($this->data['Facturasproveedore']['id'])) {
+            $query = 'SELECT MAX(f.numero)+1 as siguiente  FROM facturasproveedores f ';
+            $resultado = $this->query($query);
+            $this->data['Facturasproveedore']['numero'] = $resultado[0][0]['siguiente'];
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(f.numero)+1 as siguiente  FROM facturasproveedores f ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente'];
+    }
 }
 
 ?>

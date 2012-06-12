@@ -1,103 +1,52 @@
-<div class="pedidosproveedores view">
-    <h2><?php __('Pedidosproveedore'); ?></h2>
-    <dl><?php
-$i = 0;
-$class = ' class="altrow"';
-?>
-        <dt><?php __('Id'); ?></dt>
-        <dd>
-            <?php echo $pedidosproveedore['Pedidosproveedore']['id']; ?>
-            &nbsp;
-        </dd>
-        <dt><?php __('Fecha'); ?></dt>
-        <dd>
-            <?php echo $pedidosproveedore['Pedidosproveedore']['fecha']; ?>
-            &nbsp;
-        </dd>
-        <dt><?php __('Observaciones'); ?></dt>
-        <dd>
-            <?php echo $pedidosproveedore['Pedidosproveedore']['observaciones']; ?>
-            &nbsp;
-        </dd>
-        <dt><?php __('Fecha de recepción'); ?></dt>
-        <dd>
-            <?php echo $pedidosproveedore['Pedidosproveedore']['fecharecepcion']; ?>
-            &nbsp;
-        </dd>
-        <dt><?php __('Pedido escaneado'); ?></dt>
-        <dd>
-            <?php echo $pedidosproveedore['Pedidosproveedore']['pedidoescaneado']; ?>
-            &nbsp;
-        </dd>
-    </dl>
-    <h3><?php __('Presupuesto de Proveedor ' . $presupuestosproveedore['Presupuestosproveedore']['id']); ?></h3>
-    <dl>
-        <dt><?php __('Presupuesto a Proveedor Id'); ?></dt>
-        <dd style="margin-left: 18em;">
-            <?php echo $this->Html->link($presupuestosproveedore['Presupuestosproveedore']['id'], array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestosproveedore['Presupuestosproveedore']['id'])); ?>
-        </dd>
-        <?php if ($presupuestosproveedore['Avisosrepuesto']['id'] != null && $presupuestosproveedore['Avisosrepuesto']['id'] >= 0) { ?>
-            <dt><?php __('Nº Aviso de repuesto'); ?></dt>
-            <dd>
-                <?php echo $this->Html->link($presupuestosproveedore['Avisosrepuesto']['id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestosproveedore['Avisosrepuesto']['id'])); ?>
-            </dd>
-            <dt><?php __('Cliente'); ?></dt>
-            <dd>
-                <?php echo $presupuestosproveedore['Avisosrepuesto']['Cliente']['nombre']; ?>&nbsp;
-            </dd>
-            <dt><?php __('Centro de Trabajo'); ?></dt>
-            <dd>
-                <?php echo $presupuestosproveedore['Avisosrepuesto']['Centrostrabajo']['centrotrabajo']; ?>&nbsp;
-            </dd>
-            <dt><?php __('Máquina'); ?></dt>
-            <dd>
-                <?php echo $presupuestosproveedore['Avisosrepuesto']['Maquina']['nombre']; ?>&nbsp;
-            </dd>
-            <?php
-        } else if ($presupuestosproveedore['Avisostallere']['id'] != null) {
-            ?>
-            <dt><?php __('Nº Aviso de taller'); ?></dt>
-            <dd>
-                <?php echo $this->Html->link($presupuestosproveedore['Avisostallere']['id'], array('controller' => 'avisostalleres', 'action' => 'view', $presupuestosproveedore['Avisostallere']['id'])); ?>
-            </dd>
-            <dt><?php __('Cliente'); ?></dt>
-            <dd>
-                <?php echo $this->Html->link($presupuestosproveedore['Avisostallere']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $presupuestosproveedore['Avisostallere']['Cliente']['id'])) ?>&nbsp;
-            </dd>
-            <dt><?php __('Centro de Trabajo'); ?></dt>
-            <dd>
-                <?php echo $this->Html->link($presupuestosproveedore['Avisostallere']['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $presupuestosproveedore['Avisostallere']['Centrostrabajo']['id'])); ?>&nbsp;
-            </dd>
-            <dt><?php __('Máquina'); ?></dt>
-            <dd>
-                <?php echo $this->Html->link($presupuestosproveedore['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $presupuestosproveedore['Avisostallere']['Maquina']['id'])); ?>&nbsp;
-            </dd>
-        <?php } ?>
-        <dt><?php __('Proveedor'); ?></dt>
-        <dd>
-            <?php echo $this->Html->link($presupuestosproveedore['Proveedore']['id'] . ' --- ' . $presupuestosproveedore['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $presupuestosproveedore['Proveedore']['id'])); ?>&nbsp;
-        </dd>
-        <dt><?php __('Almacén'); ?></dt>
-        <dd>
-            <?php echo $this->Html->link($presupuestosproveedore['Almacene']['nombre'], array('controller' => 'almacenes', 'action' => 'view', $presupuestosproveedore['Almacene']['id'])); ?>
-        </dd>
-        <dt><?php __('Fecha de plazo'); ?></dt>
-        <dd>
-            <?php echo $presupuestosproveedore['Presupuestosproveedore']['fechaplazo']; ?>&nbsp;
-        </dd>
-        <dt><?php __('Observaciones'); ?></dt>
-        <dd>
-            <?php echo $presupuestosproveedore['Presupuestosproveedore']['observaciones']; ?>&nbsp;
-        </dd>
-        <dt><?php __('Confirmado'); ?></dt>
-        <dd>
-            <?php echo $presupuestosproveedore['Presupuestosproveedore']['confirmado']; ?>&nbsp;
-        </dd>
-        <dt><?php __('Presupuesto escaneado'); ?></dt>
-        <dd>
-            <?php echo $presupuestosproveedore['Presupuestosproveedore']['presupuestoescaneado']; ?>&nbsp;
-        </dd>
-    </dl> 
+<div class="pedidosproveedores">
+    <h2>
+        <?php __('Pedidosproveedore'); ?>
+        <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $pedidosproveedore['Pedidosproveedore']['id']), array('class' => 'button_link')); ?>
+        <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?>
+        <?php echo $this->Html->link(__('Eliminar Pedido de proveedores', true), array('action' => 'delete', $pedidosproveedore['Pedidosproveedore']['id'], $pedidosproveedore['Pedidosproveedore']['presupuestosproveedore_id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $pedidosproveedore['Pedidosproveedore']['numero'])); ?>
+    </h2>
+    <table class="view">
+        <tr>
+            <td colspan="4">
+                <span>Número</span>
+                <?php echo $pedidosproveedore['Pedidosproveedore']['numero']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>Proveedor</span>
+                <?php echo $pedidosproveedore['Presupuestosproveedore']['Proveedore']['nombre']; ?>
+            </td>
+            <td>
+                <span>Fecha</span>
+                <?php echo $pedidosproveedore['Pedidosproveedore']['fecha']; ?>
+            </td>
+            <td>
+                <span>Almacen de los Materiales</span>
+                <?php echo $pedidosproveedore['Presupuestosproveedore']['Almacene']['nombre']; ?>
+            </td>
+            <td>
+                <span>Confirmado</span>
+                <?php echo!empty($pedidosproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <span>Observaciones</span>
+                <?php $pedidosproveedore['Pedidosproveedore']['observaciones'] ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <span>Pedido Escaneado</span>
+                <?php echo $this->Html->link(__($pedidosproveedore['Pedidosproveedore']['pedidoescaneado'], true), '/files/pedidosproveedore/' . $pedidosproveedore['Pedidosproveedore']['pedidoescaneado']); ?>
+            </td>
+            <td>
+                <span>Fecha de Recepcion</span>
+                <?php $pedidosproveedore['Pedidosproveedore']['fecharecepcion'] ?>
+            </td>
+        </tr>
+    </table>
     <div class="related" style="margin-top: 30px">
         <h3><?php __('Artículos del Pedido a Proveedor'); ?></h3>
         <div class="actions">
@@ -145,8 +94,20 @@ $class = ' class="altrow"';
                 ?>
             </table>
         <?php endif; ?>
-        <h3 style="margin-top: 20px;"><?php __('Albaranes de Proveedor Relacionados con el Pedido a Proveedor'); ?></h3>
+    </div>
+    <div style="clear: both">
+        <div class="actions">
+            <ul>   
+                <li><?php echo $this->Html->link(__('Nuevo Albaran a proveedores', true), array('controller' => 'albaranesproveedores', 'action' => 'add', $pedidosproveedore['Pedidosproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="clear: both">
+    <p style="text-align: center;"><?php echo $this->Html->link(__('Relacionados con el Presupuesto a Proveedor', true), '#', array('id' => 'show_relations', 'class' => 'button_link')); ?></p>
+    <div id="relations-presupuestoproveedor" style="display: none;">
         <?php if (!empty($pedidosproveedore['Albaranesproveedore'])): ?>
+            <h3 style="margin-top: 20px;"><?php __('Albaranes de Proveedor Relacionados con el Pedido a Proveedor'); ?></h3>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
                     <th><?php __('Id Albaran de Proveedor'); ?></th>
@@ -177,18 +138,88 @@ $class = ' class="altrow"';
                 ?>
             </table>
         <?php endif; ?>
-    </div>
-    <div class="actions">
-        <ul>   
-            <li><?php echo $this->Html->link(__('Nuevo Albaran a proveedores', true), array('controller' => 'albaranesproveedores', 'action' => 'add', $pedidosproveedore['Pedidosproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
-        </ul>
+        <?php if (!empty($presupuestosproveedore['Ordene']['id'])): ?>
+            <h3 style="margin-top: 40px;"><?php __('Orden Relacionada con el Presupuesto de Proveedor'); ?></h3>
+            <table cellpadding = "0" cellspacing = "0">
+                <tr>
+                    <th><?php __('Id Orden'); ?></th>
+                    <th><?php __('Cliente'); ?></th>
+                    <th><?php __('Fecha Prevista de Reparación'); ?></th>
+                    <th><?php __('Observaciones'); ?></th>
+                    <th><?php __('Aviso de Taller'); ?></th>
+                    <th class="actions"><?php __('Acciones'); ?></th>
+                </tr>
+                <tr>
+                    <td><?php echo $presupuestosproveedore['Ordene']['id']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Ordene']['Avisostallere']['Cliente']['nombre']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Ordene']['fecha_prevista_reparacion']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Ordene']['observaciones']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Ordene']['avisostallere_id']; ?></td>
+                    <td class="actions">
+                        <?php echo $this->Html->link(__('Ver', true), array('controller' => 'ordene', 'action' => 'view', $presupuestosproveedore['Ordene']['id'])); ?>
+                    </td>
+                </tr>
+            </table>
+        <?php endif; ?>
+        <?php if (!empty($presupuestosproveedore['Avisostallere']['id'])): ?>
+            <h3 style="margin-top: 40px;"><?php __('Aviso de Taller Relacionado con el Presupuesto de Proveedor'); ?></h3>
+            <table cellpadding = "0" cellspacing = "0">
+                <tr>
+                    <th><?php __('Nº'); ?></th>
+                    <th><?php __('Fecha'); ?></th>
+                    <th><?php __('Cliente'); ?></th>
+                    <th><?php __('Centro de Trabajo'); ?></th>
+                    <th><?php __('Maquina'); ?></th>
+                    <th><?php __('Observaciones'); ?></th>
+                    <th><?php __('Estados Aviso'); ?></th>
+                    <th class="actions"><?php __('Acciones'); ?></th>
+                </tr>
+                <tr>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['numero']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['fechaaviso']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['Cliente']['nombre']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['Maquina']['nombre']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['observaciones']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisostallere']['Estadosavisostallere']['estado']; ?></td>
+                    <td class="actions">
+                        <?php echo $this->Html->link(__('Ver', true), array('controller' => 'avisostalleres', 'action' => 'view', $presupuestosproveedore['Avisostallere']['id'])); ?>
+                    </td>
+                </tr>
+            </table>
+        <?php endif; ?>
+        <?php if (!empty($presupuestosproveedore['Avisosrepuesto']['id'])): ?>
+            <h3 style="margin-top: 40px;"><?php __('Aviso de Repuestos Relacionado con el Presupuesto de Proveedor'); ?></h3>
+            <table cellpadding = "0" cellspacing = "0">
+                <tr>
+                    <th><?php __('Nº'); ?></th>
+                    <th><?php __('Fecha'); ?></th>
+                    <th><?php __('Cliente'); ?></th>
+                    <th><?php __('Centro de Trabajo'); ?></th>
+                    <th><?php __('Maquina'); ?></th>
+                    <th><?php __('Observaciones'); ?></th>
+                    <th><?php __('Estados Aviso'); ?></th>
+                    <th class="actions"><?php __('Acciones'); ?></th>
+                </tr>
+                <tr>
+                    <td><?php echo $presupuestosproveedore['Avisosrepuesto']['numero']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisosrepuesto']['fechahora']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisosrepuesto']['Cliente']['nombre']; ?></td>
+                    <td><?php echo!empty($presupuestosproveedore['Avisosrepuesto']['Centrostrabajo']['centrotrabajo']) ? $presupuestosproveedore['Avisosrepuesto']['Centrostrabajo']['centrotrabajo'] : $presupuestosproveedore['Avisosrepuesto']['Centrostrabajo']['direccion']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisosrepuesto']['Maquina']['nombre']; ?></td>
+                    <td><?php echo $presupuestosproveedore['Avisosrepuesto']['observaciones']; ?></td>
+                    <td><?php echo!empty($presupuestosproveedore['Avisosrepuesto']['Estadosaviso']['estado']) ? $presupuestosproveedore['Avisosrepuesto']['Estadosaviso']['estado'] : ''; ?></td>
+                    <td class="actions">
+                        <?php echo $this->Html->link(__('Ver', true), array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestosproveedore['Avisosrepuesto']['id'])); ?>
+                    </td>
+                </tr>
+            </table>
+        <?php endif; ?>
     </div>
 </div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-        <li><?php echo $this->Html->link(__('Editar Pedido de proveedores', true), array('action' => 'edit', $pedidosproveedore['Pedidosproveedore']['id'], $pedidosproveedore['Pedidosproveedore']['presupuestosproveedore_id'])); ?> </li>
-        <li><?php echo $this->Html->link(__('Eliminar Pedido de proveedores', true), array('action' => 'delete', $pedidosproveedore['Pedidosproveedore']['id'], $pedidosproveedore['Pedidosproveedore']['presupuestosproveedore_id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pedidosproveedore['Pedidosproveedore']['id'])); ?> </li>
-    </ul>
-</div>
-<script>$("dd:odd").css("background-color", "#F4F4F4"); $("dt:odd").css("background-color", "#F4F4F4");</script>
+<script type="text/javascript">
+    $('#show_relations').click(function() {
+        $('#relations-presupuestoproveedor').fadeToggle("slow", "linear");
+    });
+    $("dd:odd").css("background-color", "#F4F4F4"); $("dt:odd").css("background-color", "#F4F4F4");
+</script>

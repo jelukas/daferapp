@@ -1,4 +1,4 @@
-<div class="pedidosproveedores form">
+<div class="pedidosproveedores">
     <?php echo $this->Form->create('Pedidosproveedore', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Añadir Pedido a proveedor al Presupuesto a Proveedor ' . $presupuestosproveedore['Presupuestosproveedore']['id']); ?></legend>
@@ -126,16 +126,4 @@
         </div>
     </fieldset>
     <?php echo $this->Form->end(__('Añadir', true)); ?>
-</div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-        <li><a href="#?">Buscar Pedido de Proveedor *</a></li>
-        <li><a href="#?">Nuevo Albarán de Proveedor *</a></li>
-        <li><?php echo $this->Html->link(__('Volver al Presupuesto', true), array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestosproveedore['Presupuestosproveedore']['id'])); ?></li>
-        <li><?php echo $this->Html->link(__('Volver al Presupuesto', true), array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestosproveedore['Presupuestosproveedore']['id'])); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Pedidos de proveedores', true), array('action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Proveedores', true), array('controller' => 'proveedores', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Proveedor', true), array('controller' => 'proveedores', 'action' => 'add')); ?> </li>
-    </ul>
 </div>

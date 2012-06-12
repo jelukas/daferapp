@@ -32,7 +32,7 @@ class Pedidosproveedore extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => '',
-            'limit' => '', 
+            'limit' => '',
             'offset' => '',
             'exclusive' => '',
             'finderQuery' => '',
@@ -52,6 +52,21 @@ class Pedidosproveedore extends AppModel {
             'counterQuery' => ''
         )
     );
+
+    function beforeSave($options) {
+        if (empty($this->data['Pedidosproveedore']['id'])) {
+            $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM pedidosproveedores p ';
+            $resultado = $this->query($query);
+            $this->data['Pedidosproveedore']['numero'] = $resultado[0][0]['siguiente'];
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM pedidosproveedores p ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente'];
+    }
 
 }
 

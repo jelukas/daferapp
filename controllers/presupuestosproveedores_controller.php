@@ -42,7 +42,7 @@ class PresupuestosproveedoresController extends AppController {
         }
 
         $presupuestosproveedores = $this->paginate('Presupuestosproveedore', $conditions);
-        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contains' => array('Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'));
+        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'));
         $this->set('presupuestosproveedores', $presupuestosproveedores);
 
         if (!empty($this->params['url']['pdf'])) {

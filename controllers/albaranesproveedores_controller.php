@@ -3,23 +3,24 @@
 class AlbaranesproveedoresController extends AppController {
 
     var $name = 'Albaranesproveedores';
-    var $components = array('FileUpload','Session');
+    var $components = array('FileUpload', 'Session');
     var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js');
 
     function beforeFilter() {
         parent::beforeFilter();
-        //defaults to 'files', will be webroot/files, make sure webroot/files exists and is chmod 777 
-        $this->FileUpload->fileModel = 'Albaranesproveedore';
-        $this->FileUpload->uploadDir = 'files';
-        $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Albaranesproveedore';
+            $this->FileUpload->uploadDir = 'files/albaranesproveedore';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
         if ($this->params['action'] == 'index') {
             $this->__list();
         }
     }
 
     function index() {
-        $this->Albaranesproveedore->recursive = 2;
         $conditions = array();
+        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene'))));
         $albaranesproveedores = $this->paginate('Albaranesproveedore', $conditions);
         $this->set('albaranesproveedores', $albaranesproveedores);
 
@@ -34,10 +35,15 @@ class AlbaranesproveedoresController extends AppController {
             $this->flashWarnings(__('Albarán Inválido', true));
             $this->redirect($this->referer());
         }
-        $this->Albaranesproveedore->recursive = 2;
-        $this->Albaranesproveedore->ArticulosAlbaranesproveedore->recursive = 3;
+        $albaranesproveedore = $this->Albaranesproveedore->find('first', array('conditions' => array('Albaranesproveedore.id' => $id),
+            'contain' => array('Pedidosproveedore' =>
+                array('Presupuestosproveedore' =>
+                    array('Proveedore',
+                        'Almacene',
+                        'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
+                        'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
+                        'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')))))));
 
-        $albaranesproveedore = $this->Albaranesproveedore->read(null, $id);
         $articulos_albaranesproveedore = $this->Albaranesproveedore->ArticulosAlbaranesproveedore->findAllByAlbaranesproveedoreId($id);
         $presupuestosproveedore = $this->Albaranesproveedore->Pedidosproveedore->Presupuestosproveedore->findById($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id']);
         $this->set('albaranesproveedore', $albaranesproveedore);
@@ -52,7 +58,12 @@ class AlbaranesproveedoresController extends AppController {
             if ($this->Albaranesproveedore->save($this->data)) {
                 $pedidosproveedore_id = $this->data['Albaranesproveedore']['pedidosproveedore_id'];
                 $id = $this->Albaranesproveedore->id;
-                $this->Albaranesproveedore->saveField('albaranescaneado', $this->FileUpload->finalFile);
+                
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->Albaranesproveedore->saveField('albaranescaneado', $this->FileUpload->finalFile);
+                }
+                /* FIn Guardar Fichero */
                 $data = array();
                 foreach ($this->data['ArticulosPedidosproveedore'] as $articulo_pedidosproveedore) {
                     if ($articulo_pedidosproveedore['id'] != 0) {
@@ -81,8 +92,8 @@ class AlbaranesproveedoresController extends AppController {
         if (!empty($pedidosproveedore_id)) {
             $pedidosproveedore = $this->Albaranesproveedore->Pedidosproveedore->find('first', array('contain' => array('ArticulosPedidosproveedore' => 'Articulo'), 'conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
         }
-
-        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore'));
+        $numero = $this->Albaranesproveedore->dime_siguiente_numero();
+        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore','numero'));
     }
 
     function edit($id = null) {
@@ -92,9 +103,13 @@ class AlbaranesproveedoresController extends AppController {
         }
         if (!empty($this->data)) {
             if ($this->Albaranesproveedore->saveAll($this->data)) {
+                $id = $this->Albaranesproveedore->id;
+                $upload = $this->Albaranesproveedore->findById($id);
+                if (!empty($this->data['Albaranesproveedore']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Albaranesproveedore']['albaranescaneado']);
+                    $this->Albaranesproveedore->saveField('albaranescaneado', null);
+                }
                 if ($this->FileUpload->finalFile != null) {
-                    $id = $this->Albaranesproveedore->id;
-                    $upload = $this->Albaranesproveedore->findById($id);
                     $this->FileUpload->RemoveFile($upload['Albaranesproveedore']['albaranescaneado']);
                     $this->Albaranesproveedore->saveField('albaranescaneado', $this->FileUpload->finalFile);
                 }
@@ -105,19 +120,19 @@ class AlbaranesproveedoresController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->Albaranesproveedore->recursive = 2;
-            $albaranesproveedore = $this->Albaranesproveedore->read(null, $id);
-            $articulos_albaranesproveedore = $this->Albaranesproveedore->ArticulosAlbaranesproveedore->findAllByAlbaranesproveedoreId($id);
-            $presupuestosproveedore = $this->Albaranesproveedore->Pedidosproveedore->Presupuestosproveedore->findById($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id']);
-
+            $albaranesproveedore = $this->Albaranesproveedore->find('first', array('conditions' => array('Albaranesproveedore.id' => $id),
+                'contain' => array('Pedidosproveedore' =>
+                    array('Presupuestosproveedore' =>
+                        array('Proveedore',
+                            'Almacene',
+                            'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
+                            'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
+                            'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')))))));
             $this->set('albaranesproveedore', $albaranesproveedore);
-            $this->set('presupuestosproveedore', $presupuestosproveedore);
             $this->data = $this->Albaranesproveedore->read(null, $id);
         }
         $pedidosproveedores = $this->Albaranesproveedore->Pedidosproveedore->find('list');
-        $this->Albaranesproveedore->ArticulosAlbaranesproveedore->recursive = 3;
-        $articulos_albaranesproveedore = $this->Albaranesproveedore->ArticulosAlbaranesproveedore->findAllByAlbaranesproveedoreId($id);
-        $this->set(compact('pedidosproveedores', 'articulos_albaranesproveedore'));
+        $this->set(compact('pedidosproveedores'));
     }
 
     function delete($id = null) {

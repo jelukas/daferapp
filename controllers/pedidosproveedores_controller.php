@@ -7,10 +7,11 @@ class PedidosproveedoresController extends AppController {
 
     function beforeFilter() {
         parent::beforeFilter();
-        //defaults to 'files', will be webroot/files, make sure webroot/files exists and is chmod 777 
-        $this->FileUpload->fileModel = 'Pedidosproveedore';
-        $this->FileUpload->uploadDir = 'files';
-        $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Pedidosproveedore';
+            $this->FileUpload->uploadDir = 'files/pedidosproveedore';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
         if ($this->params['action'] == 'index') {
             $this->__list();
         }
@@ -34,7 +35,9 @@ class PedidosproveedoresController extends AppController {
             $conditions['Pedidosproveedore.fecha <='] = $this->params['url']['year_pedido_t'] . '-' . $this->params['url']['month_pedido_t'] . '-' . $this->params['url']['day_pedido_t'];
         }
 
+        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene')));
         $pedidosproveedores = $this->paginate('Pedidosproveedore', $conditions);
+
         $this->set('pedidosproveedores', $pedidosproveedores);
         if (!empty($this->params['url']['pdf'])) {
             $this->layout = 'pdf';
@@ -65,9 +68,13 @@ class PedidosproveedoresController extends AppController {
         }
         if (!empty($this->data)) {
             if ($this->Pedidosproveedore->saveAll($this->data)) {
+                $id = $this->Pedidosproveedore->id;
+                $upload = $this->Pedidosproveedore->findById($id);
+                if (!empty($this->data['Pedidosproveedore']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Pedidosproveedore']['pedidoescaneado']);
+                    $this->Pedidosproveedore->saveField('pedidoescaneado', null);
+                }
                 if ($this->FileUpload->finalFile != null) {
-                    $id = $this->Pedidosproveedore->id;
-                    $upload = $this->Pedidosproveedore->findById($id);
                     $this->FileUpload->RemoveFile($upload['Pedidosproveedore']['pedidoescaneado']);
                     $this->Pedidosproveedore->saveField('pedidoescaneado', $this->FileUpload->finalFile);
                 }
@@ -160,8 +167,11 @@ class PedidosproveedoresController extends AppController {
                 }
                 $this->Pedidosproveedore->ArticulosPedidosproveedore->saveAll($data);
                 /* Fin paso */
-                $id = $this->Pedidosproveedore->id;
-                $this->Pedidosproveedore->saveField('pedidoescaneado', $this->FileUpload->finalFile);
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->Pedidosproveedore->saveField('pedidoescaneado', $this->FileUpload->finalFile);
+                }
+                /* FIn Guardar Fichero */
                 $this->Session->setFlash(__('El Pedido a Proveedor ha sido guardado', true));
                 $this->redirect(array('action' => 'view', $this->Pedidosproveedore->id));
             } else {
@@ -191,7 +201,7 @@ class PedidosproveedoresController extends AppController {
                         $articulo_pedidoproveedore = array();
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['pedidosproveedore_id'] = $id;
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['articulo_id'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['articulo_id'];
-                        $articulo_pedidoproveedore['ArticulosPedidosproveedore']['cantidad'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad']* -1;
+                        $articulo_pedidoproveedore['ArticulosPedidosproveedore']['cantidad'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'] * -1;
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['precio_proveedor'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor'];
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['descuento'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['descuento'];
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['neto'] = $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['neto'] * -1;
@@ -213,9 +223,9 @@ class PedidosproveedoresController extends AppController {
             $this->flashWarnings(__('No se puede crear un Pedido a Proveedor sin venir desde un Presupuesto a Proveedor.', true));
             $this->redirect(array('action' => 'index'));
         }
-        $albaranesproveedore = $this->Pedidosproveedore->Albaranesproveedore->find('first',array('contain'=>array('Pedidosproveedore' =>array('Presupuestosproveedore'=>array('Proveedore','Almacene','Avisosrepuesto' =>array('Cliente','Maquina','Centrostrabajo'),'Avisostallere' =>array('Cliente','Maquina','Centrostrabajo')))),'conditions'=>array('Albaranesproveedore.id' => $albaranesproveedore_id)));//findById($albaranesproveedore_id);
-        $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->find('first',array('contain'=>array('Pedidosproveedore' =>array('Presupuestosproveedore'=>array('Proveedore','Almacene','Avisosrepuesto' =>array('Cliente','Maquina','Centrostrabajo'),'Avisostallere' =>array('Cliente','Maquina','Centrostrabajo')))),'conditions'=>array('Presupuestosproveedore.id' => $presupuestosproveedore_id))); //findById($presupuestosproveedore_id);
-        $this->set(compact('albaranesproveedore','presupuestosproveedore'));
+        $albaranesproveedore = $this->Pedidosproveedore->Albaranesproveedore->find('first', array('contain' => array('Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene', 'Avisosrepuesto' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo')))), 'conditions' => array('Albaranesproveedore.id' => $albaranesproveedore_id))); //findById($albaranesproveedore_id);
+        $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->find('first', array('contain' => array('Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene', 'Avisosrepuesto' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo')))), 'conditions' => array('Presupuestosproveedore.id' => $presupuestosproveedore_id))); //findById($presupuestosproveedore_id);
+        $this->set(compact('albaranesproveedore', 'presupuestosproveedore'));
     }
 
 }

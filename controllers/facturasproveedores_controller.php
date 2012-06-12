@@ -17,7 +17,7 @@ class FacturasproveedoresController extends AppController {
     }
 
     function index() {
-        $this->Facturasproveedore->recursive = 0;
+        $this->Facturasproveedore->recursive = 1;
 
         $conditions = array();
         if (!empty($this->params['url']['day_factura_f']) && !empty($this->params['url']['month_factura_f']) && !empty($this->params['url']['year_factura_f'])) {
@@ -57,20 +57,13 @@ class FacturasproveedoresController extends AppController {
             $this->flashWarnings(__('Factura de Proveedor No Existe', true));
             $this->redirect($this->redirect());
         }
-
         $facturasproveedore = $this->Facturasproveedore->read(null, $id);
         $articulos_facturasproveedore = $this->Facturasproveedore->ArticulosFacturasproveedore->findAllByFacturasproveedoreId($id);
-        $pedidosproveedore = $this->Facturasproveedore->Albaranesproveedore->Pedidosproveedore->findById($facturasproveedore['Albaranesproveedore']['pedidosproveedore_id']);
-        $presupuestosproveedore = $this->Facturasproveedore->Albaranesproveedore->Pedidosproveedore->Presupuestosproveedore->findById($pedidosproveedore['Pedidosproveedore']['presupuestosproveedore_id']);
-
         $this->set('facturasproveedore', $facturasproveedore);
-        $this->set('pedidosproveedore', $pedidosproveedore);
-        $this->set('presupuestosproveedore', $presupuestosproveedore);
         $this->set('articulos_facturasproveedore', $articulos_facturasproveedore);
     }
 
     function add($albaranesproveedore_id = null) {
-
         $this->Facturasproveedore->recursive = 2;
         if (!empty($this->data)) {
             $albaranesproveedore_id = $this->data['Facturasproveedore']['albaranesproveedore_id'];
