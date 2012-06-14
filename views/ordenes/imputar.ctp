@@ -1,6 +1,6 @@
 <fieldset>
     <?php echo $this->Form->create('Ordene', array('action' => 'imputar')); ?>
-    <legend><?php __('IMPUPTACION A LA ORDEN'); ?><?php echo (!empty($ordene_id)) ? ' '.$ordene_id : '' ?></legend>
+    <legend><?php __('IMPUTACIÓN A LA ORDEN'); ?><?php echo (!empty($ordene_id)) ? ' '.$ordene_id : '' ?></legend>
     <h2><?php __('Pedido cliente'.' '.$pedidoscliente['Pedidoscliente']['id']); ?></h2>
     <dl>
         <?php

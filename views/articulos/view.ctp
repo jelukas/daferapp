@@ -1,5 +1,8 @@
-<div class="articulos view">
-<h2><?php  __('Ficha de Artículo');?></h2>
+<div class="articulos">
+<h2>
+    <?php  __('Ficha de Artículo Ref. '. $articulo['Articulo']['ref']);?>
+    <?php echo $this->Html->link(__('Editar Articulo', true), array('action' => 'edit', $articulo['Articulo']['id']),array('class' => 'button_link')); ?>
+</h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('ID'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
@@ -71,19 +74,4 @@
 		</dd>
 		
 	</dl>
-</div>
-<div class="actions">
-	<h3><?php __('Acciones'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Editar Articulo', true), array('action' => 'edit', $articulo['Articulo']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Eliminar Articulo', true), array('action' => 'delete', $articulo['Articulo']['id']), null, sprintf(__('¿Está seguro de que desea borrar el artículo %s?', true), $articulo['Articulo']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Listar Articulos', true), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Articulo', true), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Listar Familias', true), array('controller' => 'familias', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nueva Familia', true), array('controller' => 'familias', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Listar Almacenes', true), array('controller' => 'almacenes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Almacén', true), array('controller' => 'almacenes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Ref. Intercambiables', true), array('controller' => 'referenciasintercambiables', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nueva Ref. Intercambiable', true), array('controller' => 'referenciasintercambiables', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

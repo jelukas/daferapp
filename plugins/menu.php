@@ -2,8 +2,12 @@
 
 <div class="nav-container-outer">
     <ul id="nav-container" class="nav-container">
-        <li><span class="divider divider-vert" ></span></li>
-        <li><a class="item-primary" href="avisosController.php?action=mapa" target="_self">Avisos</a>
+        <?php if (!empty($_SERVER['HTTP_REFERER'])): ?>
+            <li><span class="divider divider-vert" ></span></li>
+            <li><a class="item-primary" href="<?php echo $_SERVER['HTTP_REFERER'] ?>" target="_self">Volver</a>
+            <?php endif; ?>
+        </li><li><span class="divider divider-vert" ></span></li>
+        <li><a class="item-primary" href="/daferapp/avisostalleres/mapa" target="_self">Avisos</a>
             <ul>                    
                 <li><a href="/daferapp/avisostalleres" title="Avisos de Taller" target="_self" >Avisos de taller</a></li>
                 <li><a href="/daferapp/avisostalleres/mapa" title="Mapa Avisos de Taller" target="_self" >Mapa de Avisos de Taller</a></li>

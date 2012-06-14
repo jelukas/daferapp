@@ -1,4 +1,4 @@
-<div class="albaranesclientes form">
+<div class="albaranesclientes">
     <?php echo $this->Form->create('Albaranescliente', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Nuevo Albaran de Venta Directa'); ?></legend>
@@ -13,10 +13,4 @@
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Guardar', true)); ?>
-</div>
-<div class="actions">
-    <h3><?php __('Actions'); ?></h3>
-    <ul>
-        <li><?php echo $this->Html->link(__('List Albaranesclientes', true), array('action' => 'index')); ?></li>
-    </ul>
 </div>

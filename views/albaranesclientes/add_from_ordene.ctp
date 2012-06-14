@@ -1,4 +1,4 @@
-<div class="albaranesclientes form">
+<div class="albaranesclientes">
     <?php echo $this->Form->create('Albaranescliente', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Nuevo Albaran de Cliente proveniente de la Orden ' . $ordene['Ordene']['id']); ?></legend>
@@ -60,7 +60,7 @@
                                     <td><?php echo $parte['Centrostrabajo']['centrotrabajo'] ?></td>
                                     <td><?php echo $parte['horasimputables'] ?></td>
                                     <td><?php echo $parte['operacion'] ?></td>
-                                    <td><?php foreach ($parte['Mecanico'] as $mecanico): echo $mecanico['nombre'].'<br/>'; endforeach; ?></td>
+                                    <td><?php echo $parte['Mecanico']['nombre'] ?></td>
                                     <td><?php echo $this->Form->input('Tarea.' . $i . '.Parte.' . $j . '.id', array('class' => 'childcheckbox', 'label' => '', 'type' => 'checkbox', 'checked' => true, 'value' => $parte['id'])) ?></td>
                                 </tr>
                                 <?php $j++; ?>
@@ -81,7 +81,7 @@
                                     <td><?php echo $partestallere['fecha'] ?></td>
                                     <td><?php echo $partestallere['horasimputables'] ?></td>
                                     <td><?php echo $partestallere['operacion'] ?></td>
-                                    <td><?php foreach ($partestallere['Mecanico'] as $mecanico): echo $mecanico['nombre'].'<br/>'; endforeach; ?></td>
+                                    <td><?php echo $partestallere['Mecanico']['nombre'] ?></td>
                                     <td><?php echo $this->Form->input('Tarea.' . $i . '.Partestallere.' . $k . '.id', array('class' => 'childcheckbox', 'label' => '', 'type' => 'checkbox', 'checked' => true, 'value' => $partestallere['id'])) ?></td>
                                 </tr>
                                 <?php $k++; ?>

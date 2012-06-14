@@ -1,6 +1,6 @@
 <div class="ordenes">
     <h2>
-        <?php __('Orden'); ?>
+        <?php __('Orden Nº '.$ordene['Ordene']['numero']); ?>
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Listar Ordenes', true), array('action' => 'index'), array('class' => 'button_link')); ?>
     </h2>
@@ -125,23 +125,6 @@
                     </tr>
                     <tr class="tarea-relations">
                         <td colspan="4" style="background-color: #FBEEE1;">
-                            <h4>Articulos de la Tarea</h4>
-                            <table>
-                                <thead>
-                                <th>Ref.</th>
-                                <th>Nombre</th>
-                                <th>Cantidad</th>
-                                <th>Acciones</th>
-                                </thead>
-                                <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
-                                    <tr>
-                                        <td><?php echo $articulo_tarea['Articulo']['ref'] ?></td>
-                                        <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
-                                        <td><?php echo $articulo_tarea['cantidad'] ?></td>
-                                        <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $articulo_tarea['id'])); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
                             <?php if (!empty($tarea['Parte'])): ?>
                                 <h4>Partes de Centro de Trabajo</h4>
                                 <table>
@@ -255,6 +238,31 @@
                                                 <?php echo $this->Html->link(__('Editar', true), array('controller' => 'partestalleres', 'action' => 'edit', $partetaller['id']), array('class' => 'popup')); ?>
                                                 <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'partestalleres', 'action' => 'delete', $partetaller['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Taller Nº # %s?', true), $partetaller['numero'])); ?>
                                             </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            <?php endif; ?>
+                            <?php if (!empty($tarea['ArticulosTarea'])): ?>
+                                <h4>Articulos de la Tarea</h4>
+                                <table>
+                                    <thead>
+                                    <th>Ref.</th>
+                                    <th>Nombre</th>
+                                    <th>Cant. Real</th>
+                                    <th>Cant. Imputable</th>
+                                    <th>Precio Costo</th>
+                                    <th>Total Costo</th>
+                                    <th>Acciones</th>
+                                    </thead>
+                                    <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
+                                        <tr>
+                                            <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'] , true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id'] ), array('class' => 'popup'));?></td>
+                                            <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
+                                            <td><?php echo $articulo_tarea['cantidadreal'] ?></td>
+                                            <td><?php echo $articulo_tarea['cantidad'] ?></td>
+                                            <td><?php echo $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
+                                            <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
+                                            <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $articulo_tarea['id'])); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </table>

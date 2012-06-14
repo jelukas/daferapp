@@ -77,6 +77,8 @@ class ArticulosAlbaranesproveedore extends AppModel {
             $this->Albaranesproveedore->id = $this->data['ArticulosAlbaranesproveedore']['albaranesproveedore_id'];
             $this->Albaranesproveedore->saveField('baseimponible', $albaranesproveedore['Albaranesproveedore']['baseimponible'] + $this->data['ArticulosAlbaranesproveedore']['total']);
         }
+        $this->Articulo->id = $this->data['ArticulosAlbaranesproveedore']['articulo_id'];
+        $this->Articulo->saveField('ultimopreciocompra', $this->data['ArticulosAlbaranesproveedore']['precio_proveedor']);
         return true;
     }
 

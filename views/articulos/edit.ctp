@@ -7,8 +7,8 @@
 		echo $this->Form->input('ref',array('label' => __('Referencia',true)));
 		echo $this->Form->input('nombre',array('label' => __('Nombre',true)));
 		echo $this->Form->input('codigobarras',array('label' => __('Código de barras',true)));
-
 		echo $this->Form->input('precio_sin_iva',array('label' => __('Precio (sin IVA)',true)));
+		echo $this->Form->input('ultimopreciocompra',array('label' => __('Último Precio de Compra',true)));
 		echo $this->Form->input('familia_id',array('label' => __('Familia',true)));
 		echo $this->Form->input('localizacion',array('label' => __('Localización',true)));
 		echo $this->Form->input('existencias',array('label' => __('Existencias',true)));

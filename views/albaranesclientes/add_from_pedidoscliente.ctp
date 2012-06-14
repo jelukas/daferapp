@@ -1,4 +1,4 @@
-<div class="albaranesclientes form">
+<div class="albaranesclientes">
     <?php echo $this->Form->create('Albaranescliente', array('type' => 'file')); ?>
     <fieldset>
         <legend><?php __('Nuevo Albaran de Cliente proveniente del Pedido de Cliente ' . $pedidoscliente['Pedidoscliente']['id']); ?></legend>

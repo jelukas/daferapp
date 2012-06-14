@@ -60,24 +60,22 @@ class OrdenesController extends AppController {
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Invalid ordene', true));
+            $this->flashWarnings(__('Orden Inválida', true));
             $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
             if ($this->Ordene->save($this->data)) {
-                $this->Session->setFlash(__('The ordene has been saved', true));
+                $this->Session->setFlash(__('La Orden hasido guardada', true));
                 $this->redirect(array('action' => 'view', $id));
             } else {
-                $this->Session->setFlash(__('The ordene could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('The ordene could not be saved. Please, try again.', true));
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Ordene->read(null, $id);
+            $this->data = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Centrostrabajo','Mecanico'), 'Partestallere'  => array('Mecanico'))),'conditions' =>array('Ordene.id' => $id)));
         }
-        $almacenes = $this->Ordene->Almacene->find('list');
-        $avisostalleres = $this->Ordene->Avisostallere->find('list');
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
-        $this->set(compact('avisostalleres', 'estadosordenes', 'almacenes'));
+        $this->set(compact('estadosordenes'));
     }
 
     function mapa() {
