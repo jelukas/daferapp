@@ -18,7 +18,7 @@ class OrdenesController extends AppController {
             $this->flashWarnings(__('Orden Inválida', true));
             $this->redirect(array('action' => 'index'));
         }
-        $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Centrostrabajo'), 'Partestallere'  => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
+        $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Centrostrabajo','Mecanico'), 'Partestallere'  => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
         $this->set('ordene', $orden);
         $avisostallere_id = $orden['Avisostallere']['id'];
 

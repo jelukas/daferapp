@@ -75,18 +75,22 @@ class PartesController extends AppController {
         } else {
             $this->data = $this->Parte->read(null, $id);
         }
+        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere')), 'conditions' => array('Tarea.id' => $this->data['Parte']['tarea_id'])));
+        $centrostrabajos = $this->Parte->Tarea->Ordene->Avisostallere->Centrostrabajo->find('list',array('conditions' => array('Centrostrabajo.cliente_id' => $tarea['Ordene']['Avisostallere']['cliente_id'])));
         $mecanicos = $this->Parte->Mecanico->find('list');
-        $this->set(compact('mecanicos'));
+        $this->set(compact('mecanicos','centrostrabajos'));
     }
 
     function delete($id = null) {
         if (!$id) {
             $this->flashWarnings(__('Id No válida para el Parte de Centro de Trabajo', true));
+            $this->redirect($this->referer());
         }
         if ($this->Parte->delete($id)) {
             $this->Session->setFlash(__('El Parte de Centro de Trabajo ha sido borrado', true));
+            $this->redirect($this->referer());
         }
-        $this->flashWarnings(__('El Parte de Centro de Trabajo No puedo ser borrado', true));
+        $this->flashWarnings(__('El Parte de Centro de Trabajo No pudo ser borrado', true));
         $this->redirect($this->referer());
     }
 

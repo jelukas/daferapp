@@ -15,37 +15,17 @@ class Mecanico extends AppModel {
 		),
 	);
         
-        var $hasAndBelongsToMany = array(
-		'Parte' => array(
-			'className' => 'Parte',
-			'joinTable' => 'mecanicos_partes',
-			'foreignKey' => 'mecanico_id',
-			'associationForeignKey' => 'parte_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
-		'Partestallere' => array(
-			'className' => 'Partestallere',
-			'joinTable' => 'mecanicos_partestalleres',
-			'foreignKey' => 'mecanico_id',
-			'associationForeignKey' => 'partestallere_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		)
-	);
+        var $hasMany = array(
+        'Parte' => array(
+            'className' => 'Parte',
+            'foreignKey' => 'mecanico_id',
+            'dependent' => false,
+        ),
+        'Partestallere' => array(
+            'className' => 'Partestallere',
+            'foreignKey' => 'v',
+            'dependent' => true,
+        ),
+    );
 }
 ?>

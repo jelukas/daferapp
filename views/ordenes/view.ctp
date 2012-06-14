@@ -145,22 +145,79 @@
                             <?php if (!empty($tarea['Parte'])): ?>
                                 <h4>Partes de Centro de Trabajo</h4>
                                 <table>
-                                    <thead>
-                                    <th>Centro Trabajo.</th>
-                                    <th>Fecha</th>
-                                    <th>Hora Inicio</th>
-                                    <th>Hora  Final</th>
-                                    <th>Horas Imputables</th>
-                                    <th>Operación</th>
-                                    </thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Fecha</th>
+                                        <th>Mecánico</th>
+                                        <th>Centro Trabajo.</th>
+                                        <th>Descripción Operación</th>
+                                        <th>Hora Desplazamiento</th>
+                                        <th>Kilometraje</th>
+                                        <th>Desplazamiento</th>
+                                        <th>Horas de Trabajo</th>
+                                        <th>Dietas</th>
+                                        <th>Acciones</th>
+                                    </tr>
                                     <?php foreach ($tarea['Parte'] as $partecentro): ?>
-                                        <tr>
-                                            <td><?php echo (!empty($partecentro['Centrostrabajo'])) ? $partecentro['Centrostrabajo']['centrotrabajo'] : '' ?></td>
+                                        <tr>    
+                                            <td><?php echo $partecentro['numero'] ?></td>
                                             <td><?php echo $partecentro['fecha'] ?></td>
-                                            <td><?php echo $partecentro['horainicio'] ?></td>
-                                            <td><?php echo $partecentro['horafinal'] ?></td>
-                                            <td><?php echo $partecentro['horasimputables'] ?></td>
+                                            <td><?php echo (!empty($partecentro['Mecanico'])) ? $partecentro['Mecanico']['nombre'] : '' ?></td>
+                                            <td><?php echo (!empty($partecentro['Centrostrabajo'])) ? $partecentro['Centrostrabajo']['centrotrabajo'] : '' ?></td>
                                             <td><?php echo $partecentro['operacion'] ?></td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <th>Real</th>
+                                                        <th>Imput.</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><?php echo $partecentro['horasdesplazamientoreales'] ?></td>
+                                                        <td><?php echo $partecentro['horasdesplazamientoimputables'] ?></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <th>Real</th>
+                                                        <th>Imput.</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><?php echo $partecentro['kilometrajereal'] ?></td>
+                                                        <td><?php echo $partecentro['kilometrajeimputable'] ?></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td><?php echo $partecentro['preciodesplazamiento'] ?></td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <th>Real</th>
+                                                        <th>Imput.</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><?php echo $partecentro['horasreales'] ?></td>
+                                                        <td><?php echo $partecentro['horasimputables'] ?></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <th>Real</th>
+                                                        <th>Imput.</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><?php echo $partecentro['dietasreales'] ?></td>
+                                                        <td><?php echo $partecentro['dietasimputables'] ?></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="actions">
+                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'partes', 'action' => 'edit', $partecentro['id']), array('class' => 'popup')); ?>
+                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'partes', 'action' => 'delete', $partecentro['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Centro de Trabajo Nº # %s?', true), $partecentro['numero'])); ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </table>

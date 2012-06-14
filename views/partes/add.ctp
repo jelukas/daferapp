@@ -90,7 +90,7 @@
                 </tr>
                 <tr>
                     <td><?php echo $this->Form->input('dietasreales', array('label' => false, 'value' => 0)); ?></td>
-                    <td><?php echo $this->Form->input('diestasimputables', array('label' => false, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('dietasimputables', array('label' => false, 'value' => 0)); ?></td>
                 </tr>
             </table>
         </td>
@@ -106,7 +106,7 @@
         </td>
     </tr>
 </table>
-<?php echo $this->Form->end(__('Submit', true)); ?>
+<?php echo $this->Form->end(__('Guardar', true)); ?>
 <script type="text/javascript">
     $(function(){
         $('#ParteHorasdesplazamientoinicioHour').change(function(){
