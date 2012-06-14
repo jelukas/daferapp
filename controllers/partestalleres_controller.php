@@ -35,10 +35,9 @@ class PartestalleresController extends AppController {
     }
 
     function add($tarea_id = null) {
-        $this->Partestallere->recursive = 2;
         if (!empty($this->data)) {
             $this->Partestallere->create();
-            if ($this->Partestallere->saveAll($this->data)) {
+            if ($this->Partestallere->save($this->data)) {
                 $id = $this->Partestallere->id;
                 /* Guarda fichero */
                 if ($this->FileUpload->finalFile != null) {
@@ -46,27 +45,21 @@ class PartestalleresController extends AppController {
                 }
                 /*FIn Guardar Fichero*/
                 $this->Session->setFlash(__('El nuevo Parte de Taller ha sido creado correctamente', true));
-                $this->redirect(array('action' => 'view', $id));
+                $this->redirect($this->referer());
             } else {
                 $this->flashWarnings(__('El Parte de Taller NO ha podido ser creado', true));
+                $this->redirect($this->referer());
             }
         }
-        $tarea = $this->Partestallere->Tarea->read(null, $tarea_id);
-        $this->set('tarea', $tarea);
-        if ($tarea_id != null && $tarea_id >= 0) {
-            $this->loadModel('Tarea');
-            $tarea = $this->Tarea->read(null, $tarea_id);
-            $this->set('tarea', $tarea);
-        }
         $mecanicos = $this->Partestallere->Mecanico->find('list');
-        $this->set(compact('mecanicos'));
+        $this->set(compact('mecanicos','tarea_id'));
     }
 
     function edit($id = null) {
 
         if (!$id && empty($this->data)) {
             $this->flashWarnings(__('Parte de Taller Inválido', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
             if ($this->Partestallere->save($this->data)) {
@@ -80,20 +73,20 @@ class PartestalleresController extends AppController {
                     $this->FileUpload->RemoveFile($upload['Partestallere']['parteescaneado']);
                     $this->Partestallere->saveField('parteescaneado', $this->FileUpload->finalFile);
                 }
-                $this->Session->setFlash(__('El nuevo parte de taller ha sido guardado correctamente', true));
-                $this->redirect(array('action' => 'view', $id));
+                $this->Session->setFlash(__('El parte de taller ha sido guardado correctamente', true));
+                $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('El nuevo parte de taller No podido ser guardado', true));
+                $this->Session->setFlash(__('El parte de taller No podido ser guardado', true));
+                $this->redirect($this->referer());
             }
         } else {
             $this->data = $this->Partestallere->read(null, $id);
         }
 
-        $tareas = $this->Partestallere->Tarea->find('list');
         $this->Partestallere->recursive = 2;
         $partetaller = $this->Partestallere->findById($id);
         $mecanicos = $this->Partestallere->Mecanico->find('list');
-        $this->set(compact('tareas', 'partetaller', 'mecanicos'));
+        $this->set(compact('partetaller', 'mecanicos'));
     }
 
     function delete($id = null) {
@@ -111,22 +104,6 @@ class PartestalleresController extends AppController {
 
         $this->flashWarnings(__('El Paarte de Taller NO pudo ser Borrado', true));
         $this->redirect($this->referer());
-    }
-
-    function downloadFile($id = null) {
-        if (!$id) {
-            $this->flashWarnings(__('Id NO válido para el Parte de Taller', true));
-            $this->redirect(array('action' => 'index'));
-        } else {
-            $id = $this->Partestallere->id;
-            $upload = $this->Partestallere->findById($id);
-            $name = $upload['Partestallere']['parteescaneado'];
-            $ruta = '../webroot/files/' . $name;
-
-            header("Content-disposition: attachment; filename=$name");
-            header("Content-type: application/octet-stream");
-            readfile($ruta);
-        }
     }
 
     function pdf($id = null) {

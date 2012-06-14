@@ -86,7 +86,6 @@
             </td>
         </tr>
     </table>
-    
     <div class="actions">
         <?php if ($ordene['Estadosordene']['id'] == '5'): ?>
             <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id'])) ?></li></ul>
@@ -116,9 +115,9 @@
                         <td class="actions">
                             <?php echo $this->Html->link(__('Añadir Material', true), array('controller' => 'articulos_tareas', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?> 
                             <?php if ($tarea['tipo'] == 'taller'): ?>
-                                <?php echo $this->Html->link(__('Añadir Parte Taller', true), array('controller' => 'partestalleres', 'action' => 'add', $tarea['id'])); ?>
+                                <?php echo $this->Html->link(__('Añadir Parte Taller', true), array('controller' => 'partestalleres', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php elseif ($tarea['tipo'] == 'centro'): ?>
-                                <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'partes', 'action' => 'add', $tarea['id'])); ?>
+                                <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'partes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php endif; ?>
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'tareas', 'action' => 'view', $tarea['id'])); ?>
                             <?php echo $this->Html->link(__('Ver Relaciones', true), '#?', array('class' => 'ver-relaciones')); ?>
@@ -171,19 +170,35 @@
                                 <h4>Partes de Taller</h4>
                                 <table>
                                     <thead>
+                                    <th>Nº Parte</th>
                                     <th>Fecha</th>
-                                    <th>Hora Inicio</th>
-                                    <th>Hora  Final</th>
-                                    <th>Horas Imputables</th>
-                                    <th>Operación</th>
+                                    <th>Operario</th>
+                                    <th>Descripción de Operación</th>
+                                    <th>Horas de Trabajo</th>
+                                    <th class="actions">Acciones</th>
                                     </thead>
                                     <?php foreach ($tarea['Partestallere'] as $partetaller): ?>
                                         <tr>
+                                            <td><?php echo $partetaller['numero'] ?></td>
                                             <td><?php echo $partetaller['fecha'] ?></td>
-                                            <td><?php echo $partetaller['horainicio'] ?></td>
-                                            <td><?php echo $partetaller['horafinal'] ?></td>
-                                            <td><?php echo $partetaller['horasimputables'] ?></td>
+                                            <td><?php echo $partetaller['Mecanico']['nombre'] ?></td>
                                             <td><?php echo $partetaller['operacion'] ?></td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <th>Real</th>
+                                                        <th>Imputadas</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><?php echo $partetaller['horasreales'] ?></td>
+                                                        <td><?php echo $partetaller['horasimputables'] ?></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="actions">
+                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'partestalleres', 'action' => 'edit', $partetaller['id']), array('class' => 'popup')); ?>
+                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'partestalleres', 'action' => 'delete', $partetaller['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Taller Nº # %s?', true), $partetaller['numero'])); ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </table>

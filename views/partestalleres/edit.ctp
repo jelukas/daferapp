@@ -1,39 +1,83 @@
-<div class="partestalleres form">
-    <?php echo $this->Form->create('Partestallere', array('type' => 'file')); ?>
-    <fieldset>
-        <legend><?php __('Editar Parte de taller'); ?></legend>
-        <?php
-        echo $this->Form->input('id');
-        echo $this->Form->input('tarea_id');
-        echo $this->Form->input('fecha', array('label' => 'Fecha', 'dateFormat' => 'DMY'));
-        echo $this->Form->input('horainicio', array('label' => 'Hora de inicio', 'timeFormat' => '24'));
-        echo $this->Form->input('horafinal', array('label' => 'Hora final', 'timeFormat' => '24'));
-        echo $this->Form->input('horasimputables', array('label' => 'Horas imputables'));
-        echo $this->Form->input('horasnoimputables', array('label' => 'Horas no imputables'));
-        echo $this->Form->input('operacion', array('label' => 'Operaciones a realizar'));
-        echo $this->Form->input('observaciones', array('label' => 'Observaciones'));
-        echo $this->Form->input('firmadopor', array('label' => 'Parte firmado por'));
-        echo $this->Form->input('DNI', array('label' => 'DNI'));
-        echo $this->Form->input('Mecanico', array('label' => 'Mecánicos (Seleccione uno o varios mecánicos pulsando Ctrl + Click):'));
-        echo $this->Html->link(__('Parte de Taller Escaneado Actual: ' . $this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
-        echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Taller Escaneado Actual', 'hiddenField' => false));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
-        ?>
-    </fieldset>
+<?php echo $this->Form->create('Partestallere', array('type' => 'file', array('action' => 'edit'))); ?>
+<fieldset style=" width: 100%;">
+    <legend><?php __('Añadir Parte de Taller'); ?></legend>
+    <table class="view" style="font-size: 75%;">
+        <tr>
+            <th>Número</th>
+            <th>Fecha</th>
+            <th>Mecánico</th>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                echo $this->Form->hidden('tarea_id', array('type' => 'hidden'));
+                echo $this->Form->input('numero', array('label' => false));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->Form->input('fecha', array('label' => false, 'dateFormat' => 'DMY')); ?>
+            </td>
+            <td>
+                <?php echo $this->Form->input('mecanico_id', array('label' => false, 'empty' => '-- Seleccione el Mecánico --')); ?>
+            </td>
+
+        </tr>
+        <tr>
+            <th>Horas de Trabajo</th>
+            <th colspan="2">Descripción de Operaciónes</th>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <th>Inicio</th>
+                        <th>Final</th>
+                        <th>Real</th>
+                        <th>Imputable</th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->Form->input('horainicio', array('label' => false, 'timeFormat' => '24')); ?></td>
+                        <td><?php echo $this->Form->input('horafinal', array('label' => false, 'timeFormat' => '24')); ?></td>
+                        <td><?php echo $this->Form->input('horasreales', array('label' => false, 'readonly' => true)); ?></td>
+                        <td><?php echo $this->Form->input('horasimputables', array('label' => false)); ?></td>
+                    </tr>
+                </table>
+            </td>
+            <td colspan="2">
+                <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <?php
+                echo $this->Html->link(__('Parte de Taller Escaneado Actual: ' . $this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
+                echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Taller Escaneado Actual', 'hiddenField' => false));
+                echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
+                ?>
+            </td>
+        </tr>
+    </table>
+</fieldset>
 <?php echo $this->Form->end(__('Guardar', true)); ?>
-</div>
-<div class="actions">
-    <h3><?php __('Actions'); ?></h3>
-    <ul>
-        <li><?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('Partestallere.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('Partestallere.id'))); ?></li>
-        <li><?php echo $this->Html->link(__('List Partestalleres', true), array('action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link(__('List Ordenes', true), array('controller' => 'ordenes', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Ordene', true), array('controller' => 'ordenes', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('List Tareas', true), array('controller' => 'tareas', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Tarea', true), array('controller' => 'tareas', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('List Articulos', true), array('controller' => 'articulos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Articulo', true), array('controller' => 'articulos', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('List Mecanicos', true), array('controller' => 'mecanicos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Mecanico', true), array('controller' => 'mecanicos', 'action' => 'add')); ?> </li>
-    </ul>
-</div>
+<script type="text/javascript">
+    $(function(){
+        $('#PartestallereHorainicioHour').change(function(){
+            calcula_horasreales();
+        });
+        $('#PartestallereHorainicioMin').change(function(){
+            calcula_horasreales();
+        });;
+        $('#PartestallereHorafinalHour').change(function(){
+            calcula_horasreales();
+        });;
+        $('#PartestallereHorafinalMin').change(function(){
+            calcula_horasreales();
+        });;
+    })
+    function calcula_horasreales(){
+        var minutos = (parseFloat($('#PartestallereHorafinalHour').val()) * 60 + parseFloat($('#PartestallereHorafinalMin').val()))- (parseFloat($('#PartestallereHorainicioHour').val()) * 60 + parseFloat($('#PartestallereHorainicioMin').val())) ;
+        var horasreales = minutos / 60 ;
+        $('#PartestallereHorasreales').val(horasreales)
+        $('#PartestallereHorasimputables').val(horasreales)
+    }
+</script>

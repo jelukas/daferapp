@@ -153,7 +153,7 @@ jQuery(document).ready(function() {
 	
     $( "#dialog-modal" ).dialog({
         autoOpen: false,
-        width: '800',
+        width: '60%',
         height: 'auto',
         modal: true
     });

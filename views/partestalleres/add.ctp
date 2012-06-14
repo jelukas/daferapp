@@ -1,46 +1,81 @@
-<div class="partestalleres form">
-    <?php echo $this->Form->create('Partestallere', array('type' => 'file', 'url' => array($tarea['Tarea']['id'])));
-    ;
-    ?>
-    <fieldset>
-        <legend><?php __('Añadir Parte de Taller'); ?></legend>
-        <?php
-        if (isset($tarea)) {
-            echo $this->Form->label('Nº de Orden de Taller');
-            echo $tarea['Ordene']['id'] . '<br><br>';
-            echo $this->Form->label('Nº Tarea');
-            echo $tarea['Tarea']['id'] . '<br><br>';
-            echo $this->Form->hidden('tarea_id', array('value' => $tarea['Tarea']['id']));
-        }
-        ?>
-        <br>       
-        <?php
-        echo $this->Form->input('fecha', array('label' => 'Fecha', 'dateFormat' => 'DMY'));
-        echo $this->Form->input('horainicio', array('label' => 'Hora de inicio', 'timeFormat' => '24'));
-        echo $this->Form->input('horafinal', array('label' => 'Hora final', 'timeFormat' => '24'));
-        echo $this->Form->input('horasimputables', array('label' => 'Horas imputables'));
-        echo $this->Form->input('horasnoimputables', array('label' => 'Horas no imputables'));
-        echo $this->Form->input('operacion', array('label' => 'Operaciones a realizar'));
-        echo $this->Form->input('observaciones', array('label' => 'Observaciones'));
-        echo $this->Form->input('firmadopor', array('label' => 'Parte firmado por'));
-        echo $this->Form->input('DNI', array('label' => 'DNI'));
-        echo $this->Form->input('Mecanico', array('label' => 'Mecánicos (Seleccione uno o varios mecánicos pulsando Ctrl + Click):'));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
-        ?>
-    </fieldset>
+<?php echo $this->Form->create('Partestallere', array('type' => 'file',array('action' => 'add'))); ?>
+<fieldset style=" width: 100%;">
+    <legend><?php __('Añadir Parte de Taller'); ?></legend>
+    <table class="view" style="font-size: 75%;">
+        <tr>
+            <th>Número</th>
+            <th>Fecha</th>
+            <th>Mecánico</th>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                echo $this->Form->hidden('tarea_id', array('value' => $tarea_id));
+                echo $this->Form->input('numero', array('label' => false));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->Form->input('fecha', array('label' => false, 'dateFormat' => 'DMY')); ?>
+            </td>
+            <td>
+                <?php echo $this->Form->input('mecanico_id', array('label' => false ,'empty' => '-- Seleccione el Mecánico --')); ?>
+            </td>
+
+        </tr>
+        <tr>
+            <th>Horas de Trabajo</th>
+            <th colspan="2">Descripción de Operaciónes</th>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <th>Inicio</th>
+                        <th>Final</th>
+                        <th>Real</th>
+                        <th>Imputable</th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->Form->input('horainicio', array('label' => false, 'timeFormat' => '24')); ?></td>
+                        <td><?php echo $this->Form->input('horafinal', array('label' => false, 'timeFormat' => '24')); ?></td>
+                        <td><?php echo $this->Form->input('horasreales', array('label' => false, 'value' => 0, 'readonly' => true)); ?></td>
+                        <td><?php echo $this->Form->input('horasimputables', array('label' => false, 'value' => 0)); ?></td>
+                    </tr>
+                </table>
+            </td>
+            <td colspan="2">
+                <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <?php
+                echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
+                ?>
+            </td>
+        </tr>
+    </table>
+</fieldset>
 <?php echo $this->Form->end(__('Guardar', true)); ?>
-</div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-
-
-        <li><?php echo $this->Html->link(__('Listar Articulos', true), array('controller' => 'articulos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Articulo', true), array('controller' => 'articulos', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Listar Mecánicos', true), array('controller' => 'mecanicos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Mecánico', true), array('controller' => 'mecanicos', 'action' => 'add')); ?> </li>
-        <li><?php echo $this->Html->link(__('Listar Centros de Trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Centro Trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'add')); ?> </li>
-
-    </ul>
-</div>
+<script type="text/javascript">
+    $(function(){
+        $('#PartestallereHorainicioHour').change(function(){
+            calcula_horasreales();
+        });
+        $('#PartestallereHorainicioMin').change(function(){
+            calcula_horasreales();
+        });;
+        $('#PartestallereHorafinalHour').change(function(){
+            calcula_horasreales();
+        });;
+        $('#PartestallereHorafinalMin').change(function(){
+            calcula_horasreales();
+        });;
+    })
+    function calcula_horasreales(){
+        var minutos = (parseFloat($('#PartestallereHorafinalHour').val()) * 60 + parseFloat($('#PartestallereHorafinalMin').val()))- (parseFloat($('#PartestallereHorainicioHour').val()) * 60 + parseFloat($('#PartestallereHorainicioMin').val())) ;
+        var horasreales = minutos / 60 ;
+        $('#PartestallereHorasreales').val(horasreales)
+        $('#PartestallereHorasimputables').val(horasreales)
+    }
+</script>

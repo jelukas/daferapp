@@ -29,7 +29,6 @@ class PartesController extends AppController {
     }
 
     function add($tarea_id = null) {
-        $this->Parte->Tarea->Ordene->recursive = 2;
         if (!empty($this->data)) {
             $this->Parte->create();
             if ($this->Parte->save($this->data)) {
@@ -37,20 +36,17 @@ class PartesController extends AppController {
                 if ($this->FileUpload->finalFile != null) {
                     $this->Parte->saveField('parteescaneado', $this->FileUpload->finalFile);
                 }
-                $this->Session->setFlash(__('El nuevo Parte de Centro de Trabajo ha sido creado correctamente' . true));
-                $this->redirect(array('action' => 'view', $this->Parte->id));
+                $this->Session->setFlash(__('El nuevo Parte en Centro de Trabajo ha sido añadido correctamente' . true));
+                $this->redirect($this->referer());
             } else {
-                $this->flashWarnings(__('El Parte de Centro de Trabajo No ha podido ser creado. Vuelva a intentarlo' . true));
+                $this->flashWarnings(__('El Parte en Centro de Trabajo No ha podido ser añadido. Vuelva a intentarlo' . true));
+                $this->redirect($this->referer());
             }
         }
-        if ($tarea_id != null && $tarea_id >= 0) {
-            $this->Parte->Tarea->recursive = 2;
-            $tarea = $this->Parte->Tarea->read(null, $tarea_id);
-            $centrotrabajo = $this->Parte->Tarea->Ordene->Avisostallere->Centrostrabajo->findById($tarea['Ordene']['Avisostallere']['centrostrabajo_id']);
-        }
-
+        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere')), 'conditions' => array('Tarea.id' => $tarea_id)));
+        $centrostrabajos = $this->Parte->Tarea->Ordene->Avisostallere->Centrostrabajo->find('list',array('conditions' => array('Centrostrabajo.cliente_id' => $tarea['Ordene']['Avisostallere']['cliente_id'])));
         $mecanicos = $this->Parte->Mecanico->find('list');
-        $this->set(compact('mecanicos', 'tarea', 'centrotrabajo'));
+        $this->set(compact('mecanicos', 'tarea_id', 'centrostrabajos'));
     }
 
     function edit($id = null) {
@@ -74,6 +70,7 @@ class PartesController extends AppController {
                 $this->redirect($this->referer());
             } else {
                 $this->flashWarnings(__('El Parte de Centro de Trabajo No ha podido ser creado. Vuelva a intentarlo', true));
+                $this->redirect($this->referer());
             }
         } else {
             $this->data = $this->Parte->read(null, $id);
@@ -88,11 +85,9 @@ class PartesController extends AppController {
     function delete($id = null) {
         if (!$id) {
             $this->flashWarnings(__('Id No válida para el Parte de Centro de Trabajo', true));
-            $this->redirect($this->referer());
         }
         if ($this->Parte->delete($id)) {
             $this->Session->setFlash(__('El Parte de Centro de Trabajo ha sido borrado', true));
-            $this->redirect($this->referer());
         }
         $this->flashWarnings(__('El Parte de Centro de Trabajo No puedo ser borrado', true));
         $this->redirect($this->referer());

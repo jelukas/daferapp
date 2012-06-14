@@ -18,7 +18,7 @@ class OrdenesController extends AppController {
             $this->flashWarnings(__('Orden Inválida', true));
             $this->redirect(array('action' => 'index'));
         }
-        $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => 'Centrostrabajo', 'Partestallere')), 'conditions' => array('Ordene.id' => $id)));
+        $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Centrostrabajo'), 'Partestallere'  => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
         $this->set('ordene', $orden);
         $avisostallere_id = $orden['Avisostallere']['id'];
 
@@ -30,10 +30,9 @@ class OrdenesController extends AppController {
     function add($idAvisoTaller = null) {
         if (!empty($this->data)) {
             $this->Ordene->create();
-
+            $this->data['Ordene']['fecha'] = date('d-m-Y');
             if ($this->Ordene->save($this->data)) {
                 $id = $this->Ordene->id;
-
                 if (!empty($_POST["idAvisoTaller"])) {
                     $this->Ordene->saveField('avisostallere_id', $_POST["idAvisoTaller"]);
                     //Cambio el estado del Aviso de taller

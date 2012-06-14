@@ -19,27 +19,15 @@ class Parte extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
-        )
-    );
-
-    var $hasAndBelongsToMany = array(
+        ),
         'Mecanico' => array(
             'className' => 'Mecanico',
-            'joinTable' => 'mecanicos_partes',
-            'foreignKey' => 'parte_id',
-            'associationForeignKey' => 'mecanico_id',
-            'unique' => true,
+            'foreignKey' => 'mecanico_id',
             'conditions' => '',
             'fields' => '',
-            'order' => '',
-            'limit' => '',
-            'offset' => '',
-            'finderQuery' => '',
-            'deleteQuery' => '',
-            'insertQuery' => ''
+            'order' => ''
         )
     );
-
 }
 
 ?>

@@ -34,6 +34,16 @@ class Partestallere extends AppModel {
             //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
+        'horafinal' => array(
+            'time' => array(
+                'rule' => array('time'),
+            //'message' => 'Your custom message here',
+            //'allowEmpty' => false,
+            //'required' => false,
+            //'last' => false, // Stop validation after this rule
+            //'on' => 'create', // Limit validation to 'create' or 'update' operations
+            ),
+        ),
         'operacion' => array(
             'notempty' => array(
                 'rule' => array('notempty'),
@@ -54,27 +64,15 @@ class Partestallere extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
-        )
-    );
-
-    var $hasAndBelongsToMany = array(
+        ),
         'Mecanico' => array(
             'className' => 'Mecanico',
-            'joinTable' => 'mecanicos_partestalleres',
-            'foreignKey' => 'partestallere_id',
-            'associationForeignKey' => 'mecanico_id',
-            'unique' => true,
+            'foreignKey' => 'mecanico_id',
             'conditions' => '',
             'fields' => '',
-            'order' => 'Mecanico.nombre ASC',
-            'limit' => '',
-            'offset' => '',
-            'finderQuery' => '',
-            'deleteQuery' => '',
-            'insertQuery' => ''
+            'order' => ''
         )
     );
-
 }
 
 ?>
