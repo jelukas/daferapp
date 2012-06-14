@@ -20,7 +20,6 @@
             <td>
                 <?php echo $this->Form->input('mecanico_id', array('label' => false, 'empty' => '-- Seleccione el Mecánico --')); ?>
             </td>
-
         </tr>
         <tr>
             <th>Horas de Trabajo</th>
@@ -50,7 +49,7 @@
         <tr>
             <td colspan="5">
                 <?php
-                echo $this->Html->link(__('Parte de Taller Escaneado Actual: ' . $this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
+                echo 'Parte de Taller Escaneado Actual: ' .$this->Html->link(__( $this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
                 echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Taller Escaneado Actual', 'hiddenField' => false));
                 echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
                 ?>

@@ -119,7 +119,6 @@
                             <?php elseif ($tarea['tipo'] == 'centro'): ?>
                                 <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'partes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php endif; ?>
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'tareas', 'action' => 'view', $tarea['id'])); ?>
                             <?php echo $this->Html->link(__('Ver Relaciones', true), '#?', array('class' => 'ver-relaciones')); ?>
                             <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareas', 'action' => 'delete', $tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tarea['id'])); ?>
                         </td>

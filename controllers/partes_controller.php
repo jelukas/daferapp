@@ -75,11 +75,8 @@ class PartesController extends AppController {
         } else {
             $this->data = $this->Parte->read(null, $id);
         }
-        $tareas = $this->Parte->Tarea->find('list');
-        $this->Parte->recursive = 2;
-        $parte = $this->Parte->findById($id);
         $mecanicos = $this->Parte->Mecanico->find('list');
-        $this->set(compact('tareas', 'parte', 'mecanicos'));
+        $this->set(compact('mecanicos'));
     }
 
     function delete($id = null) {

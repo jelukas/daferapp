@@ -5,7 +5,7 @@
         <th style="width: 200px">Fecha</th>
         <th style="width: 150px">Mecánico</th>
         <th>Descripción Operación</th>
-        
+
     </tr>
     <tr>
         <td>
@@ -27,7 +27,8 @@
     </tr>
     <tr>
         <th colspan="2">Horas Desplazamiento</th>
-        <th colspan="2">Kilometraje</th>
+        <th>Kilometraje</th>
+        <th>Precio Desplazamiento</th>
     </tr>
     <tr>
         <td colspan="2">
@@ -39,22 +40,57 @@
                     <th>Imputable</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('horainicio', array('label' => false)); ?></td>
-                    <td><?php echo $this->Form->input('horafinal', array('label' => false)); ?></td>
-                    <td><?php echo $this->Form->input('horasreales', array('label' => false,'readonly' => true ,'value' => 0)); ?></td>
-                    <td><?php echo $this->Form->input('horasimputables', array('label' => false,'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoinicio', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientofin', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoreales', array('label' => false, 'readonly' => true, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoimputables', array('label' => false, 'value' => 0)); ?></td>
                 </tr>
             </table>
         </td>
-        <td colspan="2">
+        <td>
             <table>
                 <tr>
                     <th>Real</th>
                     <th>Imputable</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('kilometrajereal', array('label' => false,'value' => 0)); ?></td>
-                    <td><?php echo $this->Form->input('kilometrajeimputable', array('label' => false,'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajereal', array('label' => false, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajeimputable', array('label' => false, 'value' => 0)); ?></td>
+                </tr>
+            </table>
+        </td>
+        <td><?php echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => 0)); ?></td>
+    </tr>
+    <tr>
+        <th colspan="3">Horas de Trabajo</th>
+        <th>Dietas</th>
+    </tr>
+    <tr>
+        <td colspan="3">
+            <table>
+                <tr>
+                    <th>Inicio</th>
+                    <th>Final</th>
+                    <th>Real</th>
+                    <th>Imputadas</th>
+                </tr>
+                <tr>
+                    <td><?php echo $this->Form->input('horainicio', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horafinal', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasreales', array('label' => false, 'readonly' => true, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('horasimputables', array('label' => false, 'value' => 0)); ?></td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <th>Real</th>
+                    <th>Imputadas</th>
+                </tr>
+                <tr>
+                    <td><?php echo $this->Form->input('dietasreales', array('label' => false, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('diestasimputables', array('label' => false, 'value' => 0)); ?></td>
                 </tr>
             </table>
         </td>
@@ -71,3 +107,48 @@
     </tr>
 </table>
 <?php echo $this->Form->end(__('Submit', true)); ?>
+<script type="text/javascript">
+    $(function(){
+        $('#ParteHorasdesplazamientoinicioHour').change(function(){
+            calcula_horasreales_desplazamiento();
+        });
+        $('#ParteHorasdesplazamientoinicioMin').change(function(){
+            calcula_horasreales_desplazamiento();
+        });;
+        $('#ParteHorasdesplazamientofinHour').change(function(){
+            calcula_horasreales_desplazamiento();
+        });;
+        $('#ParteHorasdesplazamientofinMin').change(function(){
+            calcula_horasreales_desplazamiento();
+        });;
+
+
+        $('#ParteHorainicioHour').change(function(){
+            calcula_horasreales_trabajo();
+        });
+        $('#ParteHorainicioMin').change(function(){
+            calcula_horasreales_trabajo();
+        });;
+        $('#ParteHorafinalHour').change(function(){
+            calcula_horasreales_trabajo();
+        });;
+        $('#ParteHorafinalMin').change(function(){
+            calcula_horasreales_trabajo();
+        });;
+ 
+ 
+        function calcula_horasreales_desplazamiento(){
+            var minutos = (parseFloat($('#ParteHorasdesplazamientofinHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientofinMin').val()))- (parseFloat($('#ParteHorasdesplazamientoinicioHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientoinicioMin').val())) ;
+            var horasreales = minutos / 60 ;
+            $('#ParteHorasdesplazamientoreales').val(horasreales)
+            $('#ParteHorasdesplazamientoimputables').val(horasreales)
+        }
+        function calcula_horasreales_trabajo(){
+            var minutos = (parseFloat($('#ParteHorafinalHour').val()) * 60 + parseFloat($('#ParteHorafinalMin').val()))- (parseFloat($('#ParteHorainicioHour').val()) * 60 + parseFloat($('#ParteHorainicioMin').val())) ;
+            var horasreales = minutos / 60 ;
+            $('#ParteHorasreales').val(horasreales)
+            $('#ParteHorasimputables').val(horasreales)
+        }
+    
+    });
+</script>
