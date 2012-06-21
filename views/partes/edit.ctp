@@ -5,7 +5,6 @@
         <th style="width: 200px">Fecha</th>
         <th style="width: 150px">Mecánico</th>
         <th>Descripción Operación</th>
-
     </tr>
     <tr>
         <td>
@@ -14,16 +13,9 @@
             echo $this->Form->input('numero', array('label' => false));
             ?>
         </td>
-        <td>
-            <?php echo $this->Form->input('fecha', array('label' => false)); ?>
-        </td>
-        <td>
-            <?php echo $this->Form->input('mecanico_id', array('label' => false, 'style' => 'width: 150px')); ?>
-        </td>
-        <td>
-            <?php echo $this->Form->input('operacion', array('label' => false)); ?>
-        </td>
-
+        <td><?php echo $this->Form->input('fecha', array('label' => false)); ?></td>
+        <td><?php echo $this->Form->input('mecanico_id', array('label' => false, 'style' => 'width: 150px')); ?></td>
+        <td><?php echo $this->Form->input('operacion', array('label' => false)); ?></td>
     </tr>
     <tr>
         <th colspan="2">Horas Desplazamiento</th>
@@ -93,11 +85,6 @@
                     <td><?php echo $this->Form->input('dietasimputables', array('label' => false)); ?></td>
                 </tr>
             </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <?php echo $this->Form->input('centrostrabajo_id', array('options' => $centrostrabajos)); ?>
         </td>
     </tr>
     <tr>

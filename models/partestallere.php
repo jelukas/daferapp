@@ -73,6 +73,20 @@ class Partestallere extends AppModel {
             'order' => ''
         )
     );
+
+    function afterSave($created) {
+        $partestallere = $this->find('first', array('contain' => array('Tarea'), 'conditions' => array('Partestallere.id' => $this->id)));
+        $this->Tarea->id = $partestallere['Partestallere']['tarea_id'];
+        $this->Tarea->recalcularTotales();
+    }
+
+    function beforeDelete() {
+        $partestallere = $this->find('first', array('contain' => array('Tarea'), 'conditions' => array('Partestallere.id' => $this->id)));
+        $this->Tarea->id = $partestallere['Partestallere']['tarea_id'];
+        $this->Tarea->recalcularTotales($this->id);
+        return true;
+    }
+
 }
 
 ?>

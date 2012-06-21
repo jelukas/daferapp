@@ -1,5 +1,8 @@
-<div class="clientes index">
-<h2><?php __('Maestro de Clientes');?></h2>
+<div class="clientes">
+<h2>
+    <?php __('Maestro de Clientes');?>
+    <?php echo $html->link(__('Nuevo Cliente', true), array('action' => 'add'),array('class' => 'button_link'));?>
+</h2>
 <?php
 	echo $form->create('', array('action'=>'search'));
 	echo $form->input('Buscar', array('type'=>'text'));
@@ -9,12 +12,9 @@
 <tr>
 	
 	<th><?php echo $paginator->sort('CIF');?></th>
-	<th><?php echo $paginator->sort('Código');?></th>
-	<th><?php echo $paginator->sort('Nombre');?></th>
+	<th><?php echo $paginator->sort('Nombre Comercial');?></th>
 	<th><?php echo $paginator->sort('Teléfono');?></th>
-	
 	<th><?php echo $paginator->sort('Comercial');?></th>
-	
 	<th class="actions"><?php __('Acciones');?></th>
 </tr>
 	<?php
@@ -31,20 +31,14 @@
 			<?php echo $cliente['Cliente']['cif']; ?>
 		</td>
 		<td>
-			<?php echo $cliente['Cliente']['codigo']; ?>
-		</td>
-		<td>
 			<?php echo $cliente['Cliente']['nombre']; ?>
 		</td>
-		
 		<td>
 			<?php echo $cliente['Cliente']['telefono']; ?>
 		</td>
-		
 		<td>
 			<?php echo $html->link($cliente['Comerciale']['nombre'], array('controller' => 'comerciales', 'action' => 'view', $cliente['Comerciale']['id'])); ?>
 		</td>
-		
 		<td class="actions">
 			<?php echo $html->link(__('Ver', true), array('action' => 'view', $cliente['Cliente']['id'])); ?>
 			<?php echo $html->link(__('Editar', true), array('action' => 'edit', $cliente['Cliente']['id'])); ?>
@@ -67,15 +61,4 @@
  |
 		<?php echo $this->Paginator->next(__('Siguiente', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php __('Acciones'); ?></h3>
-	<ul>
-		<li><?php echo $html->link(__('Nuevo Cliente', true), array('action' => 'add')); ?></li>
-		<li><?php echo $html->link(__('Listar Comerciales', true), array('controller' => 'comerciales', 'action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('Nuevo Comercial', true), array('controller' => 'comerciales', 'action' => 'add')); ?> </li>
-		<li><?php echo $html->link(__('Listar Formas de pago', true), array('controller' => 'formapagos', 'action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('Nueva Forma de pago', true), array('controller' => 'formapagos', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Generar Informe', true), array('action' => 'pdf')); ?> </li>
-	</ul>
 </div>

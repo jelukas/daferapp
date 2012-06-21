@@ -5,7 +5,6 @@
         <th style="width: 200px">Fecha</th>
         <th style="width: 150px">Mecánico</th>
         <th>Descripción Operación</th>
-
     </tr>
     <tr>
         <td>
@@ -54,12 +53,12 @@
                     <th>Imputable</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('kilometrajereal', array('label' => false, 'value' => 0)); ?></td>
-                    <td><?php echo $this->Form->input('kilometrajeimputable', array('label' => false, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajereal', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['distancia'])); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajeimputable', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['distancia'])); ?></td>
                 </tr>
             </table>
         </td>
-        <td><?php echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => 0)); ?></td>
+        <td><?php echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciofijodesplazamiento'])); ?></td>
     </tr>
     <tr>
         <th colspan="3">Horas de Trabajo</th>
@@ -89,15 +88,10 @@
                     <th>Imputadas</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('dietasreales', array('label' => false, 'value' => 0)); ?></td>
-                    <td><?php echo $this->Form->input('dietasimputables', array('label' => false, 'value' => 0)); ?></td>
+                    <td><?php echo $this->Form->input('dietasreales', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['dietas'])); ?></td>
+                    <td><?php echo $this->Form->input('dietasimputables', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['dietas'])); ?></td>
                 </tr>
             </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <?php echo $this->Form->input('centrostrabajo_id', array('options' => $centrostrabajos)); ?>
         </td>
     </tr>
     <tr>
@@ -149,6 +143,5 @@
             $('#ParteHorasreales').val(horasreales)
             $('#ParteHorasimputables').val(horasreales)
         }
-    
     });
 </script>

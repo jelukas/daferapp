@@ -1,6 +1,7 @@
 <div class="partes view">
     <h2><?php __('Parte'); ?></h2>
-    <dl><?php $i = 0;
+    <dl><?php
+$i = 0;
 $class = ' class="altrow"';
 ?>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
@@ -107,7 +108,7 @@ $class = ' class="altrow"';
                         <td class="actions">
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'mecanicos', 'action' => 'view', $mecanico['id'])); ?>
                             <?php echo $this->Html->link(__('Editar', true), array('controller' => 'mecanicos', 'action' => 'edit', $mecanico['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'mecanicos', 'action' => 'delete', $mecanico['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $mecanico['id'])); ?>
+        <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'mecanicos', 'action' => 'delete', $mecanico['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $mecanico['id'])); ?>
                         </td>
                     </tr>
             <?php endforeach; ?>

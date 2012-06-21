@@ -83,10 +83,8 @@ class PartestalleresController extends AppController {
             $this->data = $this->Partestallere->read(null, $id);
         }
 
-        $this->Partestallere->recursive = 2;
-        $partetaller = $this->Partestallere->findById($id);
         $mecanicos = $this->Partestallere->Mecanico->find('list');
-        $this->set(compact('partetaller', 'mecanicos'));
+        $this->set(compact('mecanicos'));
     }
 
     function delete($id = null) {

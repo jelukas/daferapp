@@ -43,10 +43,9 @@ class PartesController extends AppController {
                 $this->redirect($this->referer());
             }
         }
-        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere')), 'conditions' => array('Tarea.id' => $tarea_id)));
-        $centrostrabajos = $this->Parte->Tarea->Ordene->Avisostallere->Centrostrabajo->find('list',array('conditions' => array('Centrostrabajo.cliente_id' => $tarea['Ordene']['Avisostallere']['cliente_id'])));
+        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $tarea_id)));
         $mecanicos = $this->Parte->Mecanico->find('list');
-        $this->set(compact('mecanicos', 'tarea_id', 'centrostrabajos'));
+        $this->set(compact('mecanicos', 'tarea_id','tarea'));
     }
 
     function edit($id = null) {
@@ -75,10 +74,9 @@ class PartesController extends AppController {
         } else {
             $this->data = $this->Parte->read(null, $id);
         }
-        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere')), 'conditions' => array('Tarea.id' => $this->data['Parte']['tarea_id'])));
-        $centrostrabajos = $this->Parte->Tarea->Ordene->Avisostallere->Centrostrabajo->find('list',array('conditions' => array('Centrostrabajo.cliente_id' => $tarea['Ordene']['Avisostallere']['cliente_id'])));
+        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $this->data['Parte']['tarea_id'])));
         $mecanicos = $this->Parte->Mecanico->find('list');
-        $this->set(compact('mecanicos','centrostrabajos'));
+        $this->set(compact('mecanicos'));
     }
 
     function delete($id = null) {

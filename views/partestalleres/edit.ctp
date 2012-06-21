@@ -49,7 +49,7 @@
         <tr>
             <td colspan="5">
                 <?php
-                echo 'Parte de Taller Escaneado Actual: ' .$this->Html->link(__( $this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
+                echo 'Parte de Taller Escaneado Actual: ' . $this->Html->link(__($this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
                 echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Taller Escaneado Actual', 'hiddenField' => false));
                 echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
                 ?>

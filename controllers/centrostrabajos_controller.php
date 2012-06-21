@@ -15,7 +15,10 @@ class CentrostrabajosController extends AppController {
             $this->Session->setFlash(__('Invalid centrostrabajo', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->set('centrostrabajo', $this->Centrostrabajo->read(null, $id));
+        $centrostrabajo = $this->Centrostrabajo->read(null, $id);
+        $this->set('centrostrabajo', $centrostrabajo);
+        $maquinas = $this->Centrostrabajo->Maquina->find('list',array('conditions'=>array('Maquina.centrostrabajo_id' => $id)));
+        $this->set('maquinas', $maquinas);
     }
 
     function add() {
@@ -35,12 +38,12 @@ class CentrostrabajosController extends AppController {
     function edit($id = null) {
         if (!$id && empty($this->data)) {
             $this->Session->setFlash(__('Invalid centrostrabajo', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
             if ($this->Centrostrabajo->save($this->data)) {
                 $this->Session->setFlash(__('The centrostrabajo has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect(array('action' => 'view',$this->Centrostrabajo->id));
             } else {
                 $this->Session->setFlash(__('The centrostrabajo could not be saved. Please, try again.', true));
             }
@@ -55,11 +58,11 @@ class CentrostrabajosController extends AppController {
     function delete($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('Invalid id for centrostrabajo', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         if ($this->Centrostrabajo->delete($id)) {
             $this->Session->setFlash(__('Centrostrabajo deleted', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         $this->Session->setFlash(__('Centrostrabajo was not deleted', true));
         $this->redirect(array('action' => 'index'));

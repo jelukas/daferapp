@@ -1,6 +1,6 @@
 <div class="ordenes">
     <h2>
-        <?php __('Orden Nº '.$ordene['Ordene']['numero']); ?>
+        <?php __('Orden Nº ' . $ordene['Ordene']['numero']); ?>
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Listar Ordenes', true), array('action' => 'index'), array('class' => 'button_link')); ?>
     </h2>
@@ -132,7 +132,6 @@
                                         <th>Número</th>
                                         <th>Fecha</th>
                                         <th>Mecánico</th>
-                                        <th>Centro Trabajo.</th>
                                         <th>Descripción Operación</th>
                                         <th>Hora Desplazamiento</th>
                                         <th>Kilometraje</th>
@@ -146,7 +145,6 @@
                                             <td><?php echo $partecentro['numero'] ?></td>
                                             <td><?php echo $partecentro['fecha'] ?></td>
                                             <td><?php echo (!empty($partecentro['Mecanico'])) ? $partecentro['Mecanico']['nombre'] : '' ?></td>
-                                            <td><?php echo (!empty($partecentro['Centrostrabajo'])) ? $partecentro['Centrostrabajo']['centrotrabajo'] : '' ?></td>
                                             <td><?php echo $partecentro['operacion'] ?></td>
                                             <td>
                                                 <table>
@@ -155,8 +153,8 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partecentro['horasdesplazamientoreales'] ?></td>
-                                                        <td><?php echo $partecentro['horasdesplazamientoimputables'] ?></td>
+                                                        <td><?php echo $partecentro['horasdesplazamientoreales'] ?> h</td>
+                                                        <td><?php echo $partecentro['horasdesplazamientoimputables'] ?> h</td>
                                                     </tr>
                                                 </table>
                                             </td>
@@ -167,12 +165,12 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partecentro['kilometrajereal'] ?></td>
-                                                        <td><?php echo $partecentro['kilometrajeimputable'] ?></td>
+                                                        <td><?php echo $partecentro['kilometrajereal'] ?> Km.</td>
+                                                        <td><?php echo $partecentro['kilometrajeimputable'] ?> Km.</td>
                                                     </tr>
                                                 </table>
                                             </td>
-                                            <td><?php echo $partecentro['preciodesplazamiento'] ?></td>
+                                            <td><?php echo $partecentro['preciodesplazamiento'] ?> €</td>
                                             <td>
                                                 <table>
                                                     <tr>
@@ -180,8 +178,8 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partecentro['horasreales'] ?></td>
-                                                        <td><?php echo $partecentro['horasimputables'] ?></td>
+                                                        <td><?php echo $partecentro['horasreales'] ?> h</td>
+                                                        <td><?php echo $partecentro['horasimputables'] ?> h</td>
                                                     </tr>
                                                 </table>
                                             </td>
@@ -192,8 +190,8 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partecentro['dietasreales'] ?></td>
-                                                        <td><?php echo $partecentro['dietasimputables'] ?></td>
+                                                        <td><?php echo $partecentro['dietasreales'] ?> €</td>
+                                                        <td><?php echo $partecentro['dietasimputables'] ?> €</td>
                                                     </tr>
                                                 </table>
                                             </td>
@@ -203,61 +201,61 @@
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-                                        <tr style="background-color: #27642;">
-                                            <td colspan="4"></td>
-                                            <td style="font-weight: bold;">Precios Totales</td>
-                                            <td>
-                                                <table>
-                                                    <tr>
-                                                        <th>Real</th>
-                                                        <th>Imput.</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><?php echo $tarea['totaldesplazamientoreal'] ?></td>
-                                                        <td><?php echo $tarea['totaldesplazamientoimputado'] ?></td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table>
-                                                    <tr>
-                                                        <th>Real</th>
-                                                        <th>Imput.</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><?php echo $tarea['totalkilometrajereal'] ?></td>
-                                                        <td><?php echo $tarea['totalkilometrajeimputable'] ?></td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <?php echo $tarea['totalpreciodesplazamiento'] ?>
-                                            </td>
-                                            <td>
-                                                <table>
-                                                    <tr>
-                                                        <th>Real</th>
-                                                        <th>Imput.</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><?php echo $tarea['totalhorasreales'] ?></td>
-                                                        <td><?php echo $tarea['totalhorasimputables'] ?></td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table>
-                                                    <tr>
-                                                        <th>Real</th>
-                                                        <th>Imput.</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><?php echo $tarea['totaldietasreales'] ?></td>
-                                                        <td><?php echo $tarea['totaldietasimputables'] ?></td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
+                                    <tr style="background-color: #27642;">
+                                        <td colspan="3"></td>
+                                        <td style="font-weight: bold;">Precios Totales</td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <th>Real</th>
+                                                    <th>Imput.</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo $tarea['totaldesplazamientoreal'] ?> €</td>
+                                                    <td><?php echo $tarea['totaldesplazamientoimputado'] ?> €</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <th>Real</th>
+                                                    <th>Imput.</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo $tarea['totalkilometrajereal'] ?> €</td>
+                                                    <td><?php echo $tarea['totalkilometrajeimputable'] ?> €</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <?php echo $tarea['totalpreciodesplazamiento'] ?> €
+                                        </td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <th>Real</th>
+                                                    <th>Imput.</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo $tarea['totalhorasreales'] ?> €</td>
+                                                    <td><?php echo $tarea['totalhorasimputables'] ?> €</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <th>Real</th>
+                                                    <th>Imput.</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo $tarea['totaldietasreales'] ?> €</td>
+                                                    <td><?php echo $tarea['totaldietasimputables'] ?> €</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
                                 </table>
                             <?php endif; ?>
                             <?php if (!empty($tarea['Partestallere'])): ?>
@@ -295,6 +293,22 @@
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
+                                    <tr style="background-color: #27642;">
+                                        <td colspan="3"></td>
+                                        <td style="font-weight: bold;">Precios Totales</td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <th>Real</th>
+                                                    <th>Imput.</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo $tarea['totalhorasreales'] ?> €</td>
+                                                    <td><?php echo $tarea['totalhorasimputables'] ?> €</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
                                 </table>
                             <?php endif; ?>
                             <?php if (!empty($tarea['ArticulosTarea'])): ?>
@@ -313,7 +327,7 @@
                                     </thead>
                                     <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
                                         <tr>
-                                            <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'] , true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id'] ), array('class' => 'popup'));?></td>
+                                            <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
                                             <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidadreal'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] ?></td>

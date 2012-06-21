@@ -54,19 +54,6 @@ class Centrostrabajo extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Parte' => array(
-			'className' => 'Parte',
-			'foreignKey' => 'centrostrabajo_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
 	);
 }
 ?>

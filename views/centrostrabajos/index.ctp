@@ -1,5 +1,8 @@
-<div class="centrostrabajos index">
-	<h2><?php __('Centros de Trabajo');?></h2>
+<div class="centrostrabajos">
+	<h2>
+            <?php __('Centros de Trabajo');?>
+            <?php echo $this->Html->link(__('Nuevo Centro Trabajo', true), array('action' => 'add'),array('class'=>'button_link')); ?>
+        </h2>
 	<?php
 	echo $form->create('', array('action'=>'search'));
 	echo $form->input('Buscar', array('type'=>'text'));
@@ -53,13 +56,4 @@
  |
 		<?php echo $this->Paginator->next(__('Siguiente', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php __('Acciones'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Nuevo Centro Trabajo', true), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('Listar clientes', true), array('controller' => 'clientes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo cliente', true), array('controller' => 'clientes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Generar Informe', true), array('action' => 'pdf')); ?> </li>
-	</ul>
 </div>
