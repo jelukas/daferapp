@@ -256,6 +256,26 @@
                                             </table>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="9" style="font-weight: bold; text-align: center;">
+                                            <p style="font-style: italic; font-weight: normal;">
+                                                Este Centro de Trabajo Factura el Desplazamiento mediante:
+                                                <?php if ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciokm'): ?>
+                                                    Precio por Kilometro (* No se tendrá encuenta el Precio de Desplazamiento Fijo)
+                                                <?php elseif ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio'): ?>
+                                                    Precio Fijo Definido (* No se tendrá encuenta el Kilometraje)
+                                                <?php endif; ?>
+                                            </p>
+                                            <?php if ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciokm'): ?>
+                                                <p>Total Partes Real: <?php echo $tarea['totaldietasreales'] + $tarea['totalhorasreales'] +  $tarea['totalkilometrajereal'] + $tarea['totaldesplazamientoreal'] ?> &euro;</p>
+                                                <p>Total Partes Imputable: <?php echo $tarea['totaldietasimputables'] + $tarea['totalhorasimputables'] + $tarea['totalkilometrajeimputable'] + $tarea['totaldesplazamientoimputado'] ?> &euro;</p>
+
+                                            <?php elseif ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio'): ?>
+                                                <p>Total Partes Real: <?php echo $tarea['totaldietasreales'] + $tarea['totalhorasreales'] + $tarea['totalpreciodesplazamiento']  + $tarea['totaldesplazamientoreal'] ?> &euro;</p>
+                                                <p>Total Partes Imputable: <?php echo $tarea['totaldietasimputables'] + $tarea['totalhorasimputables'] + $tarea['totalpreciodesplazamiento'] + $tarea['totaldesplazamientoimputado'] ?> &euro;</p>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
                                 </table>
                             <?php endif; ?>
                             <?php if (!empty($tarea['Partestallere'])): ?>
@@ -325,6 +345,10 @@
                                     <th>Total PVP</th>
                                     <th>Acciones</th>
                                     </thead>
+                                    <?php
+                                    $totalmateriales_real = 0;
+                                    $totalmateriales_imputable = 0;
+                                    ?>
                                     <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
                                         <tr>
                                             <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
@@ -335,9 +359,17 @@
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
                                             <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
-                                            <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $articulo_tarea['id'])); ?></td>
+                                            <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
                                         </tr>
+                                        <?php $totalmateriales_real += $articulo_tarea['cantidadreal'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
+                                        <?php $totalmateriales_imputable += $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
                                     <?php endforeach; ?>
+                                    <tr>
+                                        <td colspan="9" style="font-weight: bold; text-align: center;">
+                                            <p>Total Materiales Real: <?php echo $totalmateriales_real ?> &euro;</p>
+                                            <p>Total Materiales Imputable: <?php echo $totalmateriales_imputable ?> &euro;</p>
+                                        </td>
+                                    </tr>
                                 </table>
                             <?php endif; ?>
                         </td>
