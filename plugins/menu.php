@@ -67,6 +67,7 @@
                 <li><a href="/daferapp/users" title="Usuarios" target="_self">Usuarios</a></li>
                 <li><a href="/daferapp/roles" title="Roles" target="_self">Roles</a></li>
                 <li><a href="/daferapp/restricciones" title="Restricciones" target="_self">Restricciones</a></li>
+                <li><a href="/daferapp/centrosdecostes" title="Tipos de IVA" target="_self">Centros de Coste</a></li>
                 <li><a href="/daferapp/tiposivas" title="Tipos de IVA" target="_self">Tipos de IVA</a></li>
                 <!--<li><a href="/configuracion.php" title="Configuración" target="_self" >Configuración</a></li>-->
 
