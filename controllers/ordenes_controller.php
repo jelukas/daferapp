@@ -7,6 +7,15 @@ class OrdenesController extends AppController {
     var $helpers = array('Javascript', 'Time');
     var $components = array('FileUpload');
 
+    function beforeFilter() {
+        parent::beforeFilter();
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Ordene';
+            $this->FileUpload->uploadDir = 'files/ordene';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
+    }
+
     function index() {
         $this->paginate = array('limit' => 20, 'contain' => array('Estadosordene', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')));
         $ordenes = $this->paginate();
@@ -72,7 +81,7 @@ class OrdenesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array( 'Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
+            $this->data = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
         }
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
         $this->set(compact('estadosordenes'));
@@ -128,6 +137,7 @@ class OrdenesController extends AppController {
                     }
                     /* Fin de la Imputacion */
                     $this->Session->setFlash(__('Se ha imputado material a la Orden', true));
+                    $this->redirect(array('action' => 'view', $ordene_id));
                 } else {
                     $this->Session->setFlash(__('The ordene could not be saved. Please, try again.', true));
                     $this->redirect($this->referer());

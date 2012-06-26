@@ -12,20 +12,18 @@ class Cliente extends AppModel {
             'className' => 'Cuentasbancaria',
             'foreignKey' => 'cliente_id',
             'dependent' => true
-        )
+        ),
+        'Formapago' => array(
+            'className' => 'Formapago',
+            'foreignKey' => 'cliente_id',
+            'dependent' => true
+        ),
     );
     
     var $belongsTo = array(
         'Comerciale' => array(
             'className' => 'Comerciale',
             'foreignKey' => 'comerciale_id',
-            'conditions' => '',
-            'fields' => '',
-            'order' => ''
-        ),
-        'Formapago' => array(
-            'className' => 'Formapago',
-            'foreignKey' => 'formapago_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''

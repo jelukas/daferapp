@@ -28,7 +28,6 @@ class ClientesController extends AppController {
             }
         }
         $comerciales = $this->Cliente->Comerciale->find('list');
-        $formapagos = $this->Cliente->Formapago->find('list');
         $this->set(compact('comerciales', 'formapagos'));
     }
 
@@ -46,11 +45,10 @@ class ClientesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Cliente->find('first',array('contain'=>array('Cuentasbancaria'),'conditions'=>array('Cliente.id' => $id)));
+            $this->data = $this->Cliente->find('first',array('contain'=>array('Cuentasbancaria','Formapago'),'conditions'=>array('Cliente.id' => $id)));
         }
         $comerciales = $this->Cliente->Comerciale->find('list');
-        $formapagos = $this->Cliente->Formapago->find('list');
-        $this->set(compact('comerciales', 'formapagos'));
+        $this->set(compact('comerciales'));
     }
 
     function delete($id = null) {
@@ -65,29 +63,6 @@ class ClientesController extends AppController {
         $this->Session->setFlash(__('El cliente no ha sido eliminado', true));
         $this->redirect($this->referer());
     }
-
-    /*
-      function search() {
-      $this->autoRender = false;
-      $search = $this->data[$this->modelClass]['Buscar'];
-      $cond = "";
-      $i = 0;
-      foreach ($this->{$this->modelClass}->_schema as $field => $value) {
-      //debug($field);
-      if ($i > 0) {
-      $cond = $cond . " OR ";
-      }
-      $cond = $cond . " " . $this->modelClass . "." . $field . " LIKE '%" . $search . "%' ";
-      $i++;
-      }
-      $conditions = array('limit' => 500, 'conditions' => $cond);
-      $this->paginate = $conditions;
-      $_SESSION["last_search"] = $conditions;
-      array_shift($_SESSION["last_search"]);
-      $this->set(strtolower($this->name), $this->paginate());
-      $this->render('index');
-      }
-     */
 
     function search() {
         $this->autoRender = false;

@@ -1028,3 +1028,7 @@ table.view span {
 div.submit {
     text-align: center;
 }
+form input[type=radio].horizontal_radio {
+margin:3px 0px 0px 3px; 
+float:none;
+}
