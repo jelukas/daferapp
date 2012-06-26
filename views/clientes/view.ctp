@@ -39,12 +39,6 @@
             <td colspan="3"><?php echo $cliente['Cliente']['modoenviofactura']; ?></td>
         </tr>
         <tr>
-            <td><span>Forma de Pago</span></td>
-            <td><?php echo $html->link($cliente['Formapago']['nombre'], array('controller' => 'formapagos', 'action' => 'view', $cliente['Formapago']['id'])); ?></td>
-            <td><span>Cuenta Bancaria</span></td>
-            <td colspan="3"><?php echo $cliente['Cliente']['cuentabancaria']; ?></td>
-        </tr>
-        <tr>
             <td><span>Riesgos</span></td>
             <td><?php echo $cliente['Cliente']['riesgos']; ?></td>
             <td><span>Modo Facturación</span></td>
@@ -53,7 +47,31 @@
             <td><?php echo $html->link($cliente['Comerciale']['nombre'], array('controller' => 'comerciales', 'action' => 'view', $cliente['Comerciale']['id'])); ?></td>
         </tr>
     </table>
-
+    <table class="view">
+        <tr>
+            <td><h4>Forma de Pago</h4></td>
+            <td><h4>Datos Bancarios</h4></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <table class="edit">
+                    <tr>
+                        <td><span>Nombre</span><br/><?php echo $cliente['Cuentasbancaria']['nombre']; ?></td>
+                        <td><span>Nº Entidad</span><br/><?php echo $cliente['Cuentasbancaria']['numero_entidad']; ?></td>
+                        <td><span>Nº Sucursal</span><br/><?php echo $cliente['Cuentasbancaria']['numero_sucursal']; ?></td>
+                        <td><span>D.C</span><br/><?php echo $cliente['Cuentasbancaria']['numero_dc']; ?></td>
+                        <td><span>Nº CCC</span><br/><?php echo $cliente['Cuentasbancaria']['numero_cuenta']; ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2"><span>BIC/SWIFT</span><br/><?php echo $cliente['Cuentasbancaria']['numero_bicswift']; ?></td>
+                        <td colspan="2"><span>IBAN</span><br/><?php echo $cliente['Cuentasbancaria']['numero_iban']; ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
     <div class="related">
         <h3>Centros de Trabajo</h3>
         <table class="view">
@@ -64,9 +82,9 @@
             </tr>
             <?php foreach ($cliente['Centrostrabajo'] as $centrostrabajo): ?>
                 <tr>
-                    <td><?php echo empty($centrostrabajo['centrotrabajo'])? '' : $centrostrabajo['centrotrabajo'] ?></td>
+                    <td><?php echo empty($centrostrabajo['centrotrabajo']) ? '' : $centrostrabajo['centrotrabajo'] ?></td>
                     <td><?php echo $centrostrabajo['direccion'] ?></td>
-                    <td class="actions"><?php echo $html->link(__('Ver', true), array('controller'=>'centrostrabajos','action' => 'view', $centrostrabajo['id'])); ?> </td>
+                    <td class="actions"><?php echo $html->link(__('Ver', true), array('controller' => 'centrostrabajos', 'action' => 'view', $centrostrabajo['id'])); ?> </td>
                 </tr>
             <?php endforeach; ?>
         </table>

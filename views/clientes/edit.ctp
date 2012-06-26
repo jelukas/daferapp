@@ -3,7 +3,7 @@
     <fieldset>
         <legend>
             <?php __('Editar Cliente'); ?>
-            <?php echo $html->link(__('Ver', true), array('action' => 'view',$form->value('Cliente.id')), array('class' => 'button_link')); ?>
+            <?php echo $html->link(__('Ver', true), array('action' => 'view', $form->value('Cliente.id')), array('class' => 'button_link')); ?>
             <?php echo $html->link(__('Listar Clientes', true), array('action' => 'index'), array('class' => 'button_link')); ?>
         </legend>
         <table class="edit">
@@ -40,18 +40,37 @@
                 <td colspan="3"><?php echo $form->input('modoenviofactura', array('type' => 'select', 'options' => array('direccionfiscal' => 'Dirección Fiscal', 'direccionpostal' => 'Dirección Postal', 'email' => 'Email'), 'label' => false)); ?></td>
             </tr>
             <tr>
-                <td><span>Forma de Pago</span></td>
-                <td><?php echo $form->input('formapago_id', array('label' => false)); ?></td>
-                <td><span>Cuenta Bancaria</span></td>
-                <td colspan="3"><?php echo $form->input('cuentabancaria', array('label' => false)); ?></td>
-            </tr>
-            <tr>
                 <td><span>Riesgos</span></td>
                 <td><?php echo $form->input('riesgos', array('label' => false)); ?></td>
                 <td><span>Modo Facturación</span></td>
-                <td><?php echo $form->input('modo_facturacion', array('type' => 'select', 'options' => array('maquina' => 'Por Máquina', 'centrotrabajo' => 'Por Centro de Trabajo', 'albaran' => 'Por Alabrán'),'label' => false)); ?></td>
+                <td><?php echo $form->input('modo_facturacion', array('type' => 'select', 'options' => array('maquina' => 'Por Máquina', 'centrotrabajo' => 'Por Centro de Trabajo', 'albaran' => 'Por Alabrán'), 'label' => false)); ?></td>
                 <td><span>Comercial</span></td>
                 <td><?php echo $form->input('comerciale_id', array('label' => false)); ?></td>
+            </tr>
+        </table>
+        <table class="view">
+            <tr>
+                <td><h4>Forma de Pago</h4></td>
+                <td><h4>Datos Bancarios</h4></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <table class="edit">
+                        <tr>
+                            <td><?php echo $form->input('Cuentasbancaria.nombre'); ?><?php echo $form->input('Cuentasbancaria.id'); ?></td>
+                            <td><?php echo $form->input('Cuentasbancaria.numero_entidad', array('label' => 'Nº Entidad', 'maxlenth' => 4)); ?></td>
+                            <td><?php echo $form->input('Cuentasbancaria.numero_sucursal', array('label' => 'Nº Sucursal', 'maxlenth' => 4)); ?></td>
+                            <td><?php echo $form->input('Cuentasbancaria.numero_dc', array('label' => 'D.C', 'maxlenth' => 2)); ?></td>
+                            <td><?php echo $form->input('Cuentasbancaria.numero_cuenta', array('label' => 'Nº CCC', 'maxlenth' => 10)); ?></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="2"><?php echo $form->input('Cuentasbancaria.numero_bicswift', array('label' => 'BIC/SWIFT')); ?></td>
+                            <td colspan="2"><?php echo $form->input('Cuentasbancaria.numero_iban', array('label' => 'IBAN')); ?></td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
     </fieldset>

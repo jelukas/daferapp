@@ -1,29 +1,20 @@
-<div class="cuentasbancarias form">
-<?php echo $this->Form->create('Cuentasbancaria');?>
-	<fieldset>
- 		<legend><?php __('Add Cuentasbancaria'); ?></legend>
-	<?php
-		echo $this->Form->input('nombre');
-		echo $this->Form->input('numero_entidad');
-		echo $this->Form->input('numero_sucursal');
-		echo $this->Form->input('numero_dc');
-		echo $this->Form->input('numero_cuenta');
-		echo $this->Form->input('numero_bicswift');
-		echo $this->Form->input('numero_iban');
-		echo $this->Form->input('proveedore_id');
-		echo $this->Form->input('cliente_id');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit', true));?>
-</div>
-<div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('List Cuentasbancarias', true), array('action' => 'index'));?></li>
-		<li><?php echo $this->Html->link(__('List Proveedores', true), array('controller' => 'proveedores', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Proveedore', true), array('controller' => 'proveedores', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Clientes', true), array('controller' => 'clientes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Cliente', true), array('controller' => 'clientes', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?php echo $this->Form->create('Cuentasbancaria'); ?>
+<table class="edit">
+    <tr>
+        <td><?php echo $this->Form->input('nombre'); ?></td>
+        <td><?php echo $this->Form->input('numero_entidad',array('label'=>'Nº Entidad')); ?></td>
+        <td><?php echo $this->Form->input('numero_sucursal',array('label'=>'Nº Sucursal')); ?></td>
+        <td><?php echo $this->Form->input('numero_dc',array('label'=>'D.C')); ?></td>
+        <td><?php echo $this->Form->input('numero_cuenta',array('label'=>'Nº CCC')); ?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="2"><?php echo $this->Form->input('numero_bicswift',array('label'=>'BIC/SWIFT')); ?></td>
+        <td colspan="2"><?php echo $this->Form->input('numero_iban',array('label'=>'IBAN')); ?></td>
+    </tr>
+</table>
+<?php
+echo $this->Form->input('proveedore_id', array('type' => 'hidden', 'value' => $proveedore_id));
+echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $cliente_id));
+?>
+<?php echo $this->Form->end(__('Guardar', true)); ?>

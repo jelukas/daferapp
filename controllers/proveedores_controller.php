@@ -12,7 +12,7 @@ class ProveedoresController extends AppController {
     function view($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('Proveedor inválido', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         $this->set('proveedore', $this->Proveedore->read(null, $id));
     }
@@ -20,9 +20,9 @@ class ProveedoresController extends AppController {
     function add() {
         if (!empty($this->data)) {
             $this->Proveedore->create();
-            if ($this->Proveedore->save($this->data)) {
+            if ($this->Proveedore->saveAll($this->data)) {
                 $this->Session->setFlash(__('El proveedor ha sido salvado correctamente.', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect(array('action' => 'view', $this->Proveedore->id));
             } else {
                 $this->Session->setFlash(__('El proveedor no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
             }
@@ -32,14 +32,15 @@ class ProveedoresController extends AppController {
     function edit($id = null) {
         if (!$id && empty($this->data)) {
             $this->Session->setFlash(__('Proveedor inválido', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
-            if ($this->Proveedore->save($this->data)) {
+            if ($this->Proveedore->saveAll($this->data)) {
                 $this->Session->setFlash(__('El proveedor ha sido salvado correctamente.', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect($this->referer());
             } else {
                 $this->Session->setFlash(__('El proveedor no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
+                $this->redirect($this->referer());
             }
         }
         if (empty($this->data)) {
@@ -50,14 +51,14 @@ class ProveedoresController extends AppController {
     function delete($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('Invalid id for proveedore', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         if ($this->Proveedore->delete($id)) {
             $this->Session->setFlash(__('Proveedor eliminado', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         $this->Session->setFlash(__('El proveedor no ha podido ser eliminado.', true));
-        $this->redirect(array('action' => 'index'));
+        $this->redirect($this->referer());
     }
 
     function search() {
@@ -100,26 +101,6 @@ class ProveedoresController extends AppController {
     function beforeFilter() {
         $this->checkPermissions('Proveedore', $this->params['action']);
     }
-
-//    function autocomplete() {
-//        $proveedores = $this->Proveedore->find('all', array(
-//            'conditions' => array(
-//                'OR' => array(
-//                    'Proveedore.nombre LIKE' => $this->params['url']['term'] . '%',
-//                    'Proveedore.id LIKE' => $this->params['url']['term'] . '%'
-//                )
-//            ),
-//            'fields' => array('nombre', 'id'),
-//            'recursive' => -1,
-//                ));
-//        $proveedores_array = array();
-//        foreach ($proveedores as $proveedore) {
-//            $proveedores_array[] = array("id" => $proveedore["Proveedore"]["id"], "value" => $proveedore["Proveedore"]["nombre"]);
-//        }
-//
-//        $this->set('proveedores', $proveedores_array);
-//        $this->layout = 'ajax';
-//    }
 
 }
 
