@@ -1,31 +1,50 @@
-<div class="maquinas form">
-<?php echo $this->Form->create('Maquina');?>
-	<fieldset>
- 		<legend><?php __('Editar Máquina'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('nombre',array('label'=>'Nombre'));
-		echo $this->Form->input('serie_maquina',array('label'=>'Nº Serie Máquina'));
-		echo $this->Form->input('serie_motor',array('label'=>'Nº Serie Motor'));
-		echo $this->Form->input('modelo_transmision',array('label'=>'Modelo Transmisión'));
-		echo $this->Form->input('serie_transmision',array('label'=>'Nº Serie Transmisión'));
-		echo $this->Form->input('horas',array('label'=>'Horas'));
-		echo $this->Form->input('observaciones',array('label'=>'Observaciones'));
-		echo $this->Form->input('centrostrabajo_id',array('label'=>'Centro de Trabajo','empty'=>'--Seleccione un centro de trabajo--'));
-		echo $this->Form->input('cliente_id',array('label'=>'Cliente','empty'=>'--Seleccione un cliente--'));
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Enviar', true));?>
-</div>
-<div class="actions">
-	<h3><?php __('Acciones'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $this->Form->value('Maquina.id')), null, sprintf(__('¿Está seguro que desea eliminar # %s?', true), $this->Form->value('Maquina.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('Listar Máquinas', true), array('action' => 'index'));?></li>
-		<li><?php echo $this->Html->link(__('Listar Centros Trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Centro Trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('Listar Clientes', true), array('controller' => 'clientes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Cliente', true), array('controller' => 'clientes', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="maquinas">
+    <?php echo $this->Form->create('Maquina'); ?>
+    <fieldset>
+        <legend>
+            <?php __('Editar Máquina'); ?>
+            <?php echo $this->Html->link(__('Ver ', true), array('action' => 'view', $maquina['Maquina']['id']), array('class' => 'button_link')); ?>		
+            <?php echo $this->Html->link(__('Borrar', true), array('action' => 'delete', $maquina['Maquina']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true),$maquina['Maquina']['nombre'])); ?>		
+            <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?>		
+            <?php echo $this->Html->link(__('Nueva Máquina', true), array('action' => 'add'), array('class' => 'button_link')); ?>	
+        </legend>
+        <?php echo $this->Form->input('id'); ?>
+        <table class="edit">
+            <tr>
+                <td><span>Código Máquina</span></td>
+                <td><?php echo $this->Form->input('codigo', array('label' => false)); ?></td>
+                <td><span>Cliente</span></td>
+                <td><?php echo $this->Html->link($maquina['Centrostrabajo']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $maquina['Centrostrabajo']['Cliente']['id'])); ?></td>
+                <td><span>Centro de Trabajo</span></td>
+                <td><?php echo $this->Form->input('centrostrabajo_id', array('label' => false, 'empty' => '--Seleccione un centro de trabajo--')); ?></td>
+            </tr>
+            <tr>
+                <td><span>Modelo</span></td>
+                <td><?php echo $this->Form->input('nombre', array('label' => false)); ?></td>
+                <td><span>Observaciones</span></td>
+                <td colspan="3"><?php echo $this->Form->input('observaciones', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span>Serie Máquina</span></td>
+                <td><?php echo $this->Form->input('serie_maquina', array('label' => false)); ?></td>
+                <td><span>Modelo Motor</span></td>
+                <td><?php echo $this->Form->input('modelo_motor', array('label' => false)); ?></td>
+                <td><span>Serie Motor</span></td>
+                <td><?php echo $this->Form->input('serie_motor', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span>Modelo Transmisión</span></td>
+                <td><?php echo $this->Form->input('modelo_transmision', array('label' => false)); ?></td>
+                <td><span>Serie Transmisión</span></td>
+                <td><?php echo $this->Form->input('serie_transmision', array('label' => false)); ?></td>
+                <td><span>Año Fabricación</span></td>
+                <td><?php echo $this->Form->input('anio_fabricacion', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span>Horas de la Máquina</span></td>
+                <td><?php echo $this->Form->input('horas', array('label' => false)); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+    <?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>

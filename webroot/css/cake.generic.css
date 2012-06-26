@@ -160,11 +160,17 @@ th a {
     padding: 2px 4px;
     text-decoration: none;
 }
-th a.asc:after {
-    content: ' �?�';
+th a.asc {
+    padding-right:5px;
+    background-image:url('/daferapp/img/sort_asc.png');
+    background-position: top right;
+    background-repeat: no-repeat;
 }
-th a.desc:after {
-    content: ' �?�';
+th a.desc {
+    padding-right:5px;
+    background-image:url('/daferapp/img/sort_desc.png');
+    background-position: top right;
+    background-repeat: no-repeat;
 }
 table tr td {
     background: #fff;
@@ -995,6 +1001,13 @@ table.view span {
     padding: 0;
 }
 .ordenes fieldset input, .ordenes fieldset textarea {
+    clear: both;
+    font-size: 100%;
+    font-family: Arial,Helvetica,sans-serif;
+    padding: 0;
+}
+
+.articulos fieldset input, .articulos fieldset textarea, .articulos input{
     clear: both;
     font-size: 100%;
     font-family: Arial,Helvetica,sans-serif;

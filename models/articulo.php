@@ -4,7 +4,7 @@ class Articulo extends AppModel {
 
     var $name = 'Articulo';
     var $displayField = 'nombre';
-    var $virtualFields = array( 'autocomplete' => "CONCAT(Articulo.ref, ' --- ',Articulo.nombre)");
+
     var $validate = array(
         'ref' => array(
             'notempty' => array(
@@ -41,23 +41,6 @@ class Articulo extends AppModel {
             'order' => ''
         )
     );
-    var $hasAndBelongsToMany = array(
-        'Referenciasintercambiable' => array(
-            'className' => 'Referenciasintercambiable',
-            'joinTable' => 'articulos_referenciasintercambiables',
-            'foreignKey' => 'articulo_id',
-            'associationForeignKey' => 'referenciasintercambiable_id',
-            'unique' => false,
-            'conditions' => '',
-            'fields' => '',
-            'order' => '',
-            'limit' => '',
-            'offset' => '',
-            'finderQuery' => '',
-            'deleteQuery' => '',
-            'insertQuery' => ''
-        ),
-    );
     var $hasMany = array(
         'ArticulosAvisosrepuesto' => array(
             'className' => 'ArticulosAvisosrepuesto',
@@ -89,14 +72,20 @@ class Articulo extends AppModel {
             'className' => 'ArticulosPresupuestosproveedore',
             'foreignKey' => 'articulo_id',
             'dependent' => true,
-            'conditions' => '',
-            'fields' => '',
-            'order' => '',
-            'limit' => '',
             'offset' => '',
             'exclusive' => '',
             'finderQuery' => '',
             'counterQuery' => ''
+        ),
+        'Referido' => array(
+            'className' => 'Referenciasintercambiable',
+            'foreignKey' => 'articulo_id',
+            'dependent' => true,
+        ),
+        'Referencia' => array(
+            'className' => 'Referenciasintercambiable',
+            'foreignKey' => 'articuloref_id',
+            'dependent' => true,
         ),
     );
 }

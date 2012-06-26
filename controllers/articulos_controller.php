@@ -3,29 +3,55 @@
 class ArticulosController extends AppController {
 
     var $name = 'Articulos';
+    var $components = array('FileUpload', 'Session');
     var $helpers = array('Html', 'Ajax', 'Javascript');
 
+    function __construct($id = false, $table = null, $ds = null) {
+        if (empty($this->alias))
+            $this->alias = 'Articulo';
+        parent::__construct($id, $table, $ds);
+        $this->virtualFields['autocomplete'] = sprintf("CONCAT(" . $this->alias . ".ref, ' --- '," . $this->alias . ".nombre)");
+    }
+
+    function beforeFilter() {
+        parent::beforeFilter();
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'Articulo';
+            $this->FileUpload->uploadDir = 'files/articulo';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
+    }
+
     function index() {
-        $this->Articulo->recursive = 0;
+        $articulos = $this->paginate('Articulo');
+        $this->paginate = array('limit' => 20, 'contain' => array('Familia'));
         $this->set('articulos', $this->paginate());
     }
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Artículo no válido', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('Artículo no válido', true));
+            $this->redirect($this->referer());
         }
-        $this->set('articulo', $this->Articulo->read(null, $id));
+        $articulo = $this->Articulo->find('first', array('contain' => array('Almacene', 'Familia', 'Proveedore', 'Referido' => array('Articulo_referido' => array('Proveedore', 'Almacene'))), 'conditions' => array('Articulo.id' => $id)));
+        $articulos_misma_ref = $this->Articulo->find('all', array('contain' => array('Almacene'), 'conditions' => array('Articulo.ref' => $articulo["Articulo"]["ref"])));
+        $this->set(compact('articulo', 'articulos_misma_ref'));
     }
 
     function add() {
         if (!empty($this->data)) {
             $this->Articulo->create();
             if ($this->Articulo->save($this->data)) {
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->Articulo->saveField('articuloescaneado', $this->FileUpload->finalFile);
+                }
+                /* FIn Guardar Fichero */
                 $this->Session->setFlash(__('The articulo has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('The articulo could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('The articulo could not be saved. Please, try again.', true));
+                $this->redirect($this->referer());
             }
         }
         $familias = $this->Articulo->Familia->find('list');
@@ -34,21 +60,29 @@ class ArticulosController extends AppController {
         $this->set(compact('almacenes'));
         $proveedores = $this->Articulo->Proveedore->find('list');
         $this->set(compact('proveedores'));
-        $referenciasintercambiables = $this->Articulo->Referenciasintercambiable->find('list');
-        $this->set(compact('referenciasintercambiables'));
     }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Invalid articulo', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('Invalid articulo', true));
+            $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
             if ($this->Articulo->save($this->data)) {
+                $id = $this->Articulo->id;
+                $upload = $this->Articulo->findById($id);
+                if (!empty($this->data['Articulo']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Articulo']['articuloescaneado']);
+                    $this->Articulo->saveField('articuloescaneado', null);
+                }
+                if ($this->FileUpload->finalFile != null) {
+                    $this->FileUpload->RemoveFile($upload['Articulo']['articuloescaneado']);
+                    $this->Articulo->saveField('articuloescaneado', $this->FileUpload->finalFile);
+                }
                 $this->Session->setFlash(__('The articulo has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('The articulo could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('The articulo could not be saved. Please, try again.', true));
             }
         }
         if (empty($this->data)) {
@@ -60,21 +94,22 @@ class ArticulosController extends AppController {
         $this->set(compact('almacenes'));
         $proveedores = $this->Articulo->Proveedore->find('list');
         $this->set(compact('proveedores'));
-        $referenciasintercambiables = $this->Articulo->Referenciasintercambiable->find('list');
-        $this->set(compact('referenciasintercambiables'));
     }
 
     function delete($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('ID no válida', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
+        $id = $this->Articulo->id;
+        $upload = $this->Articulo->findById($id);
+        $this->FileUpload->RemoveFile($upload['Articulo']['articuloescaneado']);
         if ($this->Articulo->delete($id)) {
             $this->Session->setFlash(__('Artículo borrado', true));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
         }
         $this->Session->setFlash(__('El artículo no ha podido ser eliminado', true));
-        $this->redirect(array('action' => 'index'));
+        $this->redirect($this->referer());
     }
 
     function search() {
@@ -118,10 +153,6 @@ class ArticulosController extends AppController {
         $this->render();
     }
 
-    function beforeFilter() {
-        $this->checkPermissions('Articulo', $this->params['action']);
-    }
-
     function auto_complete() {
         if (!empty($this->params['pass'][0])) {
             $articulos = $this->Articulo->find('all', array(
@@ -154,6 +185,16 @@ class ArticulosController extends AppController {
 
         $this->set('articulos', $articulos_array);
         $this->layout = 'ajax';
+    }
+
+    function regularizar($id) {
+        $this->layout = 'ajax';
+        $nueva_existencias = $this->params['form']['nueva_existencia'];
+        $this->Articulo->id = $id;
+        if (!$this->Articulo->saveField('existencias', $nueva_existencias)) {
+            die('No se puedo cambiar las existencias');
+        }
+        $this->set(compact('nueva_existencias'));
     }
 
 }

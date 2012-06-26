@@ -3,7 +3,7 @@
     <fieldset>
         <legend><?php __('Nuevo Albaran de Cliente proveniente de la Orden ' . $ordene['Ordene']['id']); ?></legend>
         <?php
-        echo "<h3>Cliente: ".$ordene['Avisostallere']['Cliente']['nombre'].'</h3>';
+        echo "<h3>Cliente: " . $ordene['Avisostallere']['Cliente']['nombre'] . '</h3>';
         echo $this->Form->input('fecha');
         echo $this->Form->input('numeroalbaran');
         echo $this->Form->input('observaciones');
@@ -26,11 +26,12 @@
                 </tr>
                 <tr class="tarea-relations">
                     <td colspan="4">
+                        <?php if (!empty($tarea['ArticulosTarea'])): ?>
                         <h4>Materiales</h4>
                         <table>
                             <tr>
                                 <th>Articulo</th>
-                                <th>Cantidad</th>
+                                <th>Cantidad Imputable</th>
                                 <th>Validar</th>
                             </tr>
                             <?php $l = 0; ?>
@@ -43,50 +44,53 @@
                                 <?php $l++; ?>
                             <?php endforeach; ?>
                         </table>
-                        <h4>Partes en el Centro de Trabajo del Cliente</h4>
-                        <table>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Centro de Trabajo</th>
-                                <th>Horas Imputables</th>
-                                <th>Operación</th>
-                                <th>Mécanicos</th>
-                                <th>Validar</th>
-                            </tr>
-                            <?php $j = 0; ?>
-                            <?php foreach ($tarea['Parte'] as $parte): ?>
+                        <?php endif; ?>
+                        <?php if (!empty($tarea['Parte'])): ?>
+                            <h4>Partes en el Centro de Trabajo del Cliente</h4>
+                            <table>
                                 <tr>
-                                    <td><?php echo $parte['fecha'] ?></td>
-                                    <td><?php echo $parte['Centrostrabajo']['centrotrabajo'] ?></td>
-                                    <td><?php echo $parte['horasimputables'] ?></td>
-                                    <td><?php echo $parte['operacion'] ?></td>
-                                    <td><?php echo $parte['Mecanico']['nombre'] ?></td>
-                                    <td><?php echo $this->Form->input('Tarea.' . $i . '.Parte.' . $j . '.id', array('class' => 'childcheckbox', 'label' => '', 'type' => 'checkbox', 'checked' => true, 'value' => $parte['id'])) ?></td>
+                                    <th>Fecha</th>
+                                    <th>Horas Imputables</th>
+                                    <th>Operación</th>
+                                    <th>Mécanicos</th>
+                                    <th>Validar</th>
                                 </tr>
-                                <?php $j++; ?>
-                            <?php endforeach; ?>
-                        </table>
-                        <h4>Partes de Taller</h4>
-                        <table>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Horas Imputables</th>
-                                <th>Operación</th>
-                                <th>Mécanicos</th>
-                                <th>Validar</th>
-                            </tr>
-                            <?php $k = 0; ?>
-                            <?php foreach ($tarea['Partestallere'] as $partestallere): ?>
+                                <?php $j = 0; ?>
+                                <?php foreach ($tarea['Parte'] as $parte): ?>
+                                    <tr>
+                                        <td><?php echo $parte['fecha'] ?></td>
+                                        <td><?php echo $parte['horasimputables'] ?></td>
+                                        <td><?php echo $parte['operacion'] ?></td>
+                                        <td><?php echo $parte['Mecanico']['nombre'] ?></td>
+                                        <td><?php echo $this->Form->input('Tarea.' . $i . '.Parte.' . $j . '.id', array('class' => 'childcheckbox', 'label' => '', 'type' => 'checkbox', 'checked' => true, 'value' => $parte['id'])) ?></td>
+                                    </tr>
+                                    <?php $j++; ?>
+                                <?php endforeach; ?>
+                            </table>
+                        <?php endif; ?>
+                        <?php if (!empty($tarea['Partestallere'])): ?>
+                            <h4>Partes de Taller</h4>
+                            <table>
                                 <tr>
-                                    <td><?php echo $partestallere['fecha'] ?></td>
-                                    <td><?php echo $partestallere['horasimputables'] ?></td>
-                                    <td><?php echo $partestallere['operacion'] ?></td>
-                                    <td><?php echo $partestallere['Mecanico']['nombre'] ?></td>
-                                    <td><?php echo $this->Form->input('Tarea.' . $i . '.Partestallere.' . $k . '.id', array('class' => 'childcheckbox', 'label' => '', 'type' => 'checkbox', 'checked' => true, 'value' => $partestallere['id'])) ?></td>
+                                    <th>Fecha</th>
+                                    <th>Horas Imputables</th>
+                                    <th>Operación</th>
+                                    <th>Mécanicos</th>
+                                    <th>Validar</th>
                                 </tr>
-                                <?php $k++; ?>
-                            <?php endforeach; ?>
-                        </table>
+                                <?php $k = 0; ?>
+                                <?php foreach ($tarea['Partestallere'] as $partestallere): ?>
+                                    <tr>
+                                        <td><?php echo $partestallere['fecha'] ?></td>
+                                        <td><?php echo $partestallere['horasimputables'] ?></td>
+                                        <td><?php echo $partestallere['operacion'] ?></td>
+                                        <td><?php echo $partestallere['Mecanico']['nombre'] ?></td>
+                                        <td><?php echo $this->Form->input('Tarea.' . $i . '.Partestallere.' . $k . '.id', array('class' => 'childcheckbox', 'label' => '', 'type' => 'checkbox', 'checked' => true, 'value' => $partestallere['id'])) ?></td>
+                                    </tr>
+                                    <?php $k++; ?>
+                                <?php endforeach; ?>
+                            </table>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php $i++; ?>

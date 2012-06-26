@@ -1,42 +1,42 @@
 <div class="pedidosclientes index">
 	<h2><?php __('Pedidos cliente');?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('fecha_plazo');?></th>
-			<th><?php echo $this->Paginator->sort('confirmado');?></th>
-			<th><?php echo $this->Paginator->sort('presupuestoscliente_id');?></th>
-			<th><?php echo $this->Paginator->sort('recepcion');?></th>
-			<th><?php echo $this->Paginator->sort('pedidoescaneado');?></th>
-			<th class="actions"><?php __('Actions');?></th>
-	</tr>
-	<?php
-	$i = 0;
-	foreach ($pedidosclientes as $pedidoscliente):
-		$class = null;
-		if ($i++ % 2 == 0) {
-			$class = ' class="altrow"';
-		}
-	?>
-	<tr<?php echo $class;?>>
-		<td><?php echo $pedidoscliente['Pedidoscliente']['id']; ?>&nbsp;</td>
-		<td><?php echo $pedidoscliente['Pedidoscliente']['fecha_plazo']; ?>&nbsp;</td>
-		<td><?php echo $pedidoscliente['Pedidoscliente']['confirmado']; ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['id'], array('controller' => 'presupuestosclientes', 'action' => 'view', $pedidoscliente['Presupuestoscliente']['id'])); ?>
-		</td>
-		<td><?php echo $pedidoscliente['Pedidoscliente']['recepcion']; ?>&nbsp;</td>
-		<td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['pedidoescaneado'],array('action' => 'downloadFile', $pedidoscliente['Pedidoscliente']['id'])) ?>&nbsp;</td>
-		
-		<td class="actions">
-			<?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $pedidoscliente['Pedidoscliente']['id'])); ?>
-			<?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $pedidoscliente['Pedidoscliente']['id'])); ?>
-			<?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $pedidoscliente['Pedidoscliente']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pedidoscliente['Pedidoscliente']['id'])); ?>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th><?php echo $this->Paginator->sort('id'); ?></th>
+                <th><?php echo $this->Paginator->sort('fecha_plazo'); ?></th>
+                <th><?php echo $this->Paginator->sort('confirmado'); ?></th>
+                <th><?php echo $this->Paginator->sort('presupuestoscliente_id'); ?></th>
+                <th><?php echo $this->Paginator->sort('recepcion'); ?></th>
+                <th><?php echo $this->Paginator->sort('pedidoescaneado'); ?></th>
+                <th class="actions"><?php __('Actions'); ?></th>
+            </tr>
+            <?php
+            $i = 0;
+            foreach ($pedidosclientes as $pedidoscliente):
+                $class = null;
+                if ($i++ % 2 == 0) {
+                    $class = ' class="altrow"';
+                }
+                ?>
+                <tr<?php echo $class; ?>>
+                    <td><?php echo $pedidoscliente['Pedidoscliente']['id']; ?>&nbsp;</td>
+                    <td><?php echo $pedidoscliente['Pedidoscliente']['fecha_plazo']; ?>&nbsp;</td>
+                    <td><?php echo $pedidoscliente['Pedidoscliente']['confirmado']; ?>&nbsp;</td>
+                    <td>
+                        <?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['id'], array('controller' => 'presupuestosclientes', 'action' => 'view', $pedidoscliente['Presupuestoscliente']['id'])); ?>
+                    </td>
+                    <td><?php echo $pedidoscliente['Pedidoscliente']['recepcion']; ?>&nbsp;</td>
+                    <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['pedidoescaneado'], array('action' => 'downloadFile', $pedidoscliente['Pedidoscliente']['id'])) ?>&nbsp;</td>
+
+                    <td class="actions">
+                        <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $pedidoscliente['Pedidoscliente']['id'])); ?>
+                        <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $pedidoscliente['Pedidoscliente']['id'])); ?>
+                        <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $pedidoscliente['Pedidoscliente']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pedidoscliente['Pedidoscliente']['id'])); ?>
                         <?php echo $this->Html->link(__('Pdf', true), array('action' => 'pdf', $pedidoscliente['Pedidoscliente']['id'])); ?>
-                </td>
-	</tr>
-<?php endforeach; ?>
-	</table>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(

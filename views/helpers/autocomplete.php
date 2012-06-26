@@ -15,7 +15,7 @@ class AutocompleteHelper extends AppHelper {
             $label_text = $label;
         else
             $label_text = $model;
-        if($this->model())
+        if ($this->model())
             $field_id = $model . 'Id';
         else
             $field_id = strtolower($model) . '_id';
@@ -28,11 +28,18 @@ class AutocompleteHelper extends AppHelper {
         <script type="text/javascript">
                if($( "#autocomplete-' . $model . '" ).length != 0){
         var autocomplete_' . $model . ' = $( "#autocomplete-' . $model . '" ).autocomplete({';
-        if (!empty($almacene_id))
-            $output .= 'source: "/daferapp/' . strtolower($model) . 's/autocomplete/' . $almacene_id . '",';
-        else
-            $output .= 'source: "/daferapp/' . strtolower($model) . 's/autocomplete",';
-        
+        if (!empty($almacene_id)) {
+            if ($model == 'Articuloref')
+                $output .= 'source: "/daferapp/' . strtolower('Articulo') . 's/autocomplete/' . $almacene_id . '",';
+            else
+                $output .= 'source: "/daferapp/' . strtolower($model) . 's/autocomplete/' . $almacene_id . '",';
+        } else {
+            if ($model == 'Articuloref')
+                $output .= 'source: "/daferapp/' . strtolower('Articulo') . 's/autocomplete",';
+            else
+                $output .= 'source: "/daferapp/' . strtolower($model) . 's/autocomplete",';
+        }
+
         $output .= 'minLength: 3,
             select: function( event, ui ) {
                 $(\'.autocompletador input[type="hidden"]\').val(ui.item.id);

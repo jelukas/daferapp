@@ -10,6 +10,8 @@ class AppController extends Controller {
         $this->RequestHandler->setContent('json', 'text/x-json');
     }
 
+    
+    
     function checkPermissions($model, $action) {
         $this->loadModel('User');
         $this->loadModel('Restriccione');
@@ -52,6 +54,9 @@ class AppController extends Controller {
 
     public function autocomplete() {
         $model_class = $this->modelClass;
+        if($model_class == 'Articulo'){
+            $this->$model_class->virtualFields['autocomplete'] = sprintf("CONCAT(". $this->$model_class->alias.".ref, ' --- ',". $this->$model_class->alias.".nombre)");
+        }
         if ($this->$model_class->hasField('autocomplete', true))
             $fields = array('nombre', 'id', 'autocomplete');
         else
@@ -60,17 +65,30 @@ class AppController extends Controller {
         if ($this->$model_class->hasField('ref', false)) {
             $fields = array('nombre', 'id', 'ref', 'autocomplete');
 
-            $objects = $this->$model_class->find('all', array(
-                'conditions' => array(
-                    $model_class . '.almacene_id' => $this->params['pass'][0],
-                    'OR' => array(
-                        $model_class . '.nombre LIKE' => $this->params['url']['term'] . '%',
-                        $model_class . '.ref LIKE' => $this->params['url']['term'] . '%'
-                    )
-                ),
-                'fields' => $fields,
-                'recursive' => -1,
-                    ));
+            if (!empty($this->params['pass'][0])) {
+                $objects = $this->$model_class->find('all', array(
+                    'conditions' => array(
+                        $model_class . '.almacene_id' => $this->params['pass'][0],
+                        'OR' => array(
+                            $model_class . '.nombre LIKE' => $this->params['url']['term'] . '%',
+                            $model_class . '.ref LIKE' => $this->params['url']['term'] . '%'
+                        )
+                    ),
+                    'fields' => $fields,
+                    'recursive' => -1,
+                        ));
+            } else {
+                $objects = $this->$model_class->find('all', array(
+                    'conditions' => array(
+                        'OR' => array(
+                            $model_class . '.nombre LIKE' => $this->params['url']['term'] . '%',
+                            $model_class . '.ref LIKE' => $this->params['url']['term'] . '%'
+                        )
+                    ),
+                    'fields' => $fields,
+                    'recursive' => -1,
+                        ));
+            }
         } else {
             $objects = $this->$model_class->find('all', array(
                 'conditions' => array(
@@ -83,7 +101,7 @@ class AppController extends Controller {
                 'recursive' => -1,
                     ));
         }
-        
+
         $objects_array = array();
         foreach ($objects as $object) {
             if (isset($object[$model_class]["autocomplete"]))

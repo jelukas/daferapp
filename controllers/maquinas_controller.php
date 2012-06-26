@@ -5,16 +5,17 @@ class MaquinasController extends AppController {
     var $name = 'Maquinas';
 
     function index() {
-        $this->Maquina->recursive = 0;
+        $maquinas = $this->paginate('Maquina');
+        $this->paginate = array('limit' => 20,'contain' => array('Centrostrabajo' => 'Cliente', 'Cliente'));
         $this->set('maquinas', $this->paginate());
     }
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid maquina', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('Invalid maquina', true));
+            $this->redirect($this->referer());
         }
-        $this->set('maquina', $this->Maquina->read(null, $id));
+        $this->set('maquina', $this->Maquina->find('first', array('contain' => array('Articulosparamantenimiento' => 'Articulo', 'Otrosrepuesto' => 'Articulo', 'Centrostrabajo' => 'Cliente', 'Cliente'), 'conditions' => array('Maquina.id' => $id))));
     }
 
     function add() {
@@ -48,9 +49,9 @@ class MaquinasController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Maquina->read(null, $id);
         }
-        $centrostrabajos = $this->Maquina->Centrostrabajo->find('list');
-        $clientes = $this->Maquina->Cliente->find('list');
-        $this->set(compact('centrostrabajos', 'clientes'));
+        $maquina = $this->Maquina->find('first', array('contain' => array('Centrostrabajo' => 'Cliente'), 'conditions' => array('Maquina.id' => $id)));
+        $centrostrabajos = $this->Maquina->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $maquina['Centrostrabajo']['cliente_id'])));
+        $this->set(compact('maquina', 'centrostrabajos'));
     }
 
     function delete($id = null) {

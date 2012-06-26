@@ -31,8 +31,12 @@ class ArticulosTareasController extends AppController {
                 $this->redirect($this->referer());
             }
         }
-        $tarea = $this->ArticulosTarea->Tarea->find('first',array('contain' => 'Ordene','conditions' => array('Tarea.id' => $tarea_id)));
-        $this->set(compact('tarea_id','tarea'));
+        $tarea = $this->ArticulosTarea->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $tarea_id)));
+        if (!empty($tarea['Ordene']['Avisostallere']['Centrostrabajo']['descuentomaterial']))
+            $descuento = $tarea['Ordene']['Avisostallere']['Centrostrabajo']['descuentomaterial'];
+        else
+            $descuento = 0;
+        $this->set(compact('tarea_id', 'tarea', 'descuento'));
     }
 
     function edit($id = null) {

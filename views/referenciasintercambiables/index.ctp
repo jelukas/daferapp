@@ -1,17 +1,11 @@
 <div class="referenciasintercambiables index">
-	<h2><?php __('Referencias Intercambiables');?></h2>
-
-	<?php
-	echo $form->create('', array('action'=>'search'));
-	echo $form->input('Buscar', array('type'=>'text'));
-	echo $form->end('Buscar');
-	?>
-
+	<h2><?php __('Referenciasintercambiables');?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('articulo_id');?></th>
-			<th class="actions"><?php __('Acciones');?></th>
+			<th><?php echo $this->Paginator->sort('articuloref_id');?></th>
+			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
 	$i = 0;
@@ -26,10 +20,13 @@
 		<td>
 			<?php echo $this->Html->link($referenciasintercambiable['Articulo']['nombre'], array('controller' => 'articulos', 'action' => 'view', $referenciasintercambiable['Articulo']['id'])); ?>
 		</td>
+		<td>
+			<?php echo $this->Html->link($referenciasintercambiable['Articuloref']['nombre'], array('controller' => 'articulos', 'action' => 'view', $referenciasintercambiable['Articuloref']['id'])); ?>
+		</td>
 		<td class="actions">
-			
-			<?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $referenciasintercambiable['Referenciasintercambiable']['id'])); ?>
-			<?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $referenciasintercambiable['Referenciasintercambiable']['id']), null, sprintf(__('¿Está seguro que quiere eliminar # %s?', true), $referenciasintercambiable['Referenciasintercambiable']['id'])); ?>
+			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $referenciasintercambiable['Referenciasintercambiable']['id'])); ?>
+			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $referenciasintercambiable['Referenciasintercambiable']['id'])); ?>
+			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $referenciasintercambiable['Referenciasintercambiable']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $referenciasintercambiable['Referenciasintercambiable']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -37,22 +34,22 @@
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(
-	'format' => __('Página %page% de %pages%, mostrando %current% registros de un total de %count%, empezando en registro %start%, finalizando en el registro %end%', true)
+	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
 	));
 	?>	</p>
 
 	<div class="paging">
-		<?php echo $this->Paginator->prev('<< ' . __('Anterior', true), array(), null, array('class'=>'disabled'));?>
+		<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
 	 | 	<?php echo $this->Paginator->numbers();?>
  |
-		<?php echo $this->Paginator->next(__('Siguiente', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
 </div>
 <div class="actions">
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Nueva Ref. Intercambiable', true), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('Listar Artículos', true), array('controller' => 'articulos', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Artículo', true), array('controller' => 'articulos', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Referenciasintercambiable', true), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List Articulos', true), array('controller' => 'articulos', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Articulo', true), array('controller' => 'articulos', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

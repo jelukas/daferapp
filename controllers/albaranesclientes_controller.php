@@ -79,7 +79,7 @@ class AlbaranesclientesController extends AppController {
             $this->set(compact('pedidoscliente', 'tiposivas'));
             $this->render('add_from_pedidoscliente');
         } elseif ($vienede == 'ordene') {
-            $ordene = $this->Albaranescliente->Ordene->find('first', array('contain' => array('Avisostallere' => 'Cliente', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Centrostrabajo', 'Mecanico'), 'Partestallere' => 'Mecanico')), 'conditions' => array('Ordene.id' => $iddedondeviene)));
+            $ordene = $this->Albaranescliente->Ordene->find('first', array('contain' => array('Avisostallere' => 'Cliente', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => 'Mecanico')), 'conditions' => array('Ordene.id' => $iddedondeviene)));
             $this->set(compact('ordene', 'tiposivas'));
             $this->render('add_from_ordene');
         } elseif ($vienede == 'avisosrepuesto') {

@@ -33,5 +33,34 @@ class Maquina extends AppModel {
 			'order' => ''
 		)
 	);
+        
+        var $hasMany = array(
+		'Articulosparamantenimiento' => array(
+			'className' => 'Articulosparamantenimiento',
+			'foreignKey' => 'maquina_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Otrosrepuesto' => array(
+			'className' => 'Otrosrepuesto',
+			'foreignKey' => 'maquina_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
 }
 ?>

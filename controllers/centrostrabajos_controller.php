@@ -118,6 +118,10 @@ class CentrostrabajosController extends AppController {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Avisosrepuesto']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
     }
+    function selectMaquina() {
+        $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Maquina']['cliente_id'])));
+        $this->set(compact('centrostrabajos'));
+    }
 
     function beforeFilter() {
         $this->checkPermissions('Centrostrabajo', $this->params['action']);

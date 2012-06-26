@@ -1,5 +1,5 @@
 <div class="referenciasintercambiables view">
-<h2><?php  __('Referencias intercambiables');?></h2>
+<h2><?php  __('Referenciasintercambiable');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
@@ -8,7 +8,12 @@
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Articulo'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $this->Html->link($referenciasintercambiable['Articulo']['id'], array('controller' => 'articulos', 'action' => 'view', $referenciasintercambiable['Articulo']['id'])); ?>
+			<?php echo $this->Html->link($referenciasintercambiable['Articulo']['nombre'], array('controller' => 'articulos', 'action' => 'view', $referenciasintercambiable['Articulo']['id'])); ?>
+			&nbsp;
+		</dd>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Articuloref'); ?></dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
+			<?php echo $this->Html->link($referenciasintercambiable['Articuloref']['nombre'], array('controller' => 'articulos', 'action' => 'view', $referenciasintercambiable['Articuloref']['id'])); ?>
 			&nbsp;
 		</dd>
 	</dl>

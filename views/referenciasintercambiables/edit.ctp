@@ -5,7 +5,7 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('articulo_id');
-		echo $this->Form->input('Articulo');
+		echo $this->Form->input('articuloref_id');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

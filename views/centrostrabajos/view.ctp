@@ -1,7 +1,7 @@
 <div class="centrostrabajos">
     <h2>
         <?php __('Ficha de Centro de Trabajo'); ?>
-        <?php echo $this->Html->link(__('Editar Centro Trabajo', true), array('action' => 'edit',$centrostrabajo['Centrostrabajo']['id']), array('class' => 'button_link')); ?>
+        <?php echo $this->Html->link(__('Editar Centro Trabajo', true), array('action' => 'edit', $centrostrabajo['Centrostrabajo']['id']), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Nuevo Centro Trabajo', true), array('action' => 'add'), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Listar Centros Trabajo', true), array('action' => 'index'), array('class' => 'button_link')); ?>
     </h2>
@@ -41,7 +41,7 @@
                 <span>Máquinas</span>
             </td>
             <td colspan="6">
-                <?php echo $this->Form->input('vermaquina', array('label' =>'Selecione que Máquina desea Ver','type' => 'select', 'options' => $maquinas)); ?>
+                <?php echo $this->Form->input('vermaquina', array('label' => 'Selecione que Máquina desea Ver', 'type' => 'select', 'options' => $maquinas, 'empty' => '-- Elije la Maquina para Ver --')); ?>
             </td>
         </tr>
         <tr>
