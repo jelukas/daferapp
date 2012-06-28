@@ -4,6 +4,7 @@ class ArticulosAlbaranesproveedore extends AppModel {
 
     var $name = 'ArticulosAlbaranesproveedore';
     var $displayField = 'id';
+    var $articulo_id = 0;
     var $validate = array(
         'articulo_id' => array(
             'numeric' => array(
@@ -78,9 +79,14 @@ class ArticulosAlbaranesproveedore extends AppModel {
             $this->Albaranesproveedore->saveField('baseimponible', $albaranesproveedore['Albaranesproveedore']['baseimponible'] + $this->data['ArticulosAlbaranesproveedore']['total']);
         }
         $this->Articulo->id = $this->data['ArticulosAlbaranesproveedore']['articulo_id'];
+        $this->articulo_id = $this->data['ArticulosAlbaranesproveedore']['articulo_id'];
         $this->Articulo->saveField('ultimopreciocompra', $this->data['ArticulosAlbaranesproveedore']['precio_proveedor']);
         return true;
     }
+
+    /*
+     * Antes de Eliminar
+     */
 
     function beforeDelete() {
         /* Las existencias del Articulo original deben aumentar */
@@ -91,7 +97,46 @@ class ArticulosAlbaranesproveedore extends AppModel {
         $albaranesproveedore = $this->Albaranesproveedore->find('first', array('contain' => '', 'conditions' => array('Albaranesproveedore.id' => $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'])));
         $this->Albaranesproveedore->id = $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'];
         $this->Albaranesproveedore->saveField('baseimponible', $albaranesproveedore['Albaranesproveedore']['baseimponible'] - $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['total']);
+        $this->articulo_id = $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['articulo_id'];
         return true;
+    }
+
+    /*
+     * Esto se hará: Despues de uno nuevo , despues de editar y despues de borrar
+     */
+
+    function recalcular_valoracion($articulo_id) {
+        
+        $articulos_albaranesproveedores = $this->find('all', array('contain'=>array(),'conditions' => array('ArticulosAlbaranesproveedore.articulo_id' => $articulo_id)));
+        $nueva_valoracion = 0;
+        $cantidad_por_precio = 0;
+        $cantidad_total = 0;
+
+        foreach ($articulos_albaranesproveedores as $articulos_albaranesproveedore) {
+            $cantidad_por_precio += $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'] * $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor'];
+            $cantidad_total += $articulos_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'];
+        }
+        $nueva_valoracion = $cantidad_por_precio / $cantidad_total;
+        $this->Articulo->id = $articulo_id;
+        $this->Articulo->saveField('valoracion',number_format($nueva_valoracion, 5, '.', ''));
+    }
+
+    /*
+     * Despues de Guardar
+     */
+
+    function afterSave($created) {
+        $articulo_id = $this->articulo_id;
+        $this->recalcular_valoracion($articulo_id);
+    }
+
+    /*
+     * Despues de borrar
+     */
+
+    function afterDelete() {
+        $articulo_id = $this->articulo_id;
+        $this->recalcular_valoracion($articulo_id);
     }
 
 }

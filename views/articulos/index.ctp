@@ -18,6 +18,7 @@
             <th><?php echo $paginator->sort('Descripción', 'nombre'); ?></th>
             <th><?php echo $paginator->sort('Código barras', 'codigobarras'); ?></th>
             <th><?php echo $paginator->sort('Precio Coste (* Ultimo)', 'ultimopreciocompra'); ?></th>
+            <th><?php echo $paginator->sort('Valoración', 'valoracion'); ?></th>
             <th><?php echo $paginator->sort('PVP', 'precio_sin_iva'); ?></th>
             <th><?php echo $paginator->sort('Almacén', 'almacene_id'); ?></th>
             <th><?php echo $paginator->sort('Localización', 'localizacion'); ?></th>
@@ -42,13 +43,14 @@
                 <td><?php echo $articulo['Articulo']['nombre']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Articulo']['codigobarras']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Articulo']['ultimopreciocompra']; ?>&nbsp;</td>
+                <td><?php echo $articulo['Articulo']['valoracion']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Articulo']['precio_sin_iva']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Almacene']['nombre']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Articulo']['localizacion']; ?>&nbsp;</td>
                 <td id="<?php echo $articulo['Articulo']['id']; ?>" class="existencias-field"><?php echo $articulo['Articulo']['existencias']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Articulo']['stock_minimo']; ?>&nbsp;</td>
                 <td><?php echo $articulo['Articulo']['stock_maximo']; ?>&nbsp;</td>
-                <td><?php echo $articulo['Articulo']['stock_maximo'] - $articulo['Articulo']['existencias']; ?>&nbsp;</td>
+                <td><?php echo ($articulo['Articulo']['stock_maximo'] - $articulo['Articulo']['existencias']) < 0 ? 0 : $articulo['Articulo']['stock_maximo'] - $articulo['Articulo']['existencias']; ?>&nbsp;</td>
                 <td><?php echo $this->Form->input('validar', array('name' => 'data[articulos_validados][]', 'type' => 'checkbox', 'value' => $articulo['Articulo']['id'], 'hiddenField' => false, 'label' => false)) ?></td>
                 <td><?php echo $this->Html->link($articulo['Familia']['nombre'], array('controller' => 'familias', 'action' => 'view', $articulo['Familia']['id'])); ?></td>
                 <td class="actions">
