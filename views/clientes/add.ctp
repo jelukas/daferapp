@@ -49,11 +49,58 @@
         </table>
         <table class="view">
             <tr>
-                <td><h4>Forma de Pago</h4></td>
+                <td>
+                    <h4>Forma de Pago<?php echo $html->link(__('Editar Forma de Pago', true), '#?', array('class' => 'button_link editar_formapago')); ?></h4>
+                </td>
+            </tr>
+            <tr style="display: none" id="formapago_row">
+                <td>
+                    <table class="edit">
+                        <tr>
+                            <td><span>Tipos de Pagos</span></td>
+                            <td><span>Nº Vencimientos</span></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">
+                                <?php
+                                $options = array('efectivo' => 'Efectivo', 'contado' => 'Contado', 'talon' => 'Talón', 'pagare' => 'Pagare', 'transferencia' => 'Transferencia', 'giro' => 'Giro', 'recibo' => 'Recibo', 'confirming' => 'Confirming', 'efecto' => 'Efecto');
+                                $attributes = array('legend' => false);
+                                echo $form->radio('Formapago.tipodepago', $options, $attributes);
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                $options = array(1 => '1', 2 => '2', 3 => '3', 4 => '4', 5 => '5');
+                                $attributes = array('legend' => false, 'label' => false, 'separator' => '  ', 'class' => 'horizontal_radio');
+                                echo $form->radio('Formapago.numero_vencimientos', $options, $attributes);
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Diferencia entre vencimientos:</span>
+                                <?php echo $form->input('Formapago.dias_entre_vencimiento', array('label' => false)); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Fecha Fija de Vencimiento:</span>
+                                <?php echo $form->input('Formapago.dia_mes_fijo_vencimiento', array('label' => false)); ?>
+                            </td>                
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Nombre:</span>
+                                <?php echo $form->input('Formapago.nombre', array('label' => false)); ?>
+                            </td>                
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
                 <td><h4>Datos Bancarios</h4></td>
             </tr>
             <tr>
-                <td></td>
                 <td>
                     <table class="edit">
                         <tr>
@@ -73,6 +120,13 @@
             </tr>
         </table>
     </fieldset>
-
     <?php echo $form->end('Añadir'); ?>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        $('.editar_formapago').click(function(){
+            $('#formapago_row').fadeToggle("slow", "linear");
+        });
+    });
+</script>

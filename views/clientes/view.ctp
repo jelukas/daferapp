@@ -53,7 +53,7 @@
             <td><h4>Datos Bancarios</h4></td>
         </tr>
         <tr>
-            <td></td>
+            <td><?php echo $cliente['Formapago']['nombre']; ?></td>
             <td>
                 <table class="edit">
                     <tr>
