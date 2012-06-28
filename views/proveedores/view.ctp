@@ -1,137 +1,110 @@
-<div class="proveedores view">
-<h2><?php  __('Ficha de proveedor');?></h2>
-	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('ID'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['id']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('CIF'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['cif']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Nombre'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['nombre']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Dirección'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['direccion']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Dirección Almacén'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['direccionalmacen']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Población'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['poblacion']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Provincia'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['provincia']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Código Postal'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['cp']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('País'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['pais']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Teléfono'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['telefono']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Fax'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['fax']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Página Web'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['web']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('E-mail'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['email']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Comercial/es'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['comercial']; ?>
-			&nbsp;
-		</dd>
-		
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Impuestos'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['impuestos']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Cuenta Contable'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['cuentacontable']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Observaciones'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['observaciones']; ?>
-			&nbsp;
-		</dd>
-
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Materiales'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['tipomaterial']; ?>
-			&nbsp;
-		</dd>
-
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Tipo de Transporte'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['tipotransporte']; ?>
-			&nbsp;
-		</dd>
-
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Forma de pedido'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['formapedido']; ?>
-			&nbsp;
-		</dd>
-
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('E-Commerce'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['ecommerce']; ?>
-			&nbsp;
-		</dd>
-
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Usuario E-Commerce'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['usuario']; ?>
-			&nbsp;
-		</dd>
-
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Contraseña'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $proveedore['Proveedore']['contrasenia']; ?>
-			&nbsp;
-		</dd>
-	</dl>
+<div class="proveedores">
+    <h2>
+        <?php __('Ficha de proveedor'); ?>
+        <?php echo $this->Html->link(__('Editar Proveedor', true), array('action' => 'edit', $proveedore['Proveedore']['id']), array('class' => 'button_link')); ?> 
+        <?php echo $this->Html->link(__('Eliminar Proveedor', true), array('action' => 'delete', $proveedore['Proveedore']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $proveedore['Proveedore']['id'])); ?> 
+        <?php echo $this->Html->link(__('Listar Proveedores', true), array('action' => 'index'), array('class' => 'button_link')); ?> 
+    </h2>
+    <table class="view edit">
+        <tr>
+            <td><span><?php __('Denominación Comercial'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['nombre']; ?></td>
+            <td><span><?php __('Nombre Fiscal'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['nombrefiscal']; ?></td>
+            <td><span><?php __('CIF'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['cif']; ?></td>
+            <td><span><?php __('Tipo de IVA'); ?></span></td>
+            <td><?php echo $proveedore['Tiposiva']['tipoiva']; ?> - <?php echo $proveedore['Tiposiva']['porcentaje_aplicable']; ?> &percnt;</td>
+            <td><span><?php __('Cuenta Contable'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['cuentacontable']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Población'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['poblacion']; ?></td>
+            <td><span><?php __('Provincia'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['provincia']; ?></td>
+            <td><span><?php __('Código Postal'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['cp']; ?></td>
+            <td><span><?php __('Pais'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['pais']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Teléfono'); ?></span></td>
+            <td colspan="3"><?php echo $proveedore['Proveedore']['telefono']; ?></td>
+            <td><span><?php __('Dirección Fiscal'); ?></span></td>
+            <td colspan="5"><?php echo $proveedore['Proveedore']['direccionfiscal']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Fax'); ?></span></td>
+            <td colspan="3"><?php echo $proveedore['Proveedore']['fax']; ?></td>
+            <td><span><?php __('Dirección Postal'); ?></span></td>
+            <td colspan="5"><?php echo $proveedore['Proveedore']['direccion']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Email: '); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['email']; ?></td>
+            <td><span><?php __('Web: '); ?></span></td>
+            <td><a href="<?php echo $proveedore['Proveedore']['web']; ?>"><?php echo $proveedore['Proveedore']['web']; ?></a></td>
+            <td><span><?php __('Dirección Almacen'); ?></span></td>
+            <td colspan="5"><?php echo $proveedore['Proveedore']['direccionalmacen']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Comercial/es'); ?></span></td>
+            <td colspan="3"><?php echo $proveedore['Proveedore']['comercial']; ?></td>
+            <td><span><?php __('Proveedores de(material)'); ?></span></td>
+            <td colspan="5"><?php echo $proveedore['Proveedore']['proveedoresde']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Personas de Contacto'); ?></span></td>
+            <td colspan="2"><?php echo $proveedore['Proveedore']['personascontacto']; ?></td>
+            <td><span><?php __('Forma de Pedido'); ?></span></td>
+            <td colspan="2"><?php echo $proveedore['Proveedore']['formapedido']; ?></td>
+            <td><span><?php __('Tipo de Transporte'); ?></span></td>
+            <td colspan="2"><?php echo $proveedore['Proveedore']['tipotransporte']; ?></td>
+        </tr>
+        <tr>
+            <td colspan="2"><span><?php __('E-commerce Enlace'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['ecommerce']; ?></td>
+            <td colspan="2"><span><?php __('Usuario E-commerce'); ?></span></td>
+            <td><?php echo $proveedore['Proveedore']['usuario']; ?></td>
+            <td colspan="2"><span><?php __('Contraseña'); ?></span></td>
+            <td><input type="password" value="<?php echo $proveedore['Proveedore']['contrasenia']; ?>" readonly="true" id="password"/><a href="#?" id="show-password">Ver</a></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Observaciones'); ?></span></td>
+            <td colspan="9"><?php echo $proveedore['Proveedore']['observaciones']; ?></td>
+        </tr>
+    </table>
+    <table class="view">
+        <tr>
+            <td><h4>Forma de Pago</h4></td>
+            <td><h4>Datos Bancarios</h4></td>
+        </tr>
+        <tr>
+            <td><?php echo $proveedore['Formapago']['nombre']; ?></td>
+            <td>
+                <table class="edit">
+                    <tr>
+                        <td><span>Nombre</span><br/><?php echo $proveedore['Cuentasbancaria']['nombre']; ?></td>
+                        <td><span>Nº Entidad</span><br/><?php echo $proveedore['Cuentasbancaria']['numero_entidad']; ?></td>
+                        <td><span>Nº Sucursal</span><br/><?php echo $proveedore['Cuentasbancaria']['numero_sucursal']; ?></td>
+                        <td><span>D.C</span><br/><?php echo $proveedore['Cuentasbancaria']['numero_dc']; ?></td>
+                        <td><span>Nº CCC</span><br/><?php echo $proveedore['Cuentasbancaria']['numero_cuenta']; ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2"><span>BIC/SWIFT</span><br/><?php echo $proveedore['Cuentasbancaria']['numero_bicswift']; ?></td>
+                        <td colspan="2"><span>IBAN</span><br/><?php echo $proveedore['Cuentasbancaria']['numero_iban']; ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </div>
-<div class="actions">
-	<h3><?php __('Acciones'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Editar Proveedor', true), array('action' => 'edit', $proveedore['Proveedore']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Eliminar Proveedor', true), array('action' => 'delete', $proveedore['Proveedore']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $proveedore['Proveedore']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Listar Proveedores', true), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Proveedor', true), array('action' => 'add')); ?> </li>
-		
-	</ul>
-</div>
+<script type="text/javascript">
+    $(function(){
+        $('#show-password').click(function(){
+            alert($('#password').val());
+        });
+    });
+</script>

@@ -11,7 +11,7 @@ class ProveedoresController extends AppController {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Proveedor inválido', true));
+            $this->flashWarnings(__('Proveedor inválido', true));
             $this->redirect($this->referer());
         }
         $this->set('proveedore', $this->Proveedore->read(null, $id));
@@ -22,16 +22,18 @@ class ProveedoresController extends AppController {
             $this->Proveedore->create();
             if ($this->Proveedore->saveAll($this->data)) {
                 $this->Session->setFlash(__('El proveedor ha sido salvado correctamente.', true));
-                $this->redirect(array('action' => 'view', $this->Proveedore->id));
+                $this->redirect(array('action'=>'view',$this->Proveedore->id));
             } else {
-                $this->Session->setFlash(__('El proveedor no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
+                $this->flashWarnings(__('El proveedor no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
             }
         }
+        $tiposivas = $this->Proveedore->Tiposiva->find('list');
+        $this->set(compact('tiposivas'));
     }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Proveedor inválido', true));
+            $this->flashWarnings(__('Proveedor inválido', true));
             $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
@@ -39,25 +41,31 @@ class ProveedoresController extends AppController {
                 $this->Session->setFlash(__('El proveedor ha sido salvado correctamente.', true));
                 $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('El proveedor no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
+                $msg = 'El proveedor no ha podido ser salvado. Por favor, inténtelo de nuevo.';
+                $errors = $this->Proveedore->invalidFields();
+                if(!empty($errors['Cuentasbancaria']))
+                    $msg .= '<br/>Revisa los datos de la cuenta bancaria. Rellena todos los campos obligatorios';
+                $this->flashWarnings(__($msg, true));
                 $this->redirect($this->referer());
             }
         }
         if (empty($this->data)) {
             $this->data = $this->Proveedore->read(null, $id);
+            $tiposivas = $this->Proveedore->Tiposiva->find('list');
+            $this->set(compact('tiposivas'));
         }
     }
 
     function delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid id for proveedore', true));
+            $this->flashWarnings(__('Invalid id for proveedore', true));
             $this->redirect($this->referer());
         }
         if ($this->Proveedore->delete($id)) {
             $this->Session->setFlash(__('Proveedor eliminado', true));
-            $this->redirect($this->referer());
+            $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('El proveedor no ha podido ser eliminado.', true));
+        $this->flashWarnings(__('El proveedor no ha podido ser eliminado.', true));
         $this->redirect($this->referer());
     }
 

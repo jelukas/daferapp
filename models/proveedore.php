@@ -7,6 +7,17 @@ class Proveedore extends AppModel {
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 
     var $virtualFields = array('idnombre' => "CONCAT(Proveedore.nombre, ' --- ', Proveedore.id)");
+   
+    var $belongsTo = array(
+        'Tiposiva' => array(
+            'className' => 'Tiposiva',
+            'foreignKey' => 'tiposiva_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        )
+    );
+    
     var $hasMany = array(
         'Articulo' => array(
             'className' => 'Articulo',
@@ -40,7 +51,12 @@ class Proveedore extends AppModel {
             'className' => 'Cuentasbancaria',
             'foreignKey' => 'proveedore_id',
             'dependent' => true
-        )
+        ),
+        'Formapago' => array(
+            'className' => 'Formapago',
+            'foreignKey' => 'proveedore_id',
+            'dependent' => true
+        ),
     );
 
 }
