@@ -34,8 +34,12 @@
             <tr>
                 <td>Existencias</td>
                 <td><?php echo $this->Form->input('existencias', array('label' => false)); ?></td>
+            </tr>
+            <tr>
                 <td>Stock Mínimo</td>
                 <td><?php echo $this->Form->input('stock_minimo', array('label' => false)); ?></td>
+                <td>Stock Máximo</td>
+                <td><?php echo $this->Form->input('stock_maximo', array('label' => false)); ?></td>
             </tr>
             <tr>
                 <td><span>Familia</span></td>

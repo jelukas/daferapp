@@ -23,8 +23,12 @@ class ArticulosController extends AppController {
     }
 
     function index() {
+        $this->paginate = array(
+            'limit' => 60,
+            'contain' => array('Familia', 'Almacene'),
+            'order' => array('ref' => 'asc'),
+        );
         $articulos = $this->paginate('Articulo');
-        $this->paginate = array('limit' => 20, 'contain' => array('Familia'));
         $this->set('articulos', $this->paginate());
     }
 

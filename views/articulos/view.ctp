@@ -9,14 +9,16 @@
         <tr>
             <td><span>Referencia</span></td>
             <td><?php echo $articulo['Articulo']['ref']; ?></td>
+            <td><span>Descripción</span></td>
+            <td><?php echo $articulo['Articulo']['nombre']; ?></td>
             <td><span>Código de Barras</span></td>
             <td><?php echo $articulo['Articulo']['codigobarras']; ?></td>
         </tr>
         <tr>
-            <td><span>Familia</span></td>
+            <td colspan="2"><span>Familia</span></td>
             <td><?php echo $this->Html->link($articulo['Familia']['nombre'], array('controller' => 'familias', 'action' => 'view', $articulo['Familia']['id'])); ?></td>
             <td><span>Imágen</span></td>
-            <td><?php echo $this->Html->link(__($articulo['Articulo']['articuloescaneado'], true), '/files/articulo/' . $articulo['Articulo']['articuloescaneado']); ?></td>
+            <td colspan="2"><?php echo $this->Html->link(__($articulo['Articulo']['articuloescaneado'], true), '/files/articulo/' . $articulo['Articulo']['articuloescaneado']); ?></td>
         </tr>
         <tr>
             <td><span>Observaciones</span></td>
@@ -34,6 +36,7 @@
             <th>Precio Coste (* Último)</th>
             <th>PVP</th>
             <th>Stock Mínimo</th>
+            <th>Stock Máximo</th>
             <th class="actions">Acciones</th>
         </tr>
         <?php foreach ($articulos_misma_ref as $articuloref): ?>
@@ -44,6 +47,7 @@
                 <td><?php echo $articuloref['Articulo']['ultimopreciocompra'] ?></td>
                 <td><?php echo $articuloref['Articulo']['precio_sin_iva'] ?></td>
                 <td><?php echo $articuloref['Articulo']['stock_minimo'] ?></td>
+                <td><?php echo $articuloref['Articulo']['stock_maximo'] ?></td>
                 <td class="actions"><?php echo $this->Html->link(_('Editar'), array('action' => 'edit', $articuloref['Articulo']['id'])); ?></td>
             </tr>
         <?php endforeach; ?>
@@ -69,7 +73,7 @@
             </tr>
             <?php foreach ($articulo['Referido'] as $referencia): ?>
                 <tr>
-                    <td><?php echo $referencia['Articulo_referido']['ref'] ?></td>
+                    <td><?php echo $this->Html->link($referencia['Articulo_referido']['ref'], array('action' => 'edit',$referencia['Articulo_referido']['id'])); ?></td>
                     <td><?php echo $referencia['Articulo_referido']['nombre'] ?></td>
                     <td><?php echo $referencia['Articulo_referido']['existencias'] ?></td>
                     <td><?php echo $referencia['Articulo_referido']['ultimopreciocompra'] ?></td>
