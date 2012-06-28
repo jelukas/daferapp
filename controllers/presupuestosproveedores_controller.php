@@ -57,20 +57,19 @@ class PresupuestosproveedoresController extends AppController {
             $this->redirect(array('action' => 'index'));
         }
         $this->set('presupuestosproveedore', $this->Presupuestosproveedore->find(
-                'first',
-                array('contain' =>
+                        'first', array('contain' =>
                     array('Pedidosproveedore',
                         'Pedidoscliente',
                         'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
-                        'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina','Estadosavisostallere'),
-                        'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina','Estadosaviso'),
+                        'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
+                        'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
                         'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'),
                     'conditions' => array('Presupuestosproveedore.id' => $id))));
         $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('all', array('contain' => array('Articulo'), 'conditions' => array('ArticulosPresupuestosproveedore.presupuestosproveedore_id' => $id))));
     }
 
     function add($avisorepuestos_id = null, $avisostallere_id = null, $ordene_id = null) {
-        if (!empty($this->data)) {
+        if (!empty($this->data) && !isset($this->data['articulos_validados'])) {
             $this->Presupuestosproveedore->create();
             if ($this->Presupuestosproveedore->save($this->data)) {
                 $id = $this->Presupuestosproveedore->id;
@@ -93,27 +92,6 @@ class PresupuestosproveedoresController extends AppController {
                     $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->saveAll($data);
                     /* Fin conversion */
                 } elseif (!empty($this->data['Presupuestosproveedore']['ordene_id'])) {
-                    /* Convertimos los articulos del aviso de taller a articulos para pedir a proveedor */
-                    /* $this->Presupuestosproveedore->Ordene->Tarea->recursive = 2;
-                      $tareas = $this->Presupuestosproveedore->Ordene->Tarea->findAllByOrdeneId($this->data['Presupuestosproveedore']['ordene_id']);
-                      $articulos_avisostallere = array();
-                      foreach ($tareas as $tarea) {
-                      $articulos_tarea = $tarea['ArticulosTarea'];
-                      foreach ($articulos_tarea as $articulo_tarea) {
-                      $articulos_avisostallere[] = $articulo_tarea;
-                      }
-                      }
-                      $data = array();
-                      foreach ($articulos_avisostallere as $articulo_avisostallere) {
-                      $articulo_proveedore = array();
-                      $articulo_proveedore['ArticulosPresupuestosproveedore']['articulo_id'] = $articulo_avisostallere['articulo_id'];
-                      $articulo_proveedore['ArticulosPresupuestosproveedore']['presupuestosproveedore_id'] = $id;
-                      $articulo_proveedore['ArticulosPresupuestosproveedore']['cantidad'] = $articulo_avisostallere['cantidad'];
-                      $data[] = $articulo_proveedore;
-                      }
-                      $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->saveAll($data); */
-                    /* Fin conversion */
-                    //Cambio el estado de la Orden
                     $this->Presupuestosproveedore->Ordene->updateAll(array('Ordene.estadosordene_id' => 1), array('Ordene.id' => $this->data['Presupuestosproveedore']['ordene_id']));
                 } elseif (!empty($this->data['Albaranesproveedore']['albaranesproveedore_id'])) {
                     /* Convertimos los Articulos que vienen de albaran marcados para devolucion */
@@ -132,6 +110,19 @@ class PresupuestosproveedoresController extends AppController {
                     }
                     $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->saveAll($articulos_presupuestosproveedore);
                     /* Fin conversion */
+                } elseif (!empty($this->data['paraalmacen'])) {
+                    /* Convertimos los articulos del aviso de repuesto a articulos para pedir a proveedor */
+                    $articulos = $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->Articulo->find('all', array('conditions' => array('Articulo.id' => $this->data['articulos'])));
+                    $data = array();
+                    foreach ($articulos as $articulo) {
+                        $articulo_proveedore = array();
+                        $articulo_proveedore['ArticulosPresupuestosproveedore']['articulo_id'] = $articulo['Articulo']['id'];
+                        $articulo_proveedore['ArticulosPresupuestosproveedore']['presupuestosproveedore_id'] = $id;
+                        $articulo_proveedore['ArticulosPresupuestosproveedore']['cantidad'] = $articulo['Articulo']['stock_maximo'] - $articulo['Articulo']['existencias'];
+                        $data[] = $articulo_proveedore;
+                    }
+                    $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->saveAll($data);
+                    /* Fin conversion */
                 }
                 $this->Session->setFlash(__('El presupuesto de proveedor ha sido guardado correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Presupuestosproveedore->id));
@@ -144,9 +135,15 @@ class PresupuestosproveedoresController extends AppController {
         $proveedores = $this->Presupuestosproveedore->Proveedore->find('list');
         $almacenes = $this->Presupuestosproveedore->Almacene->find('list');
         $numero = $this->Presupuestosproveedore->dime_siguiente_numero();
-        $this->set(compact('proveedores', 'almacenes', 'ordene_id','numero'));
+        $this->set(compact('proveedores', 'almacenes', 'ordene_id', 'numero'));
         if ($avisorepuestos_id == null && $avisostallere_id == null && $ordene_id == null) {
-            $this->render('add_directo');
+            if (empty($this->data['articulos_validados'])) {
+                $this->render('add_directo');
+            } else {
+                $articulos = $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->Articulo->find('all', array('conditions' => array('Articulo.id' => $this->data['articulos_validados'])));
+                $this->set(compact('articulos'));
+                $this->render('add_almacen');
+            }
         } elseif ($avisorepuestos_id == 'devolucion' && !empty($avisostallere_id)) {
             $albaranesproveedore_id = $avisostallere_id; //Albaran del que vienen las devoluciones
             $this->set('albaranesproveedore_id', $albaranesproveedore_id);
