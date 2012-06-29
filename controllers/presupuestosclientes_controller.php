@@ -15,7 +15,7 @@ class PresupuestosclientesController extends AppController {
             $this->flashWarnings(__('Presupuestos Cliente Inválido', true));
             $this->redirect(array('action' => 'index'));
         }
-        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto', 'Presupuestosproveedore', 'Avisostallere', 'Ordene', 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
+        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Mensajesinformativo', 'Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina')), 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($presupuestoscliente['Tareaspresupuestocliente'] as $tarea) {
@@ -136,21 +136,23 @@ class PresupuestosclientesController extends AppController {
         }
         $comerciales = $this->Presupuestoscliente->Comerciale->find('list');
         $tiposivas = $this->Presupuestoscliente->Tiposiva->find('list');
-        $this->set(compact('comerciales', 'tiposivas'));
+        $almacenes = $this->Presupuestoscliente->Almacene->find('list');
+        $mensajesinformativos = $this->Presupuestoscliente->Mensajesinformativo->find('list');
+        $numero = $this->Presupuestoscliente->dime_siguiente_numero();
+        $this->set(compact('comerciales', 'tiposivas', 'almacenes', 'numero', 'mensajesinformativos'));
         switch ($vienede) {
             case 'avisosrepuesto':
-                $avisosrepuesto = $this->Presupuestoscliente->Avisosrepuesto->find('first', array('contain' => array('Almacene', 'Cliente'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
+                $avisosrepuesto = $this->Presupuestoscliente->Avisosrepuesto->find('first', array('contain' => array('Almacene', 'Cliente', 'Centrostrabajo', 'Maquina'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
                 $this->set(compact('avisosrepuesto'));
                 $this->render('add_from_avisosrepuesto');
                 break;
             case 'avisostallere':
-                $almacenes = $this->Presupuestoscliente->Almacene->find('list');
-                $avisostallere = $this->Presupuestoscliente->Avisostallere->findById($iddedondeviene);
-                $this->set(compact('avisostallere', 'almacenes'));
+                $avisostallere = $this->Presupuestoscliente->Avisostallere->find('first', array('contain' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'conditions' => array('Avisostallere.id' => $iddedondeviene)));
+                $this->set(compact('avisostallere'));
                 $this->render('add_from_avisostallere');
                 break;
             case 'ordene':
-                $ordene = $this->Presupuestoscliente->Ordene->find('first', array('contain' => array('Almacene', 'Avisostallere' => 'Cliente'), 'conditions' => array('Ordene.id' => $iddedondeviene)));
+                $ordene = $this->Presupuestoscliente->Ordene->find('first', array('contain' => array('Almacene', 'Avisostallere' => array( 'Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Ordene.id' => $iddedondeviene)));
                 $this->set(compact('ordene'));
                 $this->render('add_from_ordene');
                 break;
@@ -188,7 +190,8 @@ class PresupuestosclientesController extends AppController {
         $avisosrepuestos = $this->Presupuestoscliente->Avisosrepuesto->find('list');
         $ordenes = $this->Presupuestoscliente->Ordene->find('list');
         $avisostalleres = $this->Presupuestoscliente->Avisostallere->find('list');
-        $this->set(compact('almacenes', 'comerciales', 'avisosrepuestos', 'ordenes', 'avisostalleres', 'tiposivas'));
+        $mensajesinformativos = $this->Presupuestoscliente->Mensajesinformativo->find('list');
+        $this->set(compact('mensajesinformativos', 'almacenes', 'comerciales', 'avisosrepuestos', 'ordenes', 'avisostalleres', 'tiposivas'));
     }
 
     function delete($id = null) {

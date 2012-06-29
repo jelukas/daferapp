@@ -1,81 +1,92 @@
-<div class="presupuestosclientes view">
-    <h2><?php __('Presupuestoscliente'); ?></h2>
-    <dl><?php
-$i = 0;
-$class = ' class="altrow"';
-?>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Presupuestoscliente']['id']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Cliente'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($presupuestoscliente['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $presupuestoscliente['Cliente']['id'])); ?>
-            &nbsp;
-        </dd><dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Comerciale'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($presupuestoscliente['Comerciale']['nombre'], array('controller' => 'comerciales', 'action' => 'view', $presupuestoscliente['Comerciale']['id'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Fecha'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Presupuestoscliente']['fecha']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Almacen de los Materiales'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Almacene']['nombre']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Avisar'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Presupuestoscliente']['avisar']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Observaciones'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Presupuestoscliente']['observaciones']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Precio'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Presupuestoscliente']['precio']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Tipos IVA'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Tiposiva']['tipoiva']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Impuestos'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $presupuestoscliente['Presupuestoscliente']['impuestos']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Avisosrepuesto'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($presupuestoscliente['Avisosrepuesto']['id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestoscliente['Avisosrepuesto']['id'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Ordene'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($presupuestoscliente['Ordene']['id'], array('controller' => 'ordenes', 'action' => 'view', $presupuestoscliente['Ordene']['id'])); ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Avisostallere'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($presupuestoscliente['Avisostallere']['id'], array('controller' => 'avisostalleres', 'action' => 'view', $presupuestoscliente['Avisostallere']['id'])); ?>
-            &nbsp;
-        </dd>
-        <?php if (!empty($presupuestoscliente['Presupuestosproveedore']['id'])): ?>
-            <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Presupuesto Proveedor'); ?></dt>
-            <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-                <?php echo $this->Html->link($presupuestoscliente['Presupuestosproveedore']['id'], array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestoscliente['Presupuestosproveedore']['id'])); ?>
-                &nbsp;
-            </dd>
+<div class="presupuestosclientes">
+    <h2>
+        <?php __('Presupuestoscliente'); ?>
+        <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link')); ?> 
+        <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['Presupuestoscliente']['numero'])); ?> 
+        <?php echo $this->Html->link(__('Listar Presupuestos a Clientes', true), array('action' => 'index'), array('class' => 'button_link')); ?> 
+        <?php echo $this->Html->link(__('Nuevo Pedido de Cliente', true), '#', array('class' => 'button_link')); ?> 
+    </h2>
+    <table class="view">
+        <tr>
+            <td><span><?php __('Número'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Presupuestoscliente']['numero']; ?></td>
+            <td><span><?php __('Fecha'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Presupuestoscliente']['fecha']; ?></td>
+            <td><span><?php __('Almacén de los Materiales'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Almacene']['nombre']; ?></td>
+            <td><span><?php __('Confirmado'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Presupuestoscliente']['confirmado'] == 0 ? 'No' : 'Sí'; ?></td>
+            <td><span><?php __('Comercial'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Comerciale']['nombre']; ?> <?php echo $presupuestoscliente['Comerciale']['apellidos']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Cliente'); ?></span></td>
+            <td colspan="9"><?php echo $this->Html->link($presupuestoscliente['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $presupuestoscliente['Cliente']['id'])); ?></td>
+        </tr>
+        <?php if (!empty($presupuestoscliente['Presupuestoscliente']['ordene_id'])): ?>
+            <tr>
+                <td><h4><?php __('Orden'); ?></h4></td>
+                <td><?php echo $this->Html->link($presupuestoscliente['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $presupuestoscliente['Ordene']['id'])); ?></td>
+                <td><span><?php __('Centro de Trabajo'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Ordene']['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><span><?php __('Máquina'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Ordene']['Avisostallere']['Maquina']['nombre']; ?></td>
+                <td><span><?php __('Nº Serie Máquina'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Ordene']['Avisostallere']['Maquina']['serie_maquina']; ?></td>
+                <td><span><?php __('Horas'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Ordene']['Avisostallere']['horas_maquina']; ?></td>
+            </tr>
         <?php endif; ?>
-    </dl>
+        <?php if (!empty($presupuestoscliente['Presupuestoscliente']['avisostallere_id'])): ?>
+            <tr>
+                <td><h4><?php __('Aviso de Taller'); ?></h4></td>
+                <td><?php echo $this->Html->link($presupuestoscliente['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $presupuestoscliente['Avisostallere']['id'])); ?></td>
+                <td><span><?php __('Centro de Trabajo'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><span><?php __('Máquina'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisostallere']['Maquina']['nombre']; ?></td>
+                <td><span><?php __('Nº Serie Máquina'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisostallere']['Maquina']['serie_maquina']; ?></td>
+                <td><span><?php __('Horas'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisostallere']['horas_maquina']; ?></td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($presupuestoscliente['Presupuestoscliente']['avisosrepuesto_id'])): ?>
+            <tr>
+                <td><h4><?php __('Aviso de Repuestos'); ?></h4></td>
+                <td><?php echo $this->Html->link($presupuestoscliente['Avisosrepuesto']['numero'], array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestoscliente['Avisosrepuesto']['id'])); ?></td>
+                <td><span><?php __('Centro de Trabajo'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisosrepuesto']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><span><?php __('Máquina'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisosrepuesto']['Maquina']['nombre']; ?></td>
+                <td><span><?php __('Nº Serie Máquina'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisosrepuesto']['Maquina']['serie_maquina']; ?></td>
+                <td><span><?php __('Horas'); ?></span></td>
+                <td><?php echo $presupuestoscliente['Avisosrepuesto']['horas_maquina']; ?></td>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <td><span><?php __('Mensaje'); ?></span></td>
+            <td colspan="9"><?php echo $presupuestoscliente['Mensajesinformativo']['mensaje']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Observaciones'); ?></span></td>
+            <td colspan="7"><?php echo $presupuestoscliente['Presupuestoscliente']['observaciones']; ?></td>
+            <td><span><?php __('Avisar'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Presupuestoscliente']['avisar'] == 0 ? 'No' : 'Sí'; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Presupuesto Enviado Fecha'); ?></span></td>
+            <td><?php echo $presupuestoscliente['Presupuestoscliente']['fecha_enviado']; ?></td>
+            <td><span><?php __('Tipo de IVA') ?></span></td>
+            <td><?php echo $presupuestoscliente['Tiposiva']['tipoiva']; ?> <?php echo $presupuestoscliente['Tiposiva']['porcentaje_aplicable']; ?> &percnt;</td>
+            <?php if (!empty($presupuestoscliente['Presupuestosproveedore']['id'])): ?>
+                <td><span><?php __('Presupuesto de Proveedor') ?></span></td>
+                <td><?php echo $this->Html->link($presupuestoscliente['Presupuestosproveedore']['numero'], array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestoscliente['Presupuestosproveedore']['id'])); ?></td>
+            <?php endif; ?>
+        </tr>
+    </table>
+
     <div class="related">
         <h3>Tareas a realizar </h3>
         <div class="actions">
@@ -187,15 +198,6 @@ $class = ' class="altrow"';
             <?php endforeach; ?>
         </table>
     </div>
-</div>
-<div class="actions">
-    <h3><?php __('Actions'); ?></h3>
-    <ul>
-        <li><?php echo $this->Html->link(__('Edit Presupuestoscliente', true), array('action' => 'edit', $presupuestoscliente['Presupuestoscliente']['id'])); ?> </li>
-        <li><?php echo $this->Html->link(__('Delete Presupuestoscliente', true), array('action' => 'delete', $presupuestoscliente['Presupuestoscliente']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['Presupuestoscliente']['id'])); ?> </li>
-        <li><?php echo $this->Html->link(__('List Presupuestosclientes', true), array('action' => 'index')); ?> </li>
-        <li style="margin-top: 20px"><?php echo $this->Html->link(__('Nuevo Pedido de Cliente', true), '#'); ?> </li>
-    </ul>
 </div>
 <div id="loading_background">
     <div id="loading_animation"></div>

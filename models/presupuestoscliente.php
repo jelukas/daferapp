@@ -6,6 +6,7 @@ class Presupuestoscliente extends AppModel {
     var $displayField = 'fecha';
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 
+    var $order = "Presupuestoscliente.numero DESC";
     var $belongsTo = array(
         'Comerciale' => array(
             'className' => 'Comerciale',
@@ -17,6 +18,13 @@ class Presupuestoscliente extends AppModel {
         'Avisosrepuesto' => array(
             'className' => 'Avisosrepuesto',
             'foreignKey' => 'avisosrepuesto_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Mensajesinformativo' => array(
+            'className' => 'Mensajesinformativo',
+            'foreignKey' => 'mensajesinformativo_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''
@@ -92,6 +100,25 @@ class Presupuestoscliente extends AppModel {
             'counterQuery' => ''
         ),
     );
+
+    function beforeSave($options) {
+        if (empty($this->data['Presupuestoscliente']['id'])) {
+            $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM presupuestosclientes p ';
+            $resultado = $this->query($query);
+            if (!empty($resultado[0][0]['siguiente']))
+                $this->data['Presupuestoscliente']['numero'] = $resultado[0][0]['siguiente'];
+            else
+                $this->data['Presupuestoscliente']['numero'] = 1;
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM presupuestosclientes p ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente'];
+    }
+
 }
 
 ?>

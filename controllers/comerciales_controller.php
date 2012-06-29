@@ -11,8 +11,8 @@ class ComercialesController extends AppController {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('comercial inválido', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('Comercial inválido', true));
+            $this->redirect($this->referer());
         }
         $this->set('comerciale', $this->Comerciale->read(null, $id));
     }
@@ -22,24 +22,24 @@ class ComercialesController extends AppController {
             $this->Comerciale->create();
             if ($this->Comerciale->save($this->data)) {
                 $this->Session->setFlash(__('El comercial ha sido salvado correctamente', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect(array('action' => 'view',$this->Comerciale->id));
             } else {
-                $this->Session->setFlash(__('El comercial no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
+                $this->flashWarnings(__('El comercial no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
             }
         }
     }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('comercial inválido', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('comercial inválido', true));
+            $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
             if ($this->Comerciale->save($this->data)) {
                 $this->Session->setFlash(__('El comercial ha sido salvado correctamente', true));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('El comercial no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
+                $this->flashWarnings(__('El comercial no ha podido ser salvado. Por favor, inténtelo de nuevo.', true));
             }
         }
         if (empty($this->data)) {
@@ -49,15 +49,15 @@ class ComercialesController extends AppController {
 
     function delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Id de comercial no válida', true));
-            $this->redirect(array('action' => 'index'));
+            $this->flashWarnings(__('Id de comercial no válida', true));
+            $this->redirect($this->referer());
         }
         if ($this->Comerciale->delete($id)) {
             $this->Session->setFlash(__('Comercial eliminado', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('El comercial no ha podido ser eliminado.', true));
-        $this->redirect(array('action' => 'index'));
+        $this->flashWarnings(__('El comercial no ha podido ser eliminado.', true));
+        $this->redirect($this->referer());
     }
 
     function search() {
