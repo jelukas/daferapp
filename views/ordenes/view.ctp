@@ -1,6 +1,6 @@
 <div class="ordenes">
     <h2>
-        <?php __('Orden Nº ' . $ordene['Ordene']['numero']); ?>
+        <?php __('Orden Nº ' . $ordene['Ordene']['numero']); //?>
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Listar Ordenes', true), array('action' => 'index'), array('class' => 'button_link')); ?>
     </h2>
@@ -363,13 +363,14 @@
                                             <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
-                                            <td><?php $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'])-(($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'])*($articulo_tarea['descuento']/100)); echo $totalcondescuento; ?></td>
+                                            <td><?php $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
+                        echo $totalcondescuento; ?></td>
                                             <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
                                         </tr>
                                         <?php $totalmateriales_real += $articulo_tarea['cantidadreal'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
                                         <?php $totalmateriales_imputable += $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
                                         <?php $totalmateriales_imputable_descuento += $totalcondescuento; ?>
-                                    <?php endforeach; ?>
+            <?php endforeach; ?>
                                     <tr>
                                         <td colspan="9" style="font-weight: bold; text-align: center;">
                                             <p>Total Materiales Real: <?php echo $totalmateriales_real ?> &euro;</p>
@@ -378,12 +379,12 @@
                                         </td>
                                     </tr>
                                 </table>
-                            <?php endif; ?>
+        <?php endif; ?>
                         </td>
                     </tr>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </table>
-        <?php endif; ?>
+<?php endif; ?>
         <br/>
         <div class="actions">
             <ul>
@@ -394,7 +395,7 @@
     <div style="clear: both"><?php echo $this->Html->link(__('Presupuestos y Pedidos Relacionados', true), '#?', array('class' => 'ver-relaciones-orden button_link')); ?></div>
     <div class="orden-relations">
         <h3><?php __('Presupuestos de Proveedores'); ?></h3>
-        <?php if (!empty($ordene['Presupuestosproveedore'])): ?>
+<?php if (!empty($ordene['Presupuestosproveedore'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
                     <th><?php __('ID'); ?></th>
@@ -417,10 +418,10 @@
                         <td class="actions">
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestoproveedore['id'])); ?>
                             <?php echo $this->Html->link(__('Editar', true), array('controller' => 'presupuestosproveedores', 'action' => 'edit', $presupuestoproveedore['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosproveedores', 'action' => 'delete', $presupuestoproveedore['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoproveedore['id'])); ?>
+        <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosproveedores', 'action' => 'delete', $presupuestoproveedore['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoproveedore['id'])); ?>
                         </td>
                     </tr>
-                    <?php if (!empty($presupuestoproveedore['Pedidosproveedore'])): ?>
+        <?php if (!empty($presupuestoproveedore['Pedidosproveedore'])): ?>
                         <tr>
                             <td>
                                 <h4>Pedidos a Proveedores</h4>
@@ -433,7 +434,7 @@
                                         <th>confirmado</th>
                                         <th>pedidoescaneado</th>
                                     </tr>
-                                    <?php foreach ($presupuestoproveedore['Pedidosproveedore'] as $pedidosproveedore): ?>
+            <?php foreach ($presupuestoproveedore['Pedidosproveedore'] as $pedidosproveedore): ?>
                                         <tr<?php echo $class; ?>>
                                             <td><?php echo $pedidosproveedore['Pedidosproveedore']['numero']; ?>&nbsp;</td>
                                             <td><?php echo $this->Html->link($presupuestoproveedore['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $presupuestoproveedore['Proveedore']['id'])); ?></td>
@@ -442,17 +443,17 @@
                                             <td><?php echo!empty($pedidosproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?></td>
                                             <td><?php echo $this->Html->link(__($pedidosproveedore['Pedidosproveedore']['pedidoescaneado'], true), '/files/pedidosproveedore/' . $pedidosproveedore['Pedidosproveedore']['pedidoescaneado']); ?></td>
                                         </tr>
-                                    <?php endforeach; ?>
+            <?php endforeach; ?>
                                 </table>
                             </td>
                         </tr>
                     <?php endif; ?>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </table>
-        <?php endif; ?>
+<?php endif; ?>
 
         <h3><?php __('Presupuestos a Cliente ' . $avisostallere['Cliente']['nombre'] . ' en la Orden ' . $ordene['Ordene']['id']); ?></h3>
-        <?php if (!empty($ordene['Presupuestoscliente'])): ?>
+<?php if (!empty($ordene['Presupuestoscliente'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
                     <th><?php __('Id'); ?></th>
@@ -481,10 +482,10 @@
                         <td class="actions">
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'presupuestosclientes', 'action' => 'view', $presupuestoscliente['id'])); ?>
                             <?php echo $this->Html->link(__('Editar', true), array('controller' => 'presupuestosclientes', 'action' => 'edit', $presupuestoscliente['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosclientes', 'action' => 'delete', $presupuestoscliente['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['id'])); ?>
+        <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosclientes', 'action' => 'delete', $presupuestoscliente['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['id'])); ?>
                         </td>
                     </tr>
-                    <?php if (!empty($presupuestoscliente['Pedidoscliente'])): ?>
+        <?php if (!empty($presupuestoscliente['Pedidoscliente'])): ?>
                         <tr>
                             <td>
                                 <h4>Pedidos de Cliente</h4>
@@ -495,26 +496,26 @@
                                         <th><?php echo __('confirmado'); ?></th>
                                         <th><?php echo __('recepcion'); ?></th>
                                     </tr>
-                                    <?php foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente): ?>
+            <?php foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente): ?>
                                         <tr>
                                             <td><?php echo $pedidoscliente['id']; ?>&nbsp;</td>
                                             <td><?php echo $pedidoscliente['fecha_plazo']; ?>&nbsp;</td>
                                             <td><?php echo $pedidoscliente['confirmado']; ?>&nbsp;</td>
                                             <td><?php echo $pedidoscliente['recepcion']; ?>&nbsp;</td>
                                         </tr>
-                                    <?php endforeach; ?>
+            <?php endforeach; ?>
                                 </table>
                             </td>
                         </tr>
                     <?php endif; ?>
-                <?php endforeach; ?>
+    <?php endforeach; ?>
 
             </table>
-        <?php endif; ?>
+<?php endif; ?>
     </div>
     <div style="clear: both; margin-top: 30px;">
         <?php echo $this->Html->link(__('Nuevo Presupuesto a cliente', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
-        <?php echo $this->Html->link(__('Nuevo Presupuesto de Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', -1, -1, $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
+<?php echo $this->Html->link(__('Nuevo Presupuesto de Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', -1, -1, $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
     </div>
 </div>
 <script>

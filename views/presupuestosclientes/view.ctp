@@ -4,7 +4,7 @@
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link')); ?> 
         <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['Presupuestoscliente']['numero'])); ?> 
         <?php echo $this->Html->link(__('Listar Presupuestos a Clientes', true), array('action' => 'index'), array('class' => 'button_link')); ?> 
-        <?php echo $this->Html->link(__('Nuevo Pedido de Cliente', true), '#', array('class' => 'button_link')); ?> 
+        <?php echo $this->Html->link(__('Nuevo Pedido de Clidente', true), array('controller' => 'pedidosclientes', 'action' => 'add', $presupuestoscliente['Presupuestoscliente']['id']),array('class' => 'button_link')); ?>
     </h2>
     <table class="view">
         <tr>

@@ -43,7 +43,7 @@ class PedidosclientesController extends AppController {
             $this->flashWarnings(__('Pedido de Cliente Inválido', true));
             $this->redirect($this->referer());
         }
-        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => 'Presupuestosproveedore', 'Tareaspedidoscliente' => array('TareaspedidosclientesOtrosservicio', 'MaterialesTareaspedidoscliente' => array('Articulo'), 'ManodeobrasTareaspedidoscliente')), 'conditions' => array('Pedidoscliente.id' => $id)));
+        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Almacene','Comerciale','Presupuestosproveedore', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina'))), 'Tareaspedidoscliente' => array('TareaspedidosclientesOtrosservicio', 'MaterialesTareaspedidoscliente' => array('Articulo'), 'ManodeobrasTareaspedidoscliente')), 'conditions' => array('Pedidoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($pedidoscliente['Tareaspedidoscliente'] as $tarea) {
@@ -128,9 +128,10 @@ class PedidosclientesController extends AppController {
                 $this->redirect($this->referer());
             }
         }
+        $numero = $this->Pedidoscliente->dime_siguiente_numero();
         $presupuestoscliente = $this->Pedidoscliente->Presupuestoscliente->find('first', array('contain' => array('Tareaspresupuestocliente' => array('Materiale' => 'Articulo', 'Manodeobra', 'TareaspresupuestoclientesOtrosservicio')), 'conditions' => array('Presupuestoscliente.id' => $presupuestoscliente_id)));
         $tiposivas = $this->Pedidoscliente->Presupuestoscliente->Tiposiva->find('list');
-        $this->set(compact('presupuestoscliente', 'tiposiva'));
+        $this->set(compact('presupuestoscliente', 'tiposiva','numero'));
     }
 
     function edit($id = null) {

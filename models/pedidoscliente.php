@@ -46,6 +46,24 @@ class Pedidoscliente extends AppModel {
         ),
     );
 
+    function beforeSave($options) {
+        if (empty($this->data['Pedidoscliente']['id'])) {
+            $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM pedidosclientes p ';
+            $resultado = $this->query($query);
+            if (!empty($resultado[0][0]['siguiente']))
+                $this->data['Pedidoscliente']['numero'] = $resultado[0][0]['siguiente'];
+            else
+                $this->data['Pedidoscliente']['numero'] = 1;
+        }
+        return true;
+    }
+
+    function dime_siguiente_numero() {
+        $query = 'SELECT MAX(p.numero)+1 as siguiente  FROM pedidosclientes p ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['siguiente'];
+    }
+
 }
 
 ?>

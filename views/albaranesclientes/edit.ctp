@@ -5,12 +5,13 @@
         <?php
         echo $this->Form->input('id');
         echo $this->Form->input('fecha');
-        echo $this->Form->input('numeroalbaran');
+        echo $this->Form->input('numero');
         echo $this->Form->input('observaciones');
         echo $this->Html->link(__('Albaran Escaneado Actual: ' . $this->Form->value('Albaranescliente.albaranescaneado'), true), '/files/albaranescliente/' . $this->Form->value('Albaranescliente.albaranescaneado'));
         echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Albaran Escaneado Actual', 'hiddenField' => false));
         echo $this->Form->input('file', array('type' => 'file', 'label' => 'Albaran Escaneado'));
         echo $this->Form->input('tiposiva_id');
+        echo $this->Form->input('centrosdecoste_id');
         echo $this->Form->input('facturable');
         ?>
     </fieldset>

@@ -1,15 +1,39 @@
-<div class="pedidosclientes form">
+<div class="pedidosclientes">
     <?php echo $this->Form->create('Pedidoscliente', array('type' => 'file')); ?>
     <fieldset>
-        <legend><?php __('Añadir Pedido de Cliente'); ?></legend>
-        <?php
-        echo $this->Form->input('fecha_plazo', array('label' => 'Fecha de plazo', 'dateFormat' => 'DMY'));
-        echo $this->Form->input('confirmado', array('label' => 'Confirmado Por:'));
-        echo $this->Form->input('presupuestoscliente_id', array('type' => 'text', 'label' => 'Presupuesto de Cliente', 'readonly' => true, 'value' => $presupuestoscliente['Presupuestoscliente']['id']));
-        echo $this->Form->input('tiposiva_id', array('type' => 'hidden','value' => $presupuestoscliente['Presupuestoscliente']['tiposiva_id']));
-        echo $this->Form->input('recepcion', array('label' => 'Recepción'));
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Pedido Escaneado'));
-        ?>
+        <legend>
+            <?php __('Añadir Pedido de Cliente'); ?>
+        </legend>
+        <table class="edit">
+            <tr>
+                <td><span><?php __('Número'); ?></span></td>
+                <td><?php echo $this->Form->input('numero', array('label' => false ,'value' =>$numero)); ?></td>
+                <td><span><?php __('Fecha'); ?></span></td>
+                <td><?php echo $this->Form->input('fecha', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Confirmado'); ?></span></td>
+                <td><?php echo $this->Form->input('confirmado', array('label' => false)); ?></td>
+                <td colspan="4"></td>
+                <td><span><?php __('Nº Aceptación aportado por el cliente'); ?></span></td>
+                <td><?php echo $this->Form->input('numero_aceptacion_aportado', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td  colspan="6">
+                    <?php
+                    echo $this->Form->input('file', array('type' => 'file', 'label' => 'Pedido Escaneado'));
+                    ?>
+                </td>
+                <td><span><?php __('Recepcion'); ?></span></td>
+                <td><?php echo $this->Form->input('recepcion', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Observaciones'); ?></span></td>
+                <td  colspan="5"><?php echo $this->Form->input('observaciones', array('label' => false)); ?></td>
+                <td><span><?php __('Plazo de Entrega'); ?></span></td>
+                <td><?php echo $this->Form->input('fecha_plazo', array('label' => false)); ?></td>
+            </tr>
+        </table>
         <div class="related">
             <h3>Tareas a realizar </h3>
             <table style="background-color: #FFE6CC;">
@@ -95,21 +119,9 @@
                 <?php endforeach; ?>
             </table>
         </div>
-
     </fieldset>
-    <?php echo $this->Form->end(__('Añadir', true)); ?>
+    <?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>
-<div class="actions">
-    <h3><?php __('Acciones'); ?></h3>
-    <ul>
-
-        <li><?php echo $this->Html->link(__('Listar Pedidosclientes', true), array('action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link(__('Listar Presupuestos Clientes', true), array('controller' => 'presupuestos_clientes', 'action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('Nuevo Presupuesto de Cliente', true), array('controller' => 'presupuestos_clientes', 'action' => 'add')); ?> </li>
-
-    </ul>
-</div>
-
 <script type="text/javascript">
     $('.validartarea').change(function(){
         tr = $(this).parent().parent().parent();
@@ -125,6 +137,5 @@
         if(tr.find('.validartarea').is(':checked') == false ){
             tr.find('.validartarea').attr('checked', true);
         };
-        // MIRAR QUE PONER AQUI
     });
 </script>
