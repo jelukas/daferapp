@@ -88,7 +88,7 @@
     </table>
     <div class="actions">
         <?php if ($ordene['Estadosordene']['id'] == '5'): ?>
-            <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id'])) ?></li></ul>
+            <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientesreparaciones', 'action' => 'add', $ordene['Ordene']['id'])) ?></li></ul>
         <?php endif; ?>
     </div>
     <br/><br/><br/>
@@ -110,9 +110,9 @@
                     }
                     ?>
                     <tr<?php echo $class; ?>>
-                        <td>Tarea <?php echo $i ?> - <?php echo $tarea['tipo'] ?></td>
-                        <td><?php echo $tarea['descripcion']; ?></td>
-                        <td class="actions">
+                        <td style="background-color: #FACC2E">Tarea <?php echo $i ?> - <?php echo $tarea['tipo'] ?></td>
+                        <td style="background-color: #FACC2E"><?php echo $tarea['descripcion']; ?></td>
+                        <td class="actions" style="background-color: #FACC2E">
                             <?php echo $this->Html->link(__('Añadir Material', true), array('controller' => 'articulos_tareas', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?> 
                             <?php if ($tarea['tipo'] == 'taller'): ?>
                                 <?php echo $this->Html->link(__('Añadir Parte Taller', true), array('controller' => 'partestalleres', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
@@ -364,7 +364,8 @@
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
                                             <td><?php $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
-                        echo $totalcondescuento; ?></td>
+                        echo $totalcondescuento;
+                                        ?></td>
                                             <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
                                         </tr>
                                         <?php $totalmateriales_real += $articulo_tarea['cantidadreal'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>

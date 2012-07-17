@@ -43,6 +43,7 @@ class AutocompleteHelper extends AppHelper {
         $output .= 'minLength: 3,
             select: function( event, ui ) {
                 $(\'.autocompletador input[type="hidden"]\').val(ui.item.id);
+                $(\'.autocompletador input[type="hidden"]\').change();
             }
         });
         autocomplete_' . $model . '.data( "autocomplete" )._renderItem = function( ul, item ) {

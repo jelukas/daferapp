@@ -29,16 +29,7 @@
             }
             ?>
             <tr<?php echo $class; ?>>
-                <td><a href="#" class="selecionado" id="<?php echo $ordene['Ordene']['id']; ?>"><?php echo $ordene['Ordene']['numero']; ?></a></td>
-            <script type="text/javascript">
-                $('.selecionado').click(function(){
-                    if(window.opener){
-                        window.opener.$('#AlbaranesclientesreparacioneOrdeneId').val($(this).attr('id'));
-                        window.opener.$('#OrdeneNumero').val($(this).html());
-                        window.close();
-                    }
-                });
-        </script>
+                <td><?php echo $ordene['Ordene']['numero']; ?></td>
                 <td><?php echo $ordene['Ordene']['fecha']; ?></td>
                 <td><?php echo $this->Html->link($ordene['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $ordene['Avisostallere']['id'])); ?></td>
                 <td><?php echo !empty($ordene['Avisostallere']['Cliente']['nombre'])? $this->Html->link($ordene['Avisostallere']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $ordene['Avisostallere']['Cliente']['id'])) : ''; ?></td>

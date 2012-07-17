@@ -5,7 +5,7 @@
         <?php
         echo $this->Autocomplete->replace_select('Cliente', null, true, null);
         echo $this->Form->input('fecha');
-        echo $this->Form->input('numeroalbaran');
+        echo $this->Form->input('numero');
         echo $this->Form->input('observaciones');
         echo $this->Form->input('tiposiva_id');
         echo $this->Form->input('almacene_id');

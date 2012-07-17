@@ -62,7 +62,6 @@
             <td><?php echo $albaranescliente['Centrosdecoste']['denominacion'] ?></td>
         </tr>
     </table>
-</dl>
 <div class="related">
     <h3>Tareas a realizar </h3>
     <div class="actions">

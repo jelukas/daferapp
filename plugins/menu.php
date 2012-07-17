@@ -39,7 +39,8 @@
             <ul>
                 <li><a href="/daferapp/presupuestosclientes" title="Presupuestos a clientes" target="_self" >Presupuestos a clientes</a></li>
                 <li><a href="/daferapp/pedidosclientes" title="Pedidos de clientes" target="_self" >Pedidos de clientes</a></li>
-                <li><a href="/daferapp/albaranesclientes" title="Albaranes de venta" target="_self" >Albaranes de venta</a></li>
+                <li><a href="/daferapp/albaranesclientes" title="Albaranes de Repuestos" target="_self" >Albaranes de Repuestos</a></li>
+                <li><a href="/daferapp/albaranesclientesreparaciones" title="Albaranes de Reparación" target="_self" >Albaranes de Reparación</a></li>
                 <li><a href="/daferapp/albaranesclientes/facturacion" title="Facturación de Albaranes" target="_self" >Facturación de Albaranes</a></li>
                 <li><a href="/daferapp/facturas_clientes" title="Facturas de venta" target="_self" >Facturas de venta</a></li>
             </ul>
