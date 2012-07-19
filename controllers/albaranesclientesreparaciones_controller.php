@@ -25,7 +25,7 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->flashWarnings(__('Albarán de Reparación Inválido', true));
             $this->redirect($this->referer());
         }
-        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->read(null, $id));
+        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientereparacione' => array('PartesTareasAlbaranesclientereparacione','PartestallereTareasAlbaranesclientesreparacione','ArticulosTareasAlbaranesclientesreparacione'),'Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
     }
 
     function add($ordene_id = null) {
@@ -37,6 +37,14 @@ class AlbaranesclientesreparacionesController extends AppController {
                     $this->Albaranesclientesreparacione->saveField('albaranescaneado', $this->FileUpload->finalFile);
                 }
                 /* Fin de Guardar Fichero */
+                /* Pasamos las Tareas de la Orden Validadas */
+                if (!empty($this->data['Tarea'])) {
+                    foreach ($this->data['Tarea'] as $tarea_validada) {
+                        $this->Albaranesclientesreparacione->TareasAlbaranesclientesreparacione->create();
+                        $this->Albaranesclientesreparacione->TareasAlbaranesclientesreparacione->crear_desde_tarea_de_orden($tarea_validada['id'], $this->Albaranesclientesreparacione->id);
+                    }
+                }
+                /* Fin de Pasar las Tareas de la Orden Validadas */
                 $this->Session->setFlash(__('El Albarán de Reparación ha sido guardado correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Albaranesclientesreparacione->id));
             } else {
@@ -50,8 +58,8 @@ class AlbaranesclientesreparacionesController extends AppController {
         $centrosdecostes = $this->Albaranesclientesreparacione->Centrosdecoste->find('list');
         $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes', 'numero'));
         if (!empty($ordene_id)) {
-            $ordene = $this->Albaranesclientesreparacione->Ordene->find('first',array('contain'=>array('Almacene','Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico')),'Avisostallere'=>array('Cliente','Centrostrabajo','Maquina')),'conditions'=>array('Ordene.id' => $ordene_id)));
-            $this->set('ordene',$ordene);
+            $ordene = $this->Albaranesclientesreparacione->Ordene->find('first', array('contain' => array('Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Ordene.id' => $ordene_id)));
+            $this->set('ordene', $ordene);
             $this->render('add_from_ordene');
         } else {
             $this->render('add');
@@ -65,6 +73,15 @@ class AlbaranesclientesreparacionesController extends AppController {
         }
         if (!empty($this->data)) {
             if ($this->Albaranesclientesreparacione->save($this->data)) {
+                $upload = $this->Albaranesclientesreparacione->findById($id);
+                if (!empty($this->data['Albaranesclientesreparacione']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Albaranesclientesreparacione']['albaranescaneado']);
+                    $this->Albaranesclientesreparacione->saveField('albaranescaneado', null);
+                }
+                if ($this->FileUpload->finalFile != null) {
+                    $this->FileUpload->RemoveFile($upload['Albaranesclientesreparacione']['albaranescaneado']);
+                    $this->Albaranesclientesreparacione->saveField('albaranescaneado', $this->FileUpload->finalFile);
+                }
                 $this->Session->setFlash(__('The albaranesclientesreparacione has been saved', true));
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -72,16 +89,13 @@ class AlbaranesclientesreparacionesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Albaranesclientesreparacione->read(null, $id);
+            $this->data = $this->Albaranesclientesreparacione->find('first', array('contain' => array('Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id)));
         }
         $tiposivas = $this->Albaranesclientesreparacione->Tiposiva->find('list');
-        $ordenes = $this->Albaranesclientesreparacione->Ordene->find('list');
-        $clientes = $this->Albaranesclientesreparacione->Cliente->find('list');
         $almacenes = $this->Albaranesclientesreparacione->Almacene->find('list');
-        $facturasClientes = $this->Albaranesclientesreparacione->FacturasCliente->find('list');
         $comerciales = $this->Albaranesclientesreparacione->Comerciale->find('list');
         $centrosdecostes = $this->Albaranesclientesreparacione->Centrosdecoste->find('list');
-        $this->set(compact('tiposivas', 'ordenes', 'clientes', 'almacenes', 'facturasClientes', 'comerciales', 'centrosdecostes'));
+        $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes'));
     }
 
     function delete($id = null) {

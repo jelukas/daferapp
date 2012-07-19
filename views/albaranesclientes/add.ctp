@@ -1,5 +1,5 @@
 <div class="albaranesclientes form">
-<?php echo $this->Form->create('Albaranescliente');?>
+<?php echo $this->Form->create('Albaranescliente', array('type' => 'file'));?>
 	<fieldset>
  		<legend><?php __('Add Albaranescliente'); ?></legend>
 	<?php

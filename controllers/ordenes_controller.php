@@ -30,10 +30,11 @@ class OrdenesController extends AppController {
         $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => array('Proveedore', 'Pedidosproveedore'), 'Presupuestoscliente' => array('Cliente', 'Pedidoscliente'), 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
         $this->set('ordene', $orden);
         $avisostallere_id = $orden['Avisostallere']['id'];
-
         $this->set('avisostallere', $this->Ordene->Avisostallere->read(null, $avisostallere_id));
         $estadosordene_id = $orden['Estadosordene']['id'];
         $this->set('estadosordene', $this->Ordene->Estadosordene->read(null, $estadosordene_id));
+        $this->loadModel('Config');
+        $this->set('config', $this->Config->read(null, 1));
     }
 
     function add($idAvisoTaller = null) {
@@ -139,7 +140,7 @@ class OrdenesController extends AppController {
                     $this->Session->setFlash(__('Se ha imputado material a la Orden', true));
                     $this->redirect(array('action' => 'view', $ordene_id));
                 } else {
-                    $this->Session->setFlash(__('The ordene could not be saved. Please, try again.', true));
+                    $this->flashWarnings(__('The ordene could not be saved. Please, try again.', true));
                     $this->redirect($this->referer());
                 }
             } elseif (!empty($this->data['Ordene']['avisostallere_id'])) {
@@ -148,7 +149,7 @@ class OrdenesController extends AppController {
                 if ($this->Ordene->save($this->data)) {
                     $ordene_id = $this->Ordene->id;
                 } else {
-                    $this->Session->setFlash(__('The ordene could not be saved. Please, try again.', true));
+                    $this->flashWarnings(__('The ordene could not be saved. Please, try again.', true));
                     $this->redirect($this->referer());
                 }
             }
@@ -175,6 +176,16 @@ class OrdenesController extends AppController {
             }
         }
         $this->set(compact('pedidoscliente', 'avisostallere_id', 'ordene_id', 'almacene_id'));
+    }
+
+    function cambiar_estado($ordene_id, $estadosordene_id) {
+        $this->Ordene->id = $ordene_id;
+        $estadosordene = $this->Ordene->Estadosordene->find('first', array('contain' => '', 'conditions' => array('Estadosordene.id' => $estadosordene_id)));
+        if ($this->Ordene->saveField('estadosordene_id', $estadosordene_id))
+            $this->Session->setFlash(__('Se ha cambiado el estado de la Orden correctamente: ' . $estadosordene['Estadosordene']['estado'], true));
+        else
+            $this->flashWarnings(__('No Se ha podido cambiar el estado de la Orden', true));
+        $this->redirect($this->referer());
     }
 
 }

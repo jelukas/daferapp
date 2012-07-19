@@ -103,6 +103,13 @@ class Albaranesclientesreparacione extends AppModel {
             'order' => ''
         )
     );
+    var $hasMany = array(
+        'TareasAlbaranesclientesreparacione' => array(
+            'className' => 'TareasAlbaranesclientesreparacione',
+            'foreignKey' => 'albaranesclientesreparacione_id',
+            'dependent' => true,
+        ),
+    );
 
     function beforeSave($options) {
         if (empty($this->data['Albaranesclientesreparacione']['id'])) {
@@ -124,6 +131,7 @@ class Albaranesclientesreparacione extends AppModel {
         else
             return $resultado[0][0]['siguiente'];
     }
+    
 
 }
 

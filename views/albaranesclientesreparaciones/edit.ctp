@@ -1,45 +1,63 @@
-<div class="albaranesclientesreparaciones form">
-<?php echo $this->Form->create('Albaranesclientesreparacione');?>
-	<fieldset>
- 		<legend><?php __('Edit Albaranesclientesreparacione'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('fecha');
-		echo $this->Form->input('numero');
-		echo $this->Form->input('observaciones');
-		echo $this->Form->input('albaranescaneado');
-		echo $this->Form->input('facturable');
-		echo $this->Form->input('tiposiva_id');
-		echo $this->Form->input('ordene_id');
-		echo $this->Form->input('cliente_id');
-		echo $this->Form->input('almacene_id');
-		echo $this->Form->input('facturas_cliente_id');
-		echo $this->Form->input('es_devolucion');
-		echo $this->Form->input('comerciale_id');
-		echo $this->Form->input('centrosdecoste_id');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit', true));?>
-</div>
-<div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('Albaranesclientesreparacione.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('Albaranesclientesreparacione.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Albaranesclientesreparaciones', true), array('action' => 'index'));?></li>
-		<li><?php echo $this->Html->link(__('List Tiposivas', true), array('controller' => 'tiposivas', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Tiposiva', true), array('controller' => 'tiposivas', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Ordenes', true), array('controller' => 'ordenes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Ordene', true), array('controller' => 'ordenes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Clientes', true), array('controller' => 'clientes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Cliente', true), array('controller' => 'clientes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Almacenes', true), array('controller' => 'almacenes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Almacene', true), array('controller' => 'almacenes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Facturas Clientes', true), array('controller' => 'facturas_clientes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Facturas Cliente', true), array('controller' => 'facturas_clientes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Comerciales', true), array('controller' => 'comerciales', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Comerciale', true), array('controller' => 'comerciales', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Centrosdecostes', true), array('controller' => 'centrosdecostes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Centrosdecoste', true), array('controller' => 'centrosdecostes', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="albaranesclientesreparaciones">
+    <?php echo $this->Form->create('Albaranesclientesreparacione', array('type' => 'file')); ?>
+    <fieldset>
+        <legend>
+            <?php __('Editando Albarán de Reparación Nº ' . $this->Form->value('Albaranesclientesreparacione.numero')); ?>
+            <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $this->Form->value('Albaranesclientesreparacione.id')), array('class' => 'button_link')); ?>
+            <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $this->Form->value('Albaranesclientesreparacione.id')), array('class' => 'button_link'), sprintf(__('¿Seguro que quieres borrar el Albaran de Reparación Nº # %s?', true), $this->Form->value('Albaranesclientesreparacione.numero'))); ?>
+            <?php echo $this->Html->link(__('Listar Albaranes de Reparación', true), array('action' => 'index'), array('class' => 'button_link')); ?>
+        </legend>
+        <?php echo $this->Form->input('id'); ?>
+        <table class="view edit">
+            <tr>
+                <td><span><?php __('Número'); ?></span></td>
+                <td><?php echo $this->Form->input('numero', array('label' => false)); ?></td>
+                <td><span><?php __('Fecha'); ?></span></td>
+                <td><?php echo $this->Form->input('fecha', array('label' => false)); ?></td>
+                <td><span><?php __('Almacén de los Materiales'); ?></span></td>
+                <td><?php echo $this->Form->input('almacene_id', array('label' => false)); ?></td>
+                <td><span><?php __('Comercial'); ?></span></td>
+                <td><?php echo $this->Form->input('comerciale_id', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Cliente') ?></span></td>
+                <td><?php echo $this->Html->link($this->Form->value('Cliente.nombre'), array('controller' => 'clientes', 'action' => 'view', $this->Form->value('Albaranesclientesreparacione.cliente_id'))); ?></td>
+                <td><span><?php __('Centro de Trabajo') ?></span></td>
+                <td><?php echo $this->Html->link($this->Form->value('Centrostrabajo.centrotrabajo'), array('controller' => 'centrostrabajos', 'action' => 'view', $this->Form->value('Albaranesclientesreparacione.centrostrabajo_id'))); ?></td>
+                <td><span><?php __('Maquina') ?></span></td>
+                <td><?php echo $this->Html->link($this->Form->value('Maquina.nombre'), array('controller' => 'maquinas', 'action' => 'view', $this->Form->value('Albaranesclientesreparacione.maquina_id'))); ?></td>
+            </tr>
+            <tr>
+                <td><h4><?php __('Nº Orden'); ?></h4></td>
+                <td><?php echo $this->Html->link($this->Form->value('Ordene.numero'), array('controller' => 'ordenes', 'action' => 'view', $this->Form->value('Albaranesclientesreparacione.ordene_id'))); ?></td>
+                <td colspan="3"><span><?php __('Número Aceptación Aportado por el Cliente') ?></span></td>
+                <td><?php echo $this->Form->input('numero_aceptacion_aportado', array('label' => false)) ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Albarán de Reparación Escaneado'); ?></span></td>
+                <td colspan="5">
+                    <?php
+                    echo $this->Html->link(__('Albaran Escaneado Actual: ' . $this->Form->value('Albaranesclientesreparacione.albaranescaneado'), true), '/files/albaranesclientesreparacione/' . $this->Form->value('Albaranesclientesreparacione.albaranescaneado'));
+                    echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Albaran Escaneado Actual', 'hiddenField' => false));
+                    echo $this->Form->input('file', array('type' => 'file', 'label' => 'Albaran Escaneado'));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td><span><?php __('Observaciones'); ?></span></td>
+                <td colspan="5"><?php echo $this->Form->input('observaciones', array('label' => false)); ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Centro de Coste') ?></span></td>
+                <td><?php echo $this->Form->input('centrosdecoste_id', array('label' => false)); ?></td>
+                <td><span><?php __('Tipo de IVA') ?></span></td>
+                <td><?php echo $this->Form->input('tiposiva_id', array('label' => false)); ?></td>
+                <td><span><?php __('Facturable'); ?></span></td>
+                <td><?php echo $this->Form->input('facturable', array('label' => false)); ?></td>
+                <td><span><?php __('Es devolución') ?></span></td>
+                <td><?php echo $this->Form->input('es_devolucion', array('label' => false)); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+    <?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>

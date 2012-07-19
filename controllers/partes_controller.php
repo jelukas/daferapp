@@ -36,6 +36,7 @@ class PartesController extends AppController {
                 if ($this->FileUpload->finalFile != null) {
                     $this->Parte->saveField('parteescaneado', $this->FileUpload->finalFile);
                 }
+                /* Fin de Guardar Fichero */
                 $this->Session->setFlash(__('El nuevo Parte en Centro de Trabajo ha sido añadido correctamente' . true));
                 $this->redirect($this->referer());
             } else {
@@ -45,7 +46,7 @@ class PartesController extends AppController {
         }
         $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $tarea_id)));
         $mecanicos = $this->Parte->Mecanico->find('list');
-        $this->set(compact('mecanicos', 'tarea_id','tarea'));
+        $this->set(compact('mecanicos', 'tarea_id', 'tarea'));
     }
 
     function edit($id = null) {

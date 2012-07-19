@@ -90,24 +90,28 @@ class Tarea extends AppModel {
         $tarea['Tarea']['totalhorasimputables'] = 0;
         $tarea['Tarea']['totaldietasreales'] = 0;
         $tarea['Tarea']['totaldietasimputables'] = 0;
+        $tarea['Tarea']['totalotroserviciosreales'] = 0;
+        $tarea['Tarea']['totalotroserviciosimputables'] = 0;
         /*
          * La Tarea es de Centro de trabajo
          */
         if ($tarea['Tarea']['tipo'] == 'centro') {
             foreach ($tarea['Parte'] as $partecentro) {
                 if ($partecentro['id'] != $deleted_id) {
-                    $tarea['Tarea']['totaldesplazamientoreal'] += $partecentro['horasdesplazamientoreales'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento'];
-                    $tarea['Tarea']['totaldesplazamientoimputado'] += $partecentro['horasdesplazamientoimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento'];
-                    $tarea['Tarea']['totalkilometrajereal'] += $partecentro['kilometrajereal'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm'];
-                    $tarea['Tarea']['totalkilometrajeimputable'] += $partecentro['kilometrajeimputable'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm'];
+                    $tarea['Tarea']['totaldesplazamientoreal'] += ($partecentro['horasdesplazamientoreales_ida'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']) + ($partecentro['horasdesplazamientoreales_vuelta'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']);
+                    $tarea['Tarea']['totaldesplazamientoimputado'] += ($partecentro['horasdesplazamientoimputables_ida'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']) + ($partecentro['horasdesplazamientoimputables_vuelta'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']);
+                    $tarea['Tarea']['totalkilometrajereal'] += ($partecentro['kilometrajereal_ida'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm']) + ($partecentro['kilometrajereal_vuelta'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm']);
+                    $tarea['Tarea']['totalkilometrajeimputable'] += ($partecentro['kilometrajeimputable_ida'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm']) + ($partecentro['kilometrajeimputable_vuelta'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm']);
                     $tarea['Tarea']['totalpreciodesplazamiento'] += $partecentro['preciodesplazamiento'];
                     $tarea['Tarea']['totalhorasreales'] += $partecentro['horafinal'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraencentro'];
                     $tarea['Tarea']['totalhorasimputables'] += $partecentro['horasimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraencentro'];
                     $tarea['Tarea']['totaldietasreales'] += $partecentro['dietasreales'];
-                    $tarea['Tarea']['totaldietasimputables'] += $partecentro['dietasimputables'];
+                    $tarea['Tarea']['totaldietasimputables'] += $partecentro['dietasimputables']; 
+                    $tarea['Tarea']['totalotroserviciosreales'] += $partecentro['otrosservicios_real'];
+                    $tarea['Tarea']['totalotroserviciosimputables'] += $partecentro['otrosservicios_imputable'];
                 }
             }
-        } else {
+        } else { //  La Tarea es de Taller
             foreach ($tarea['Partestallere'] as $partetaller) {
                 if ($partetaller['id'] != $deleted_id) {
                     $tarea['Tarea']['totalhorasreales'] += $partetaller['horasimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraentraller'];
@@ -125,6 +129,8 @@ class Tarea extends AppModel {
         $tarea['Tarea']['totalhorasimputables'] = number_format($tarea['Tarea']['totalhorasimputables'], 5, '.', '');
         $tarea['Tarea']['totaldietasreales'] = number_format($tarea['Tarea']['totaldietasreales'], 5, '.', '');
         $tarea['Tarea']['totaldietasimputables'] = number_format($tarea['Tarea']['totaldietasimputables'], 5, '.', '');
+        $tarea['Tarea']['totalotroserviciosreales'] = number_format($tarea['Tarea']['totalotroserviciosreales'], 5, '.', '');
+        $tarea['Tarea']['totalotroserviciosimputables'] = number_format($tarea['Tarea']['totalotroserviciosimputables'], 5, '.', '');
 
         $this->save($tarea['Tarea']);
     }

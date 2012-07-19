@@ -1,5 +1,5 @@
 <div class="albaranesclientesreparaciones">
-    <?php echo $this->Form->create('Albaranesclientesreparacione'); ?>
+    <?php echo $this->Form->create('Albaranesclientesreparacione', array('type' => 'file')); ?>
     <fieldset>
         <legend>
             <?php __('Nuevo Albarán de Reparación desde la Orden ' . $ordene['Ordene']['numero']); ?>
@@ -19,7 +19,7 @@
             <tr>
                 <td><span><?php __('Cliente') ?></span></td>
                 <td>
-                    <?php echo $ordene['Avisostallere']['Cliente']['nombre'] ?>
+                    <?php echo $this->Html->link($ordene['Avisostallere']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $ordene['Avisostallere']['Cliente']['id'])); ?>
                     <?php echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['cliente_id'])); ?>
                 </td>
                 <td><span><?php __('Centro de Trabajo') ?></span></td>
@@ -29,22 +29,22 @@
                 </td>
                 <td><span><?php __('Maquina') ?></span></td>
                 <td>
-                    <?php echo $ordene['Avisostallere']['Maquina']['nombre'] ?>
+                    <?php echo $this->Html->link($ordene['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $ordene['Avisostallere']['Maquina']['id'])); ?>
                     <?php echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['maquina_id'])); ?>
                 </td>
             </tr>
             <tr>
                 <td><h4><?php __('Nº Orden'); ?></h4></td>
                 <td>
-                    <?php echo $ordene['Ordene']['numero'] ?>
-                    <?php echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $ordene['Ordene']['id'])); ?>
+                    <?php echo $this->Html->link($ordene['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $ordene['Ordene']['id'])); ?>
+                    <?php echo $this->Form->input('ordene_id', array('type' => 'hidden', 'value' => $ordene['Ordene']['id'])); ?>
                 </td>
                 <td colspan="3"><span><?php __('Número Aceptación Aportado por el Cliente') ?></span></td>
                 <td><?php echo $this->Form->input('numero_aceptacion_aportado', array('label' => false)) ?></td>
             </tr>
             <tr>
                 <td><span><?php __('Albarán de Reparación Escaneado'); ?></span></td>
-                <td colspan="5"><?php echo $this->Form->input('file', array('type' => 'file')); ?></td>
+                <td colspan="5"><?php echo $this->Form->input('file', array('type' => 'file','label' => false)); ?></td>
             </tr>
             <tr>
                 <td><span><?php __('Observaciones'); ?></span></td>
@@ -82,7 +82,8 @@
                             <td style="background-color: #FACC2E">Tarea <?php echo $i ?> - <?php echo $tarea['tipo'] ?></td>
                             <td style="background-color: #FACC2E"><?php echo $tarea['descripcion']; ?></td>
                             <td class="actions" style="background-color: #FACC2E">
-                                VALIDAR
+                                <?php echo $this->Html->link(__('Ver Contenido', true), '#?', array('class' => 'ver-relaciones')); ?>
+                                <?php echo $this->Form->input('Tarea.' . $i . '.id', array('label' => false, 'div' => false, 'class' => 'validartarea', 'type' => 'checkbox', 'checked' => true, 'value' => $tarea['id'], 'hiddenField' => false)) ?>
                             </td>
                         </tr>
                         <tr class="tarea-relations">
@@ -100,7 +101,6 @@
                                             <th>Desplazamiento</th>
                                             <th>Horas de Trabajo</th>
                                             <th>Dietas</th>
-                                            <th>Validar</th>
                                         </tr>
                                         <?php foreach ($tarea['Parte'] as $partecentro): ?>
                                             <tr>    
@@ -156,9 +156,6 @@
                                                             <td><?php echo $partecentro['dietasimputables'] ?> €</td>
                                                         </tr>
                                                     </table>
-                                                </td>
-                                                <td class="actions">
-                                                    VALIDAR
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -240,6 +237,10 @@
                                     </table>
                                 <?php endif; ?>
                                 <?php if (!empty($tarea['Partestallere'])): ?>
+                                    <?php $totalcosto_partestaller = 0; ?>
+                                    <?php $totalpvp_partestaller = 0; ?> 
+                                    <?php $totalhorasreales_partestaller = 0; ?>
+                                    <?php $totalhorasimput_partestaller = 0; ?>
                                     <h4>Partes de Taller</h4>
                                     <table>
                                         <thead>
@@ -248,7 +249,8 @@
                                         <th>Operario</th>
                                         <th>Descripción de Operación</th>
                                         <th>Horas de Trabajo</th>
-                                        <th class="actions">Validar</th>
+                                        <th>Costo</th>
+                                        <th>PVP</th>
                                         </thead>
                                         <?php foreach ($tarea['Partestallere'] as $partetaller): ?>
                                             <tr>
@@ -260,22 +262,21 @@
                                                     <table>
                                                         <tr>
                                                             <th>Real</th>
-                                                            <th>Imputadas</th>
+                                                            <th>Imput.</th>
                                                         </tr>
                                                         <tr>
-                                                            <td><?php echo $partetaller['horasreales'] ?></td>
-                                                            <td><?php echo $partetaller['horasimputables'] ?></td>
+                                                            <td><?php echo $partetaller['horasreales'] ?> <?php $totalhorasreales_partestaller += $partetaller['horasreales']; ?></td>
+                                                            <td><?php echo $partetaller['horasimputables'] ?> <?php $totalhorasimput_partestaller += $partetaller['horasimputables']; ?></td>
                                                         </tr>
                                                     </table>
                                                 </td>
-                                                <td class="actions">
-                                                    VALIDAAR
-                                                </td>
+                                                <td><?php $totalcosto_partestaller += ($partetaller['Mecanico']['costehora'] * $partetaller['horasreales']) ?><?php echo $partetaller['Mecanico']['costehora'] * $partetaller['horasreales'] ?></td>
+                                                <td><?php $totalpvp_partestaller += ($partetaller['horasimputables'] * $ordene['Avisostallere']['Centrostrabajo']['preciohoraentraller']) ?><?php echo $partetaller['horasimputables'] * $ordene['Avisostallere']['Centrostrabajo']['preciohoraentraller'] ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                         <tr style="background-color: #27642;">
                                             <td colspan="3"></td>
-                                            <td style="font-weight: bold;">Precios Totales</td>
+                                            <td style="font-weight: bold;">Totales</td>
                                             <td>
                                                 <table>
                                                     <tr>
@@ -283,11 +284,13 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $tarea['totalhorasreales'] ?> €</td>
-                                                        <td><?php echo $tarea['totalhorasimputables'] ?> €</td>
+                                                        <td><?php echo $totalhorasreales_partestaller ?></td>
+                                                        <td><?php echo $totalhorasimput_partestaller ?></td>
                                                     </tr>
                                                 </table>
                                             </td>
+                                            <td><?php echo $totalcosto_partestaller ?> €</td>
+                                            <td><?php echo $totalpvp_partestaller ?> €</td>
                                         </tr>
                                     </table>
                                 <?php endif; ?>
@@ -305,7 +308,6 @@
                                         <th>Total PVP</th>
                                         <th>Descuento</th>
                                         <th>Total <br/> Descuento Aplicado</th>
-                                        <th>Validar</th>
                                         </thead>
                                         <?php
                                         $totalmateriales_real = 0;
@@ -327,7 +329,6 @@
                             $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
                             echo $totalcondescuento;
                                             ?></td>
-                                                <td class="actions">Validar</td>
                                             </tr>
                                             <?php $totalmateriales_real += $articulo_tarea['cantidadreal'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
                                             <?php $totalmateriales_imputable += $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
@@ -352,3 +353,9 @@
     </fieldset>
     <?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>
+<script type="text/javascript">
+    $('.tarea-relations').hide();
+    $('.ver-relaciones').click(function(){
+        $(this).parent().parent().next('.tarea-relations').fadeToggle("slow", "linear");
+    });
+</script>

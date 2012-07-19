@@ -32,10 +32,16 @@
                     <th>Imputable</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('horasdesplazamientoinicio', array('label' => false, 'timeFormat' => '24')); ?></td>
-                    <td><?php echo $this->Form->input('horasdesplazamientofin', array('label' => false, 'timeFormat' => '24')); ?></td>
-                    <td><?php echo $this->Form->input('horasdesplazamientoreales', array('label' => false, 'readonly' => true)); ?></td>
-                    <td><?php echo $this->Form->input('horasdesplazamientoimputables', array('label' => false)); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoinicio_ida', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientofin_ida', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoreales_ida', array('label' => false, 'readonly' => true)); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoimputables_ida', array('label' => false)); ?></td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->Form->input('horasdesplazamientoinicio_vuelta', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientofin_vuelta', array('label' => false, 'timeFormat' => '24')); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoreales_vuelta', array('label' => false, 'readonly' => true)); ?></td>
+                    <td><?php echo $this->Form->input('horasdesplazamientoimputables_vuelta', array('label' => false)); ?></td>
                 </tr>
             </table>
         </td>
@@ -46,8 +52,12 @@
                     <th>Imputable</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('kilometrajereal', array('label' => false)); ?></td>
-                    <td><?php echo $this->Form->input('kilometrajeimputable', array('label' => false)); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajereal_ida', array('label' => false)); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajeimputable_ida', array('label' => false)); ?></td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->Form->input('kilometrajereal_vuelta', array('label' => false)); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajeimputable_vuelta', array('label' => false)); ?></td>
                 </tr>
             </table>
         </td>
@@ -88,29 +98,57 @@
         </td>
     </tr>
     <tr>
-        <td colspan="4">
+        <td colspan="2">
             <?php
-            echo 'Parte de Centro de Trabajo Escaneado Actual: ' . $this->Html->link(__($this->Form->value('Parte.parteescaneado'), true), '/files/parte/' . $this->Form->value('Parte.parteescaneado'));
+            echo 'Actual: ' . $this->Html->link(__($this->Form->value('Parte.parteescaneado'), true), '/files/parte/' . $this->Form->value('Parte.parteescaneado'));
             echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Centro de Trabajo Escaneado Actual', 'hiddenField' => false));
             echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Centro de Trabajo Escaneado'));
             ?>
+        </td>
+        
+        <td colspan="2">
+            <table>
+                <tr><th colspan="2">Otros Servicios</th></tr>
+                <tr>
+                    <th>Real</th>
+                    <th>Imputable</th>
+                </tr>
+                <tr>
+                    <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>
+                    <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false)); ?></td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
 <?php echo $this->Form->end(__('Guardar', true)); ?>
 <script type="text/javascript">
     $(function(){
-        $('#ParteHorasdesplazamientoinicioHour').change(function(){
-            calcula_horasreales_desplazamiento();
+        // Ida
+        $('#ParteHorasdesplazamientoinicioIdaHour').change(function(){
+            calcula_horasreales_desplazamiento_ida();
         });
-        $('#ParteHorasdesplazamientoinicioMin').change(function(){
-            calcula_horasreales_desplazamiento();
+        $('#ParteHorasdesplazamientoinicioIdaMin').change(function(){
+            calcula_horasreales_desplazamiento_ida();
         });;
-        $('#ParteHorasdesplazamientofinHour').change(function(){
-            calcula_horasreales_desplazamiento();
+        $('#ParteHorasdesplazamientofinIdaHour').change(function(){
+            calcula_horasreales_desplazamiento_ida();
         });;
-        $('#ParteHorasdesplazamientofinMin').change(function(){
-            calcula_horasreales_desplazamiento();
+        $('#ParteHorasdesplazamientofinIdaMin').change(function(){
+            calcula_horasreales_desplazamiento_ida();
+        });;
+        // Vuelta
+        $('#ParteHorasdesplazamientoinicioVueltaHour').change(function(){
+            calcula_horasreales_desplazamiento_vuelta();
+        });
+        $('#ParteHorasdesplazamientoinicioVueltaMin').change(function(){
+            calcula_horasreales_desplazamiento_vuelta();
+        });;
+        $('#ParteHorasdesplazamientofinVueltaHour').change(function(){
+            calcula_horasreales_desplazamiento_vuelta();
+        });;
+        $('#ParteHorasdesplazamientofinVueltaMin').change(function(){
+            calcula_horasreales_desplazamiento_vuelta();
         });;
 
 
@@ -128,11 +166,17 @@
         });;
  
  
-        function calcula_horasreales_desplazamiento(){
-            var minutos = (parseFloat($('#ParteHorasdesplazamientofinHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientofinMin').val()))- (parseFloat($('#ParteHorasdesplazamientoinicioHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientoinicioMin').val())) ;
+        function calcula_horasreales_desplazamiento_ida(){
+            var minutos = (parseFloat($('#ParteHorasdesplazamientofinIdaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientofinIdaMin').val()))- (parseFloat($('#ParteHorasdesplazamientoinicioIdaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientoinicioIdaMin').val())) ;
             var horasreales = minutos / 60 ;
-            $('#ParteHorasdesplazamientoreales').val(horasreales)
-            $('#ParteHorasdesplazamientoimputables').val(horasreales)
+            $('#ParteHorasdesplazamientorealesIda').val(horasreales)
+            $('#ParteHorasdesplazamientoimputablesIda').val(horasreales)
+        }
+        function calcula_horasreales_desplazamiento_vuelta(){
+            var minutos = (parseFloat($('#ParteHorasdesplazamientofinVueltaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientofinVueltaMin').val()))- (parseFloat($('#ParteHorasdesplazamientoinicioVueltaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientoinicioVueltaMin').val())) ;
+            var horasreales = minutos / 60 ;
+            $('#ParteHorasdesplazamientorealesVuelta').val(horasreales)
+            $('#ParteHorasdesplazamientoimputablesVuelta').val(horasreales)
         }
         function calcula_horasreales_trabajo(){
             var minutos = (parseFloat($('#ParteHorafinalHour').val()) * 60 + parseFloat($('#ParteHorafinalMin').val()))- (parseFloat($('#ParteHorainicioHour').val()) * 60 + parseFloat($('#ParteHorainicioMin').val())) ;
@@ -140,6 +184,5 @@
             $('#ParteHorasreales').val(horasreales)
             $('#ParteHorasimputables').val(horasreales)
         }
-    
     });
 </script>

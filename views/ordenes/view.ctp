@@ -108,6 +108,14 @@
                     if ($i++ % 2 == 0) {
                         $class = ' class="altrow"';
                     }
+                    $total_horas_desplazamiento_real = 0;
+                    $total_horas_desplazamiento_imputable = 0;
+                    $total_horas_desplazamiento_costo = 0;
+                    $total_horas_desplazamiento_pvp = 0;
+                    $total_km_desplazamiento_real = 0;
+                    $total_km_desplazamiento_imputable = 0;
+                    $total_km_desplazamiento_costo = 0;
+                    $total_km_desplazamiento_pvp = 0;
                     ?>
                     <tr<?php echo $class; ?>>
                         <td style="background-color: #FACC2E">Tarea <?php echo $i ?> - <?php echo $tarea['tipo'] ?></td>
@@ -119,7 +127,7 @@
                             <?php elseif ($tarea['tipo'] == 'centro'): ?>
                                 <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'partes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php endif; ?>
-                            <?php echo $this->Html->link(__('Ver Relaciones', true), '#?', array('class' => 'ver-relaciones')); ?>
+                            <?php echo $this->Html->link(__('Ver Contenido', true), '#?', array('class' => 'ver-relaciones')); ?>
                             <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareas', 'action' => 'delete', $tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tarea['id'])); ?>
                         </td>
                     </tr>
@@ -133,8 +141,12 @@
                                         <th>Fecha</th>
                                         <th>Mecánico</th>
                                         <th>Descripción Operación</th>
-                                        <th>Hora Desplazamiento</th>
+                                        <th>Horas de Desplazamiento</th>
+                                        <th>Costo</th>
+                                        <th>PVP</th>
                                         <th>Kilometraje</th>
+                                        <th>Costo</th>
+                                        <th>PVP</th>
                                         <th>Desplazamiento</th>
                                         <th>Horas de Trabajo</th>
                                         <th>Dietas</th>
@@ -153,11 +165,13 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partecentro['horasdesplazamientoreales'] ?> h</td>
-                                                        <td><?php echo $partecentro['horasdesplazamientoimputables'] ?> h</td>
+                                                        <td><?php echo $total_horas_desplazamiento_real += $partecentro['horasdesplazamientoreales_ida'] + $partecentro['horasdesplazamientoreales_vuelta'] ?> h</td>
+                                                        <td><?php echo $total_horas_desplazamiento_imputable += $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta'] ?> h</td>
                                                     </tr>
                                                 </table>
                                             </td>
+                                            <td><?php echo $total_horas_desplazamiento_costo += ($partecentro['horasdesplazamientoreales_ida'] + $partecentro['horasdesplazamientoreales_vuelta']) * $config['Config']['costohoradesplazamiento']?></td>
+                                            <td><?php echo $total_horas_desplazamiento_pvp += ($partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta']) * $ordene['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']?></td>
                                             <td>
                                                 <table>
                                                     <tr>
@@ -165,11 +179,13 @@
                                                         <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partecentro['kilometrajereal'] ?> Km.</td>
-                                                        <td><?php echo $partecentro['kilometrajeimputable'] ?> Km.</td>
+                                                        <td><?php echo $total_km_desplazamiento_real += $partecentro['kilometrajereal_ida'] + $partecentro['kilometrajereal_vuelta'] ?> Km.</td>
+                                                        <td><?php echo $total_km_desplazamiento_imputable += $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajereal_vuelta'] ?> Km.</td>
                                                     </tr>
                                                 </table>
                                             </td>
+                                            <td><?php echo $total_km_desplazamiento_costo += ($partecentro['kilometrajereal_ida'] + $partecentro['kilometrajereal_vuelta']) * $config['Config']['costokmdesplazamiento']?></td>
+                                            <td><?php echo $total_km_desplazamiento_pvp += ($partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajereal_vuelta']) * $ordene['Avisostallere']['Centrostrabajo']['preciokm'] ?></td>
                                             <td><?php echo $partecentro['preciodesplazamiento'] ?> €</td>
                                             <td>
                                                 <table>
@@ -203,7 +219,7 @@
                                     <?php endforeach; ?>
                                     <tr style="background-color: #27642;">
                                         <td colspan="3"></td>
-                                        <td style="font-weight: bold;">Precios Totales</td>
+                                        <td style="font-weight: bold;">Totales</td>
                                         <td>
                                             <table>
                                                 <tr>
@@ -211,11 +227,13 @@
                                                     <th>Imput.</th>
                                                 </tr>
                                                 <tr>
-                                                    <td><?php echo $tarea['totaldesplazamientoreal'] ?> €</td>
-                                                    <td><?php echo $tarea['totaldesplazamientoimputado'] ?> €</td>
+                                                    <td><?php echo $total_horas_desplazamiento_real ?> h</td>
+                                                    <td><?php echo $total_horas_desplazamiento_imputable ?> h</td>
                                                 </tr>
                                             </table>
                                         </td>
+                                        <td><?php echo $total_horas_desplazamiento_costo ?> €</td>
+                                        <td><?php echo $total_horas_desplazamiento_pvp ?> €</td>
                                         <td>
                                             <table>
                                                 <tr>
@@ -223,11 +241,13 @@
                                                     <th>Imput.</th>
                                                 </tr>
                                                 <tr>
-                                                    <td><?php echo $tarea['totalkilometrajereal'] ?> €</td>
-                                                    <td><?php echo $tarea['totalkilometrajeimputable'] ?> €</td>
+                                                    <td><?php echo $total_km_desplazamiento_real ?> Km.</td>
+                                                    <td><?php echo $total_km_desplazamiento_imputable ?> Km.</td>
                                                 </tr>
                                             </table>
                                         </td>
+                                        <td><?php echo $total_km_desplazamiento_costo ?> €</td>
+                                        <td><?php echo $total_km_desplazamiento_pvp ?> €</td>
                                         <td>
                                             <?php echo $tarea['totalpreciodesplazamiento'] ?> €
                                         </td>
@@ -257,13 +277,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="9" style="font-weight: bold; text-align: center;">
-                                            <p style="font-style: italic; font-weight: normal;">
+                                        <td colspan="12" style="font-weight: bold; text-align: center;">
+                                            <p style="font-style: italic; font-weight: normal; color: red;">
                                                 Este Centro de Trabajo Factura el Desplazamiento mediante:
                                                 <?php if ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciokm'): ?>
-                                                    Precio por Kilometro (* No se tendrá encuenta el Precio de Desplazamiento Fijo)
+                                                    Precio por Kilometro (* No se tendrá en cuenta el Precio de Desplazamiento Fijo)
                                                 <?php elseif ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio'): ?>
-                                                    Precio Fijo Definido (* No se tendrá encuenta el Kilometraje)
+                                                    Precio Fijo Definido (* No se tendrá en cuenta el Kilometraje)
                                                 <?php endif; ?>
                                             </p>
                                             <?php if ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciokm'): ?>
@@ -279,6 +299,10 @@
                                 </table>
                             <?php endif; ?>
                             <?php if (!empty($tarea['Partestallere'])): ?>
+                                <?php $totalcosto_partestaller = 0; ?>
+                                <?php $totalpvp_partestaller = 0; ?> 
+                                <?php $totalhorasreales_partestaller = 0; ?>
+                                <?php $totalhorasimput_partestaller = 0; ?>
                                 <h4>Partes de Taller</h4>
                                 <table>
                                     <thead>
@@ -287,6 +311,8 @@
                                     <th>Operario</th>
                                     <th>Descripción de Operación</th>
                                     <th>Horas de Trabajo</th>
+                                    <th>Costo</th>
+                                    <th>PVP</th>
                                     <th class="actions">Acciones</th>
                                     </thead>
                                     <?php foreach ($tarea['Partestallere'] as $partetaller): ?>
@@ -299,14 +325,16 @@
                                                 <table>
                                                     <tr>
                                                         <th>Real</th>
-                                                        <th>Imputadas</th>
+                                                        <th>Imput.</th>
                                                     </tr>
                                                     <tr>
-                                                        <td><?php echo $partetaller['horasreales'] ?></td>
-                                                        <td><?php echo $partetaller['horasimputables'] ?></td>
+                                                        <td><?php echo $partetaller['horasreales'] ?> <?php $totalhorasreales_partestaller += $partetaller['horasreales']; ?></td>
+                                                        <td><?php echo $partetaller['horasimputables'] ?> <?php $totalhorasimput_partestaller += $partetaller['horasimputables']; ?></td>
                                                     </tr>
                                                 </table>
                                             </td>
+                                            <td><?php $totalcosto_partestaller += ($partetaller['Mecanico']['costehora'] * $partetaller['horasreales']) ?><?php echo $partetaller['Mecanico']['costehora'] * $partetaller['horasreales'] ?></td>
+                                            <td><?php $totalpvp_partestaller += ($partetaller['horasimputables'] * $ordene['Avisostallere']['Centrostrabajo']['preciohoraentraller']) ?><?php echo $partetaller['horasimputables'] * $ordene['Avisostallere']['Centrostrabajo']['preciohoraentraller'] ?></td>
                                             <td class="actions">
                                                 <?php echo $this->Html->link(__('Editar', true), array('controller' => 'partestalleres', 'action' => 'edit', $partetaller['id']), array('class' => 'popup')); ?>
                                                 <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'partestalleres', 'action' => 'delete', $partetaller['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Taller Nº # %s?', true), $partetaller['numero'])); ?>
@@ -315,7 +343,7 @@
                                     <?php endforeach; ?>
                                     <tr style="background-color: #27642;">
                                         <td colspan="3"></td>
-                                        <td style="font-weight: bold;">Precios Totales</td>
+                                        <td style="font-weight: bold;">Totales</td>
                                         <td>
                                             <table>
                                                 <tr>
@@ -323,11 +351,13 @@
                                                     <th>Imput.</th>
                                                 </tr>
                                                 <tr>
-                                                    <td><?php echo $tarea['totalhorasreales'] ?> €</td>
-                                                    <td><?php echo $tarea['totalhorasimputables'] ?> €</td>
+                                                    <td><?php echo $totalhorasreales_partestaller ?></td>
+                                                    <td><?php echo $totalhorasimput_partestaller ?></td>
                                                 </tr>
                                             </table>
                                         </td>
+                                        <td><?php echo $totalcosto_partestaller ?> €</td>
+                                        <td><?php echo $totalpvp_partestaller ?> €</td>
                                     </tr>
                                 </table>
                             <?php endif; ?>
@@ -363,7 +393,8 @@
                                             <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
-                                            <td><?php $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
+                                            <td><?php
+                        $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
                         echo $totalcondescuento;
                                         ?></td>
                                             <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
@@ -371,7 +402,7 @@
                                         <?php $totalmateriales_real += $articulo_tarea['cantidadreal'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
                                         <?php $totalmateriales_imputable += $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']; ?>
                                         <?php $totalmateriales_imputable_descuento += $totalcondescuento; ?>
-            <?php endforeach; ?>
+                                    <?php endforeach; ?>
                                     <tr>
                                         <td colspan="9" style="font-weight: bold; text-align: center;">
                                             <p>Total Materiales Real: <?php echo $totalmateriales_real ?> &euro;</p>
@@ -380,12 +411,12 @@
                                         </td>
                                     </tr>
                                 </table>
-        <?php endif; ?>
+                            <?php endif; ?>
                         </td>
                     </tr>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
             </table>
-<?php endif; ?>
+        <?php endif; ?>
         <br/>
         <div class="actions">
             <ul>
@@ -396,7 +427,7 @@
     <div style="clear: both"><?php echo $this->Html->link(__('Presupuestos y Pedidos Relacionados', true), '#?', array('class' => 'ver-relaciones-orden button_link')); ?></div>
     <div class="orden-relations">
         <h3><?php __('Presupuestos de Proveedores'); ?></h3>
-<?php if (!empty($ordene['Presupuestosproveedore'])): ?>
+        <?php if (!empty($ordene['Presupuestosproveedore'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
                     <th><?php __('ID'); ?></th>
@@ -419,10 +450,10 @@
                         <td class="actions">
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestoproveedore['id'])); ?>
                             <?php echo $this->Html->link(__('Editar', true), array('controller' => 'presupuestosproveedores', 'action' => 'edit', $presupuestoproveedore['id'])); ?>
-        <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosproveedores', 'action' => 'delete', $presupuestoproveedore['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoproveedore['id'])); ?>
+                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosproveedores', 'action' => 'delete', $presupuestoproveedore['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoproveedore['id'])); ?>
                         </td>
                     </tr>
-        <?php if (!empty($presupuestoproveedore['Pedidosproveedore'])): ?>
+                    <?php if (!empty($presupuestoproveedore['Pedidosproveedore'])): ?>
                         <tr>
                             <td>
                                 <h4>Pedidos a Proveedores</h4>
@@ -435,7 +466,7 @@
                                         <th>confirmado</th>
                                         <th>pedidoescaneado</th>
                                     </tr>
-            <?php foreach ($presupuestoproveedore['Pedidosproveedore'] as $pedidosproveedore): ?>
+                                    <?php foreach ($presupuestoproveedore['Pedidosproveedore'] as $pedidosproveedore): ?>
                                         <tr<?php echo $class; ?>>
                                             <td><?php echo $pedidosproveedore['Pedidosproveedore']['numero']; ?>&nbsp;</td>
                                             <td><?php echo $this->Html->link($presupuestoproveedore['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $presupuestoproveedore['Proveedore']['id'])); ?></td>
@@ -444,17 +475,17 @@
                                             <td><?php echo!empty($pedidosproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?></td>
                                             <td><?php echo $this->Html->link(__($pedidosproveedore['Pedidosproveedore']['pedidoescaneado'], true), '/files/pedidosproveedore/' . $pedidosproveedore['Pedidosproveedore']['pedidoescaneado']); ?></td>
                                         </tr>
-            <?php endforeach; ?>
+                                    <?php endforeach; ?>
                                 </table>
                             </td>
                         </tr>
                     <?php endif; ?>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
             </table>
-<?php endif; ?>
+        <?php endif; ?>
 
         <h3><?php __('Presupuestos a Cliente ' . $avisostallere['Cliente']['nombre'] . ' en la Orden ' . $ordene['Ordene']['id']); ?></h3>
-<?php if (!empty($ordene['Presupuestoscliente'])): ?>
+        <?php if (!empty($ordene['Presupuestoscliente'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
                     <th><?php __('Id'); ?></th>
@@ -483,10 +514,10 @@
                         <td class="actions">
                             <?php echo $this->Html->link(__('Ver', true), array('controller' => 'presupuestosclientes', 'action' => 'view', $presupuestoscliente['id'])); ?>
                             <?php echo $this->Html->link(__('Editar', true), array('controller' => 'presupuestosclientes', 'action' => 'edit', $presupuestoscliente['id'])); ?>
-        <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosclientes', 'action' => 'delete', $presupuestoscliente['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['id'])); ?>
+                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosclientes', 'action' => 'delete', $presupuestoscliente['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['id'])); ?>
                         </td>
                     </tr>
-        <?php if (!empty($presupuestoscliente['Pedidoscliente'])): ?>
+                    <?php if (!empty($presupuestoscliente['Pedidoscliente'])): ?>
                         <tr>
                             <td>
                                 <h4>Pedidos de Cliente</h4>
@@ -497,26 +528,30 @@
                                         <th><?php echo __('confirmado'); ?></th>
                                         <th><?php echo __('recepcion'); ?></th>
                                     </tr>
-            <?php foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente): ?>
+                                    <?php foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente): ?>
                                         <tr>
                                             <td><?php echo $pedidoscliente['id']; ?>&nbsp;</td>
                                             <td><?php echo $pedidoscliente['fecha_plazo']; ?>&nbsp;</td>
                                             <td><?php echo $pedidoscliente['confirmado']; ?>&nbsp;</td>
                                             <td><?php echo $pedidoscliente['recepcion']; ?>&nbsp;</td>
                                         </tr>
-            <?php endforeach; ?>
+                                    <?php endforeach; ?>
                                 </table>
                             </td>
                         </tr>
                     <?php endif; ?>
-    <?php endforeach; ?>
+                <?php endforeach; ?>
 
             </table>
-<?php endif; ?>
+        <?php endif; ?>
     </div>
     <div style="clear: both; margin-top: 30px;">
         <?php echo $this->Html->link(__('Nuevo Presupuesto a cliente', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
-<?php echo $this->Html->link(__('Nuevo Presupuesto de Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', -1, -1, $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
+        <?php echo $this->Html->link(__('Nuevo Presupuesto de Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', -1, -1, $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
+        <?php
+        // Cerramos la ORDEN pulsando el boton terminada: Estado 5: Cerrada Pendiente de Facturar
+        echo $this->Html->link(__('TERMINADA', true), array('action' => 'cambiar_estado', $ordene['Ordene']['id'], 5), array('class' => 'button_link'));
+        ?>
     </div>
 </div>
 <script>
