@@ -8,7 +8,7 @@
     } else {
         echo $this->Form->input('presupuestosproveedore_id');
     }
-    echo $this->Form->input('cantidad', array('value' => 0));
+    echo $this->Form->input('cantidad', array('value' => 0)); //
     echo $this->Form->input('precio_proveedor', array('value' => 0)); // Esto debe cambiarse al ultimo precio de compra
     echo $this->Form->input('descuento', array('value' => 0));
     echo $this->Form->input('neto', array('value' => 0, 'label' => 'Neto Ud.', 'readonly' => true));
