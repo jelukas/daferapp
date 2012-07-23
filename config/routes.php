@@ -33,7 +33,6 @@
  * ...and connect the rest of 'Pages' controller's urls.
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
-	Router::connect('/config/*', array('controller' => 'configs', 'action' => 'edit',1));
 
 	Router::parseExtensions('json');
 

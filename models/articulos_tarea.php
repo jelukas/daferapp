@@ -61,7 +61,16 @@ class ArticulosTarea extends AppModel {
         $this->Articulo->id = $articulos_tarea['ArticulosTarea']['articulo_id'];
         $cantidad = $articulos_tarea['ArticulosTarea']['cantidad'] - $articulo['Articulo']['cantidad'];
         $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $articulos_tarea['ArticulosTarea']['cantidad']);
+        
+        $this->Tarea->id = $articulos_tarea['ArticulosTarea']['tarea_id'];
+        $this->Tarea->recalcularTotales();
         return true;
+    }
+
+    function afterSave($created) {
+        $articulos_tarea = $this->find('first', array('conditions' => array('ArticulosTarea.id' => $this->id)));
+        $this->Tarea->id = $articulos_tarea['ArticulosTarea']['tarea_id'];
+        $this->Tarea->recalcularTotales();
     }
 
 }

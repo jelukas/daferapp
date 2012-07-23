@@ -13,6 +13,8 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->FileUpload->uploadDir = 'files/albaranesclientesreparacione';
             $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
         }
+        $this->loadModel('Config');
+        $this->set('config', $this->Config->read(null, 1));
     }
 
     function index() {
@@ -25,7 +27,7 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->flashWarnings(__('Albarán de Reparación Inválido', true));
             $this->redirect($this->referer());
         }
-        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientereparacione' => array('PartesTareasAlbaranesclientereparacione','PartestallereTareasAlbaranesclientesreparacione','ArticulosTareasAlbaranesclientesreparacione'),'Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
+        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientereparacione' => array('PartesTareasAlbaranesclientereparacione', 'PartestallereTareasAlbaranesclientesreparacione', 'ArticulosTareasAlbaranesclientesreparacione'), 'Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
     }
 
     function add($ordene_id = null) {
@@ -37,14 +39,14 @@ class AlbaranesclientesreparacionesController extends AppController {
                     $this->Albaranesclientesreparacione->saveField('albaranescaneado', $this->FileUpload->finalFile);
                 }
                 /* Fin de Guardar Fichero */
-                /* Pasamos las Tareas de la Orden Validadas */
+                /* Pasamos las Tareas Validadas de la Orden  */
                 if (!empty($this->data['Tarea'])) {
                     foreach ($this->data['Tarea'] as $tarea_validada) {
                         $this->Albaranesclientesreparacione->TareasAlbaranesclientesreparacione->create();
                         $this->Albaranesclientesreparacione->TareasAlbaranesclientesreparacione->crear_desde_tarea_de_orden($tarea_validada['id'], $this->Albaranesclientesreparacione->id);
                     }
                 }
-                /* Fin de Pasar las Tareas de la Orden Validadas */
+                /* Fin de Pasar las Tareas Validadas de la Orden  */
                 $this->Session->setFlash(__('El Albarán de Reparación ha sido guardado correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Albaranesclientesreparacione->id));
             } else {

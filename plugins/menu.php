@@ -70,7 +70,7 @@
                 <li><a href="/daferapp/restricciones" title="Restricciones" target="_self">Restricciones</a></li>
                 <li><a href="/daferapp/centrosdecostes" title="Tipos de IVA" target="_self">Centros de Coste</a></li>
                 <li><a href="/daferapp/tiposivas" title="Tipos de IVA" target="_self">Tipos de IVA</a></li>
-                <li><a href="/daferapp/config" title="Configuración" target="_self" >Configuración</a></li>
+                <li><a href="/daferapp/configs/edit/1" title="Configuración" target="_self" >Configuración</a></li>
             </ul>
         </li>
 

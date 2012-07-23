@@ -70,7 +70,7 @@ class TareasAlbaranesclientesreparacione extends AppModel {
      */
 
     function crear_desde_tarea_de_orden($tarea_id, $albaranesclientesreparacione_id) {
-        $tarea = $this->Albaranesclientesreparacione->Ordene->Tarea->find('first', array('conditions' => array('Tarea.id' => $tarea_id)));
+        $tarea = $this->Albaranesclientesreparacione->Ordene->Tarea->find('first', array('contain'=>array('Parte','Partestallere'),'conditions' => array('Tarea.id' => $tarea_id)));
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione'] = $tarea['Tarea'];
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['albaranesclientesreparacione_id'] = $albaranesclientesreparacione_id;
         unset($tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['id']);

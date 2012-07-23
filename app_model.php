@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application model for Cake.
  *
@@ -30,9 +31,10 @@
  * @package       cake
  * @subpackage    cake.app
  */
-
 class AppModel extends Model {
-	 public $actsAs = array('Containable');
+
+    public $actsAs = array('Containable');
+
 }
 ?>
 

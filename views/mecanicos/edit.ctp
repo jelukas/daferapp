@@ -6,8 +6,6 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('dni',array('label'=>'DNI'));
 		echo $this->Form->input('nombre',array('label'=>'Nombre y Apellidos'));
-		echo $this->Form->input('costehora',array('label'=>'Coste Hora'));
-		echo $this->Form->input('costehoraextra',array('label'=>'Coste Hora Extra'));
 		echo $this->Form->input('fechaalta',array('label'=>'Fecha de Alta'));
 		echo $this->Form->input('observaciones',array('label'=>'Observaciones'));
 	?>
