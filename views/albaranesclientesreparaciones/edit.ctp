@@ -26,6 +26,8 @@
                 <td><?php echo $this->Html->link($this->Form->value('Centrostrabajo.centrotrabajo'), array('controller' => 'centrostrabajos', 'action' => 'view', $this->Form->value('Albaranesclientesreparacione.centrostrabajo_id'))); ?></td>
                 <td><span><?php __('Maquina') ?></span></td>
                 <td><?php echo $this->Html->link($this->Form->value('Maquina.nombre'), array('controller' => 'maquinas', 'action' => 'view', $this->Form->value('Albaranesclientesreparacione.maquina_id'))); ?></td>
+                <td><span><?php __('Forma de Pago') ?></span></td>
+                <td><?php echo $this->Form->value('Cliente.Formapago.nombre'); ?></td>
             </tr>
             <tr>
                 <td><h4><?php __('Nº Orden'); ?></h4></td>
@@ -37,7 +39,7 @@
                 <td><span><?php __('Albarán de Reparación Escaneado'); ?></span></td>
                 <td colspan="5">
                     <?php
-                    echo $this->Html->link(__('Albaran Escaneado Actual: ' . $this->Form->value('Albaranesclientesreparacione.albaranescaneado'), true), '/files/albaranesclientesreparacione/' . $this->Form->value('Albaranesclientesreparacione.albaranescaneado'));
+                    echo 'Albaran Escaneado Actual: ' . $this->Html->link(__($this->Form->value('Albaranesclientesreparacione.albaranescaneado'), true), '/files/albaranesclientesreparacione/' . $this->Form->value('Albaranesclientesreparacione.albaranescaneado'));
                     echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Albaran Escaneado Actual', 'hiddenField' => false));
                     echo $this->Form->input('file', array('type' => 'file', 'label' => 'Albaran Escaneado'));
                     ?>

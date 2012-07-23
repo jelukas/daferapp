@@ -1,7 +1,7 @@
 <div class="albaranesclientesreparaciones">
     <h2>
         <?php __('Albaranes de Reparaciones'); ?>
-        <?php echo $this->Html->link(__('Nuevo', true), array('action' => 'add'), array('class' => 'button_link')); ?>
+        <?php // echo $this->Html->link(__('Nuevo', true), array('action' => 'add'), array('class' => 'button_link')); ?>
     </h2>
     <?php echo $this->Form->create('Albaranesclientesreparacione', array('type' => 'get', 'action' => 'index')); ?>
     <?php echo $this->Form->input('buscar', array('type' => 'text')); ?>

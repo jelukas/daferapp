@@ -1,70 +1,90 @@
 <?php
+
 class TareasAlbaranesclientesreparacionesPartestalleresController extends AppController {
 
-	var $name = 'TareasAlbaranesclientesreparacionesPartestalleres';
+    var $name = 'TareasAlbaranesclientesreparacionesPartestalleres';
+    var $helpers = array('Form', 'Ajax', 'Js');
+    var $components = array('RequestHandler', 'FileUpload', 'Session');
 
-	function index() {
-		$this->TareasAlbaranesclientesreparacionesPartestallere->recursive = 0;
-		$this->set('tareasAlbaranesclientesreparacionesPartestalleres', $this->paginate());
-	}
+    function beforeFilter() {
+        parent::beforeFilter();
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add') {
+            $this->FileUpload->fileModel = 'TareasAlbaranesclientesreparacionesPartestallere';
+            $this->FileUpload->uploadDir = 'files/partestallere';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
+    }
 
-	function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid tareas albaranesclientesreparaciones partestallere', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->set('tareasAlbaranesclientesreparacionesPartestallere', $this->TareasAlbaranesclientesreparacionesPartestallere->read(null, $id));
-	}
+    function add($tareas_albaranesclientesreparacione_id = null) {
+        if (!empty($this->data)) {
+            $this->TareasAlbaranesclientesreparacionesPartestallere->create();
+            if ($this->TareasAlbaranesclientesreparacionesPartestallere->save($this->data)) {
+                $id = $this->TareasAlbaranesclientesreparacionesPartestallere->id;
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->TareasAlbaranesclientesreparacionesPartestallere->saveField('parteescaneado', $this->FileUpload->finalFile);
+                }
+                /* FIn Guardar Fichero */
+                $this->Session->setFlash(__('El nuevo Parte de Taller de la Tarea del Albarán ha sido creado correctamente', true));
+                $this->redirect($this->referer());
+            } else {
+                $this->flashWarnings(__('El Parte de Taller de la Tarea de Albarán NO ha podido ser creado', true));
+                $this->redirect($this->referer());
+            }
+        }
+        $mecanicos = $this->TareasAlbaranesclientesreparacionesPartestallere->Mecanico->find('list');
+        $this->set(compact('mecanicos', 'tareas_albaranesclientesreparacione_id'));
+    }
 
-	function add() {
-		if (!empty($this->data)) {
-			$this->TareasAlbaranesclientesreparacionesPartestallere->create();
-			if ($this->TareasAlbaranesclientesreparacionesPartestallere->save($this->data)) {
-				$this->Session->setFlash(__('The tareas albaranesclientesreparaciones partestallere has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The tareas albaranesclientesreparaciones partestallere could not be saved. Please, try again.', true));
-			}
-		}
-		$tareasAlbaranesclientesreparaciones = $this->TareasAlbaranesclientesreparacionesPartestallere->TareasAlbaranesclientesreparacione->find('list');
-		$partestalleres = $this->TareasAlbaranesclientesreparacionesPartestallere->Partestallere->find('list');
-		$mecanicos = $this->TareasAlbaranesclientesreparacionesPartestallere->Mecanico->find('list');
-		$this->set(compact('tareasAlbaranesclientesreparaciones', 'partestalleres', 'mecanicos'));
-	}
+    function edit($id = null) {
 
-	function edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid tareas albaranesclientesreparaciones partestallere', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		if (!empty($this->data)) {
-			if ($this->TareasAlbaranesclientesreparacionesPartestallere->save($this->data)) {
-				$this->Session->setFlash(__('The tareas albaranesclientesreparaciones partestallere has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The tareas albaranesclientesreparaciones partestallere could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->TareasAlbaranesclientesreparacionesPartestallere->read(null, $id);
-		}
-		$tareasAlbaranesclientesreparaciones = $this->TareasAlbaranesclientesreparacionesPartestallere->TareasAlbaranesclientesreparacione->find('list');
-		$partestalleres = $this->TareasAlbaranesclientesreparacionesPartestallere->Partestallere->find('list');
-		$mecanicos = $this->TareasAlbaranesclientesreparacionesPartestallere->Mecanico->find('list');
-		$this->set(compact('tareasAlbaranesclientesreparaciones', 'partestalleres', 'mecanicos'));
-	}
+        if (!$id && empty($this->data)) {
+            $this->flashWarnings(__('Parte de Taller No Válido', true));
+            $this->redirect($this->referer());
+        }
+        if (!empty($this->data)) {
+            if ($this->TareasAlbaranesclientesreparacionesPartestallere->save($this->data)) {
+                $id = $this->TareasAlbaranesclientesreparacionesPartestallere->id;
+                $upload = $this->TareasAlbaranesclientesreparacionesPartestallere->findById($id);
+                if (!empty($this->data['TareasAlbaranesclientesreparacionesPartestallere']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['TareasAlbaranesclientesreparacionesPartestallere']['parteescaneado']);
+                    $this->TareasAlbaranesclientesreparacionesPartestallere->saveField('parteescaneado', null);
+                }
+                if ($this->FileUpload->finalFile != null) {
+                    $this->FileUpload->RemoveFile($upload['TareasAlbaranesclientesreparacionesPartestallere']['parteescaneado']);
+                    $this->TareasAlbaranesclientesreparacionesPartestallere->saveField('parteescaneado', $this->FileUpload->finalFile);
+                }
+                $this->Session->setFlash(__('El parte de taller ha sido guardado correctamente', true));
+                $this->redirect($this->referer());
+            } else {
+                $this->Session->setFlash(__('El parte de taller No podido ser guardado', true));
+                $this->redirect($this->referer());
+            }
+        } else {
+            $this->data = $this->TareasAlbaranesclientesreparacionesPartestallere->read(null, $id);
+        }
 
-	function delete($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for tareas albaranesclientesreparaciones partestallere', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		if ($this->TareasAlbaranesclientesreparacionesPartestallere->delete($id)) {
-			$this->Session->setFlash(__('Tareas albaranesclientesreparaciones partestallere deleted', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash(__('Tareas albaranesclientesreparaciones partestallere was not deleted', true));
-		$this->redirect(array('action' => 'index'));
-	}
+        $mecanicos = $this->TareasAlbaranesclientesreparacionesPartestallere->Mecanico->find('list');
+        $this->set(compact('mecanicos'));
+    }
+
+    function delete($id = null) {
+        if (!$id) {
+            $this->flashWarnings(__('Id Inválida para el Parte de Taller de la Tarea de Albarán', true));
+            $this->redirect($this->referer());
+        }
+        $id = $this->TareasAlbaranesclientesreparacionesPartestallere->id;
+        $upload = $this->TareasAlbaranesclientesreparacionesPartestallere->findById($id);
+        $this->FileUpload->RemoveFile($upload['TareasAlbaranesclientesreparacionesPartestallere']['parteescaneado']);
+        if ($this->TareasAlbaranesclientesreparacionesPartestallere->delete($id)) {
+            $this->Session->setFlash(__('Parte de Taller de la Tarea del Albarán Borrado Correctamente', true));
+            $this->redirect($this->referer());
+        }
+
+        $this->flashWarnings(__('El Parte de Taller de la Tarea del Albarán NO pudo ser Borrado', true));
+        $this->redirect($this->referer());
+    }
+
 }
+
 ?>

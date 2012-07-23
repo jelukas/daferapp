@@ -27,11 +27,12 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->flashWarnings(__('Albarán de Reparación Inválido', true));
             $this->redirect($this->referer());
         }
-        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientesreparacione' => array('TareasAlbaranesclientesreparacionesParte'=>'Mecanico','TareasAlbaranesclientesreparacionesPartestallere'=>'Mecanico','ArticulosTareasAlbaranesclientesreparacione'=>'Articulo'), 'Ordene'=>array('Avisostallere'=>'Centrostrabajo'), 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
+        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientesreparacione' => array('TareasAlbaranesclientesreparacionesParte' => 'Mecanico', 'TareasAlbaranesclientesreparacionesPartestallere' => 'Mecanico', 'ArticulosTareasAlbaranesclientesreparacione' => 'Articulo'), 'Ordene' => array('Avisostallere' => 'Centrostrabajo'), 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente' => 'Formapago', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
     }
 
     function add($ordene_id = null) {
         if (!empty($this->data)) {
+            die(pr($this->data));
             $this->Albaranesclientesreparacione->create();
             if ($this->Albaranesclientesreparacione->save($this->data)) {
                 /* Guardar fichero */
@@ -91,7 +92,7 @@ class AlbaranesclientesreparacionesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Albaranesclientesreparacione->find('first', array('contain' => array('Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id)));
+            $this->data = $this->Albaranesclientesreparacione->find('first', array('contain' => array('Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente' => 'Formapago', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id)));
         }
         $tiposivas = $this->Albaranesclientesreparacione->Tiposiva->find('list');
         $almacenes = $this->Albaranesclientesreparacione->Almacene->find('list');

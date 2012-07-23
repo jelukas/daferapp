@@ -1,70 +1,46 @@
 <?php
+
 class ArticulosTareasAlbaranesclientesreparacionesController extends AppController {
 
-	var $name = 'ArticulosTareasAlbaranesclientesreparaciones';
+    var $name = 'ArticulosTareasAlbaranesclientesreparaciones';
+    var $helpers = array('Form', 'Ajax', 'Js', 'Autocomplete');
+    var $components = array('RequestHandler', 'Session');
+   
+    function add($tareas_albaranesclientesreparacione_id = null) {
+        $this->ArticulosTareasAlbaranesclientesreparacione->recursive = 1;
+        if (!empty($this->data)) {
+            $this->ArticulosTareasAlbaranesclientesreparacione->create();
+            if ($this->ArticulosTareasAlbaranesclientesreparacione->save($this->data)) {
+                $this->Session->setFlash(__('El Artículo se ha añadido a la Tarea del Albarán', true));
+                $this->redirect($this->referer());
+            } else {
+                $this->flashWarnings(__('El Artículo No ha podido ser añadido a la Tarea del Albarán.', true));
+                $this->redirect($this->referer());
+            }
+        }
+        $tarea = $this->ArticulosTareasAlbaranesclientesreparacione->TareasAlbaranesclientesreparacione->find('first', array('contain' => array('Albaranesclientesreparacione' => array('Centrostrabajo')), 'conditions' => array('TareasAlbaranesclientesreparacione.id' => $tareas_albaranesclientesreparacione_id)));
+        if (!empty($tarea['Albaranesclientesreparacione']['Centrostrabajo']['descuentomaterial']))
+            $descuento = $tarea['Albaranesclientesreparacione']['Centrostrabajo']['descuentomaterial'];
+        else
+            $descuento = 0;
+        $this->set(compact('tareas_albaranesclientesreparacione_id', 'tarea', 'descuento'));
+    }
 
-	function index() {
-		$this->ArticulosTareasAlbaranesclientesreparacione->recursive = 0;
-		$this->set('articulosTareasAlbaranesclientesreparaciones', $this->paginate());
-	}
+    function delete($id = null, $tarea_id = null) {
+        if (!$id) {
+            $this->flashWarnings(__('Invalid id for articulos tarea', true));
+        }
+        if ($this->ArticulosTareasAlbaranesclientesreparacione->delete($id)) {
+            $this->Session->setFlash(__('Artículo de la Tarea de Albarán Borrado', true));
+        } else {
+            $this->flashWarnings(__('No se pudo borrar el Artículo de la Tarea de Albarán', true));
+        }
+        if ($tarea_id != null)
+            $this->redirect($this->referer());
+        else
+            $this->redirect($this->referer());
+    }
 
-	function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid articulos tareas albaranesclientesreparacione', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->set('articulosTareasAlbaranesclientesreparacione', $this->ArticulosTareasAlbaranesclientesreparacione->read(null, $id));
-	}
-
-	function add() {
-		if (!empty($this->data)) {
-			$this->ArticulosTareasAlbaranesclientesreparacione->create();
-			if ($this->ArticulosTareasAlbaranesclientesreparacione->save($this->data)) {
-				$this->Session->setFlash(__('The articulos tareas albaranesclientesreparacione has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The articulos tareas albaranesclientesreparacione could not be saved. Please, try again.', true));
-			}
-		}
-		$articulos = $this->ArticulosTareasAlbaranesclientesreparacione->Articulo->find('list');
-		$articulosTareas = $this->ArticulosTareasAlbaranesclientesreparacione->ArticulosTarea->find('list');
-		$tareasAlbaranesclientesreparaciones = $this->ArticulosTareasAlbaranesclientesreparacione->TareasAlbaranesclientesreparacione->find('list');
-		$this->set(compact('articulos', 'articulosTareas', 'tareasAlbaranesclientesreparaciones'));
-	}
-
-	function edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid articulos tareas albaranesclientesreparacione', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		if (!empty($this->data)) {
-			if ($this->ArticulosTareasAlbaranesclientesreparacione->save($this->data)) {
-				$this->Session->setFlash(__('The articulos tareas albaranesclientesreparacione has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The articulos tareas albaranesclientesreparacione could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->ArticulosTareasAlbaranesclientesreparacione->read(null, $id);
-		}
-		$articulos = $this->ArticulosTareasAlbaranesclientesreparacione->Articulo->find('list');
-		$articulosTareas = $this->ArticulosTareasAlbaranesclientesreparacione->ArticulosTarea->find('list');
-		$tareasAlbaranesclientesreparaciones = $this->ArticulosTareasAlbaranesclientesreparacione->TareasAlbaranesclientesreparacione->find('list');
-		$this->set(compact('articulos', 'articulosTareas', 'tareasAlbaranesclientesreparaciones'));
-	}
-
-	function delete($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for articulos tareas albaranesclientesreparacione', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		if ($this->ArticulosTareasAlbaranesclientesreparacione->delete($id)) {
-			$this->Session->setFlash(__('Articulos tareas albaranesclientesreparacione deleted', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash(__('Articulos tareas albaranesclientesreparacione was not deleted', true));
-		$this->redirect(array('action' => 'index'));
-	}
 }
+
 ?>

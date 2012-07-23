@@ -4,7 +4,7 @@
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $albaranesclientesreparacione['Albaranesclientesreparacione']['id']), array('class' => 'button_link')); ?> 
         <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $albaranesclientesreparacione['Albaranesclientesreparacione']['id']), array('class' => 'button_link'), sprintf(__('¿Seguro que quieres borrar el Albaran de Reparación Nº # %s?', true), $albaranesclientesreparacione['Albaranesclientesreparacione']['numero'])); ?> 
         <?php echo $this->Html->link(__('Listar Albaranes de Reparación', true), array('action' => 'index'), array('class' => 'button_link')); ?> 
-        <?php echo $this->Html->link(__('Nuevo', true), array('action' => 'add'), array('class' => 'button_link')); ?> 
+        <?php // echo $this->Html->link(__('Nuevo', true), array('action' => 'add'), array('class' => 'button_link')); ?> 
     </h2>
     <table class="view edit">
         <tr>
@@ -24,6 +24,8 @@
             <td><?php echo $albaranesclientesreparacione['Centrostrabajo']['centrotrabajo'] ?></td>
             <td><span><?php __('Maquina') ?></span></td>
             <td><?php echo $this->Html->link($albaranesclientesreparacione['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $albaranesclientesreparacione['Maquina']['id'])); ?></td>
+            <td><span><?php __('Forma de Pago') ?></span></td>
+            <td><?php echo $albaranesclientesreparacione['Cliente']['Formapago']['nombre']; ?></td>
         </tr>
         <tr>
             <td><h4><?php __('Nº Orden'); ?></h4></td>
@@ -77,11 +79,11 @@
                         <td style="background-color: #FACC2E">Tarea <?php echo $i ?> - <?php echo $tarea['tipo'] ?></td>
                         <td style="background-color: #FACC2E"><?php echo $tarea['descripcion']; ?></td>
                         <td class="actions" style="background-color: #FACC2E">
-                            <?php echo $this->Html->link(__('Añadir Material', true), array('controller' => 'articulos_tareas', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?> 
+                            <?php echo $this->Html->link(__('Añadir Material', true), array('controller' => 'articulos_tareas_albaranesclientesreparaciones', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?> 
                             <?php if ($tarea['tipo'] == 'taller'): ?>
-                                <?php echo $this->Html->link(__('Añadir Parte Taller', true), array('controller' => 'partestalleres', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                                <?php echo $this->Html->link(__('Añadir Parte Taller', true), array('controller' => 'tareas_albaranesclientesreparaciones_partestalleres', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php elseif ($tarea['tipo'] == 'centro'): ?>
-                                <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'partes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                                <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'tareas_albaranesclientesreparaciones_partes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php endif; ?>
                             <?php echo $this->Html->link(__('Ver Contenido', true), '#?', array('class' => 'ver-relaciones')); ?>
                             <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareasalbaranesclientes_controller', 'action' => 'delete', $tarea['id']), null, sprintf(__('Seguro que quieres borrar la Tarea del Albarán ?', true))); ?>
@@ -235,8 +237,8 @@
                                                 <?php echo!empty($partecentro['parteescaneado']) ? $this->Html->link($this->Html->image("clip.png"), '/files/parte/' . $partecentro['parteescaneado'], array('target' => '_blank', 'escape' => false)) : '' ?>
                                             </td>
                                             <td class="actions">
-                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'partes', 'action' => 'edit', $partecentro['id']), array('class' => 'popup')); ?>
-                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'partes', 'action' => 'delete', $partecentro['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Centro de Trabajo Nº # %s?', true), $partecentro['numero'])); ?>
+                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareas_albaranesclientesreparaciones_partes', 'action' => 'edit', $partecentro['id']), array('class' => 'popup')); ?>
+                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareas_albaranesclientesreparaciones_partes', 'action' => 'delete', $partecentro['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Centro de Trabajo Nº # %s?', true), $partecentro['numero'])); ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -388,8 +390,8 @@
                                                 <?php echo!empty($partetaller['parteescaneado']) ? $this->Html->link($this->Html->image("clip.png"), '/files/partestallere/' . $partetaller['parteescaneado'], array('target' => '_blank', 'escape' => false)) : '' ?>
                                             </td>
                                             <td class="actions">
-                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'partestalleres', 'action' => 'edit', $partetaller['id']), array('class' => 'popup')); ?>
-                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'partestalleres', 'action' => 'delete', $partetaller['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Taller Nº # %s?', true), $partetaller['numero'])); ?>
+                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareas_albaranesclientesreparaciones_partestalleres', 'action' => 'edit', $partetaller['id']), array('class' => 'popup')); ?>
+                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareas_albaranesclientesreparaciones_partestalleres', 'action' => 'delete', $partetaller['id']), null, sprintf(__('Seguro que quieres borrar el Parte de Taller Nº # %s?', true), $partetaller['numero'])); ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -437,10 +439,18 @@
                                         <tr>
                                             <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
                                             <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
-                                            <td><?php echo $articulo_tarea['cantidadreal'];
-                        $total_cantidad_material_real += $articulo_tarea['cantidadreal'] ?></td>
-                                            <td><?php echo $articulo_tarea['cantidad'];
-                        $total_cantidad_material_imputable += $articulo_tarea['cantidad'] ?></td>
+                                            <td>
+                                                <?php
+                                                echo $articulo_tarea['cantidadreal'];
+                                                $total_cantidad_material_real += $articulo_tarea['cantidadreal'];
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                echo $articulo_tarea['cantidad'];
+                                                $total_cantidad_material_imputable += $articulo_tarea['cantidad'];
+                                                ?>
+                                            </td>
                                             <td><?php echo $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
                                             <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
@@ -452,9 +462,9 @@
                                                 echo $totalcondescuento;
                                                 ?>
                                             </td>
-                                            <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
+                                            <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas_albaranesclientesreparaciones', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea del Albarán?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
                                         </tr>
-            <?php endforeach; ?>
+                                    <?php endforeach; ?>
                                     <tr>
                                         <td colspan="2" style="text-align: right; font-weight: bold;">Totales</td>
                                         <td><?php echo $total_cantidad_material_real ?></td>
@@ -473,7 +483,7 @@
                                         </td>
                                     </tr>
                                 </table>
-        <?php endif; ?>
+                            <?php endif; ?>
                             <h5>Total de la Tarea Real: <?php echo $tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real'] ?> &euro;</h5>
                             <h5>Total de la Tarea Imputable: <?php echo $tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'] ?> &euro;</h5>
                             <h5>Beneficio Neto: <?php echo ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro;</h5>
@@ -481,12 +491,12 @@
                                 <h5>Porcentaje Beneficio: <?php echo ((($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real'])) / ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'])) * 100 ?> &percnt;</h5>
                             <?php else: ?>
                                 <h5>Porcentaje Beneficio: 0 &percnt;</h5>
-                    <?php endif; ?>
+                            <?php endif; ?>
                         </td>
                     </tr>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
             </table>
-<?php endif; ?>
+        <?php endif; ?>
     </div>
 </div>
 
