@@ -27,7 +27,7 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->flashWarnings(__('Albarán de Reparación Inválido', true));
             $this->redirect($this->referer());
         }
-        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientesreparacione' => array(), 'Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
+        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientesreparacione' => array('TareasAlbaranesclientesreparacionesParte'=>'Mecanico','TareasAlbaranesclientesreparacionesPartestallere'=>'Mecanico','ArticulosTareasAlbaranesclientesreparacione'=>'Articulo'), 'Ordene'=>array('Avisostallere'=>'Centrostrabajo'), 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
     }
 
     function add($ordene_id = null) {

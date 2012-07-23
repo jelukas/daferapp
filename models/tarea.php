@@ -69,17 +69,6 @@ class Tarea extends AppModel {
     );
 
     public function recalcularTotales($deleted_id = null) {
-        /*
-         * 	totaldesplazamientoreal
-         * 	totaldesplazamientoimputado
-         * 	totalkilometrajereal
-         * 	totalkilometrajeimputable
-         * 	totalpreciodesplazamiento
-         * 	totalhorasreales
-         * 	totalhorasimputables
-         * 	totaldietasreales
-         * 	totaldietasimputables
-         */
         $config = ClassRegistry::init("Config")->findById(1);
         $tarea = $this->find('first', array('contain' => array('ArticulosTarea' => 'Articulo', 'Parte', 'Partestallere', 'Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $this->id)));
         $tarea['Tarea']['totaldesplazamientoreal'] = 0;
