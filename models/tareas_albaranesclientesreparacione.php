@@ -76,31 +76,34 @@ class TareasAlbaranesclientesreparacione extends AppModel {
     );
 
     function crear_desde_tarea_de_orden($tarea_id, $albaranesclientesreparacione_id) {
-        $tarea = $this->Albaranesclientesreparacione->Ordene->Tarea->find('first', array('contain' => array('Parte', 'Partestallere','ArticulosTarea'), 'conditions' => array('Tarea.id' => $tarea_id)));
+        $tarea = $this->Albaranesclientesreparacione->Ordene->Tarea->find('first', array('contain' => array('Parte', 'Partestallere', 'ArticulosTarea'), 'conditions' => array('Tarea.id' => $tarea_id)));
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione'] = $tarea['Tarea'];
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['albaranesclientesreparacione_id'] = $albaranesclientesreparacione_id;
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['tarea_id'] = $tarea['Tarea']['id'];
         unset($tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['id']);
         unset($tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['ordene_id']);
+        $this->create();
         $this->save($tarea_albaranesclientesreparacione);
         /* Conversión de Parte a TareasAlbaranesclientesreparacionesParte */
-        $tareareparacion_parte = array();
         foreach ($tarea['Parte'] as $parte) {
+            $tareareparacion_parte = array();
             $tareareparacion_parte['TareasAlbaranesclientesreparacionesParte'] = $parte;
             unset($tareareparacion_parte['TareasAlbaranesclientesreparacionesParte']['id']);
             unset($tareareparacion_parte['TareasAlbaranesclientesreparacionesParte']['tarea_id']);
             $tareareparacion_parte['TareasAlbaranesclientesreparacionesParte']['parte_id'] = $parte['id'];
             $tareareparacion_parte['TareasAlbaranesclientesreparacionesParte']['tareas_albaranesclientesreparacione_id'] = $this->id;
+            $this->TareasAlbaranesclientesreparacionesParte->create();
             $this->TareasAlbaranesclientesreparacionesParte->save($tareareparacion_parte);
         }
         /* Conversión de Partestallere a TareasAlbaranesclientesreparacionesPartestallere */
-        $tareareparacion_partestallere = array();
         foreach ($tarea['Partestallere'] as $partestallere) {
+            $tareareparacion_partestallere = array();
             $tareareparacion_partestallere['TareasAlbaranesclientesreparacionesPartestallere'] = $partestallere;
             unset($tareareparacion_partestallere['TareasAlbaranesclientesreparacionesPartestallere']['id']);
             unset($tareareparacion_partestallere['TareasAlbaranesclientesreparacionesPartestallere']['tarea_id']);
             $tareareparacion_partestallere['TareasAlbaranesclientesreparacionesPartestallere']['tareas_albaranesclientesreparacione_id'] = $this->id;
             $tareareparacion_partestallere['TareasAlbaranesclientesreparacionesPartestallere']['partestallere_id'] = $partestallere['id'];
+            $this->TareasAlbaranesclientesreparacionesPartestallere->create();
             $this->TareasAlbaranesclientesreparacionesPartestallere->save($tareareparacion_partestallere);
         }
         /* Conversión de ArticulosTarea a ArticulosTareasAlbaranesclientesreparacione */
@@ -111,6 +114,7 @@ class TareasAlbaranesclientesreparacione extends AppModel {
             unset($tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['tarea_id']);
             $tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['tareas_albaranesclientesreparacione_id'] = $this->id;
             $tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['articulos_tarea_id'] = $articulos_tarea['id'];
+            $this->ArticulosTareasAlbaranesclientesreparacione->create();
             $this->ArticulosTareasAlbaranesclientesreparacione->save($tareareparacion_articulo);
         }
     }
