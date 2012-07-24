@@ -14,10 +14,10 @@ class TareaspresupuestoclientesOtrosserviciosController extends AppController {
                 $this->flashWarnings(__('The tareaspresupuestoclientes otrosservicio could not be saved. Please, try again.', true));
             }
         }
-        $tarea = $this->TareaspresupuestoclientesOtrosservicio->Tareaspresupuestocliente->find('first', array('contain' => array('Presupuestoscliente' => array('Centrostrabajo','Cliente')), 'conditions' => array('Tareaspresupuestocliente.id' => $tarea_id)));
+        $tarea = $this->TareaspresupuestoclientesOtrosservicio->Tareaspresupuestocliente->find('first', array('contain' => array('Presupuestoscliente' => array('Centrostrabajo', 'Cliente')), 'conditions' => array('Tareaspresupuestocliente.id' => $tarea_id)));
         if (!empty($tarea['Presupuestoscliente']['centrostrabajo_id'])) {
-            $this->set('centrostrabajo',$tarea['Presupuestoscliente']['Centrostrabajo']);
-        } 
+            $this->set('centrostrabajo', $tarea['Presupuestoscliente']['Centrostrabajo']);
+        }
         $this->set(compact('tarea_id'));
     }
 

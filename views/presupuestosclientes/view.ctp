@@ -119,13 +119,13 @@
                         <?php if (!empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?>
                             <h4>Otros Servicios</h4>
                             <table>
-                                <tr><th>Desplazamiento</th><th>M.O.D</th><th>Km</th><th>Dietas</th><th>Varios</th><th>Total</th><th>Acciones</th></tr>
+                                <tr><th>Precio Fijo Desplazamiento</th><th>Precio Mano de Obra</th><th>Precio Kilometraje</th><th>Dietas</th><th>Varios</th><th>Total</th><th>Acciones</th></tr>
                                 <?php if (!empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?>
                                     <tr>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['desplazamiento'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['manoobradesplazamiento'] ?> &euro;</td>
-                                        <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['kilometraje'] ?> Km.</td>
-                                        <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['dietas'] ?></td>
+                                        <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['kilometraje'] ?> &euro;</td>
+                                        <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['dietas'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['varios'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['total'] ?> &euro;</td>
                                         <td class="actions"><?php echo $this->Html->link('Eliminar', array('controller' => 'tareaspresupuestoclientes_otrosservicios', 'action' => 'delete', $tarea['TareaspresupuestoclientesOtrosservicio']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tarea['TareaspresupuestoclientesOtrosservicio']['id'])) ?></td>
