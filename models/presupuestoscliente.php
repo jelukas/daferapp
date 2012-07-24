@@ -15,6 +15,13 @@ class Presupuestoscliente extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Centrostrabajo' => array(
+            'className' => 'Centrostrabajo',
+            'foreignKey' => 'centrostrabajo_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
         'Avisosrepuesto' => array(
             'className' => 'Avisosrepuesto',
             'foreignKey' => 'avisosrepuesto_id',

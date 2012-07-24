@@ -105,7 +105,6 @@
             echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Centro de Trabajo Escaneado'));
             ?>
         </td>
-        
         <td colspan="2">
             <table>
                 <tr><th colspan="2">Otros Servicios</th></tr>

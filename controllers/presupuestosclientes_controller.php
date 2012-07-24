@@ -15,7 +15,7 @@ class PresupuestosclientesController extends AppController {
             $this->flashWarnings(__('Presupuestos Cliente Inválido', true));
             $this->redirect(array('action' => 'index'));
         }
-        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Mensajesinformativo', 'Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina')), 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
+        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Centrostrabajo', 'Mensajesinformativo', 'Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina')), 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($presupuestoscliente['Tareaspresupuestocliente'] as $tarea) {
@@ -34,6 +34,8 @@ class PresupuestosclientesController extends AppController {
                 //Si viene el presupuesto desde una maquina para encargar los repuestos necesarios para el mantenimiento
                 $presupuestoscliente = array();
                 $presupuestoscliente['Presupuestoscliente']['cliente_id'] = $this->data['Cliente']['id'];
+                if (!empty($this->data['Centrostrabajo']['id']))
+                    $presupuestoscliente['Presupuestoscliente']['centrostrabajo_id'] = $this->data['Centrostrabajo']['id'];
                 $presupuestoscliente['Presupuestoscliente']['precio_mat'] = 0;
                 $presupuestoscliente['Presupuestoscliente']['precio_obra'] = 0;
                 $presupuestoscliente['Presupuestoscliente']['precio'] = 0;
@@ -152,7 +154,7 @@ class PresupuestosclientesController extends AppController {
                 $this->render('add_from_avisostallere');
                 break;
             case 'ordene':
-                $ordene = $this->Presupuestoscliente->Ordene->find('first', array('contain' => array('Almacene', 'Avisostallere' => array( 'Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Ordene.id' => $iddedondeviene)));
+                $ordene = $this->Presupuestoscliente->Ordene->find('first', array('contain' => array('Almacene', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Ordene.id' => $iddedondeviene)));
                 $this->set(compact('ordene'));
                 $this->render('add_from_ordene');
                 break;

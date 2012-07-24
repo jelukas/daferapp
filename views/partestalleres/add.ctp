@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('Partestallere', array('type' => 'file',array('action' => 'add'))); ?>
+<?php echo $this->Form->create('Partestallere', array('type' => 'file', array('action' => 'add'))); ?>
 <fieldset style=" width: 100%;">
     <legend><?php __('Añadir Parte de Taller'); ?></legend>
     <table class="view" style="font-size: 75%;">
@@ -18,7 +18,7 @@
                 <?php echo $this->Form->input('fecha', array('label' => false, 'dateFormat' => 'DMY')); ?>
             </td>
             <td>
-                <?php echo $this->Form->input('mecanico_id', array('label' => false ,'empty' => '-- Seleccione el Mecánico --')); ?>
+                <?php echo $this->Form->input('mecanico_id', array('label' => false, 'empty' => '-- Seleccione el Mecánico --')); ?>
             </td>
 
         </tr>
@@ -48,10 +48,23 @@
             </td>
         </tr>
         <tr>
-            <td colspan="5">
+            <td colspan="2">
                 <?php
-                echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
+                echo $this->Form->input('file', array('type' => 'file', 'label' => 'Adjunto'));
                 ?>
+            </td>
+            <td colspan="3">
+                <table>
+                    <tr><td colspan="2">Otros Servicios</td></tr>
+                    <tr>
+                        <th>Real</th>
+                        <th>Imputable</th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false, 'value' => 0)); ?></td>
+                        <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false, 'value' => 0)); ?></td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

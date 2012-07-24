@@ -52,12 +52,13 @@
             <td><?php echo empty($albaranesclientesreparacione['Albaranesclientesreparacione']['es_devolucion']) ? 'No' : 'Sí'; ?></td>
         </tr>
     </table>
+    <?php $total_albaranreparación = 0 ?>
     <div class="related">
         <h3><?php __('Tareas'); ?></h3>
         <?php if (!empty($albaranesclientesreparacione['TareasAlbaranesclientesreparacione'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
-                    <th><?php __('Tarea'); ?></th>
+                    <th><?php __(''); ?></th>
                     <th><?php __('Descripción'); ?></th>
                     <th class="actions"><?php __('Acciones'); ?></th>
                 </tr>
@@ -106,7 +107,7 @@
                                         <th>Kilometraje</th>
                                         <th>Costo</th>
                                         <th>PVP</th>
-                                        <th>Desplazamiento</th>
+                                        <th>Precio Fijo<br/>Desplazamiento</th>
                                         <th>Horas de Trabajo</th>
                                         <th>Costo</th>
                                         <th>PVP</th>
@@ -499,11 +500,11 @@
                                     </tr>
                                 </table>
                             <?php endif; ?>
-                            <h5>Total de la Tarea Real: <?php echo $tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real'] ?> &euro;</h5>
-                            <h5>Total de la Tarea Imputable: <?php echo $tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'] ?> &euro;</h5>
-                            <h5>Beneficio Neto: <?php echo ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro;</h5>
+                            <h5>Total de la Tarea Real: <?php echo $tarea['total_materiales_costo']  + $tarea['total_partes_real'] ?> &euro;</h5>
+                            <h5>Total de la Tarea Imputable: <?php echo $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable'] ; $total_albaranreparación+= $tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'] ?> &euro;</h5>
+                            <h5>Beneficio Neto: <?php echo ($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro;</h5>
                             <?php if (($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) != 0): ?>
-                                <h5>Porcentaje Beneficio: <?php echo ((($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real'])) / ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'])) * 100 ?> &percnt;</h5>
+                                <h5>Porcentaje Beneficio: <?php echo ((($tarea['total_materiales_imputables']  + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real'])) / ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'])) * 100 ?> &percnt;</h5>
                             <?php else: ?>
                                 <h5>Porcentaje Beneficio: 0 &percnt;</h5>
                             <?php endif; ?>
@@ -512,6 +513,7 @@
                 <?php endforeach; ?>
             </table>
         <?php endif; ?>
+        <p class="total_orden">Total Albaran de Reparación: <?php echo $total_albaranreparación ?> &euro;</p>
     </div>
 </div>
 

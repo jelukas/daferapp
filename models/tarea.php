@@ -7,15 +7,9 @@ class Tarea extends AppModel {
         'ordene_id' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
     );
-    //The Associations below have been created with all possible keys, those that are not needed can be removed
 
     var $belongsTo = array(
         'Ordene' => array(
@@ -112,6 +106,8 @@ class Tarea extends AppModel {
         } else { //  La Tarea es de Taller
             foreach ($tarea['Partestallere'] as $partetaller) {
                 if ($partetaller['id'] != $deleted_id) {
+                    $tarea['Tarea']['totalotroserviciosreales'] += $partetaller['otrosservicios_real'];
+                    $tarea['Tarea']['totalotroserviciosimputables'] += $partetaller['otrosservicios_imputable'];
                     $tarea['Tarea']['total_horastrabajoprecio_real'] += $partetaller['horasreales'] * $config['Config']['costo_hora_en_taller'];
                     $tarea['Tarea']['total_horastrabajoprecio_imputable'] += $partetaller['horasimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraentraller'];
                 }

@@ -47,13 +47,26 @@
             </td>
         </tr>
         <tr>
-            <td colspan="5">
+            <td colspan="2">
                 <?php
-                echo 'Parte de Taller Escaneado Actual: ' . $this->Html->link(__($this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
+                echo 'Adjunto Actual: ' . $this->Html->link(__($this->Form->value('Partestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('Partestallere.parteescaneado'));
                 echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Taller Escaneado Actual', 'hiddenField' => false));
                 echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
                 ?>
             </td>
+            <td colspan="3">
+            <table>
+                <tr><th colspan="2">Otros Servicios</th></tr>
+                <tr>
+                    <th>Real</th>
+                    <th>Imputable</th>
+                </tr>
+                <tr>
+                    <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>
+                    <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false)); ?></td>
+                </tr>
+            </table>
+        </td>
         </tr>
     </table>
 </fieldset>

@@ -61,10 +61,9 @@
                 <td><?php echo $this->Form->input('es_devolucion', array('label' => false)); ?></td>
             </tr>
         </table>
-
-
+        <?php $total_orden = 0 ; ?>
         <div class="related">
-            <h3><?php __('Tareas'); ?></h3>
+            <h3><?php __(''); ?></h3>
             <?php if (!empty($ordene['Tarea'])): ?>
                 <table cellpadding = "0" cellspacing = "0">
                     <tr>
@@ -111,7 +110,7 @@
                                             <th>Kilometraje</th>
                                             <th>Costo</th>
                                             <th>PVP</th>
-                                            <th>Desplazamiento</th>
+                                            <th>Precio Fijo<br/>Desplazamiento</th>
                                             <th>Horas de Trabajo</th>
                                             <th>Costo</th>
                                             <th>PVP</th>
@@ -354,7 +353,7 @@
                                         <th>Horas de Trabajo</th>
                                         <th>Costo</th>
                                         <th>PVP</th>
-                                        <th>Presupuestado</th>
+                                        <th class="columna-presupuestado">Presupuestado</th>
                                         <th>Parte<br/> Adjunto</th>
                                         </thead>
                                         <?php foreach ($tarea['Partestallere'] as $partetaller): ?>
@@ -410,7 +409,7 @@
                                             </td>
                                             <td><?php echo $tarea['total_horastrabajoprecio_real'] ?> €</td>
                                             <td><?php echo $tarea['total_horastrabajoprecio_imputable'] ?> €</td>
-                                            <td><?php echo $this->Number->precision($tarea['total_manoobra_presupuestada'], 2) ?> €</td>
+                                            <td class="columna-presupuestado"><?php echo $this->Number->precision($tarea['total_manoobra_presupuestada'], 2) ?> €</td>
                                         </tr>
                                     </table>
                                 <?php endif; ?>
@@ -421,14 +420,14 @@
                                         <th>Ref.</th>
                                         <th>Nombre</th>
                                         <th>Cant. Real</th>
-                                        <th>Cant. Presup</th>
+                                        <th class="columna-presupuestado">Cant. Presup</th>
                                         <th>Cant. Imputable</th>
                                         <th>Ultimo <br/>Precio Costo</th>
                                         <th>Total Costo</th>
                                         <th>PVP</th>
                                         <th>Total PVP</th>
                                         <th>Descuento</th>
-                                        <th>Presupuestado</th>
+                                        <th class="columna-presupuestado">Presupuestado</th>
                                         <th>Total con<br/> Descuento Aplicado</th>
                                         </thead>
                                         <?php
@@ -445,7 +444,7 @@
                                                     $total_cantidad_material_real += $articulo_tarea['cantidadreal'];
                                                     ?>
                                                 </td>
-                                                <td>
+                                                <td class="columna-presupuestado">
                                                     <?php
                                                     echo $articulo_tarea['cantidad_presupuestada'];
                                                     $total_cantidad_materiales_presupuestados += $articulo_tarea['cantidad_presupuestada']
@@ -462,7 +461,7 @@
                                                 <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                                 <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                                 <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
-                                                <td><?php echo $articulo_tarea['presupuestado']; ?></td>
+                                                <td class="columna-presupuestado"><?php echo $articulo_tarea['presupuestado']; ?></td>
                                                 <td>
                                                     <?php
                                                     $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
@@ -474,14 +473,14 @@
                                         <tr>
                                             <td colspan="2" style="text-align: right; font-weight: bold;">Totales</td>
                                             <td><?php echo $total_cantidad_material_real ?></td>
-                                            <td><?php echo $total_cantidad_materiales_presupuestados ?></td>
+                                            <td class="columna-presupuestado"><?php echo $total_cantidad_materiales_presupuestados ?></td>
                                             <td><?php echo $total_cantidad_material_imputable ?></td>
                                             <td></td>
                                             <td></td>
                                             <td><?php echo $tarea['total_materiales_costo'] ?> &euro; </td>
                                             <td></td>
                                             <td></td>
-                                            <td><?php echo $tarea['total_materiales_presupuestado'] ?> &euro; </td>
+                                            <td class="columna-presupuestado"><?php echo $tarea['total_materiales_presupuestado'] ?> &euro; </td>
                                             <td><?php echo $tarea['total_materiales_imputables'] ?> &euro; </td>
                                             <td></td>
                                         </tr>
@@ -492,22 +491,24 @@
                                         </tr>
                                     </table>
                                 <?php endif; ?>
-                                <h5>Total de la Tarea Real: <?php echo $tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real'] ?> &euro;</h5>
-                                <h5>Total de la Tarea Imputable: <?php echo $tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'] ?> &euro;</h5>
-                                <h5>Beneficio Neto: <?php echo ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro;</h5>
+                                <h5>Total de la Tarea Real: <?php echo $tarea['total_materiales_costo'] + $tarea['total_partes_real'] ?> &euro;</h5>
+                                <h5>Total de la Tarea Imputable: <?php echo $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable'];
+                        $total_orden+= $tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'] ?> &euro;</h5>
+                                <h5>Beneficio Neto: <?php echo ($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro;</h5>
                                 <?php if (($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) != 0): ?>
-                                    <h5>Porcentaje Beneficio: <?php echo ((($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_materiales_costo'] + $tarea['total_partes_real'])) / ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'])) * 100 ?> &percnt;</h5>
+                                    <h5>Porcentaje Beneficio: <?php echo ((($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real'])) / ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'])) * 100 ?> &percnt;</h5>
                                 <?php else: ?>
                                     <h5>Porcentaje Beneficio: 0 &percnt;</h5>
-                                <?php endif; ?>
+        <?php endif; ?>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                <?php endforeach; ?>
                 </table>
-            <?php endif; ?>
+<?php endif; ?>
+            <p class="total_orden">Total Orden: <?php echo $total_orden ?> &euro;</p>
         </div>
     </fieldset>
-    <?php echo $this->Form->end(__('Guardar', true)); ?>
+<?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>
 <script type="text/javascript">
     $('.tarea-relations').hide();
