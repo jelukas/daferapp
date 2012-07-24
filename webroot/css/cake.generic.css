@@ -1038,3 +1038,7 @@ float:none;
     font-family: Arial,Helvetica,sans-serif;
     padding: 0;
 }
+
+.columna-presupuestado {
+    color: red;
+}

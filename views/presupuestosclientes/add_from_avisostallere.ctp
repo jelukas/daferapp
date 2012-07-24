@@ -54,8 +54,8 @@
                 <td><?php echo $this->Form->input('avisar', array('label' => false)); ?></td>
             </tr>
             <tr>
-                <td><span><?php __('Presupuesto Enviado Fecha'); ?></span></td>
-                <td><?php echo $this->Form->input('fecha_enviado', array('label' => false, 'empty' => '--')); ?></td>
+                <td colspan="2"><span><?php __('Presupuesto Enviado Fecha'); ?></span></td>
+                <td colspan="3"><?php echo $this->Form->input('fecha_enviado', array('label' => false, 'empty' => '--')); ?></td>
                 <td><span><?php __('Tipo de IVA') ?></span></td>
                 <td><?php echo $this->Form->input('tiposiva_id', array('label' => false)); ?></td>
             </tr>

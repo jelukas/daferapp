@@ -8,7 +8,7 @@
         echo '<input type="hidden" value="' . $ordene['Ordene']['id'] . '" name="ordene_id"/>';
     }
     ?>
-        <label>Tipo de Tarea</label>
+    <label>Tipo de Tarea</label>
     <?php
     $options = array('taller' => 'En taller', 'centro' => 'En el Centro de Trabajo');
     echo $this->Form->select('tipo', $options);

@@ -4,7 +4,7 @@ class OrdenesController extends AppController {
 
     var $name = 'Ordenes';
     var $uses = array('Ordene', 'Avisostallere');
-    var $helpers = array('Javascript', 'Time');
+    var $helpers = array('Javascript', 'Time','Number');
     var $components = array('FileUpload');
 
     function beforeFilter() {
@@ -120,6 +120,8 @@ class OrdenesController extends AppController {
                             $tarea['Tarea'] = array();
                             $tarea['Tarea']['ordene_id'] = $ordene_id;
                             $tarea['Tarea']['descripcion'] = $tareapedido_modelo['Tareaspedidoscliente']['asunto'];
+                            $tarea['Tarea']['total_materiales_presupuestado'] = $tareapedido_modelo['Tareaspedidoscliente']['materiales'];
+                            $tarea['Tarea']['total_manoobra_presupuestada'] = $tareapedido_modelo['Tareaspedidoscliente']['mano_de_obra'];
                             $this->Ordene->Tarea->save($tarea);
                             if (!empty($tareapedido['MaterialesTareaspedidoscliente'])) {
                                 foreach ($tareapedido['MaterialesTareaspedidoscliente'] as $materiale) {
@@ -130,6 +132,9 @@ class OrdenesController extends AppController {
                                         $articulos_tarea['ArticulosTarea']['tarea_id'] = $this->Ordene->Tarea->id;
                                         $articulos_tarea['ArticulosTarea']['articulo_id'] = $materiale_modelo['MaterialesTareaspedidoscliente']['articulo_id'];
                                         $articulos_tarea['ArticulosTarea']['cantidad'] = $materiale_modelo['MaterialesTareaspedidoscliente']['cantidad'];
+                                        $articulos_tarea['ArticulosTarea']['presupuestado'] = $materiale_modelo['MaterialesTareaspedidoscliente']['importe'];
+                                        $articulos_tarea['ArticulosTarea']['cantidad_presupuestada'] = $materiale_modelo['MaterialesTareaspedidoscliente']['cantidad'];
+                                        $articulos_tarea['ArticulosTarea']['descuento'] = $materiale_modelo['MaterialesTareaspedidoscliente']['descuento'];
                                         $this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea);
                                     }
                                 }

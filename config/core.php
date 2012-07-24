@@ -227,7 +227,6 @@
  * To use, prefix your JavaScript link URLs with '/cjs/' instead of '/js/' or use JavaScriptHelper::link().
  */
 	//Configure::write('Asset.filter.js', 'custom_javascript_output_filter.php');
-
 /**
  * The classname and database used in CakePHP's
  * access control lists.

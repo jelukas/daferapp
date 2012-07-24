@@ -4,7 +4,7 @@ class AlbaranesclientesreparacionesController extends AppController {
 
     var $name = 'Albaranesclientesreparaciones';
     var $components = array('RequestHandler', 'Session', 'FileUpload');
-    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js');
+    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js','Number');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -32,7 +32,6 @@ class AlbaranesclientesreparacionesController extends AppController {
 
     function add($ordene_id = null) {
         if (!empty($this->data)) {
-            die(pr($this->data));
             $this->Albaranesclientesreparacione->create();
             if ($this->Albaranesclientesreparacione->save($this->data)) {
                 /* Guardar fichero */
