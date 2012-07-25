@@ -28,9 +28,10 @@ class ManodeobrasController extends AppController {
                 $this->flashWarnings(__('No se puedo añadir la mano de obra a la Tarea. Inténtalo de nuevo.', true));
             }
         }
-        $tarea = $this->TareaspresupuestoclientesOtrosservicio->Tareaspresupuestocliente->find('first', array('contain' => array('Presupuestoscliente' => array('Centrostrabajo', 'Cliente')), 'conditions' => array('Tareaspresupuestocliente.id' => $tareaspresupuestocliente_id)));
+        $tarea = $this->Manodeobra->Tareaspresupuestocliente->find('first', array('contain' => array('Presupuestoscliente' => array('Centrostrabajo', 'Cliente')), 'conditions' => array('Tareaspresupuestocliente.id' => $tareaspresupuestocliente_id)));
         if (!empty($tarea['Presupuestoscliente']['centrostrabajo_id'])) {
             $this->set('centrostrabajo', $tarea['Presupuestoscliente']['Centrostrabajo']);
+            $this->set('tareaspresupuestocliente', $tarea['Tareaspresupuestocliente']);
         }
         $this->set(compact('tareaspresupuestocliente_id'));
     }

@@ -1050,3 +1050,25 @@ float:none;
     background-color: #f0f09a;
     padding: 10px;
 }
+
+.total_articulos, .total_partes {
+    font-weight: bold !important;
+    background-color: #EFD3D3 !important;
+    border-bottom: 1px solid #000 !important;
+    border-top: 1px solid #000 !important;
+}
+.total_importe_tarea, .beneficio_articulos, .beneficio_partes {
+    font-weight: bold !important;
+    border-top: 3px solid #000 !important;
+    border-bottom: 3px solid #000 !important;
+    border-collapse: collapse;
+    background-color: #CA87CE !important;
+}
+table.rendimientos_tarea{
+    width: 70%;
+    border: 3px solid red;
+}
+.rendimientos_tarea tr td{
+    background-color: #ccc;
+    font-weight: bold;
+}

@@ -15,6 +15,9 @@ class TareaspresupuestoclientesOtrosservicio extends AppModel {
             'order' => ''
         )
     );
+    var $virtualFields = array(
+        'total_desplazamiento' => 'TareaspresupuestoclientesOtrosservicio.desplazamiento + TareaspresupuestoclientesOtrosservicio.manoobradesplazamiento + TareaspresupuestoclientesOtrosservicio.kilometraje'
+    );
 
     function afterSave($created) {
         $tarea = $this->Tareaspresupuestocliente->find('first', array('contain' => 'TareaspresupuestoclientesOtrosservicio', 'conditions' => array('Tareaspresupuestocliente.id' => $this->data['TareaspresupuestoclientesOtrosservicio']['tareaspresupuestocliente_id'])));

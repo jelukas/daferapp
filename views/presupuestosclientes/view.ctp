@@ -97,14 +97,25 @@
             </ul>
         </div>
         <table style="background-color: #FFE6CC;">
-            <thead><th>Asunto</th><th>Acciones</th></thead>
+            <thead><th>Tipo</th><th>Asunto</th><th>Acciones</th></thead>
             <?php foreach ($presupuestoscliente['Tareaspresupuestocliente'] as $indice => $tarea): ?>
                 <tr>
+                    <td style="background-color: #FFE6CC"><?php echo $tarea['tipo'] ?></td>                  
                     <td style="background-color: #FFE6CC">Tarea <?php echo $indice + 1 ?> - <?php echo $tarea['asunto'] ?></td>                  
-                    <td class="actions"  style="background-color: #FFE6CC"><?php echo $this->Html->link(__('+ Material', true), array('controller' => 'materiales', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?><?php echo $this->Html->link(__('+ Mano de Obra', true), array('controller' => 'manodeobras', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?><?php if (empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?><?php echo $this->Html->link(__('+ Otros Conceptos', true), array('controller' => 'tareaspresupuestoclientes_otrosservicios', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?><?php endif; ?><?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'edit', $tarea['id'])); ?><?php echo $this->Html->link(__('Borrar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'delete', $tarea['id'])); ?></td>
+                    <td class="actions"  style="background-color: #FFE6CC">
+                        <?php echo $this->Html->link(__('+ Material', true), array('controller' => 'materiales', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                        <?php if ($tarea['tipo'] != 'repuestos'): ?>
+                            <?php echo $this->Html->link(__('+ Mano de Obra', true), array('controller' => 'manodeobras', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                        <?php endif; ?>
+                        <?php if (empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?>
+                            <?php echo $this->Html->link(__('+ Otros Conceptos', true), array('controller' => 'tareaspresupuestoclientes_otrosservicios', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                        <?php endif; ?>
+                        <?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'edit', $tarea['id'])); ?>
+                        <?php echo $this->Html->link(__('Borrar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'delete', $tarea['id'])); ?>
+                    </td>
                 </tr>
                 <tr class="tarea-relations">
-                    <td colspan="4">
+                    <td colspan="5">
                         <?php if (!empty($tarea['Manodeobra'])): ?>
                             <h4>Mano de Obra</h4>
                             <table>
@@ -119,12 +130,14 @@
                         <?php if (!empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?>
                             <h4>Otros Conceptos</h4>
                             <table>
-                                <tr><th>Precio Fijo Desplazamiento</th><th>Precio Desplazamiento de Mano de Obra</th><th>Precio Kilometraje</th><th>Dietas</th><th>Varios</th><th>Total</th><th>Acciones</th></tr>
+                                <tr><th colspan="4">Desplazamiento</th></tr>
+                                <tr><th>Precio Fijo Desplazamiento</th><th>Precio Desplazamiento de Mano de Obra</th><th>Precio Kilometraje</th><th>Total Desplazamiento</th><th>Dietas</th><th>Varios</th><th>Total</th><th>Acciones</th></tr>
                                 <?php if (!empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?>
                                     <tr>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['desplazamiento'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['manoobradesplazamiento'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['kilometraje'] ?> &euro;</td>
+                                        <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['total_desplazamiento'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['dietas'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['varios'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspresupuestoclientesOtrosservicio']['total'] ?> &euro;</td>
@@ -166,7 +179,7 @@
                 </tr>
             <?php endforeach; ?>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <table style="font-size: 16px; font-weight: bold;text-align: right;">
                         <tr>
                             <td>Total Mano de Obra y Otros Conceptos</td>
