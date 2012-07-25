@@ -19,8 +19,29 @@
                 <td><?php echo $this->Form->input('comerciale_id', array('label' => false)); ?></td>
             </tr>
             <tr>
-                <td><span><?php __('Cliente'); ?></span></td>
-                <td colspan="9"><?php echo $this->Autocomplete->replace_select('Cliente', null, true); ?></td>
+                <td colspan="2">
+                    <?php echo $this->Autocomplete->replace_select('Cliente', null, true, null); ?>
+                </td>
+                <?php
+                echo $ajax->observeField('PresupuestosclienteClienteId', array(
+                    'frequency' => '1',
+                    'update' => 'CentrostrabajoSelectDiv',
+                    'url' => array(
+                        'controller' => 'centrostrabajos',
+                        'action' => 'selectPresupuestoscliente'
+                        ))
+                );
+                ?>
+                <td colspan="4">
+                    <?php
+                    echo $this->Form->input('centrostrabajo_id', array(
+                        'label' => 'Centro de Trabajo',
+                        'div' => array(
+                            'id' => 'CentrostrabajoSelectDiv'
+                        ),
+                        'empty' => '--- Seleccione un centro de trabajo ---'));
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td><span><?php __('Mensaje'); ?></span></td>

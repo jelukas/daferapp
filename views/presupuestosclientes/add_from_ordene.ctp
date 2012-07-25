@@ -31,6 +31,13 @@
                     echo $this->Form->input('Presupuestoscliente.cliente_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['cliente_id']));
                     ?>
                 </td>
+                <td colspan="2"><span><?php __('Centro de Trabajo'); ?></span></td>
+                <td colspan="2">
+                    <?php
+                    echo $this->Html->link($ordene['Avisostallere']['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $ordene['Avisostallere']['Centrostrabajo']['id']));
+                    echo $this->Form->input('Presupuestoscliente.centrostrabajo_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['centrostrabajo_id']));
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td><h4><?php __('Nº de Orden'); ?></h4></td>

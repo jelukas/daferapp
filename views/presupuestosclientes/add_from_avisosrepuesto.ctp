@@ -36,7 +36,8 @@
                     <?php
                     echo $this->Html->link($avisosrepuesto['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $avisosrepuesto['Centrostrabajo']['id']));
                     echo $this->Form->input('Presupuestoscliente.centrostrabajo_id', array('type' => 'hidden', 'value' => $avisosrepuesto['Avisosrepuesto']['centrostrabajo_id']));
-                    ?></td>
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td><h4><?php __('Nº Aviso de Repuestos'); ?></h4></td>

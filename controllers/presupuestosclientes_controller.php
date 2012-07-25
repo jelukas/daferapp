@@ -159,7 +159,7 @@ class PresupuestosclientesController extends AppController {
                 $this->render('add_from_ordene');
                 break;
             case 'presupuestosproveedore':
-                $presupuestosproveedore = $this->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => 'Almacene', 'conditions' => array('Presupuestosproveedore.id' => $iddedondeviene)));
+                $presupuestosproveedore = $this->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => array('Almacene','Avisostallere'=>'Centrostrabajo','Avisosrepuesto'=>'Centrostrabajo','Ordene'=>array('Avisostallere'=>'Centrostrabajo')), 'conditions' => array('Presupuestosproveedore.id' => $iddedondeviene)));
                 $cliente = $this->Presupuestoscliente->Cliente->find('first', array('contain' => '', 'conditions' => array('Cliente.id' => $cliente_id)));
                 $this->set(compact('presupuestosproveedore', 'cliente'));
                 $this->render('add_from_presupuestosproveedore');

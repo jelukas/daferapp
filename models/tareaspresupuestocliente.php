@@ -35,28 +35,23 @@ class Tareaspresupuestocliente extends AppModel {
         foreach ($presupuestoscliente['Tareaspresupuestocliente'] as $tarea) {
             $preciomateriales_total += $tarea['materiales'];
             $precioobra_total += $tarea['mano_de_obra'];
-            if (!empty($tarea['TareaspresupuestoclientesOtrosservicio']))
-                $otrosservicios_total += $tarea['TareaspresupuestoclientesOtrosservicio']['total'];
+            $otrosservicios_total += $tarea['servicios'];
         }
-        $presupuestoscliente['Presupuestoscliente']['precio_mat'] = number_format($preciomateriales_total, 5, '.', '');
-        $presupuestoscliente['Presupuestoscliente']['precio_obra'] = number_format($precioobra_total, 5, '.', '');
-        $presupuestoscliente['Presupuestoscliente']['precio'] = number_format($presupuestoscliente['Presupuestoscliente']['precio_mat'] + $presupuestoscliente['Presupuestoscliente']['precio_obra'] + $otrosservicios_total, 5, '.', '');
-        $presupuestoscliente['Presupuestoscliente']['impuestos'] = number_format($presupuestoscliente['Presupuestoscliente']['precio'] * ((float) str_replace('%', '', $presupuestoscliente['Tiposiva']['tipoiva']) / 100), 5, '.', '');
+        $presupuestoscliente['Presupuestoscliente']['precio_mat'] = redondear_dos_decimal($preciomateriales_total);
+        $presupuestoscliente['Presupuestoscliente']['precio_obra'] = redondear_dos_decimal($precioobra_total);
+        $presupuestoscliente['Presupuestoscliente']['precio'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_mat'] + $presupuestoscliente['Presupuestoscliente']['precio_obra'] + $otrosservicios_total);
+        $presupuestoscliente['Presupuestoscliente']['impuestos'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio'] * ($presupuestoscliente['Tiposiva']['porcentaje_aplicable'] / 100));
         $this->Presupuestoscliente->save($presupuestoscliente);
     }
 
     function beforeDelete() {
         $tarea = $this->findById($this->id);
         $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Tareaspresupuestocliente' => 'TareaspresupuestoclientesOtrosservicio'), 'conditions' => array('Presupuestoscliente.id' => $tarea['Tareaspresupuestocliente']['presupuestoscliente_id'])));
-        $presupuestoscliente['Presupuestoscliente']['precio_mat'] = number_format($presupuestoscliente['Presupuestoscliente']['precio_mat'] - $tarea['Tareaspresupuestocliente']['materiales'], 5, '.', '');
-        $presupuestoscliente['Presupuestoscliente']['precio_obra'] = number_format($presupuestoscliente['Presupuestoscliente']['precio_obra'] - $tarea['Tareaspresupuestocliente']['mano_de_obra'], 5, '.', '');
-        if (!empty($tarea['TareaspresupuestoclientesOtrosservicio']))
-            $presupuestoscliente['Presupuestoscliente']['precio'] = number_format($presupuestoscliente['Presupuestoscliente']['precio_mat'] + $presupuestoscliente['Presupuestoscliente']['precio_obra'] - $tarea['TareaspresupuestoclientesOtrosservicio']['total'], 5, '.', '');
+        $presupuestoscliente['Presupuestoscliente']['precio_mat'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_mat'] - $tarea['Tareaspresupuestocliente']['materiales']);
+        $presupuestoscliente['Presupuestoscliente']['precio_obra'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_obra'] - $tarea['Tareaspresupuestocliente']['mano_de_obra']);
+        $presupuestoscliente['Presupuestoscliente']['precio'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_mat'] + $presupuestoscliente['Presupuestoscliente']['precio_obra'] - $tarea['Tareaspresupuestocliente']['servicios']);
 
-        else
-            $presupuestoscliente['Presupuestoscliente']['precio'] = number_format($presupuestoscliente['Presupuestoscliente']['precio_mat'] + $presupuestoscliente['Presupuestoscliente']['precio_obra'], 5, '.', '');
-
-        $presupuestoscliente['Presupuestoscliente']['impuestos'] = number_format($presupuestoscliente['Presupuestoscliente']['precio'] * ((float) str_replace('%', '', $presupuestoscliente['Tiposiva']['tipoiva']) / 100), 5, '.', '');
+        $presupuestoscliente['Presupuestoscliente']['impuestos'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio'] * ($presupuestoscliente['Tiposiva']['porcentaje_aplicable'] / 100));
         $this->Presupuestoscliente->save($presupuestoscliente);
         return true;
     }

@@ -31,6 +31,24 @@
                     echo $this->Form->input('Presupuestoscliente.cliente_id', array('type' => 'hidden', 'value' => $cliente['Cliente']['id']));
                     ?>
                 </td>
+                <?php
+                if (!empty($presupuestosproveedore['Avisostallere']['Centrostrabajo'])) {
+                    $centrostrabajo = $presupuestosproveedore['Avisostallere']['Centrostrabajo'];
+                } elseif (!empty($presupuestosproveedore['Avisosrepuesto']['Centrostrabajo'])) {
+                    $centrostrabajo = $presupuestosproveedore['Avisosrepuesto']['Centrostrabajo'];
+                } elseif (!empty($presupuestosproveedore['Ordene']['Avisostallere']['Centrostrabajo'])) {
+                    $centrostrabajo = $presupuestosproveedore['Ordene']['Avisostallere']['Centrostrabajo'];
+                }
+                ?>
+                <?php if (isset($centrostrabajo)): ?>
+                    <td colspan="2"><span><?php __('Centro de Trabajo'); ?></span></td>
+                    <td colspan="2">
+                        <?php
+                        echo $this->Html->link($centrostrabajo['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $centrostrabajo['id']));
+                        echo $this->Form->input('Presupuestoscliente.centrostrabajo_id', array('type' => 'hidden', 'value' => $centrostrabajo['id']));
+                        ?>
+                    </td>
+                <?php endif; ?>
             </tr>
             <tr>
                 <td><h4><?php __('Nº Presupuesto Proveedor'); ?></h4></td>

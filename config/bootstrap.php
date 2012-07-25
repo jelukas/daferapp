@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is loaded automatically by the app/webroot/index.php file after the core bootstrap.php
  *
@@ -20,7 +21,6 @@
  * @since         CakePHP(tm) v 0.10.8.2117
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
  * This is related to Ticket #470 (https://trac.cakephp.org/ticket/470)
@@ -48,8 +48,11 @@
  * Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
  *
  */
+function redondear_dos_decimal($valor) {
+    $float_redondeado = round($valor * 100) / 100;
+    return $float_redondeado;
+}
 
-    setlocale(LC_ALL, 'es_ES.utf8');
-    date_default_timezone_set('Europe/Madrid');
-
+setlocale(LC_ALL, 'en_US.utf8');
+date_default_timezone_set('Europe/Madrid');
 ?>
