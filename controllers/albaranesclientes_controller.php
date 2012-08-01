@@ -50,6 +50,7 @@ class AlbaranesclientesController extends AppController {
                 } else {
                     $this->Albaranescliente->Tareasalbaranescliente->create();
                     $tareasalbaranescliente = array();
+                    $tareasalbaranescliente['Tareasalbaranescliente']['tipo'] = 'repuestos';
                     $tareasalbaranescliente['Tareasalbaranescliente']['asunto'] = 'Material de Venta';
                     $tareasalbaranescliente['Tareasalbaranescliente']['materiales'] = 0;
                     $tareasalbaranescliente['Tareasalbaranescliente']['mano_de_obra'] = 0;
@@ -69,10 +70,6 @@ class AlbaranesclientesController extends AppController {
                 $this->Session->setFlash(__('El Albarán de Venta no ha podido ser guardado. Por favor, prueba de nuevo.', true));
                 $this->redirect($this->referer());
             }
-        }
-        if (empty($vienede)) {
-            $this->flashWarnings(__('No  viene de Ningun sitio', true));
-            $this->redirect($this->referer());
         }
         $almacenes = $this->Albaranescliente->Almacene->find('list');
         $tiposivas = $this->Albaranescliente->Tiposiva->find('list');
@@ -94,7 +91,7 @@ class AlbaranesclientesController extends AppController {
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Invalid albaranescliente', true));
+            $this->flashWarnings(__('Invalid albaranescliente', true));
             $this->redirect(array('action' => 'index'));
         }
         if (!empty($this->data)) {
@@ -112,7 +109,7 @@ class AlbaranesclientesController extends AppController {
                 $this->Session->setFlash(__('The albaranescliente has been saved', true));
                 $this->redirect(array('action' => 'view', $id));
             } else {
-                $this->Session->setFlash(__('The albaranescliente could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('The albaranescliente could not be saved. Please, try again.', true));
             }
         }
         if (empty($this->data)) {
@@ -123,7 +120,7 @@ class AlbaranesclientesController extends AppController {
         $avisosrepuestos = $this->Albaranescliente->Avisosrepuesto->find('list');
         $pedidosclientes = $this->Albaranescliente->Pedidoscliente->find('list');
         $facturasClientes = $this->Albaranescliente->FacturasCliente->find('list');
-        $this->set(compact('avisosrepuestos', 'ordenes', 'pedidosclientes', 'facturasClientes', 'tiposivas','centrosdecostes'));
+        $this->set(compact('avisosrepuestos', 'pedidosclientes', 'facturasClientes', 'tiposivas','centrosdecostes'));
     }
 
     function delete($id = null) {

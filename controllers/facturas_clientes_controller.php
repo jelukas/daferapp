@@ -162,30 +162,17 @@ class FacturasClientesController extends AppController {
             $fecha_inicio = date('Y-m-d', strtotime($this->data['Filtro']['fecha_inicio']['year'] . '-' . $this->data['Filtro']['fecha_inicio']['month'] . '-' . $this->data['Filtro']['fecha_inicio']['day']));
             $fecha_fin = date('Y-m-d', strtotime($this->data['Filtro']['fecha_fin']['year'] . '-' . $this->data['Filtro']['fecha_fin']['month'] . '-' . $this->data['Filtro']['fecha_fin']['day']));
             if (!empty($this->data['Filtro']['todos'])) {
-                /* Obtenemos los alabranes de todos los clientes comprendidos en el rango de fecha
+                /* Obtenemos los albaranes de todos los clientes comprendidos en el rango de fecha
                  * y que se PUEDAN FACTURAR 
                  */
-                $albaranesreparacion_list = $this->FacturasCliente->Albaranesclientesreparacione->find(
-                        'all', array(
-                    'contain' => '',
-                    'conditions' => array(
-                        'Albaranesclientesreparacione.facturable' => 1,
-                        'Albaranesclientesreparacione.facturas_cliente_id' => null,
-                        'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
-                    )
-                        ));
-                 $albaranesrepuestos_list = $this->FacturasCliente->Albaranescliente->find(
-                        'all', array(
-                    'contain' => '',
-                    'conditions' => array(
-                        'Albaranescliente.facturable' => 1,
-                        'Albaranescliente.facturas_cliente_id' => null,
-                        'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
-                    )
-                        ));
-                 die(pr($albaranesrepuestos_list));
+                $cliente_list = $this->FacturasCliente->Cliente->find('all', array('contain' => ''));
+                foreach ($cliente_list as $indice => $cliente) {
+                    $this->FacturasCliente->Cliente->id = $cliente['Cliente']['id'];
+                    $albaranes_para_facturar = $this->FacturasCliente->Cliente->get_albaranesrepuestos_para_facturar($fecha_inicio, $fecha_fin);
+                    die(pr($albaranes_para_facturar));
+                }
             } elseif (!empty($this->data['Filtro']['Cliente'])) {
-                /* Obtenemos los alabranes de los clientes selecionados comprendidos en el rango de fecha
+                /* Obtenemos los albaranes de los clientes selecionados comprendidos en el rango de fecha
                  * y que se PUEDAN FACTURAR 
                  */
             }

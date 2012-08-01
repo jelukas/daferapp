@@ -19,19 +19,19 @@
                 <td><?php echo $this->Form->input('comerciale_id', array('label' => false)); ?></td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="4">
                     <?php echo $this->Autocomplete->replace_select('Cliente', null, true, null); ?>
+                    <?php
+                    echo $ajax->observeField('PresupuestosclienteClienteId', array(
+                        'frequency' => '1',
+                        'update' => 'CentrostrabajoSelectDiv',
+                        'url' => array(
+                            'controller' => 'centrostrabajos',
+                            'action' => 'selectPresupuestoscliente'
+                            ))
+                    );
+                    ?>
                 </td>
-                <?php
-                echo $ajax->observeField('PresupuestosclienteClienteId', array(
-                    'frequency' => '1',
-                    'update' => 'CentrostrabajoSelectDiv',
-                    'url' => array(
-                        'controller' => 'centrostrabajos',
-                        'action' => 'selectPresupuestoscliente'
-                        ))
-                );
-                ?>
                 <td colspan="3">
                     <?php
                     echo $this->Form->input('centrostrabajo_id', array(
@@ -40,7 +40,7 @@
                             'id' => 'CentrostrabajoSelectDiv'
                         ),
                         'empty' => '--- Seleccione un centro de trabajo ---'));
-                     echo $ajax->observeField('PresupuestosclienteCentrostrabajoId', array(
+                    echo $ajax->observeField('PresupuestosclienteCentrostrabajoId', array(
                         'frequency' => '1',
                         'update' => 'MaquinaSelectDiv',
                         'url' => array(
@@ -50,7 +50,7 @@
                     );
                     ?>
                 </td>
-                <td colspan="2">
+                <td colspan="3">
                     <?php
                     echo $this->Form->input('maquina_id', array(
                         'label' => 'Máquina',

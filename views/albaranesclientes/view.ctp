@@ -20,10 +20,10 @@
             <td><?php echo $albaranescliente['Cliente']['nombre']; ?></td>
             <td><span><?php __('Centro de Trabajo') ?> </span></td>
             <td><?php echo $albaranescliente['Centrostrabajo']['centrotrabajo']; ?></td>
+            <td><span><?php __('Maquina') ?> </span></td>
+            <td><?php echo $albaranescliente['Maquina']['nombre']; ?></td>
             <td><span><?php __('Pedido de cliente'); ?></span></td>
             <td><?php echo $this->Html->link($albaranescliente['Pedidoscliente']['numero'], array('controller' => 'pedidosclientes', 'action' => 'view', $albaranescliente['Pedidoscliente']['id'])); ?></td>
-            <td><span><?php __('Facturable'); ?></span></td>
-            <td><?php echo $albaranescliente['Albaranescliente']['facturable'] == 0 ? 'No' : 'Sí' ?></td>
         </tr>
         <tr>
             <?php if (!empty($albaranescliente['Albaranescliente']['avisosrepuesto_id'])): ?>
@@ -52,6 +52,8 @@
             <td><?php echo $albaranescliente['Centrosdecoste']['denominacion'] ?></td>
             <td><span><?php __('Tipo de IVA Aplicado') ?></span></td>
             <td><?php echo $albaranescliente['Tiposiva']['tipoiva'] ?></td>
+            <td><span><?php __('Facturable'); ?></span></td>
+            <td><?php echo $albaranescliente['Albaranescliente']['facturable'] == 0 ? 'No' : 'Sí' ?></td>
         </tr>
     </table>
     <div class="related">

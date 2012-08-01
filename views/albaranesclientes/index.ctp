@@ -1,5 +1,9 @@
 <div class="albaranesclientes">
-    <h2><?php __('Albaranes a Clientes'); ?></h2>
+    <h2>
+        <?php __('Albaranes a Clientes'); ?>
+        <?php echo $this->Html->link(__('Nuevo Albarán Directo', true), array('action' => 'add'), array('class' => 'button_link')); ?> 
+
+    </h2>
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Paginator->sort('numero'); ?></th>
