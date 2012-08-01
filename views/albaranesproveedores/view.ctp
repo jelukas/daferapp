@@ -61,6 +61,7 @@
                 <tr>
                     <th><?php __('Ref'); ?></th>
                     <th><?php __('Nombre'); ?></th>
+                    <th><?php __('Tarea de la Orden'); ?></th>
                     <th><?php __('Cantidad'); ?></th>
                     <th><?php __('Precio Proveedor €'); ?></th>
                     <th><?php __('Descuento %'); ?></th>
@@ -80,6 +81,7 @@
                         <tr<?php echo $class; ?>>
                             <td><?php echo $articulo_albaranesproveedore['Articulo']['ref']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['Articulo']['nombre']; ?></td>
+                            <td><?php echo $articulo_albaranesproveedore['Tarea']['descripcion']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['descuento']; ?></td>
@@ -100,6 +102,9 @@
     <div class="actions">
         <ul>   
             <li><?php echo $this->Html->link(__('Nueva Devolución', true), array('controller' => 'pedidosproveedores', 'action' => 'devolucion', $albaranesproveedore['Albaranesproveedore']['id'], $presupuestosproveedore['Presupuestosproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
+            <?php if (!empty($presupuestosproveedore['Presupuestosproveedore']['ordene_id'])): ?>
+                <li><?php echo $this->Html->link(__('Imputar a Orden', true), array('controller' => 'ordenes', 'action' => 'imputar_albaranproveedor', $albaranesproveedore['Albaranesproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
+            <?php endif; ?>
         </ul>
     </div>
     <div style="clear: both">

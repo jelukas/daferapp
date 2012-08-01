@@ -15,20 +15,24 @@ class TareaspedidosclientesOtrosservicio extends AppModel {
             'order' => ''
         )
     );
+    var $virtualFields = array(
+        'total_desplazamiento' => 'TareaspedidosclientesOtrosservicio.desplazamiento + TareaspedidosclientesOtrosservicio.manoobradesplazamiento + TareaspedidosclientesOtrosservicio.kilometraje'
+    );
 
-       function afterSave($created) {
+    function afterSave($created) {
         $tarea = $this->Tareaspedidoscliente->find('first', array('contain' => 'TareaspedidosclientesOtrosservicio', 'conditions' => array('Tareaspedidoscliente.id' => $this->data['TareaspedidosclientesOtrosservicio']['tareaspedidoscliente_id'])));
-        $tarea['Tareaspedidoscliente']['servicios'] = number_format($tarea['TareaspedidosclientesOtrosservicio']['total'], 5, '.', '');
+        $tarea['Tareaspedidoscliente']['servicios'] = redondear_dos_decimal($tarea['TareaspedidosclientesOtrosservicio']['total']);
         $this->Tareaspedidoscliente->save($tarea);
     }
 
     function beforeDelete() {
-        $servicio =  $this->findById($this->id);
+        $servicio = $this->findById($this->id);
         $tarea = $this->Tareaspedidoscliente->find('first', array('contain' => 'TareaspedidosclientesOtrosservicio', 'conditions' => array('Tareaspedidoscliente.id' => $servicio['TareaspedidosclientesOtrosservicio']['tareaspedidoscliente_id'])));
-        $tarea['Tareaspedidoscliente']['servicios'] = number_format($tarea['Tareaspedidoscliente']['servicios']-$servicio['TareaspedidosclientesOtrosservicio']['total'], 5, '.', '');
+        $tarea['Tareaspedidoscliente']['servicios'] = redondear_dos_decimal($tarea['Tareaspedidoscliente']['servicios'] - $servicio['TareaspedidosclientesOtrosservicio']['total']);
         $this->Tareaspedidoscliente->save($tarea);
         return true;
     }
+
 }
 
 ?>

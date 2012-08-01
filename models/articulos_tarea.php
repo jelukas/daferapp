@@ -48,7 +48,6 @@ class ArticulosTarea extends AppModel {
             /* Estmaos creando */
             $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosTarea']['articulo_id'])));
             $this->Articulo->id = $this->data['ArticulosTarea']['articulo_id'];
-            $cantidad = $this->data['ArticulosTarea']['cantidad'] - $articulo['Articulo']['cantidad'];
             $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] - $this->data['ArticulosTarea']['cantidad']);
         }
         return true;

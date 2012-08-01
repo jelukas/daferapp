@@ -3,13 +3,19 @@
     <fieldset>
         <legend><?php __('Nuevo Albaran de Cliente proveniente del Pedido de Cliente ' . $pedidoscliente['Pedidoscliente']['id']); ?></legend>
         <?php
-        echo "<h3>Cliente: ".$pedidoscliente['Presupuestoscliente']['Cliente']['nombre'].'</h3>';
+        echo "<h3>Cliente: " . $pedidoscliente['Presupuestoscliente']['Cliente']['nombre'] . '</h3>';
+        if (!empty($pedidoscliente['Presupuestoscliente']['Centrostrabajo']['centrotrabajo']))
+            echo "<h3>Centros de Trabajo: " . $pedidoscliente['Presupuestoscliente']['Centrostrabajo']['centrotrabajo'] . '</h3>';
+        if (!empty($pedidoscliente['Presupuestoscliente']['Maquina']['nombre']))
+            echo "<h3>Máquina: " . $pedidoscliente['Presupuestoscliente']['Maquina']['nombre'] . '</h3>';
         echo $this->Form->input('fecha');
-        echo $this->Form->input('numeroalbaran');
+        echo $this->Form->input('numero',array('value' => $numero));
         echo $this->Form->input('observaciones');
         echo $this->Form->input('file', array('type' => 'file', 'label' => 'Albaran Escaneado'));
         echo $this->Form->input('pedidoscliente_id', array('type' => 'hidden', 'value' => $pedidoscliente['Pedidoscliente']['id']));
         echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $pedidoscliente['Presupuestoscliente']['cliente_id']));
+        echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden', 'value' => $pedidoscliente['Presupuestoscliente']['centrostrabajo_id']));
+        echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $pedidoscliente['Presupuestoscliente']['maquina_id']));
         echo $this->Form->input('tiposiva_id');
         echo $this->Form->input('facturable');
         ?>

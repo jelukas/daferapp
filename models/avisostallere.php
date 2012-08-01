@@ -3,6 +3,7 @@
 class Avisostallere extends AppModel {
 
     var $name = 'Avisostallere';
+    var $order = "Avisostallere.numero DESC";
     var $belongsTo = array(
         'Cliente' => array(
             'className' => 'Cliente',

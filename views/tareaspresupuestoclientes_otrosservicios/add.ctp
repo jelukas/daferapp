@@ -60,6 +60,9 @@
         <tr>
             <td><span>Otros Servicios</span></td>
             <td><?php echo $this->Form->input('varios', array('label' => false, 'default' => 0)); ?></td>
+            <td colspan="2" rowspan="2">
+                <?php echo $this->Form->input('varios_descripcion', array('label' => 'Otros Servicios Descripción')); ?>
+            </td>
         </tr>
         <tr>
             <td><span>Total</span></td>

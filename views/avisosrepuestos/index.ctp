@@ -10,13 +10,13 @@
     </div>
     <table cellpadding="0" cellspacing="0">
         <tr>
-            <th><?php echo $this->Paginator->sort('Numero'); ?></th>
+            <th><?php echo $this->Paginator->sort('Numero','numero'); ?></th>
             <th><?php echo $this->Paginator->sort('Fecha'); ?></th>
-            <th><?php echo $this->Paginator->sort('Cliente'); ?></th>
-            <th><?php echo $this->Paginator->sort('Centro de trabajo'); ?></th>
-            <th><?php echo $this->Paginator->sort('Máquina'); ?></th>
+            <th><?php echo $this->Paginator->sort('Cliente','cliente_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Centro de trabajo','centrostrabajo_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Máquina','maquina_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Descripción'); ?></th>
-            <th><?php echo $this->Paginator->sort('Estado'); ?></th>
+            <th><?php echo $this->Paginator->sort('Estado','estado_id'); ?></th>
             <th class="actions"><?php __('Acciones'); ?></th>
         </tr>
         <?php

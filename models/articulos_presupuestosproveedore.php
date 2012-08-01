@@ -25,7 +25,11 @@ class ArticulosPresupuestosproveedore extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
-        )
+        ),
+        'Tarea' => array(
+            'className' => 'Tarea',
+            'foreignKey' => 'tarea_id',
+        ),
     );
 
 }

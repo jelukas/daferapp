@@ -7,7 +7,6 @@
             <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $this->Form->value('FacturasCliente.id')), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('FacturasCliente.id'))); ?>
         </legend>
         <?php
-        echo $this->Form->input('id');
         echo $this->Form->input('numero', array('label' => 'Numero','readonly'=>true));
         echo $this->Form->input('fecha', array('label' => 'Fecha'));
         echo $this->Form->input('cobrado', array('label' => 'Fecha de Cobro'));

@@ -4,7 +4,6 @@ class Tareaspresupuestocliente extends AppModel {
 
     var $name = 'Tareaspresupuestocliente';
     var $displayField = 'asunto';
-    //The Associations below have been created with all possible keys, those that are not needed can be removed
 
     var $belongsTo = array(
         'Presupuestoscliente' => array(
@@ -46,11 +45,10 @@ class Tareaspresupuestocliente extends AppModel {
 
     function beforeDelete() {
         $tarea = $this->findById($this->id);
-        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Tareaspresupuestocliente' => 'TareaspresupuestoclientesOtrosservicio'), 'conditions' => array('Presupuestoscliente.id' => $tarea['Tareaspresupuestocliente']['presupuestoscliente_id'])));
+        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Tareaspresupuestocliente' => 'TareaspresupuestoclientesOtrosservicio','Tiposiva'), 'conditions' => array('Presupuestoscliente.id' => $tarea['Tareaspresupuestocliente']['presupuestoscliente_id'])));
         $presupuestoscliente['Presupuestoscliente']['precio_mat'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_mat'] - $tarea['Tareaspresupuestocliente']['materiales']);
         $presupuestoscliente['Presupuestoscliente']['precio_obra'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_obra'] - $tarea['Tareaspresupuestocliente']['mano_de_obra']);
         $presupuestoscliente['Presupuestoscliente']['precio'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio_mat'] + $presupuestoscliente['Presupuestoscliente']['precio_obra'] - $tarea['Tareaspresupuestocliente']['servicios']);
-
         $presupuestoscliente['Presupuestoscliente']['impuestos'] = redondear_dos_decimal($presupuestoscliente['Presupuestoscliente']['precio'] * ($presupuestoscliente['Tiposiva']['porcentaje_aplicable'] / 100));
         $this->Presupuestoscliente->save($presupuestoscliente);
         return true;

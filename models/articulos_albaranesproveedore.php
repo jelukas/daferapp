@@ -53,7 +53,11 @@ class ArticulosAlbaranesproveedore extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
-        )
+        ),
+        'Tarea' => array(
+            'className' => 'Tarea',
+            'foreignKey' => 'tarea_id',
+        ),
     );
 
     function beforeSave($options) {

@@ -20,46 +20,46 @@
             <td><h4><?php __('Nº Presupuesto de Cliente'); ?></h4></td>
             <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['presupuestoscliente_id'], array('controller' => 'presupuestosclientes', 'action' => 'view', $pedidoscliente['Presupuestoscliente']['id'])); ?></td>
         </tr>
-        <?php if (!empty($pedidoscliente['Presupuestoscliente']['ordene_id'])): ?>
+        <?php if (!empty($pedidoscliente['Pedidoscliente']['ordene_id'])): ?>
             <tr>
                 <td><h4><?php __('Nº Orden'); ?></h4></td>
-                <td><?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $pedidoscliente['Presupuestoscliente']['Ordene']['id'])); ?></td>
+                <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $pedidoscliente['Pedidoscliente']['Ordene']['id'])); ?></td>
                 <td><span><?php __('Centro de Trabajo'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
                 <td><span><?php __('Máquina'); ?></span></td>
-                <td><?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['Ordene']['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view',$pedidoscliente['Presupuestoscliente']['Ordene']['Avisostallere']['Maquina']['id'])); ?></td>
+                <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['Ordene']['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $pedidoscliente['Pedidoscliente']['Ordene']['Avisostallere']['Maquina']['id'])); ?></td>
                 <td><span><?php __('Nº Serie Máquina'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Ordene']['Avisostallere']['Maquina']['serie_maquina']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Ordene']['Avisostallere']['Maquina']['serie_maquina']; ?></td>
                 <td><span><?php __('Horas'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Ordene']['Avisostallere']['horas_maquina']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Ordene']['Avisostallere']['horas_maquina']; ?></td>
             </tr>
         <?php endif; ?>
-        <?php if (!empty($pedidoscliente['Presupuestoscliente']['avisostallere_id'])): ?>
+        <?php if (!empty($pedidoscliente['Pedidoscliente']['avisostallere_id'])): ?>
             <tr>
                 <td><h4><?php __('Aviso de Taller'); ?></h4></td>
-                <td><?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $pedidoscliente['Presupuestoscliente']['Avisostallere']['id'])); ?></td>
+                <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $pedidoscliente['Pedidoscliente']['Avisostallere']['id'])); ?></td>
                 <td><span><?php __('Centro de Trabajo'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
                 <td><span><?php __('Máquina'); ?></span></td>
-                <td><?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view',$pedidoscliente['Presupuestoscliente']['Avisostallere']['Maquina']['id'])); ?></td>
+                <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $pedidoscliente['Pedidoscliente']['Avisostallere']['Maquina']['id'])); ?></td>
                 <td><span><?php __('Nº Serie Máquina'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Avisostallere']['Maquina']['serie_maquina']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Avisostallere']['Maquina']['serie_maquina']; ?></td>
                 <td><span><?php __('Horas'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Avisostallere']['horas_maquina']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Avisostallere']['horas_maquina']; ?></td>
             </tr>
         <?php endif; ?>
-        <?php if (!empty($pedidoscliente['Presupuestoscliente']['avisosrepuesto_id'])): ?>
+        <?php if (!empty($pedidoscliente['Pedidoscliente']['avisosrepuesto_id'])): ?>
             <tr>
                 <td><h4><?php __('Aviso de Repuestos'); ?></h4></td>
-                <td><?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['numero'], array('controller' => 'avisosrepuestos', 'action' => 'view', $pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['id'])); ?></td>
+                <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['Avisosrepuesto']['numero'], array('controller' => 'avisosrepuestos', 'action' => 'view', $pedidoscliente['Pedidoscliente']['Avisosrepuesto']['id'])); ?></td>
                 <td><span><?php __('Centro de Trabajo'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Avisosrepuesto']['Centrostrabajo']['centrotrabajo']; ?></td>
                 <td><span><?php __('Máquina'); ?></span></td>
-                <td><?php echo $this->Html->link($pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view',$pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['Maquina']['id'])); ?></td>
+                <td><?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['Avisosrepuesto']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $pedidoscliente['Pedidoscliente']['Avisosrepuesto']['Maquina']['id'])); ?></td>
                 <td><span><?php __('Nº Serie Máquina'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['Maquina']['serie_maquina']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Avisosrepuesto']['Maquina']['serie_maquina']; ?></td>
                 <td><span><?php __('Horas'); ?></span></td>
-                <td><?php echo $pedidoscliente['Presupuestoscliente']['Avisosrepuesto']['horas_maquina']; ?></td>
+                <td><?php echo $pedidoscliente['Pedidoscliente']['Avisosrepuesto']['horas_maquina']; ?></td>
             </tr>
         <?php endif; ?>
         <tr>
@@ -89,15 +89,26 @@
                 <li><?php echo $this->Html->link(__('+ Tarea', true), array('controller' => 'tareaspedidosclientes', 'action' => 'add', $pedidoscliente['Pedidoscliente']['id']), array('class' => 'popup')); ?></li>
             </ul>
         </div>
+
         <table style="background-color: #FFE6CC;">
-            <thead><th>Asunto</th><th>Acciones</th></thead>
+            <thead><th>Tipo</th><th>Asunto</th><th>Acciones</th></thead>
             <?php foreach ($pedidoscliente['Tareaspedidoscliente'] as $indice => $tarea): ?>
                 <tr>
+                    <td style="background-color: #FFE6CC"><?php echo $tarea['tipo'] ?></td>                  
                     <td style="background-color: #FFE6CC">Tarea <?php echo $indice + 1 ?> - <?php echo $tarea['asunto'] ?></td>                  
-                    <td class="actions"  style="background-color: #FFE6CC"><?php echo $this->Html->link(__('+ Material', true), array('controller' => 'materiales_tareaspedidosclientes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?><?php echo $this->Html->link(__('+ Mano de Obra', true), array('controller' => 'manodeobras_tareaspedidosclientes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?><?php if (empty($tarea['TareaspedidosclientesOtrosservicio'])): ?><?php echo $this->Html->link(__('+ Otros Servicios', true), array('controller' => 'tareaspedidosclientes_otrosservicios', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?><?php endif; ?><?php echo $this->Html->link(__('Ver', true), array('controller' => 'tareaspedidosclientes', 'action' => 'view', $tarea['id'])); ?><?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareaspedidosclientes', 'action' => 'edit', $tarea['id'])); ?><?php echo $this->Html->link(__('Borrar', true), array('controller' => 'tareaspedidosclientes', 'action' => 'delete', $tarea['id'])); ?></td>
+                    <td class="actions"  style="background-color: #FFE6CC">
+                        <?php echo $this->Html->link(__('+ Material', true), array('controller' => 'materiales_tareaspedidosclientes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                        <?php if ($tarea['tipo'] != 'repuestos'): ?>
+                            <?php echo $this->Html->link(__('+ Mano de Obra', true), array('controller' => 'manodeobras_tareaspedidosclientes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                        <?php endif; ?>
+                        <?php if (empty($tarea['TareaspedidosclientesOtrosservicio'])): ?>
+                            <?php echo $this->Html->link(__('+ Otros Conceptos', true), array('controller' => 'tareaspedidosclientes_otrosservicios', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
+                        <?php endif; ?>
+                        <?php echo $this->Html->link(__('Borrar', true), array('controller' => 'tareaspedidosclientes', 'action' => 'delete', $tarea['id'])); ?>
+                    </td>
                 </tr>
                 <tr class="tarea-relations">
-                    <td colspan="4">
+                    <td colspan="5">
                         <?php if (!empty($tarea['ManodeobrasTareaspedidoscliente'])): ?>
                             <h4>Mano de Obra</h4>
                             <table>
@@ -110,60 +121,62 @@
                             <p style="background-color: #fff; text-align: right;"><?php echo $tarea['mano_de_obra'] ?> &euro;</p>
                         <?php endif; ?>
                         <?php if (!empty($tarea['TareaspedidosclientesOtrosservicio'])): ?>
-                            <h4>Otros Servicios</h4>
+                            <h4>Otros Conceptos</h4>
                             <table>
-                                <tr><th>Desplazamiento</th><th>M.O.D</th><th>Km</th><th>Dietas</th><th>Varios</th><th>Total</th><th>Acciones</th></tr>
+                                <tr><th colspan="4">Desplazamiento</th></tr>
+                                <tr><th>Precio Fijo Desplazamiento</th><th>Precio Desplazamiento de Mano de Obra</th><th>Precio Kilometraje</th><th>Total Desplazamiento</th><th>Dietas</th><th>Varios</th><th>Varios Descripción</th><th>Total</th><th>Acciones</th></tr>
                                 <?php if (!empty($tarea['TareaspedidosclientesOtrosservicio'])): ?>
                                     <tr>
                                         <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['desplazamiento'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['manoobradesplazamiento'] ?> &euro;</td>
-                                        <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['kilometraje'] ?> Km.</td>
-                                        <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['dietas'] ?></td>
+                                        <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['kilometraje'] ?> &euro;</td>
+                                        <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['total_desplazamiento'] ?> &euro;</td>
+                                        <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['dietas'] ?> &euro;</td>
                                         <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['varios'] ?> &euro;</td>
+                                        <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['varios_descripcion'] ?></td>
                                         <td><?php echo $tarea['TareaspedidosclientesOtrosservicio']['total'] ?> &euro;</td>
-                                        <td class="actions"><?php echo $this->Html->link('Eliminar', array('controller' => 'tareaspedidosclientes_otrosservicios', 'action' => 'delete', $tarea['TareaspedidosclientesOtrosservicio']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tarea['TareaspedidosclientesOtrosservicio']['id'])) ?></td>
+                                        <td class="actions"><?php echo $this->Html->link('Eliminar', array('controller' => 'tareaspedidosclientes_otrosservicios', 'action' => 'delete', $tarea['TareaspedidosclientesOtrosservicio']['id']), null, sprintf(__('Seguro que quieres eliminar los otros conceptos?', true), $tarea['TareaspedidosclientesOtrosservicio']['id'])) ?></td>
                                     </tr>
                                 <?php endif; ?>
                             </table>
-
-                            <p style="background-color: #fff; text-align: right;font-weight: bold;">Otros Servicios</p>
+                            <p style="background-color: #fff; text-align: right;font-weight: bold;">Otros Conceptos</p>
                             <p style="background-color: #fff; text-align: right;"><?php echo!empty($tarea['TareaspedidosclientesOtrosservicio']['total']) ? $tarea['TareaspedidosclientesOtrosservicio']['total'] : 0 ?> &euro;</p>
-
                         <?php endif; ?>
-                        <h4>MaterialesTareaspedidosclientes</h4>
-                        <div id="ajax_message"></div>
-                        <table>
-                            <tr>
-                                <th>Articulo</th>
-                                <th>Cantidad</th>
-                                <th>Precio Ud.</th>
-                                <th>Descuento</th>
-                                <th>Importe</th>
-                                <th>Acciones</th>
-                            </tr>
-                            <?php foreach ($tarea['MaterialesTareaspedidoscliente'] as $materiale): ?>
+                        <?php if (!empty($tarea['MaterialesTareaspedidoscliente'])): ?>
+                            <h4>Materiales</h4>
+                            <div id="ajax_message"></div>
+                            <table>
                                 <tr>
-                                    <td><?php echo $materiale['Articulo']['nombre'] ?></td>
-                                    <td><?php echo $materiale['cantidad'] ?></td>
-                                    <td><?php echo $materiale['precio_unidad'] ?></td>
-                                    <td><?php echo $materiale['descuento'] ?> %</td>
-                                    <td><?php echo $materiale['importe'] ?></td>
-                                    <td class="actions"><?php echo $this->Html->link('Eliminar', array('controller' => 'materiales_tareaspedidosclientes', 'action' => 'delete', $materiale['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $materiale['id'])) ?></td>
+                                    <th>Articulo</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Ud.</th>
+                                    <th>Descuento</th>
+                                    <th>Importe</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </table>
-                        <p style="background-color: #fff; text-align: right;font-weight: bold;">Total de MaterialesTareaspedidosclientes</p>
-                        <p style="background-color: #fff; text-align: right;"><?php echo $tarea['materiales'] ?> &euro;</p>                        
+                                <?php foreach ($tarea['MaterialesTareaspedidoscliente'] as $materiale): ?>
+                                    <tr>
+                                        <td><?php echo $materiale['Articulo']['nombre'] ?></td>
+                                        <td><?php echo $materiale['cantidad'] ?></td>
+                                        <td><?php echo $materiale['precio_unidad'] ?></td>
+                                        <td><?php echo $materiale['descuento'] ?> %</td>
+                                        <td><?php echo $materiale['importe'] ?></td>
+                                        <td class="actions"><?php echo $this->Html->link('Eliminar', array('controller' => 'materiales_tareaspedidosclientes', 'action' => 'delete', $materiale['id']), null, sprintf(__('Seguro que quieres borrar el material?', true), $materiale['id'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                            <p style="background-color: #fff; text-align: right;font-weight: bold;">Total de Materiales</p>
+                            <p style="background-color: #fff; text-align: right;"><?php echo $tarea['materiales'] ?> &euro;</p>                        
+                        <?php endif; ?>
                         <p style="background-color: #FFE6CC; text-align: right;font-weight: bold;font-size: 15px;">Total Tarea</p>
                         <p style="background-color: #FFE6CC; text-align: right;"><?php echo $tarea['total']; ?> &euro;</p>
                     </td>
                 </tr>
             <?php endforeach; ?>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <table style="font-size: 16px; font-weight: bold;text-align: right;">
                         <tr>
-                            <td>Total Mano de Obra y Servicios</td>
+                            <td>Total Mano de Obra y Otros Conceptos</td>
                             <td><?php echo $totalmanoobrayservicios; ?> &euro;</td>
                             <td>Total Repuestos</td>
                             <td><?php echo $totalrepuestos; ?> &euro;</td>
@@ -180,12 +193,11 @@
                 </td>
             </tr>
         </table>
+
         <div class="actions">
             <ul>
-                <?php if (!empty($pedidoscliente['Presupuestoscliente']['avisosrepuesto_id']) || !empty($pedidoscliente['Presupuestoscliente']['Presupuestosproveedore']['avisosrepuesto_id'])): ?>
                     <li><?php echo $this->Html->link(__('Nuevo Albaran de Venta', true), array('controller' => 'albaranesclientes', 'action' => 'add', 'pedidoscliente', $pedidoscliente['Pedidoscliente']['id'])); ?></li>
-                <?php endif; ?>
-                <li><?php echo $this->Html->link(__('Imputar a Orden', true), array('controller' => 'ordenes', 'action' => 'imputar', $pedidoscliente['Pedidoscliente']['id'])); ?></li>
+                    <li><?php echo $this->Html->link(__('Imputar a Orden', true), array('controller' => 'ordenes', 'action' => 'imputar', $pedidoscliente['Pedidoscliente']['id'])); ?></li>
             </ul>
         </div>
     </div>

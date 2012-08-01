@@ -4,11 +4,6 @@
 $i = 0;
 $class = ' class="altrow"';
 ?>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $facturasCliente['FacturasCliente']['id']; ?>
-            &nbsp;
-        </dd>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Numero'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
             <?php echo $facturasCliente['FacturasCliente']['numero']; ?>
@@ -50,13 +45,11 @@ $class = ' class="altrow"';
         <legend>Albaranes en esta Factura</legend>
         <table>
             <tr>
-                <th><?php echo __('id'); ?></th>
+                <th><?php echo __('numero'); ?></th>
                 <th><?php echo __('fecha'); ?></th>
-                <th><?php echo __('numeroalbaran'); ?></th>
                 <th><?php echo __('observaciones'); ?></th>
                 <th><?php echo __('albaranescaneado'); ?></th>
                 <th><?php echo __('avisosrepuesto_id'); ?></th>
-                <th><?php echo __('ordene_id'); ?></th>
                 <th><?php echo __('pedidoscliente_id'); ?></th>
                 <th><?php echo __('Precio'); ?></th>
                 <th><?php echo __('Quitar de la Factura'); ?></th>
@@ -70,13 +63,11 @@ $class = ' class="altrow"';
                 }
                 ?>
                 <tr<?php echo $class; ?>>
-                    <td><?php echo $this->Html->link($albaranescliente['id'], array('controller' => 'albaranesclientes', 'action' => 'view', $albaranescliente['id'])); ?>&nbsp;</td>
+                    <td><?php echo $this->Html->link($albaranescliente['numero'], array('controller' => 'albaranesclientes', 'action' => 'view', $albaranescliente['id'])); ?>&nbsp;</td>
                     <td><?php echo $this->Html->link($albaranescliente['fecha'], array('controller' => 'albaranesclientes', 'action' => 'view', $albaranescliente['id'])); ?>&nbsp;</td>
-                    <td><?php echo $this->Html->link($albaranescliente['numeroalbaran'], array('controller' => 'albaranesclientes', 'action' => 'view', $albaranescliente['id'])); ?>&nbsp;</td>
                     <td><?php echo $albaranescliente['observaciones']; ?>&nbsp;</td>
                     <td><?php echo $albaranescliente['albaranescaneado']; ?>&nbsp;</td>
                     <td><?php echo $this->Html->link($albaranescliente['avisosrepuesto_id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $albaranescliente['avisosrepuesto_id'])); ?></td>
-                    <td><?php echo $this->Html->link($albaranescliente['ordene_id'], array('controller' => 'ordenes', 'action' => 'view', $albaranescliente['ordene_id'])); ?></td>
                     <td><?php echo $this->Html->link($albaranescliente['pedidoscliente_id'], array('controller' => 'pedidosclientes', 'action' => 'view', $albaranescliente['pedidoscliente_id'])); ?></td>
                     <td><?php echo $albaranescliente['precio']; ?>&nbsp;</td>
                     <td class="actions"><?php echo $this->Html->link('Quitar', array('controller' => 'facturas_clientes', 'action' => 'quitar_albaran', $albaranescliente['id'])); ?></td>

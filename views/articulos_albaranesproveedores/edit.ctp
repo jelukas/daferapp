@@ -6,6 +6,7 @@
 		echo $this->Form->input('articulo',array('type'=>'text','disabled'=>true,'value'=>$articulo['Articulo']['ref'].' ---- '.$articulo['Articulo']['nombre']));
 		echo $this->Form->input('articulo_id',array('type'=>'hidden'));
 		echo $this->Form->input('albaranesproveedore_id', array('type' => 'hidden'));
+                echo $this->Form->input('tarea_id',array('empty' =>'-- Seleciona la Tarea de la Orden --'));
 		echo $this->Form->input('cantidad');
 		echo $this->Form->input('precio_proveedor');
 		echo $this->Form->input('descuento');

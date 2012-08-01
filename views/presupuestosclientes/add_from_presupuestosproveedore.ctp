@@ -2,7 +2,7 @@
     <?php echo $this->Form->create('Presupuestoscliente'); ?>
     <fieldset>
         <legend>
-            <?php __('Nuevo Presupuesto a Cliente desde el Aviso de Repuestos '); ?>
+            <?php __('Nuevo Presupuesto a Cliente desde el Presupuesto de Proveedor '); ?>
             <?php echo $this->Html->link(__('Listar Presupuestos a clientes', true), array('action' => 'index'), array('class' => 'button_link')); ?>
         </legend>
         <table class="edit">
@@ -41,11 +41,29 @@
                 }
                 ?>
                 <?php if (isset($centrostrabajo)): ?>
-                    <td colspan="2"><span><?php __('Centro de Trabajo'); ?></span></td>
-                    <td colspan="2">
+                    <td><span><?php __('Centro de Trabajo'); ?></span></td>
+                    <td>
                         <?php
                         echo $this->Html->link($centrostrabajo['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $centrostrabajo['id']));
                         echo $this->Form->input('Presupuestoscliente.centrostrabajo_id', array('type' => 'hidden', 'value' => $centrostrabajo['id']));
+                        ?>
+                    </td>
+                <?php endif; ?>
+                <?php
+                if (!empty($presupuestosproveedore['Avisostallere']['Maquina'])) {
+                    $maquina = $presupuestosproveedore['Avisostallere']['Maquina'];
+                } elseif (!empty($presupuestosproveedore['Avisosrepuesto']['Maquina'])) {
+                    $maquina = $presupuestosproveedore['Avisosrepuesto']['Maquina'];
+                } elseif (!empty($presupuestosproveedore['Ordene']['Avisostallere']['Maquina'])) {
+                    $maquina = $presupuestosproveedore['Ordene']['Avisostallere']['Maquina'];
+                }
+                ?>
+                <?php if (isset($maquina)): ?>
+                    <td><span><?php __('Maquina'); ?></span></td>
+                    <td>
+                        <?php
+                        echo $this->Html->link($maquina['nombre'], array('controller' => 'maquinas', 'action' => 'view', $maquina['id']));
+                        echo $this->Form->input('Presupuestoscliente.maquina_id', array('type' => 'hidden', 'value' => $maquina['id']));
                         ?>
                     </td>
                 <?php endif; ?>

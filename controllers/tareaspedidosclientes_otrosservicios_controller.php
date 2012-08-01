@@ -21,38 +21,17 @@ class TareaspedidosclientesOtrosserviciosController extends AppController {
         if (!empty($this->data)) {
             $this->TareaspedidosclientesOtrosservicio->create();
             if ($this->TareaspedidosclientesOtrosservicio->save($this->data)) {
-                $this->Session->setFlash(__('Los Servicios para la tarea del Pedido de Venta han sido guardados', true));
+                $this->Session->setFlash(__('Se han guardado correctamente otros conceptos', true));
                 $this->redirect($this->referer());
             } else {
-                $this->flashWarnings(__('Los Servicios para la tarea del Pedido de Venta No han sido guardados. Por favor, prueba de nuevo.', true));
+                $this->flashWarnings(__('No se han podido guardar correctamente otros conceptos', true));
             }
         }
-        $tarea = $this->TareaspedidosclientesOtrosservicio->Tareaspedidoscliente->find('first', array('contain' => array('Pedidoscliente' => array('Presupuestoscliente' => array('Avisosrepuesto' => 'Centrostrabajo', 'Ordene' => array('Avisostallere' => 'Centrostrabajo'), 'Avisostallere' => 'Centrostrabajo'))), 'conditions' => array('Tareaspedidoscliente.id' => $tarea_id)));
-        $otrosservicios = array();
-                debug($tarea);
-
-        $otrosservicios['desplazamiento'] = 0;
-        $otrosservicios['manoobradesplazamiento'] = 0;
-        $otrosservicios['kilometraje'] = 0;
-        $otrosservicios['dietas'] = 0;
-        if (!empty($tarea['Pedidoscliente']['Presupuestoscliente']['Avisosrepuesto']['Centrostrabajo']['id'])) {
-            $otrosservicios['desplazamiento'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisosrepuesto']['Centrostrabajo']['preciodesplazamiento'];
-            $otrosservicios['manoobradesplazamiento'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisosrepuesto']['Centrostrabajo']['preciomanoobra'];
-            $otrosservicios['kilometraje'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisosrepuesto']['Centrostrabajo']['kilometraje'];
-            $otrosservicios['dietas'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisosrepuesto']['Centrostrabajo']['dietas'];
-        } elseif (!empty($tarea['Pedidoscliente']['Presupuestoscliente']['Avisostallere']['Centrostrabajo']['id'])) {
-            $otrosservicios['desplazamiento'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisostallere']['Centrostrabajo']['preciodesplazamiento'];
-            $otrosservicios['manoobradesplazamiento'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisostallere']['Centrostrabajo']['preciomanoobra'];
-            $otrosservicios['kilometraje'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisostallere']['Centrostrabajo']['kilometraje'];
-            $otrosservicios['dietas'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Avisostallere']['Centrostrabajo']['dietas'];
-        } elseif (!empty($tarea['Pedidoscliente']['Presupuestoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['id'])) {
-            $otrosservicios['desplazamiento'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['preciodesplazamiento'];
-            $otrosservicios['manoobradesplazamiento'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['preciomanoobra'];
-            $otrosservicios['kilometraje'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['kilometraje'];
-            $otrosservicios['dietas'] = $tarea['Pedidoscliente']['Presupuestoscliente']['Ordene']['Avisostallere']['Centrostrabajo']['dietas'];
+        $tarea = $this->TareaspedidosclientesOtrosservicio->Tareaspedidoscliente->find('first', array('contain' => array('Pedidoscliente' => array('Presupuestoscliente' => array('Centrostrabajo', 'Cliente'))), 'conditions' => array('Tareaspedidoscliente.id' => $tarea_id)));
+        if (!empty($tarea['Pedidoscliente']['Presupuestoscliente']['centrostrabajo_id'])) {
+            $this->set('centrostrabajo', $tarea['Pedidoscliente']['Presupuestoscliente']['Centrostrabajo']);
         }
-        $otrosservicios['total'] = $otrosservicios['desplazamiento'] + $otrosservicios['manoobradesplazamiento'] + $otrosservicios['kilometraje'] + $otrosservicios['dietas'];
-        $this->set(compact('tarea_id', 'otrosservicios'));
+        $this->set(compact('tarea_id'));
     }
 
     function edit($id = null) {

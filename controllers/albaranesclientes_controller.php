@@ -25,7 +25,7 @@ class AlbaranesclientesController extends AppController {
             $this->Session->setFlash(__('Invalid albaranescliente', true));
             $this->redirect($this->referer());
         }
-        $albaranescliente = $this->Albaranescliente->find('first', array('contain' => array('Comerciale','Centrosdecoste','Almacene','Cliente', 'Ordene' => array('Avisostallere' => array('Cliente','Centrostrabajo','Maquina')), 'Pedidoscliente' => array('Presupuestoscliente' => 'Cliente'), 'Avisosrepuesto' => array('Cliente','Centrostrabajo','Maquina'), 'Tareasalbaranescliente' => array('MaterialesTareasalbaranescliente' => 'Articulo', 'ManodeobrasTareasalbaranescliente', 'TareasalbaranesclientesOtrosservicio'), 'Avisosrepuesto' => array('Cliente','Centrostrabajo','Maquina')), 'conditions' => array('Albaranescliente.id' => $id)));
+        $albaranescliente = $this->Albaranescliente->find('first', array('contain' => array('Maquina','Tiposiva', 'Comerciale', 'Centrosdecoste', 'Almacene', 'Cliente', 'Centrostrabajo', 'Pedidoscliente' => array('Presupuestoscliente' => 'Cliente'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Tareasalbaranescliente' => array('MaterialesTareasalbaranescliente' => 'Articulo', 'ManodeobrasTareasalbaranescliente', 'TareasalbaranesclientesOtrosservicio'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Albaranescliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($albaranescliente['Tareasalbaranescliente'] as $tarea) {
@@ -70,23 +70,21 @@ class AlbaranesclientesController extends AppController {
                 $this->redirect($this->referer());
             }
         }
-        if (empty($vienede))
-            die('No viene de ningun sitio');
-        $tiposivas = $this->Albaranescliente->Tiposiva->find('list');
+        if (empty($vienede)) {
+            $this->flashWarnings(__('No  viene de Ningun sitio', true));
+            $this->redirect($this->referer());
+        }
+        $almacenes = $this->Albaranescliente->Almacene->find('list');
         $tiposivas = $this->Albaranescliente->Tiposiva->find('list');
         $centrosdecostes = $this->Albaranescliente->Centrosdecoste->find('list');
         $numero = $this->Albaranescliente->dime_siguiente_numero();
         if ($vienede == 'pedidoscliente') {
-            $pedidoscliente = $this->Albaranescliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => 'Cliente', 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $iddedondeviene)));
+            $pedidoscliente = $this->Albaranescliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Cliente', 'Centrostrabajo','Maquina'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $iddedondeviene)));
             $this->set(compact('pedidoscliente', 'tiposivas', 'numero'));
             $this->render('add_from_pedidoscliente');
-        } elseif ($vienede == 'ordene') {
-            $ordene = $this->Albaranescliente->Ordene->find('first', array('contain' => array('Avisostallere' => 'Cliente', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => 'Mecanico')), 'conditions' => array('Ordene.id' => $iddedondeviene)));
-            $this->set(compact('ordene', 'tiposivas', 'numero'));
-            $this->render('add_from_ordene');
         } elseif ($vienede == 'avisosrepuesto') {
-            $avisosrepuesto = $this->Albaranescliente->Avisosrepuesto->find('first', array('contain' => array('Cliente', 'ArticulosAvisosrepuesto' => 'Articulo'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
-            $this->set(compact('avisosrepuesto', 'tiposivas'));
+            $avisosrepuesto = $this->Albaranescliente->Avisosrepuesto->find('first', array('contain' => array('Cliente', 'Centrostrabajo','Maquina', 'ArticulosAvisosrepuesto' => 'Articulo'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
+            $this->set(compact('avisosrepuesto', 'tiposivas', 'numero'));
             $this->render('add_from_avisosrepuesto');
         } else {
             $this->set(compact('tiposivas', 'almacenes', 'numero'));
@@ -123,10 +121,9 @@ class AlbaranesclientesController extends AppController {
         $centrosdecostes = $this->Albaranescliente->Centrosdecoste->find('list');
         $tiposivas = $this->Albaranescliente->Tiposiva->find('list');
         $avisosrepuestos = $this->Albaranescliente->Avisosrepuesto->find('list');
-        $ordenes = $this->Albaranescliente->Ordene->find('list');
         $pedidosclientes = $this->Albaranescliente->Pedidoscliente->find('list');
         $facturasClientes = $this->Albaranescliente->FacturasCliente->find('list');
-        $this->set(compact('avisosrepuestos', 'ordenes', 'pedidosclientes', 'facturasClientes', 'tiposivas'));
+        $this->set(compact('avisosrepuestos', 'ordenes', 'pedidosclientes', 'facturasClientes', 'tiposivas','centrosdecostes'));
     }
 
     function delete($id = null) {
@@ -205,6 +202,7 @@ class AlbaranesclientesController extends AppController {
             $tareasalbaranescliente['Tareasalbaranescliente'] = array();
             $tareasalbaranescliente['Tareasalbaranescliente']['albaranescliente_id'] = $this->Albaranescliente->id;
             $tareasalbaranescliente['Tareasalbaranescliente']['asunto'] = 'Material del Aviso de Repuestos';
+            $tareasalbaranescliente['Tareasalbaranescliente']['tipo'] = 'repuestos';
             $tareasalbaranescliente['Tareasalbaranescliente']['materiales'] = 0;
             $tareasalbaranescliente['Tareasalbaranescliente']['mano_de_obra'] = 0;
             $tareasalbaranescliente['Tareasalbaranescliente']['servicios'] = 0;
@@ -216,84 +214,15 @@ class AlbaranesclientesController extends AppController {
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['articulo_id'] = $articulosavisosrepuesto_modelo['ArticulosAvisosrepuesto']['articulo_id'];
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['cantidad'] = $articulosavisosrepuesto_modelo['ArticulosAvisosrepuesto']['cantidad'];
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['precio_unidad'] = $articulosavisosrepuesto_modelo['Articulo']['precio_sin_iva'];
-                    $materialesalbaranescliente['MaterialesTareasalbaranescliente']['descuento'] = $cliente['Cliente']['descuentos_repuestos'];
+                    if (empty($cliente['Cliente']['descuentos_repuestos']))
+                        $materialesalbaranescliente['MaterialesTareasalbaranescliente']['descuento'] = 0;
+                    else
+                        $materialesalbaranescliente['MaterialesTareasalbaranescliente']['descuento'] = $cliente['Cliente']['descuentos_repuestos'];
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] = $materialesalbaranescliente['MaterialesTareasalbaranescliente']['cantidad'] * $materialesalbaranescliente['MaterialesTareasalbaranescliente']['precio_unidad'];
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] = $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] - (($materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] * $materialesalbaranescliente['MaterialesTareasalbaranescliente']['descuento']) / 100);
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] = number_format($materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'], 5, '.', '');
                     $materialesalbaranescliente['MaterialesTareasalbaranescliente']['tareasalbaranescliente_id'] = $this->Albaranescliente->Tareasalbaranescliente->id;
                     $this->Albaranescliente->Tareasalbaranescliente->MaterialesTareasalbaranescliente->save($materialesalbaranescliente);
-                }
-            }
-        }
-    }
-
-    function __trapaso_from_ordene($data) {
-        $cliente = $this->Albaranescliente->Ordene->Avisostallere->Cliente->find('first', array('contain' => '', 'conditions' => array('Cliente.id' => $data['Albaranescliente']['cliente_id'])));
-        foreach ($data['Tarea'] as $tarea) {
-            if ($tarea['id'] != 0) {
-                $this->Albaranescliente->Tareasalbaranescliente->create();
-                $tarea_modelo = $this->Albaranescliente->Ordene->Tarea->find('first', array('contain' => '', 'conditions' => array('Tarea.id' => $tarea['id'])));
-                $tareasalbaranescliente['Tareasalbaranescliente'] = array();
-                $tareasalbaranescliente['Tareasalbaranescliente']['albaranescliente_id'] = $this->Albaranescliente->id;
-                $tareasalbaranescliente['Tareasalbaranescliente']['asunto'] = $tarea_modelo['Tarea']['descripcion'];
-                $tareasalbaranescliente['Tareasalbaranescliente']['materiales'] = 0;
-                $tareasalbaranescliente['Tareasalbaranescliente']['mano_de_obra'] = 0;
-                $tareasalbaranescliente['Tareasalbaranescliente']['servicios'] = 0;
-                $this->Albaranescliente->Tareasalbaranescliente->save($tareasalbaranescliente);
-                if (!empty($tarea['ArticulosTarea'])) {
-                    foreach ($tarea['ArticulosTarea'] as $materiale) {
-                        if ($materiale['id'] != 0) {
-                            $this->Albaranescliente->Tareasalbaranescliente->MaterialesTareasalbaranescliente->create();
-                            $materiale_modelo = $this->Albaranescliente->Ordene->Tarea->ArticulosTarea->find('first', array('contain' => 'Articulo', 'conditions' => array('ArticulosTarea.id' => $materiale['id'])));
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['articulo_id'] = $materiale_modelo['ArticulosTarea']['articulo_id'];
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['cantidad'] = $materiale_modelo['ArticulosTarea']['cantidad'];
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['precio_unidad'] = $materiale_modelo['Articulo']['precio_sin_iva'];
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['descuento'] = $cliente['Cliente']['descuentos_materiales'];
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] = $materialesalbaranescliente['MaterialesTareasalbaranescliente']['cantidad'] * $materialesalbaranescliente['MaterialesTareasalbaranescliente']['precio_unidad'];
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] = $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] - (($materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] * $materialesalbaranescliente['MaterialesTareasalbaranescliente']['descuento']) / 100);
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'] = number_format($materialesalbaranescliente['MaterialesTareasalbaranescliente']['importe'], 5, '.', '');
-                            $materialesalbaranescliente['MaterialesTareasalbaranescliente']['tareasalbaranescliente_id'] = $this->Albaranescliente->Tareasalbaranescliente->id;
-                            $this->Albaranescliente->Tareasalbaranescliente->MaterialesTareasalbaranescliente->save($materialesalbaranescliente);
-                        }
-                    }
-                }
-                if (!empty($tarea['Partestallere'])) {
-                    foreach ($tarea['Partestallere'] as $partestallere) {
-                        if ($partestallere['id'] != 0) {
-                            $this->Albaranescliente->Tareasalbaranescliente->ManodeobrasTareasalbaranescliente->create();
-                            $partestallere_modelo = $this->Albaranescliente->Ordene->Tarea->Partestallere->find('first', array('contain' => '', 'conditions' => array('Partestallere.id' => $partestallere['id'])));
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente'] = array();
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['horas'] = $partestallere_modelo['Partestallere']['horasimputables'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['precio_hora'] = $cliente['Cliente']['precio_mano_obra'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['parteescaneado'] = $partestallere_modelo['Partestallere']['parteescaneado'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['descuento'] = 0; // TODO por ahora el cliente no tiene un descuento en la mano de obra definido
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] = $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['precio_hora'] * $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['horas'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] = $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] - (($manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] * $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['descuento']) / 100 );
-                            $materialesalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] = number_format($manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'], 5, '.', '');
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['descripcion'] = $partestallere_modelo['Partestallere']['operacion'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['tareasalbaranescliente_id'] = $this->Albaranescliente->Tareasalbaranescliente->id;
-                            $this->Albaranescliente->Tareasalbaranescliente->ManodeobrasTareasalbaranescliente->save($manodeobraalbaranescliente);
-                        }
-                    }
-                }
-                if (!empty($tarea['Parte'])) {
-                    foreach ($tarea['Parte'] as $parte) {
-                        if ($parte['id'] != 0) {
-                            $this->Albaranescliente->Tareasalbaranescliente->ManodeobrasTareasalbaranescliente->create();
-                            $parte_modelo = $this->Albaranescliente->Ordene->Tarea->Parte->find('first', array('contain' => '', 'conditions' => array('Parte.id' => $parte['id'])));
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente'] = array();
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['horas'] = $parte_modelo['Parte']['horasimputables'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['parteescaneado'] = $parte_modelo['Parte']['parteescaneado'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['precio_hora'] = $cliente['Cliente']['precio_mano_obra'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['descuento'] = 0; // TODO por ahora el cliente no tiene un descuento en la mano de obra definido
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] = $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['precio_hora'] * $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['horas'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] = $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] - (($manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] * $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['descuento']) / 100 );
-                            $materialesalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'] = number_format($manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['importe'], 5, '.', '');
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['descripcion'] = $parte_modelo['Parte']['operacion'];
-                            $manodeobraalbaranescliente['ManodeobrasTareasalbaranescliente']['tareasalbaranescliente_id'] = $this->Albaranescliente->Tareasalbaranescliente->id;
-                            $this->Albaranescliente->Tareasalbaranescliente->ManodeobrasTareasalbaranescliente->save($manodeobraalbaranescliente);
-                        }
-                    }
                 }
             }
         }
@@ -346,7 +275,7 @@ class AlbaranesclientesController extends AppController {
                             $cliente['Cliente']['Albaranescliente'] = $albaranescliente;
                             $cantidad_albaranes_facturables += count($albaranescliente);
                             break;
-                        default: // por defecto por CEntrodetrabajo
+                        default: // por defecto por Centrodetrabajo
                             foreach ($cliente['Centrostrabajo'] as $key => $centrotrabajo) {
                                 $albaranescliente = $this->__get_albaranes_by_centrostrabajo($centrotrabajo['id'], $fecha_inicio, $fecha_fin);
                                 $cantidad_albaranes_facturables += count($albaranescliente);
@@ -437,8 +366,7 @@ class AlbaranesclientesController extends AppController {
 
     function __get_albaranes_by_centrostrabajo($centrostrabajo_id, $fecha_inicio, $fecha_fin) {
         $query = "select * from albaranesclientes Albaranescliente where Albaranescliente.fecha BETWEEN '" . $fecha_inicio . "' AND '" . $fecha_fin . "' AND Albaranescliente.facturable=1 AND Albaranescliente.facturas_cliente_id IS NULL AND (";
-        $query .= "Albaranescliente.ordene_id IN (SELECT o.id FROM ordenes o WHERE o.avisostallere_id IN (SELECT at.id FROM avisostalleres at WHERE at.centrostrabajo_id = '" . $centrostrabajo_id . "')) ";
-        $query .= "OR Albaranescliente.avisosrepuesto_id IN (SELECT ar.id FROM avisosrepuestos ar WHERE ar.centrostrabajo_id = '" . $centrostrabajo_id . "') ";
+        $query .= "Albaranescliente.avisosrepuesto_id IN (SELECT ar.id FROM avisosrepuestos ar WHERE ar.centrostrabajo_id = '" . $centrostrabajo_id . "') ";
         $query .= "OR Albaranescliente.pedidoscliente_id IN (SELECT p.id FROM pedidosclientes p WHERE p.presupuestoscliente_id IN (SELECT pre.id FROM presupuestosclientes pre WHERE pre.avisosrepuesto_id IN (SELECT avr.id FROM avisosrepuestos avr WHERE avr.centrostrabajo_id = '" . $centrostrabajo_id . "'))) ";
         $query .= "OR Albaranescliente.pedidoscliente_id IN (SELECT p2.id FROM pedidosclientes p2 WHERE p2.presupuestoscliente_id IN (SELECT pre2.id FROM presupuestosclientes pre2 WHERE pre2.presupuestosproveedore_id IN(SELECT ppro.id FROM presupuestosproveedores ppro WHERE ppro.avisosrepuesto_id IN (SELECT avr2.id FROM avisosrepuestos avr2 WHERE avr2.centrostrabajo_id = '" . $centrostrabajo_id . "')))) ";
         $query .= ")";
@@ -448,8 +376,7 @@ class AlbaranesclientesController extends AppController {
 
     function __get_albaranes_by_maquina($maquina_id, $fecha_inicio, $fecha_fin) {
         $query = "select * from albaranesclientes Albaranescliente where Albaranescliente.fecha BETWEEN '" . $fecha_inicio . "' AND '" . $fecha_fin . "' AND Albaranescliente.facturable=1 AND Albaranescliente.facturas_cliente_id IS NULL AND (";
-        $query .= "Albaranescliente.ordene_id IN (SELECT o.id FROM ordenes o WHERE o.avisostallere_id IN (SELECT at.id FROM avisostalleres at WHERE at.maquina_id = '" . $maquina_id . "')) ";
-        $query .= "OR Albaranescliente.avisosrepuesto_id IN (SELECT ar.id FROM avisosrepuestos ar WHERE ar.maquina_id = '" . $maquina_id . "') ";
+        $query .= "Albaranescliente.avisosrepuesto_id IN (SELECT ar.id FROM avisosrepuestos ar WHERE ar.maquina_id = '" . $maquina_id . "') ";
         $query .= "OR Albaranescliente.pedidoscliente_id IN (SELECT p.id FROM pedidosclientes p WHERE p.presupuestoscliente_id IN (SELECT pre.id FROM presupuestosclientes pre WHERE pre.avisosrepuesto_id IN (SELECT avr.id FROM avisosrepuestos avr WHERE avr.maquina_id = '" . $maquina_id . "'))) ";
         $query .= "OR Albaranescliente.pedidoscliente_id IN (SELECT p2.id FROM pedidosclientes p2 WHERE p2.presupuestoscliente_id IN (SELECT pre2.id FROM presupuestosclientes pre2 WHERE pre2.presupuestosproveedore_id IN(SELECT ppro.id FROM presupuestosproveedores ppro WHERE ppro.avisosrepuesto_id IN (SELECT avr2.id FROM avisosrepuestos avr2 WHERE avr2.maquina_id = '" . $maquina_id . "')))) ";
         $query .= ")";

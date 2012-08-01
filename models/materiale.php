@@ -23,6 +23,20 @@ class Materiale extends AppModel {
         )
     );
 
+    // Si le hemos cambiado la tarea debes actualizar la cantidad de materiales de la tarea ORigen
+    function beforeSave($options) {
+        //Estoy Editando 
+        if (!empty($this->id)) {
+            $materiale = $this->findById($this->id);
+            if ($materiale['Materiale']['tareaspresupuestocliente_id'] != $this->data['Materiale']['tareaspresupuestocliente_id']) {
+                $tarea_origen = $this->Tareaspresupuestocliente->find('first', array('contain' => 'Materiale', 'conditions' => array('Tareaspresupuestocliente.id' => $materiale['Materiale']['tareaspresupuestocliente_id'])));
+                $tarea_origen['Tareaspresupuestocliente']['materiales'] = redondear_dos_decimal( $tarea_origen['Tareaspresupuestocliente']['materiales'] - $materiale['Materiale']['importe']);
+                $this->Tareaspresupuestocliente->save($tarea_origen);
+            }
+        }
+        return true;
+    }
+
     function afterSave($created) {
         $materiale = $this->findById($this->id);
         $tarea = $this->Tareaspresupuestocliente->find('first', array('contain' => 'Materiale', 'conditions' => array('Tareaspresupuestocliente.id' => $materiale['Materiale']['tareaspresupuestocliente_id'])));
@@ -30,14 +44,14 @@ class Materiale extends AppModel {
         foreach ($tarea['Materiale'] as $material) {
             $materiales_total += $material['importe'];
         }
-        $tarea['Tareaspresupuestocliente']['materiales'] = number_format($materiales_total, 5, '.', '');
+        $tarea['Tareaspresupuestocliente']['materiales'] = redondear_dos_decimal($materiales_total);
         $this->Tareaspresupuestocliente->save($tarea);
     }
 
     function beforeDelete() {
         $materiale = $this->findById($this->id);
         $tarea = $this->Tareaspresupuestocliente->find('first', array('contain' => 'Materiale', 'conditions' => array('Tareaspresupuestocliente.id' => $materiale['Materiale']['tareaspresupuestocliente_id'])));
-        $tarea['Tareaspresupuestocliente']['materiales'] = number_format($tarea['Tareaspresupuestocliente']['materiales'] - $materiale['Materiale']['importe'], 5, '.', '');
+        $tarea['Tareaspresupuestocliente']['materiales'] = redondear_dos_decimal($tarea['Tareaspresupuestocliente']['materiales'] - $materiale['Materiale']['importe']);
         $this->Tareaspresupuestocliente->save($tarea);
         return true;
     }

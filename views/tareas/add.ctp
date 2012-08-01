@@ -11,7 +11,7 @@
     <label>Tipo de Tarea</label>
     <?php
     $options = array('taller' => 'En taller', 'centro' => 'En el Centro de Trabajo');
-    echo $this->Form->select('tipo', $options);
+    echo $this->Form->select('tipo', $options,false,array('empty' => False));
     ?>
     <br/><br/>
     <?php

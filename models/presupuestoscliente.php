@@ -22,6 +22,13 @@ class Presupuestoscliente extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Maquina' => array(
+            'className' => 'Maquina',
+            'foreignKey' => 'maquina_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
         'Avisosrepuesto' => array(
             'className' => 'Avisosrepuesto',
             'foreignKey' => 'avisosrepuesto_id',

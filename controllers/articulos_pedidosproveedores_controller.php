@@ -3,9 +3,9 @@
 class ArticulosPedidosproveedoresController extends AppController {
 
     var $name = 'ArticulosPedidosproveedores';
-    var $helpers = array('Autocomplete','Ajax','Javascript'); 
-    var $components = array('Session','RequestHandler' );
-    
+    var $helpers = array('Autocomplete', 'Ajax', 'Javascript');
+    var $components = array('Session', 'RequestHandler');
+
     function index() {
         $this->ArticulosPedidosproveedore->recursive = 0;
         $this->set('articulosPedidosproveedores', $this->paginate());
@@ -30,8 +30,12 @@ class ArticulosPedidosproveedoresController extends AppController {
                 $this->flashWarnings(__('The articulos pedidosproveedore could not be saved. Please, try again.', true));
             }
         }
-        $pedidosproveedore = $this->ArticulosPedidosproveedore->Pedidosproveedore->find('first',array('contain' => 'Presupuestosproveedore','conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
-        $this->set(compact('pedidosproveedore_id','pedidosproveedore'));
+        $pedidosproveedore = $this->ArticulosPedidosproveedore->Pedidosproveedore->find('first', array('contain' => 'Presupuestosproveedore', 'conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
+        if (!empty($pedidosproveedore['Presupuestosproveedore']['ordene_id'])) {
+            $tareas = $this->ArticulosPedidosproveedore->Pedidosproveedore->Presupuestosproveedore->Ordene->Tarea->find('list', array('conditions' => array('Tarea.ordene_id' => $pedidosproveedore['Presupuestosproveedore']['ordene_id'])));
+            $this->set('tareas', $tareas);
+        }
+        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore'));
     }
 
     function add_ajax($pedidosproveedore_id = null) {
@@ -44,11 +48,11 @@ class ArticulosPedidosproveedoresController extends AppController {
                 $this->flashWarnings(__('The articulos pedidosproveedore could not be saved. Please, try again.', true));
             }
         }
-        $pedidosproveedore = $this->ArticulosPedidosproveedore->Pedidosproveedore->find('first',array('contain' => 'Presupuestosproveedore','conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
-        $this->set(compact('pedidosproveedore_id','pedidosproveedore'));
+        $pedidosproveedore = $this->ArticulosPedidosproveedore->Pedidosproveedore->find('first', array('contain' => 'Presupuestosproveedore', 'conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
+        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore'));
         $this->render('/articulos_pedidosproveedores/add');
-    }      
-    
+    }
+
     function edit($id = null) {
         if (!$id && empty($this->data)) {
             $this->flashWarnings(__('Invalid articulos pedidosproveedore', true));
@@ -64,6 +68,11 @@ class ArticulosPedidosproveedoresController extends AppController {
         }
         if (empty($this->data)) {
             $this->data = $this->ArticulosPedidosproveedore->read(null, $id);
+        }
+        $pedidosproveedore = $this->ArticulosPedidosproveedore->Pedidosproveedore->find('first', array('contain' => 'Presupuestosproveedore', 'conditions' => array('Pedidosproveedore.id' => $this->data['ArticulosPedidosproveedore']['pedidosproveedore_id'])));
+        if (!empty($pedidosproveedore['Presupuestosproveedore']['ordene_id'])) {
+            $tareas = $this->ArticulosPedidosproveedore->Pedidosproveedore->Presupuestosproveedore->Ordene->Tarea->find('list', array('conditions' => array('Tarea.ordene_id' => $pedidosproveedore['Presupuestosproveedore']['ordene_id'])));
+            $this->set('tareas', $tareas);
         }
         $articulo = $this->ArticulosPedidosproveedore->read(null, $id);
         $this->set(compact('articulo'));

@@ -4,7 +4,7 @@ class OrdenesController extends AppController {
 
     var $name = 'Ordenes';
     var $uses = array('Ordene', 'Avisostallere');
-    var $helpers = array('Javascript', 'Time','Number');
+    var $helpers = array('Javascript', 'Time', 'Number');
     var $components = array('FileUpload');
 
     function beforeFilter() {
@@ -116,12 +116,18 @@ class OrdenesController extends AppController {
                     foreach ($this->data['Tareaspedidoscliente'] as $tareapedido) {
                         if ($tareapedido['id'] != 0) {
                             $this->Ordene->Tarea->create();
-                            $tareapedido_modelo = $this->Ordene->Presupuestoscliente->Pedidoscliente->Tareaspedidoscliente->find('first', array('contain' => '', 'conditions' => array('Tareaspedidoscliente.id' => $tareapedido['id'])));
+                            $tareapedido_modelo = $this->Ordene->Presupuestoscliente->Pedidoscliente->Tareaspedidoscliente->find('first', array('contain' => 'TareaspedidosclientesOtrosservicio', 'conditions' => array('Tareaspedidoscliente.id' => $tareapedido['id'])));
                             $tarea['Tarea'] = array();
                             $tarea['Tarea']['ordene_id'] = $ordene_id;
                             $tarea['Tarea']['descripcion'] = $tareapedido_modelo['Tareaspedidoscliente']['asunto'];
+                            $tarea['Tarea']['tipo'] = $tareapedido_modelo['Tareaspedidoscliente']['tipo'];
                             $tarea['Tarea']['total_materiales_presupuestado'] = $tareapedido_modelo['Tareaspedidoscliente']['materiales'];
                             $tarea['Tarea']['total_manoobra_presupuestada'] = $tareapedido_modelo['Tareaspedidoscliente']['mano_de_obra'];
+                            if (!empty($tareapedido_modelo['TareaspedidosclientesOtrosservicio'])) {
+                                $tarea['Tarea']['total_dietas_presupuestada'] = $tareapedido_modelo['TareaspedidosclientesOtrosservicio']['dietas'];
+                                $tarea['Tarea']['total_desplazamiento_presupuestado'] = $tareapedido_modelo['TareaspedidosclientesOtrosservicio']['total_desplazamiento'];
+                                $tarea['Tarea']['total_varios_presupuestado'] = $tareapedido_modelo['TareaspedidosclientesOtrosservicio']['varios'];
+                            }
                             $this->Ordene->Tarea->save($tarea);
                             if (!empty($tareapedido['MaterialesTareaspedidoscliente'])) {
                                 foreach ($tareapedido['MaterialesTareaspedidoscliente'] as $materiale) {
@@ -153,6 +159,42 @@ class OrdenesController extends AppController {
                 $this->Ordene->create();
                 if ($this->Ordene->save($this->data)) {
                     $ordene_id = $this->Ordene->id;
+                    /* Imputamos el material a la orden */
+                    foreach ($this->data['Tareaspedidoscliente'] as $tareapedido) {
+                        if ($tareapedido['id'] != 0) {
+                            $this->Ordene->Tarea->create();
+                            $tareapedido_modelo = $this->Ordene->Presupuestoscliente->Pedidoscliente->Tareaspedidoscliente->find('first', array('contain' => 'TareaspedidosclientesOtrosservicio', 'conditions' => array('Tareaspedidoscliente.id' => $tareapedido['id'])));
+                            $tarea['Tarea'] = array();
+                            $tarea['Tarea']['ordene_id'] = $ordene_id;
+                            $tarea['Tarea']['descripcion'] = $tareapedido_modelo['Tareaspedidoscliente']['asunto'];
+                            $tarea['Tarea']['tipo'] = $tareapedido_modelo['Tareaspedidoscliente']['tipo'];
+                            $tarea['Tarea']['total_materiales_presupuestado'] = $tareapedido_modelo['Tareaspedidoscliente']['materiales'];
+                            $tarea['Tarea']['total_manoobra_presupuestada'] = $tareapedido_modelo['Tareaspedidoscliente']['mano_de_obra'];
+                            if (!empty($tareapedido_modelo['TareaspedidosclientesOtrosservicio'])) {
+                                $tarea['Tarea']['total_dietas_presupuestada'] = $tareapedido_modelo['TareaspedidosclientesOtrosservicio']['dietas'];
+                                $tarea['Tarea']['total_desplazamiento_presupuestado'] = $tareapedido_modelo['TareaspedidosclientesOtrosservicio']['total_desplazamiento'];
+                                $tarea['Tarea']['total_varios_presupuestado'] = $tareapedido_modelo['TareaspedidosclientesOtrosservicio']['varios'];
+                            }
+                            $this->Ordene->Tarea->save($tarea);
+                            if (!empty($tareapedido['MaterialesTareaspedidoscliente'])) {
+                                foreach ($tareapedido['MaterialesTareaspedidoscliente'] as $materiale) {
+                                    if ($materiale['id'] != 0) {
+                                        $this->Ordene->Tarea->ArticulosTarea->create();
+                                        $materiale_modelo = $this->Ordene->Presupuestoscliente->Pedidoscliente->Tareaspedidoscliente->MaterialesTareaspedidoscliente->find('first', array('contain' => '', 'conditions' => array('MaterialesTareaspedidoscliente.id' => $materiale['id'])));
+                                        $articulos_tarea['ArticulosTarea'] = array();
+                                        $articulos_tarea['ArticulosTarea']['tarea_id'] = $this->Ordene->Tarea->id;
+                                        $articulos_tarea['ArticulosTarea']['articulo_id'] = $materiale_modelo['MaterialesTareaspedidoscliente']['articulo_id'];
+                                        $articulos_tarea['ArticulosTarea']['cantidad'] = $materiale_modelo['MaterialesTareaspedidoscliente']['cantidad'];
+                                        $articulos_tarea['ArticulosTarea']['presupuestado'] = $materiale_modelo['MaterialesTareaspedidoscliente']['importe'];
+                                        $articulos_tarea['ArticulosTarea']['cantidad_presupuestada'] = $materiale_modelo['MaterialesTareaspedidoscliente']['cantidad'];
+                                        $articulos_tarea['ArticulosTarea']['descuento'] = $materiale_modelo['MaterialesTareaspedidoscliente']['descuento'];
+                                        $this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    /* Fin de la Imputacion */
                 } else {
                     $this->flashWarnings(__('The ordene could not be saved. Please, try again.', true));
                     $this->redirect($this->referer());
@@ -163,7 +205,7 @@ class OrdenesController extends AppController {
 
         $pedidoscliente = $this->Ordene->Presupuestoscliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente', 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $pedidoscliente_id)));
         if (!empty($pedidoscliente['Presupuestoscliente']['ordene_id'])) {
-            // echo 'Imptamos las nuevas tareas que hemos selecionado a la orden';
+            // echo 'Imputamos las nuevas tareas que hemos selecionado a la orden';
             $ordene_id = $pedidoscliente['Presupuestoscliente']['ordene_id'];
         } elseif (!empty($pedidoscliente['Presupuestoscliente']['avisostallere_id'])) {
             $avisostallere_id = $pedidoscliente['Presupuestoscliente']['avisostallere_id'];
@@ -183,6 +225,26 @@ class OrdenesController extends AppController {
         $this->set(compact('pedidoscliente', 'avisostallere_id', 'ordene_id', 'almacene_id'));
     }
 
+    function imputar_albaranproveedor($albaranesproveedore_id = null){
+        if (!empty($this->data)) {
+            foreach ($this->data['ArticulosAlbaranesproveedore'] as $articulos_albaranesproveedore) {
+                $this->Ordene->Tarea->ArticulosTarea->create();
+                $articulos_albaranesproveedore_modelo = $this->Ordene->Presupuestosproveedore->Pedidosproveedore->Albaranesproveedore->ArticulosAlbaranesproveedore->find('first',array('contain'=>'','conditions'=>array('ArticulosAlbaranesproveedore.id' => $articulos_albaranesproveedore['id'])));
+                $articulos_tarea['ArticulosTarea']['articulo_id'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['articulo_id'];
+                $articulos_tarea['ArticulosTarea']['tarea_id'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['tarea_id'];
+                $articulos_tarea['ArticulosTarea']['cantidadreal'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['cantidad'];
+                $articulos_tarea['ArticulosTarea']['cantidad'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['cantidad'];
+                $this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea);
+            }
+            $this->redirect(array('action'=>'view',$this->data['Ordene']['id'] ));
+        }else{
+            $albaranesproveedore = $this->Ordene->Presupuestosproveedore->Pedidosproveedore->Albaranesproveedore->find('first',array('contain' =>array('Pedidosproveedore' => 'Presupuestosproveedore','ArticulosAlbaranesproveedore' =>array('Articulo','Tarea')),'conditions' =>array('Albaranesproveedore.id' => $albaranesproveedore_id)));
+            $ordene = $this->Ordene->find('first',array('contain'=>'','conditions'=>array('Ordene.id' =>$albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'] )));
+        }
+        $this->set(compact('ordene','albaranesproveedore'));
+    }
+    
+    
     function cambiar_estado($ordene_id, $estadosordene_id) {
         $this->Ordene->id = $ordene_id;
         $estadosordene = $this->Ordene->Estadosordene->find('first', array('contain' => '', 'conditions' => array('Estadosordene.id' => $estadosordene_id)));

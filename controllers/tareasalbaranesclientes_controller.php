@@ -10,7 +10,7 @@ class TareasalbaranesclientesController extends AppController {
 
 	function view($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Invalid tareasalbaranescliente', true));
+			$this->flashWarnings(__('Invalid tareasalbaranescliente', true));
 			$this->redirect($this->referer());
 		}
 		$this->set('tareasalbaranescliente', $this->Tareasalbaranescliente->read(null, $id));
@@ -23,7 +23,7 @@ class TareasalbaranesclientesController extends AppController {
 				$this->Session->setFlash(__('The tareasalbaranescliente has been saved', true));
 				$this->redirect($this->referer());
 			} else {
-				$this->Session->setFlash(__('The tareasalbaranescliente could not be saved. Please, try again.', true));
+				$this->flashWarnings(__('The tareasalbaranescliente could not be saved. Please, try again.', true));
                                 $this->redirect($this->referer());
 			}
 		}
@@ -32,7 +32,7 @@ class TareasalbaranesclientesController extends AppController {
 
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid tareasalbaranescliente', true));
+			$this->flashWarnings(__('Invalid tareasalbaranescliente', true));
 			$this->redirect($this->referer());
 		}
 		if (!empty($this->data)) {
@@ -40,7 +40,7 @@ class TareasalbaranesclientesController extends AppController {
 				$this->Session->setFlash(__('The tareasalbaranescliente has been saved', true));
 				$this->redirect($this->referer());
 			} else {
-				$this->Session->setFlash(__('The tareasalbaranescliente could not be saved. Please, try again.', true));
+				$this->flashWarnings(__('The tareasalbaranescliente could not be saved. Please, try again.', true));
                                 $this->redirect($this->referer());
 			}
 		}
@@ -51,14 +51,14 @@ class TareasalbaranesclientesController extends AppController {
 
 	function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for tareasalbaranescliente', true));
+			$this->flashWarnings(__('Invalid id for tareasalbaranescliente', true));
 			$this->redirect($this->referer());
 		}
 		if ($this->Tareasalbaranescliente->delete($id)) {
 			$this->Session->setFlash(__('Tareasalbaranescliente deleted', true));
 			$this->redirect($this->referer());
 		}
-		$this->Session->setFlash(__('Tareasalbaranescliente was not deleted', true));
+		$this->flashWarnings(__('Tareasalbaranescliente was not deleted', true));
 		$this->redirect($this->referer());
 	}
 }

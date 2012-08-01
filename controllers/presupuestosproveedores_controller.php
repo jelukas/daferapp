@@ -65,7 +65,7 @@ class PresupuestosproveedoresController extends AppController {
                         'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
                         'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'),
                     'conditions' => array('Presupuestosproveedore.id' => $id))));
-        $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('all', array('contain' => array('Articulo'), 'conditions' => array('ArticulosPresupuestosproveedore.presupuestosproveedore_id' => $id))));
+        $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('all', array('contain' => array('Articulo','Tarea'), 'conditions' => array('ArticulosPresupuestosproveedore.presupuestosproveedore_id' => $id))));
     }
 
     function add($avisorepuestos_id = null, $avisostallere_id = null, $ordene_id = null) {

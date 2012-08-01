@@ -4,6 +4,7 @@
 	<?php
 		echo $this->Autocomplete->replace_select('Articulo', null, true,$pedidosproveedore['Presupuestosproveedore']['almacene_id']);
 		echo $this->Form->input('pedidosproveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore_id));
+		echo $this->Form->input('tarea_id',array('empty' =>'-- Seleciona la Tarea de la Orden --'));
 		echo $this->Form->input('cantidad',array('value'=>0));
 		echo $this->Form->input('precio_proveedor',array('value'=>0));
 		echo $this->Form->input('descuento',array('value'=>0));

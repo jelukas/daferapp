@@ -3,6 +3,7 @@
 class Avisosrepuesto extends AppModel {
 
     var $name = 'Avisosrepuesto';
+    var $order = "Avisosrepuesto.numero DESC";
     var $validate = array(
         'cliente_id' => array(
             'numeric' => array(

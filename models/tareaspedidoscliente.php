@@ -4,7 +4,6 @@ class Tareaspedidoscliente extends AppModel {
 
     var $name = 'Tareaspedidoscliente';
     var $displayField = 'asunto';
-
     var $belongsTo = array(
         'Pedidoscliente' => array(
             'className' => 'Pedidoscliente',
@@ -17,6 +16,7 @@ class Tareaspedidoscliente extends AppModel {
     var $hasMany = array(
         'MaterialesTareaspedidoscliente' => array('dependent' => true),
         'ManodeobrasTareaspedidoscliente' => array('dependent' => true),
+        'TareaspedidosclientesOtrosservicio' => array('dependent' => true),
     );
     var $hasOne = array(
         'TareaspedidosclientesOtrosservicio' => array('dependent' => true),
@@ -33,28 +33,22 @@ class Tareaspedidoscliente extends AppModel {
         foreach ($pedidoscliente['Tareaspedidoscliente'] as $tarea) {
             $preciomateriales_total += $tarea['materiales'];
             $precioobra_total += $tarea['mano_de_obra'];
-            if (!empty($tarea['TareaspedidosclientesOtrosservicio']))
-                $otrosservicios_total += $tarea['TareaspedidosclientesOtrosservicio']['total'];
+            $otrosservicios_total += $tarea['servicios'];
         }
-        $pedidoscliente['Pedidoscliente']['precio_mat'] = number_format($preciomateriales_total, 5, '.', '');
-        $pedidoscliente['Pedidoscliente']['precio_obra'] = number_format($precioobra_total, 5, '.', '');
-        $pedidoscliente['Pedidoscliente']['precio'] = number_format($pedidoscliente['Pedidoscliente']['precio_mat'] + $pedidoscliente['Pedidoscliente']['precio_obra'] + $otrosservicios_total, 5, '.', '');
-        $pedidoscliente['Pedidoscliente']['impuestos'] = number_format($pedidoscliente['Pedidoscliente']['precio'] * ((float) str_replace('%', '', $pedidoscliente['Tiposiva']['tipoiva']) / 100), 5, '.', '');
+        $pedidoscliente['Pedidoscliente']['precio_mat'] = redondear_dos_decimal($preciomateriales_total);
+        $pedidoscliente['Pedidoscliente']['precio_obra'] = redondear_dos_decimal($precioobra_total);
+        $pedidoscliente['Pedidoscliente']['precio'] = redondear_dos_decimal($pedidoscliente['Pedidoscliente']['precio_mat'] + $pedidoscliente['Pedidoscliente']['precio_obra'] + $otrosservicios_total);
+        $pedidoscliente['Pedidoscliente']['impuestos'] = redondear_dos_decimal($pedidoscliente['Pedidoscliente']['precio'] * ($pedidoscliente['Tiposiva']['porcentaje_aplicable'] / 100));
         $this->Pedidoscliente->save($pedidoscliente);
     }
 
     function beforeDelete() {
         $tarea = $this->findById($this->id);
-        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Tareaspedidoscliente' => 'TareaspedidosclientesOtrosservicio'), 'conditions' => array('Pedidoscliente.id' => $tarea['Tareaspedidoscliente']['pedidoscliente_id'])));
-        $pedidoscliente['Pedidoscliente']['precio_mat'] = number_format($pedidoscliente['Pedidoscliente']['precio_mat'] - $tarea['Tareaspedidoscliente']['materiales'], 5, '.', '');
-        $pedidoscliente['Pedidoscliente']['precio_obra'] = number_format($pedidoscliente['Pedidoscliente']['precio_obra'] - $tarea['Tareaspedidoscliente']['mano_de_obra'], 5, '.', '');
-        if (!empty($tarea['TareaspedidosclientesOtrosservicio']))
-            $pedidoscliente['Pedidoscliente']['precio'] = number_format($pedidoscliente['Pedidoscliente']['precio_mat'] + $pedidoscliente['Pedidoscliente']['precio_obra'] - $tarea['TareaspedidosclientesOtrosservicio']['total'], 5, '.', '');
-
-        else
-            $pedidoscliente['Pedidoscliente']['precio'] = number_format($pedidoscliente['Pedidoscliente']['precio_mat'] + $pedidoscliente['Pedidoscliente']['precio_obra'], 5, '.', '');
-
-        $pedidoscliente['Pedidoscliente']['impuestos'] = number_format($pedidoscliente['Pedidoscliente']['precio'] * ((float) str_replace('%', '', $pedidoscliente['Tiposiva']['tipoiva']) / 100), 5, '.', '');
+        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Tareaspedidoscliente' => 'TareaspedidosclientesOtrosservicio', 'Tiposiva'), 'conditions' => array('Pedidoscliente.id' => $tarea['Tareaspedidoscliente']['pedidoscliente_id'])));
+        $pedidoscliente['Pedidoscliente']['precio_mat'] = redondear_dos_decimal($pedidoscliente['Pedidoscliente']['precio_mat'] - $tarea['Tareaspedidoscliente']['materiales']);
+        $pedidoscliente['Pedidoscliente']['precio_obra'] = redondear_dos_decimal($pedidoscliente['Pedidoscliente']['precio_obra'] - $tarea['Tareaspedidoscliente']['mano_de_obra']);
+        $pedidoscliente['Pedidoscliente']['precio'] = redondear_dos_decimal($pedidoscliente['Pedidoscliente']['precio_mat'] + $pedidoscliente['Pedidoscliente']['precio_obra'] - $tarea['Tareaspedidoscliente']['servicios']);
+        $pedidoscliente['Pedidoscliente']['impuestos'] = redondear_dos_decimal($pedidoscliente['Pedidoscliente']['precio'] * ($pedidoscliente['Tiposiva']['porcentaje_aplicable'] / 100));
         $this->Pedidoscliente->save($pedidoscliente);
         return true;
     }

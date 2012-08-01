@@ -152,10 +152,10 @@ class PedidosproveedoresController extends AppController {
                 $data = array();
                 foreach ($this->data['ArticulosPresupuestosproveedore'] as $articulo_presupuestosproveedore) {
                     if ($articulo_presupuestosproveedore['id'] != 0) {
-                        $this->Pedidosproveedore->Presupuestosproveedore->ArticulosPresupuestosproveedore->recursive = -1;
-                        $articulo_presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('first', array('conditions' => array('ArticulosPresupuestosproveedore.id' => $articulo_presupuestosproveedore['id'])));
+                        $articulo_presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('first', array('contain'=>'','conditions' => array('ArticulosPresupuestosproveedore.id' => $articulo_presupuestosproveedore['id'])));
                         $articulo_pedidoproveedore = array();
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['pedidosproveedore_id'] = $id;
+                        $articulo_pedidoproveedore['ArticulosPedidosproveedore']['tarea_id'] = $articulo_presupuestosproveedore['ArticulosPresupuestosproveedore']['tarea_id'];
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['articulo_id'] = $articulo_presupuestosproveedore['ArticulosPresupuestosproveedore']['articulo_id'];
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['cantidad'] = $articulo_presupuestosproveedore['ArticulosPresupuestosproveedore']['cantidad'];
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['precio_proveedor'] = $articulo_presupuestosproveedore['ArticulosPresupuestosproveedore']['precio_proveedor'];

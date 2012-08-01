@@ -2,7 +2,6 @@
     <h2><?php __('Facturas Clientes'); ?></h2>
     <table cellpadding="0" cellspacing="0">
         <tr>
-            <th><?php echo $this->Paginator->sort('id'); ?></th>
             <th><?php echo $this->Paginator->sort('Numero'); ?></th>
             <th><?php echo $this->Paginator->sort('Cliente'); ?></th>
             <th><?php echo $this->Paginator->sort('Fecha'); ?></th>
@@ -21,7 +20,6 @@
             }
             ?>
             <tr<?php echo $class; ?>>
-                <td><?php echo $facturasCliente['FacturasCliente']['id']; ?>&nbsp;</td>
                 <td><?php echo $facturasCliente['FacturasCliente']['numero']; ?>&nbsp;</td>
                 <td><?php echo $this->Html->link($facturasCliente['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $facturasCliente['Cliente']['id'])); ?></td>
                 <td><?php echo $facturasCliente['FacturasCliente']['fecha']; ?>&nbsp;</td>

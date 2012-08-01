@@ -11,7 +11,7 @@ class ManodeobrasTareasalbaranesclientesController extends AppController {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid manodeobras tareasalbaranescliente', true));
+            $this->flashWarnings(__('Invalid manodeobras tareasalbaranescliente', true));
             $this->redirect($this->referer());
         }
         $this->set('manodeobrasTareasalbaranescliente', $this->ManodeobrasTareasalbaranescliente->read(null, $id));
@@ -24,16 +24,20 @@ class ManodeobrasTareasalbaranesclientesController extends AppController {
                 $this->Session->setFlash(__('The manodeobras tareasalbaranescliente has been saved', true));
                 $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('The manodeobras tareasalbaranescliente could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('The manodeobras tareasalbaranescliente could not be saved. Please, try again.', true));
                 $this->redirect($this->referer());
             }
         }
+        $tarea = $this->ManodeobrasTareasalbaranescliente->Tareasalbaranescliente->find('first', array('contain' => array('Albaranescliente' => array('Centrostrabajo', 'Cliente')), 'conditions' => array('Tareasalbaranescliente.id' => $tareasalbaranescliente_id)));
+        if (!empty($tarea['Albaranescliente']['Centrostrabajo']))
+            $this->set('centrostrabajo', $tarea['Albaranescliente']['Centrostrabajo']);
+        $this->set('tareasalbaranescliente', $tarea['Tareasalbaranescliente']);
         $this->set(compact('tareasalbaranescliente_id'));
     }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Invalid manodeobras tareasalbaranescliente', true));
+            $this->flashWarnings(__('Invalid manodeobras tareasalbaranescliente', true));
             $this->redirect($this->referer());
         }
         if (!empty($this->data)) {
@@ -41,7 +45,7 @@ class ManodeobrasTareasalbaranesclientesController extends AppController {
                 $this->Session->setFlash(__('The manodeobras tareasalbaranescliente has been saved', true));
                 $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('The manodeobras tareasalbaranescliente could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('The manodeobras tareasalbaranescliente could not be saved. Please, try again.', true));
                 $this->redirect($this->referer());
             }
         }
@@ -54,12 +58,12 @@ class ManodeobrasTareasalbaranesclientesController extends AppController {
 
     function delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid id for manodeobras tareasalbaranescliente', true));
+            $this->flashWarnings(__('Invalid id for manodeobras tareasalbaranescliente', true));
         }
         if ($this->ManodeobrasTareasalbaranescliente->delete($id)) {
             $this->Session->setFlash(__('Manodeobras tareasalbaranescliente deleted', true));
         }
-        $this->Session->setFlash(__('Manodeobras tareasalbaranescliente was not deleted', true));
+        $this->flashWarnings(__('Manodeobras tareasalbaranescliente was not deleted', true));
         $this->redirect($this->referer());
     }
 

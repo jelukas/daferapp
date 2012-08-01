@@ -30,14 +30,14 @@ class MaterialesTareaspedidoscliente extends AppModel {
         foreach ($tarea['MaterialesTareaspedidoscliente'] as $material) {
             $materiales_total += $material['importe'];
         }
-        $tarea['Tareaspedidoscliente']['materiales'] = number_format($materiales_total, 5, '.', '');
+        $tarea['Tareaspedidoscliente']['materiales'] = redondear_dos_decimal($materiales_total);
         $this->Tareaspedidoscliente->save($tarea);
     }
 
     function beforeDelete() {
         $materiale = $this->findById($this->id);
         $tarea = $this->Tareaspedidoscliente->find('first', array('contain' => 'MaterialesTareaspedidoscliente', 'conditions' => array('Tareaspedidoscliente.id' => $materiale['MaterialesTareaspedidoscliente']['tareaspedidoscliente_id'])));
-        $tarea['Tareaspedidoscliente']['materiales'] = number_format($tarea['Tareaspedidoscliente']['materiales'] - $materiale['MaterialesTareaspedidoscliente']['importe'], 5, '.', '');
+        $tarea['Tareaspedidoscliente']['materiales'] = redondear_dos_decimal($tarea['Tareaspedidoscliente']['materiales'] - $materiale['MaterialesTareaspedidoscliente']['importe']);
         $this->Tareaspedidoscliente->save($tarea);
         return true;
     }

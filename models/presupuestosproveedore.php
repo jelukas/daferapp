@@ -14,11 +14,6 @@ class Presupuestosproveedore extends AppModel {
                 'rule' => array('numeric'),
             ),
         ),
-        'fechaplazo' => array(
-            'date' => array(
-                'rule' => array('date'),
-            ),
-        ),
     );
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 

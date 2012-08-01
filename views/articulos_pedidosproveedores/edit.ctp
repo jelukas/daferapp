@@ -6,6 +6,7 @@
 		echo $this->Form->input('articulo',array('type'=>'text','disabled'=>true,'value'=>$articulo['Articulo']['ref'].' ---- '.$articulo['Articulo']['nombre']));
 		echo $this->Form->input('articulo_id',array('type'=>'hidden'));
 		echo $this->Form->input('pedidosproveedore_id', array('type' => 'hidden'));
+                echo $this->Form->input('tarea_id',array('empty' =>'-- Seleciona la Tarea de la Orden --'));
 		echo $this->Form->input('cantidad');
 		echo $this->Form->input('precio_proveedor');
 		echo $this->Form->input('descuento');
@@ -13,7 +14,7 @@
 		echo $this->Form->input('total', array('readonly' => true));
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit', true));?>
+<?php echo $this->Form->end(__('Guardar', true));?>
 <script type="text/javascript">
     $(document).delegate("#ArticulosPedidosproveedoreCantidad", "change", function(){
         calcular(this);

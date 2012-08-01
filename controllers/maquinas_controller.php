@@ -118,6 +118,11 @@ class MaquinasController extends AppController {
         $this->set(compact('maquinas'));
     }
 
+    function selectPresupuestosclientes() {
+        $maquinas = $this->Maquina->find('list', array('conditions' => array('Maquina.centrostrabajo_id' => $this->data['Presupuestoscliente']['centrostrabajo_id'])));
+        $this->set(compact('maquinas'));
+    }
+
     function beforeFilter() {
         $this->checkPermissions('Maquina', $this->params['action']);
     }

@@ -17,7 +17,7 @@
                     <?php
                     echo $this->Form->input('pedidosproveedore_id', array('label' => 'Pedido de proveedor', 'type' => 'text', 'value' => $pedidosproveedore_id, 'disabled' => 'true'));
                     echo $this->Form->input('pedidosproveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore_id));
-                    echo $this->Form->input('proveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore['Pedidosproveedore']['proveedore_id']));
+                    echo $this->Form->input('proveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore['Presupuestosproveedore']['proveedore_id']));
                     ?>
                 </td>
                 <td>
@@ -45,6 +45,7 @@
                     <tr>
                         <th><?php __('Ref'); ?></th>
                         <th><?php __('Nombre'); ?></th>
+                        <th><?php __('Tarea de la Orden'); ?></th>
                         <th><?php __('Cantidad'); ?></th>
                         <th><?php __('Precio Proveedor €'); ?></th>
                         <th><?php __('Descuento %'); ?></th>
@@ -65,6 +66,7 @@
                             <tr<?php echo $class; ?>>
                                 <td><?php echo $articulo_pedidosproveedore['Articulo']['ref']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['Articulo']['nombre']; ?></td>
+                                <td><?php echo $articulo_pedidosproveedore['Tarea']['descripcion']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['cantidad']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['precio_proveedor']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['descuento']; ?></td>

@@ -22,14 +22,14 @@ class ManodeobrasTareaspedidoscliente extends AppModel {
         foreach ($tarea['ManodeobrasTareaspedidoscliente'] as $manodeobra) {
             $manodeobra_total += $manodeobra['importe'];
         }
-        $tarea['Tareaspedidoscliente']['mano_de_obra'] = number_format($manodeobra_total, 5, '.', '');
+        $tarea['Tareaspedidoscliente']['mano_de_obra'] = redondear_dos_decimal($manodeobra_total);
         $this->Tareaspedidoscliente->save($tarea);
     }
 
     function beforeDelete() {
         $manodeobra = $this->findById($this->id);
         $tarea = $this->Tareaspedidoscliente->find('first', array('contain' => 'ManodeobrasTareaspedidoscliente', 'conditions' => array('Tareaspedidoscliente.id' => $manodeobra['ManodeobrasTareaspedidoscliente']['tareaspedidoscliente_id'])));
-        $tarea['Tareaspedidoscliente']['mano_de_obra'] = number_format($tarea['Tareaspedidoscliente']['mano_de_obra'] - $manodeobra['ManodeobrasTareaspedidoscliente']['importe'], 5, '.', '');
+        $tarea['Tareaspedidoscliente']['mano_de_obra'] = redondear_dos_decimal($tarea['Tareaspedidoscliente']['mano_de_obra'] - $manodeobra['ManodeobrasTareaspedidoscliente']['importe']);
         $this->Tareaspedidoscliente->save($tarea);
         return true;
     }

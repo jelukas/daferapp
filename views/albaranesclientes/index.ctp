@@ -8,7 +8,6 @@
             <th><?php echo $this->Paginator->sort('observaciones'); ?></th>
             <th><?php echo $this->Paginator->sort('albaranescaneado'); ?></th>
             <th><?php echo $this->Paginator->sort('avisosrepuesto_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('ordene_id'); ?></th>
             <th><?php echo $this->Paginator->sort('pedidoscliente_id'); ?></th>
             <th><?php echo $this->Paginator->sort('facturas_cliente_id'); ?></th>
             <th class="actions"><?php __('Acciones'); ?></th>
@@ -29,9 +28,6 @@
                 <td><?php echo $albaranescliente['Albaranescliente']['albaranescaneado']; ?>&nbsp;</td>
                 <td>
                     <?php echo $this->Html->link($albaranescliente['Avisosrepuesto']['id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $albaranescliente['Avisosrepuesto']['id'])); ?>
-                </td>
-                <td>
-                    <?php echo $this->Html->link($albaranescliente['Ordene']['id'], array('controller' => 'ordenes', 'action' => 'view', $albaranescliente['Ordene']['id'])); ?>
                 </td>
                 <td><?php echo $this->Html->link($albaranescliente['Pedidoscliente']['id'], array('controller' => 'pedidosclientes', 'action' => 'view', $albaranescliente['Pedidoscliente']['id'])); ?></td>
                 <td>

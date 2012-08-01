@@ -3,7 +3,8 @@
 class Albaranescliente extends AppModel {
 
     var $name = 'Albaranescliente';
-    var $displayField = 'id';
+    var $displayField = 'numero';
+    var $order = "Albaranescliente.numero DESC";
     var $validate = array(
         'fecha' => array(
             'date' => array(
@@ -36,16 +37,23 @@ class Albaranescliente extends AppModel {
             'fields' => '',
             'order' => ''
         ),
-        'Ordene' => array(
-            'className' => 'Ordene',
-            'foreignKey' => 'ordene_id',
+        'Cliente' => array(
+            'className' => 'Cliente',
+            'foreignKey' => 'cliente_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''
         ),
-        'Cliente' => array(
-            'className' => 'Cliente',
-            'foreignKey' => 'cliente_id',
+        'Centrostrabajo' => array(
+            'className' => 'Centrostrabajo',
+            'foreignKey' => 'centrostrabajo_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Maquina' => array(
+            'className' => 'Maquina',
+            'foreignKey' => 'maquina_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''

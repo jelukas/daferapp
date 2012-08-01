@@ -4,6 +4,7 @@ class Albaranesclientesreparacione extends AppModel {
 
     var $name = 'Albaranesclientesreparacione';
     var $displayField = 'numero';
+    var $order = "Albaranesclientesreparacione.numero DESC";
     var $validate = array(
         'fecha' => array(
             'date' => array(

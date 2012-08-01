@@ -106,13 +106,13 @@ class FacturasClientesController extends AppController {
             $this->redirect($this->referer());
         }
         $id = $this->FacturasCliente->id;
-        //$upload = $this->FacturasCliente->findById($id);
-        //$this->FileUpload->RemoveFile($upload['FacturasCliente']['facturaescaneada']);
+        $upload = $this->FacturasCliente->findById($id);
+        $this->FileUpload->RemoveFile($upload['FacturasCliente']['facturaescaneada']);
         if ($this->FacturasCliente->delete($id)) {
             $this->Session->setFlash(__('Facturas cliente deleted', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->flashWarnings(__('Facturas cliente was not deleted', true));
+        $this->flashWarnings(__('No se pudo borrar la factura cliente', true));
         $this->redirect($this->referer());
     }
 
@@ -151,10 +151,47 @@ class FacturasClientesController extends AppController {
         $albaranescliente = $this->FacturasCliente->Albaranescliente->find('first', array('contain' => array(), 'conditions' => array('Albaranescliente.id' => $albaranescliente_id)));
         $facturasClientes = $this->FacturasCliente->find('first', array('contain' => array(), 'conditions' => array('FacturasCliente.id' => $albaranescliente['Albaranescliente']['facturas_cliente_id'])));
         $this->FacturasCliente->id = $facturasClientes['FacturasCliente']['id'];
-        $this->FacturasCliente->saveField('total', number_format($facturasClientes['FacturasCliente']['total'] - $albaranescliente['Albaranescliente']['precio'], 5, '.', ''));
+        $this->FacturasCliente->saveField('total', redondear_dos_decimal($facturasClientes['FacturasCliente']['total'] - $albaranescliente['Albaranescliente']['precio']));
         $this->FacturasCliente->Albaranescliente->id = $albaranescliente['Albaranescliente']['id'];
         $this->FacturasCliente->Albaranescliente->saveField('facturas_cliente_id', null);
         $this->redirect($this->referer());
+    }
+
+    function facturacion() {
+        if (!empty($this->data)) {
+            $fecha_inicio = date('Y-m-d', strtotime($this->data['Filtro']['fecha_inicio']['year'] . '-' . $this->data['Filtro']['fecha_inicio']['month'] . '-' . $this->data['Filtro']['fecha_inicio']['day']));
+            $fecha_fin = date('Y-m-d', strtotime($this->data['Filtro']['fecha_fin']['year'] . '-' . $this->data['Filtro']['fecha_fin']['month'] . '-' . $this->data['Filtro']['fecha_fin']['day']));
+            if (!empty($this->data['Filtro']['todos'])) {
+                /* Obtenemos los alabranes de todos los clientes comprendidos en el rango de fecha
+                 * y que se PUEDAN FACTURAR 
+                 */
+                $albaranesreparacion_list = $this->FacturasCliente->Albaranesclientesreparacione->find(
+                        'all', array(
+                    'contain' => '',
+                    'conditions' => array(
+                        'Albaranesclientesreparacione.facturable' => 1,
+                        'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                        'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
+                    )
+                        ));
+                 $albaranesrepuestos_list = $this->FacturasCliente->Albaranescliente->find(
+                        'all', array(
+                    'contain' => '',
+                    'conditions' => array(
+                        'Albaranescliente.facturable' => 1,
+                        'Albaranescliente.facturas_cliente_id' => null,
+                        'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
+                    )
+                        ));
+                 die(pr($albaranesrepuestos_list));
+            } elseif (!empty($this->data['Filtro']['Cliente'])) {
+                /* Obtenemos los alabranes de los clientes selecionados comprendidos en el rango de fecha
+                 * y que se PUEDAN FACTURAR 
+                 */
+            }
+            $this->set(compact('cliente_list'));
+            $this->render('facturacion_list');
+        }
     }
 
 }

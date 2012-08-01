@@ -5,6 +5,8 @@ class Ordene extends AppModel {
     var $name = 'Ordene';
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 
+    var $order = "Ordene.numero DESC";
+    
     var $belongsTo = array(
         'Avisostallere' => array(
             'className' => 'Avisostallere',

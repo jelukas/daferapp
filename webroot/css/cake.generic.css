@@ -1072,3 +1072,6 @@ table.rendimientos_tarea{
     background-color: #ccc;
     font-weight: bold;
 }
+.tabla_materiales_tarea tr:not(.tr_titulos) {
+    cursor: move;
+}

@@ -43,7 +43,7 @@ class PedidosclientesController extends AppController {
             $this->flashWarnings(__('Pedido de Cliente Inválido', true));
             $this->redirect($this->referer());
         }
-        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Almacene','Comerciale','Presupuestosproveedore', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina'))), 'Tareaspedidoscliente' => array('TareaspedidosclientesOtrosservicio', 'MaterialesTareaspedidoscliente' => array('Articulo'), 'ManodeobrasTareaspedidoscliente')), 'conditions' => array('Pedidoscliente.id' => $id)));
+        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Tiposiva','Presupuestoscliente' => array('Almacene','Comerciale','Presupuestosproveedore', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina'))), 'Tareaspedidoscliente' => array('TareaspedidosclientesOtrosservicio', 'MaterialesTareaspedidoscliente' => array('Articulo'), 'ManodeobrasTareaspedidoscliente')), 'conditions' => array('Pedidoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($pedidoscliente['Tareaspedidoscliente'] as $tarea) {
@@ -57,7 +57,6 @@ class PedidosclientesController extends AppController {
 
     function add($presupuestoscliente_id = null) {
         if (!empty($this->data)) {
-            //die(pr($this->data));
             $this->Pedidoscliente->create();
             if ($this->Pedidoscliente->save($this->data)) {
                 $id = $this->Pedidoscliente->id;
@@ -65,7 +64,6 @@ class PedidosclientesController extends AppController {
                 /* Comenzamos con el traspaso */
                 foreach ($this->data['Tareaspresupuestocliente'] as $tareapresupuesto) {
                     if ($tareapresupuesto['id'] != 0) {
-                        $this->Pedidoscliente->Tareaspedidoscliente->create();
                         $tareapresupuesto_modelo = $this->Pedidoscliente->Presupuestoscliente->Tareaspresupuestocliente->find('first', array('contain' => '', 'conditions' => array('Tareaspresupuestocliente.id' => $tareapresupuesto['id'])));
                         $tareaspedidoscliente['Tareaspedidoscliente'] = $tareapresupuesto_modelo['Tareaspresupuestocliente'];
                         unset($tareaspedidoscliente['Tareaspedidoscliente']['id']);
@@ -74,6 +72,7 @@ class PedidosclientesController extends AppController {
                         $tareaspedidoscliente['Tareaspedidoscliente']['materiales'] = 0;
                         $tareaspedidoscliente['Tareaspedidoscliente']['mano_de_obra'] = 0;
                         $tareaspedidoscliente['Tareaspedidoscliente']['servicios'] = 0;
+                        $this->Pedidoscliente->Tareaspedidoscliente->create();
                         $this->Pedidoscliente->Tareaspedidoscliente->save($tareaspedidoscliente);
                         if (!empty($tareapresupuesto['Materiale'])) {
                             foreach ($tareapresupuesto['Materiale'] as $materiale) {
@@ -121,9 +120,11 @@ class PedidosclientesController extends AppController {
                 if ($this->FileUpload->finalFile != null) {
                     $this->Pedidoscliente->saveField('pedidoescaneado', $this->FileUpload->finalFile);
                 }
+                /*Fin de Guarda Fichero*/
                 $this->Session->setFlash(__('El Pedido de Cliente ha sido guardado', true));
                 $this->redirect(array('action' => 'view', $this->Pedidoscliente->id));
             } else {
+                die(pr($this->Pedidoscliente->invalidFields()));
                 $this->flashWarnings(__('El Pedido de Cliente no ha posido ser guardado. Por favor, inténtalo de nuevo.', true));
                 $this->redirect($this->referer());
             }

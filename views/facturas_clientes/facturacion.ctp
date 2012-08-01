@@ -1,6 +1,6 @@
-<div class="facturasClientes form">
+<div class="facturasClientes">
     <h2><?php __('Filtro de Facturación'); ?></h2>
-    <?php echo $this->Form->create('Albaranescliente'); ?>
+    <?php echo $this->Form->create('FacturasCliente'); ?>
     <fieldset>
         <legend><?php __('Clientes'); ?></legend>
         <p style="margin-bottom: 30px">Todos los clientes <?php echo $this->Form->checkbox('Filtro.todos', array('hiddenField' => false)); ?></p>

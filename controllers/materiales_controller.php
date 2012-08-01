@@ -71,6 +71,17 @@ class MaterialesController extends AppController {
         $this->set('materiale_id', $this->Materiale->id);
     }
 
+    /**
+     * Ajax
+     * @param int $id 
+     */
+    function update_tarea() {
+        $this->Materiale->id = $this->data['materiale_id'];
+        $this->Materiale->saveField('tareaspresupuestocliente_id', $this->data['tareaspresupuestocliente_id']);
+        $this->Session->setFlash(__('Material Actualizado Correctamente', true));
+        $this->layout = 'ajax';
+    }
+
     function delete($id = null) {
         if (!$id) {
             $this->flashWarnings(__('Id no válido para el material', true));

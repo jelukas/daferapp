@@ -45,7 +45,12 @@
                 <td><span><?php __('Centro de Trabajo'); ?></span></td>
                 <td><?php echo $ordene['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
                 <td><span><?php __('Máquina'); ?></span></td>
-                <td><?php echo $ordene['Avisostallere']['Maquina']['nombre']; ?></td>
+                <td>
+                    <?php
+                    echo $this->Html->link($ordene['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $ordene['Avisostallere']['Maquina']['id']));
+                    echo $this->Form->input('Presupuestoscliente.maquina_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['Maquina']['id']));
+                    ?>
+                </td>
                 <td><span><?php __('Nº Serie Máquina'); ?></span></td>
                 <td><?php echo $ordene['Avisostallere']['Maquina']['serie_maquina']; ?></td>
                 <td><span><?php __('Horas'); ?></span></td>

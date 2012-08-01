@@ -71,6 +71,7 @@ class AlbaranesproveedoresController extends AppController {
                         $this->Albaranesproveedore->Pedidosproveedore->ArticulosPedidosproveedore->recursive = -1;
                         $articulo_pedidosproveedore = $this->Albaranesproveedore->Pedidosproveedore->ArticulosPedidosproveedore->find('first', array('conditions' => array('ArticulosPedidosproveedore.id' => $articulo_pedidosproveedore['id'])));
                         $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['albaranesproveedore_id'] = $id;
+                        $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['tarea_id'] = $articulo_pedidosproveedore['ArticulosPedidosproveedore']['tarea_id'];
                         $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['articulo_id'] = $articulo_pedidosproveedore['ArticulosPedidosproveedore']['articulo_id'];
                         $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad'] = $articulo_pedidosproveedore['ArticulosPedidosproveedore']['cantidad'];
                         $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor'] = $articulo_pedidosproveedore['ArticulosPedidosproveedore']['precio_proveedor'];
@@ -90,7 +91,7 @@ class AlbaranesproveedoresController extends AppController {
             }
         }
         if (!empty($pedidosproveedore_id)) {
-            $pedidosproveedore = $this->Albaranesproveedore->Pedidosproveedore->find('first', array('contain' => array('ArticulosPedidosproveedore' => 'Articulo'), 'conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
+            $pedidosproveedore = $this->Albaranesproveedore->Pedidosproveedore->find('first', array('contain' => array('ArticulosPedidosproveedore' => array('Articulo','Tarea'),'Presupuestosproveedore'), 'conditions' => array('Pedidosproveedore.id' => $pedidosproveedore_id)));
         }
         $numero = $this->Albaranesproveedore->dime_siguiente_numero();
         $this->set(compact('pedidosproveedore_id', 'pedidosproveedore', 'numero'));

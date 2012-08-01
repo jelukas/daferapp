@@ -2,7 +2,6 @@
     <h2><?php __('Facturas Clientes'); ?></h2>
     <table cellpadding="0" cellspacing="0">
         <tr>
-            <th><?php echo __('id'); ?></th>
             <th><?php echo __('Numero'); ?></th>
             <th><?php echo __('Cliente'); ?></th>
             <th><?php echo __('Fecha'); ?></th>
@@ -21,7 +20,6 @@
             }
             ?>
             <tr<?php echo $class; ?>>
-                <td><?php echo $facturasCliente['FacturasCliente']['id']; ?>&nbsp;</td>
                 <td><?php echo $facturasCliente['FacturasCliente']['numero']; ?>&nbsp;</td>
                 <td><?php echo $this->Html->link($facturasCliente['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $facturasCliente['Cliente']['id'])); ?></td>
                 <td><?php echo $facturasCliente['FacturasCliente']['fecha']; ?>&nbsp;</td>

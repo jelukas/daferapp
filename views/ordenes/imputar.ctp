@@ -1,7 +1,7 @@
 <fieldset>
     <?php echo $this->Form->create('Ordene', array('action' => 'imputar')); ?>
-    <legend><?php __('IMPUTACIÓN A LA ORDEN'); ?><?php echo (!empty($ordene_id)) ? ' '.$ordene_id : '' ?></legend>
-    <h2><?php __('Pedido cliente'.' '.$pedidoscliente['Pedidoscliente']['id']); ?></h2>
+    <legend><?php __('IMPUTACIÓN A LA ORDEN'); ?><?php echo (!empty($ordene_id)) ? ' ' . $ordene_id : '' ?></legend>
+    <h2><?php __('Pedido cliente' . ' ' . $pedidoscliente['Pedidoscliente']['id']); ?></h2>
     <dl>
         <?php
         $i = 0;
@@ -9,7 +9,7 @@
         ?>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
         <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['id'],array('controller'=>'pedidosclientes','action'=>'view',$pedidoscliente['Pedidoscliente']['id'])); ?>
+            <?php echo $this->Html->link($pedidoscliente['Pedidoscliente']['id'], array('controller' => 'pedidosclientes', 'action' => 'view', $pedidoscliente['Pedidoscliente']['id'])); ?>
             &nbsp;
         </dd>
         <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Fecha Plazo'); ?></dt>
@@ -21,7 +21,7 @@
     <?php echo (!empty($ordene_id)) ? $this->Form->input('id', array('value' => $ordene_id)) : '' ?>
     <?php
     if (!empty($avisostallere_id)) {
-        echo '<h3>Se va ha crear una Orden nueva para el Aviso '.$avisostallere_id.'</h3>';
+        echo '<h3>Se va ha crear una Orden nueva para el Aviso ' . $avisostallere_id . '</h3>';
         echo $this->Form->input('avisostallere_id', array('type' => 'hidden', 'value' => $avisostallere_id));
         echo $this->Form->input('almacene_id', array('type' => 'hidden', 'value' => $almacene_id));
         echo $this->Form->input('fecha_prevista_reparacion');

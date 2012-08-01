@@ -60,6 +60,7 @@
             <tr>
                 <th><?php __('Ref'); ?></th>
                 <th><?php __('Nombre'); ?></th>
+                <th><?php __('Tarea de la Orden'); ?></th>
                 <th><?php __('Cantidad'); ?></th>
                 <th><?php __('Precio Proveedor €'); ?></th>
                 <th><?php __('Descuento %'); ?></th>
@@ -79,6 +80,7 @@
                     <tr<?php echo $class; ?>>
                         <td><?php echo $articulo_presupuestosproveedor['Articulo']['ref']; ?></td>
                         <td><?php echo $articulo_presupuestosproveedor['Articulo']['nombre']; ?></td>
+                        <td><?php echo $articulo_presupuestosproveedor['Tarea']['descripcion']; ?></td>
                         <td><?php echo $articulo_presupuestosproveedor['ArticulosPresupuestosproveedore']['cantidad']; ?></td>
                         <td><?php echo $articulo_presupuestosproveedor['ArticulosPresupuestosproveedore']['precio_proveedor']; ?></td>
                         <td><?php echo $articulo_presupuestosproveedor['ArticulosPresupuestosproveedore']['descuento']; ?></td>

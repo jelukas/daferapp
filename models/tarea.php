@@ -3,6 +3,8 @@
 class Tarea extends AppModel {
 
     var $name = 'Tarea';
+    var $displayField = 'descripcion';
+
     var $validate = array(
         'ordene_id' => array(
             'numeric' => array(
