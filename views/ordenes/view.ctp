@@ -90,13 +90,16 @@
             </td>
         </tr>
     </table>
-    <div class="actions">
+    <div style="margin: 20px">
         <?php if ($ordene['Estadosordene']['id'] == '5'): ?>
-            <ul><li><?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientesreparaciones', 'action' => 'add', $ordene['Ordene']['id'])) ?></li></ul>
+            <?php echo $this->Html->link(__('Nuevo Albaran desde la Orden', true), array('controller' => 'albaranesclientesreparaciones', 'action' => 'add', $ordene['Ordene']['id']), array('class' => 'button_css_blue')) ?>
+        <?php else: ?>
+            <?php
+            // Cerramos la ORDEN pulsando el boton terminada: Estado 5: Cerrada Pendiente de Facturar
+            echo $this->Html->link(__('Cambiar estado a TERMINADA', true), array('action' => 'cambiar_estado', $ordene['Ordene']['id'], 5), array('class' => 'button_css_green'));
+            ?>
         <?php endif; ?>
     </div>
-    <br/><br/><br/>
-    <?php $total_orden = 0; ?>
     <div class="related">
         <h3><?php __('Tareas'); ?> <?php echo $this->Html->link(__('Nueva Tarea', true), array('controller' => 'tareas', 'action' => 'add', $ordene['Ordene']['id']), array('class' => 'popup button_link')); ?></h3>
         <?php if (!empty($ordene['Tarea'])): ?>
@@ -505,7 +508,6 @@
                                     <td>
                                         <?php
                                         echo redondear_dos_decimal($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']);
-                                        $total_orden+= $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']
                                         ?> &euro;
                                     </td>
                                     <td>BENEFICIO NETO</td>
@@ -602,7 +604,7 @@
                         <td>Prespupuesto de Proveedor</td>
                         <td><?php echo $presupuestosproveedore['numero'] ?></td>
                         <td><?php echo!empty($presupuestosproveedore['fecha']) ? $this->Time->format('d-m-Y', $presupuestosproveedore['fecha']) : '' ?></td>
-                        <td><?php echo $presupuestosproveedore['Cliente']['nombre'] ?></td>
+                        <td><?php echo $presupuestosproveedore['Proveedore']['nombre'] ?></td>
                         <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestosproveedore['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
                 <?php endforeach; ?>
@@ -612,10 +614,6 @@
     <div style="clear: both; margin-top: 30px;">
         <?php echo $this->Html->link(__('Nuevo Presupuesto a cliente', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Nuevo Presupuesto de Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', -1, -1, $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
-        <?php
-// Cerramos la ORDEN pulsando el boton terminada: Estado 5: Cerrada Pendiente de Facturar
-        echo $this->Html->link(__('TERMINADA', true), array('action' => 'cambiar_estado', $ordene['Ordene']['id'], 5), array('class' => 'button_link'));
-        ?>
     </div>
 </div>
 <script>

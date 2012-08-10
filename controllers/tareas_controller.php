@@ -80,7 +80,7 @@ class TareasController extends AppController {
             $this->Session->setFlash(__('Tarea borrada', true));
             $this->redirect($this->referer());
         }
-        $this->flashWarnings(__('La Tarea no puedo ser borrada', true));
+        $this->flashWarnings(__('La Tarea no puedo ser borrada'. pr($this->Tarea->invalidFields()), true));
         $this->redirect($this->referer());
     }
 

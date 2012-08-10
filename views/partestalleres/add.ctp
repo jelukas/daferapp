@@ -88,6 +88,7 @@
     function calcula_horasreales(){
         var minutos = (parseFloat($('#PartestallereHorafinalHour').val()) * 60 + parseFloat($('#PartestallereHorafinalMin').val()))- (parseFloat($('#PartestallereHorainicioHour').val()) * 60 + parseFloat($('#PartestallereHorainicioMin').val())) ;
         var horasreales = minutos / 60 ;
+        horasreales =Math.round(horasreales *100)/100 ;
         $('#PartestallereHorasreales').val(horasreales)
         $('#PartestallereHorasimputables').val(horasreales)
     }

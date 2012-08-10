@@ -3,8 +3,7 @@
     <tr>
         <th>Nº Parte</th>
         <th style="width: 200px">Fecha</th>
-        <th style="width: 150px">Mecánico</th>
-        <th>Descripción Operación</th>
+        <th colspan="2">Mecánico</th>
     </tr>
     <tr>
         <td>
@@ -14,9 +13,20 @@
             ?>
         </td>
         <td><?php echo $this->Form->input('fecha', array('label' => false)); ?></td>
-        <td><?php echo $this->Form->input('mecanico_id', array('label' => false, 'style' => 'width: 150px')); ?></td>
-        <td><?php echo $this->Form->input('operacion', array('label' => false)); ?></td>
+        <td colspan="2"><?php echo $this->Form->input('mecanico_id', array('label' => false, 'data-placeholder' => 'Selecione el Mecánico...', 'empty' => '', 'class' => 'chzn-select-required')); ?></td>
     </tr>
+    <tr>
+        <th colspan="2">Descripción Operación</th>
+        <th colspan="2">Observaciones</th>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+        </td>
+        <td colspan="2">
+            <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
+        </td>
+    </tr>d
     <tr>
         <th colspan="2">Horas Desplazamiento</th>
         <th>Kilometraje</th>
@@ -168,18 +178,21 @@
         function calcula_horasreales_desplazamiento_ida(){
             var minutos = (parseFloat($('#ParteHorasdesplazamientofinIdaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientofinIdaMin').val()))- (parseFloat($('#ParteHorasdesplazamientoinicioIdaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientoinicioIdaMin').val())) ;
             var horasreales = minutos / 60 ;
+            horasreales =Math.round(horasreales *100)/100 ;
             $('#ParteHorasdesplazamientorealesIda').val(horasreales)
             $('#ParteHorasdesplazamientoimputablesIda').val(horasreales)
         }
         function calcula_horasreales_desplazamiento_vuelta(){
             var minutos = (parseFloat($('#ParteHorasdesplazamientofinVueltaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientofinVueltaMin').val()))- (parseFloat($('#ParteHorasdesplazamientoinicioVueltaHour').val()) * 60 + parseFloat($('#ParteHorasdesplazamientoinicioVueltaMin').val())) ;
             var horasreales = minutos / 60 ;
+            horasreales =Math.round(horasreales *100)/100 ;
             $('#ParteHorasdesplazamientorealesVuelta').val(horasreales)
             $('#ParteHorasdesplazamientoimputablesVuelta').val(horasreales)
         }
         function calcula_horasreales_trabajo(){
             var minutos = (parseFloat($('#ParteHorafinalHour').val()) * 60 + parseFloat($('#ParteHorafinalMin').val()))- (parseFloat($('#ParteHorainicioHour').val()) * 60 + parseFloat($('#ParteHorainicioMin').val())) ;
             var horasreales = minutos / 60 ;
+            horasreales =Math.round(horasreales *100)/100 ;
             $('#ParteHorasreales').val(horasreales)
             $('#ParteHorasimputables').val(horasreales)
         }

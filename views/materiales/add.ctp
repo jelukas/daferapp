@@ -41,6 +41,7 @@
     function calcular_materiale(){
         var importe = $('#MaterialeCantidad').val()*$('#MaterialePrecioUnidad').val();
         importe = importe - (importe * (parseFloat($('#MaterialeDescuento').val())/100));
+        importe =Math.round(importe *100)/100 ;
         $('#MaterialeImporte').val(importe);
     }
     $('#MaterialeCantidad').keyup(function(){
