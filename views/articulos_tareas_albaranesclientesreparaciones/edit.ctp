@@ -1,6 +1,6 @@
-<?php echo $this->Form->create('ArticulosTarea'); ?>
+<?php echo $this->Form->create('ArticulosTareasAlbaranesclientesreparacione'); ?>
 <fieldset>
-    <legend><?php __('Editar Artículo de la Tarea'); ?></legend>
+    <legend><?php __('Editar Artículo de la Tarea del Albarán'); ?></legend>
     <label>Articulo: <?php echo $this->Form->value('Articulo.nombre') ?></label>
     <?php 
     echo $this->Form->input('cantidadreal',array('label'=>'Cantidad Real'));

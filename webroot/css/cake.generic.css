@@ -1050,14 +1050,16 @@ form input[type=radio].horizontal_radio {
     color: red;
 }
 .total_orden {
-    text-align: right;
-    font-size: 20px;
+    text-align: left;
+    font-size: 16px;
     font-weight: bold;
     border: 1px solid black;
-    background-color: #f0f09a;
+    background-color: #f0f09a !important;
     padding: 10px;
 }
-
+.total_orden span {
+    float: right;
+}
 .total_articulos, .total_partes {
     font-weight: bold !important;
     background-color: #EFD3D3 !important;

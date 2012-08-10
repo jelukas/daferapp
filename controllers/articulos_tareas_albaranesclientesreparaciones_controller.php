@@ -25,6 +25,25 @@ class ArticulosTareasAlbaranesclientesreparacionesController extends AppControll
             $descuento = 0;
         $this->set(compact('tareas_albaranesclientesreparacione_id', 'tarea', 'descuento'));
     }
+    function edit($id = null) {
+        $this->ArticulosTareasAlbaranesclientesreparacione->recursive = 1;
+        if (!$id && empty($this->data)) {
+            $this->flashWarnings(__('Id No válido del Artículo de la Tarea del Albarán de Reparación', true));
+            $this->redirect($this->referer());
+        }
+        if (!empty($this->data)) {
+            if ($this->ArticulosTareasAlbaranesclientesreparacione->save($this->data)) {
+                $this->Session->setFlash(__('El Artículo de la Tarea del Albarán de Reparación ha sido guardado correctamente', true));
+                $this->redirect($this->referer());
+            } else {
+                $this->flashWarnings(__('El Artículo de la Tarea del Albarán de Reparación NO ha podido ser guardado', true));
+                $this->redirect($this->referer());
+            }
+        }
+        if (empty($this->data)) {
+            $this->data = $this->ArticulosTareasAlbaranesclientesreparacione->read(null, $id);
+        }
+    }
 
     function delete($id = null, $tarea_id = null) {
         if (!$id) {

@@ -140,12 +140,43 @@ class Albaranesclientesreparacione extends AppModel {
             return $resultado[0][0]['siguiente'];
     }
 
-    public function get_precio_total_albaran() {
-        $total_albaranreparación = 0;
-        $albaranescliente = $this->find('first', array('contain' => 'TareasAlbaranesclientesreparacione','conditions' => array('Albaranesclientesreparacione.id' => $this->id)));
-        foreach ($albaranescliente['TareasAlbaranesclientesreparacione'] as $tarea) {
-                    $total_albaranreparación+= $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable'];
+    public function get_baseimponible($albaranesclientesreparacione_id) {
+        $baseimponible = 0;
+        $tareas = $this->TareasAlbaranesclientesreparacione->find('all', array(
+            'fields' => array('total_partes_imputable', 'total_materiales_imputables'),
+            'contain' => '',
+            'conditions' => array('TareasAlbaranesclientesreparacione.albaranesclientesreparacione_id' => $albaranesclientesreparacione_id),
+                ));
+        foreach ($tareas as $tarea) {
+            $baseimponible += $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] + $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'];
         }
+        return $baseimponible;
+    }
+
+    public function get_totalmanoobra_servicios($albaranesclientesreparacione_id) {
+        $manoobraotroservicios = 0;
+        $tareas = $this->TareasAlbaranesclientesreparacione->find('all', array(
+            'fields' => array('total_partes_imputable'),
+            'contain' => '',
+            'conditions' => array('TareasAlbaranesclientesreparacione.albaranesclientesreparacione_id' => $albaranesclientesreparacione_id),
+                ));
+        foreach ($tareas as $tarea) {
+            $manoobraotroservicios += $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'];
+        }
+        return $manoobraotroservicios;
+    }
+
+    public function get_totalrepuestos($albaranesclientesreparacione_id) {
+        $total_repuestos = 0;
+        $tareas = $this->TareasAlbaranesclientesreparacione->find('all', array(
+            'fields' => array('total_materiales_imputables'),
+            'contain' => '',
+            'conditions' => array('TareasAlbaranesclientesreparacione.albaranesclientesreparacione_id' => $albaranesclientesreparacione_id),
+                ));
+        foreach ($tareas as $tarea) {
+            $total_repuestos += $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'];
+        }
+        return $total_repuestos;
     }
 
 }

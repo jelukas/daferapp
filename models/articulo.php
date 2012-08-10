@@ -11,11 +11,6 @@ class Articulo extends AppModel {
                 'rule' => array('notempty'),
             ),
         ),
-        'familia_id' => array(
-            'numeric' => array(
-                'rule' => array('numeric'),
-            ),
-        ),
     );
 
     var $belongsTo = array(

@@ -36,7 +36,6 @@ class ArticulosTarea extends AppModel {
 
     function beforeSave($options) {
         /* Las existencias del Articulo original deben disminuir o aumentar */
-
         if (!empty($this->data['ArticulosTarea']['id'])) {
             /* Estamos modificando */
             $articulos_tarea = $this->find('first', array('contain' => '', 'conditions' => array('ArticulosTarea.id' => $this->data['ArticulosTarea']['id'])));

@@ -57,8 +57,7 @@ class ArticulosTareasController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->ArticulosTarea->read(null, $id);
         }
-        $tareas = $this->ArticulosTarea->Tarea->find('list');
-        $this->set(compact('articulos', 'tareas'));
+        $this->set(compact('articulos'));
     }
 
     function delete($id = null, $tarea_id = null) {

@@ -309,8 +309,8 @@
                                             <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_real']; ?> €</td> 
                                             <td colspan="2" class="beneficio_partes">Total Partes Imputable</td>
                                             <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] ?> €</td>
-                                            <td colspan="2" class="beneficio_partes">Beneficio Neto</td> 
-                                            <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] - $tarea['total_partes_real']; ?>  -- <?php echo redondear_dos_decimal((1 - @($tarea['total_partes_real'] / $tarea['total_partes_imputable'])) * 100); ?> %</td>
+                                            <td colspan="3" class="beneficio_partes">Beneficio Neto</td> 
+                                            <td colspan="3" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] - $tarea['total_partes_real']; ?>  -- <?php echo redondear_dos_decimal((1 - @($tarea['total_partes_real'] / $tarea['total_partes_imputable'])) * 100); ?> %</td>
                                         <?php elseif ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio'): ?>
                                             <td colspan="2" class="beneficio_partes">Total Partes Real</td>
                                             <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_real']; ?> €</td>
@@ -409,7 +409,7 @@
                                     </tr>
                                 </table>
                             <?php endif; ?>
-                            <?php //if (!empty($tarea['ArticulosTarea'])): ?>
+                            <?php if (!empty($tarea['ArticulosTarea'])): ?>
                             <h4>Articulos de la Tarea</h4>
                             <table>
                                 <thead>
@@ -434,7 +434,7 @@
                                 ?>
                                 <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
                                     <tr>
-                                        <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
+                                        <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id'])); ?></td>
                                         <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
                                         <td><?php echo $articulo_tarea['Articulo']['localizacion'] ?></td>
                                         <td>
@@ -492,15 +492,14 @@
                                         Beneficio Neto Artículos: <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] - $tarea['total_materiales_costo']) ?> &euro; -- <?php echo redondear_dos_decimal((1 - @($tarea['total_materiales_costo'] / $tarea['total_materiales_imputables'])) * 100) ?> &percnt;
                                     </td>
                                 </tr>
+                            </table>
+                            <?php endif; ?>
+                            <table class="rendimientos_tarea">
                                 <tr>
-                                    <td colspan="10"></td>
-                                    <td colspan="3" class="total_importe_tarea" style="background-color: #ca87ce;">
+                                    <td colspan="7" class="total_importe_tarea" style="background-color: #FACC2E !important;">
                                         TOTAL IMPORTE TAREA <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']); ?>
                                     </td>
                                 </tr>
-                            </table>
-                            <?php //endif; ?>
-                            <table class="rendimientos_tarea">
                                 <tr>
                                     <td><span>RENDIMIENTOS TAREA</span></td>
                                     <td>REAL</td>
