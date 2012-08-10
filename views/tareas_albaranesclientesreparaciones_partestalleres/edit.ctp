@@ -1,6 +1,6 @@
 <?php echo $this->Form->create('TareasAlbaranesclientesreparacionesPartestallere', array('type' => 'file', array('action' => 'edit'))); ?>
 <fieldset style=" width: 100%;">
-    <legend><?php __('Modificar Parte de Taller'); ?></legend>
+    <legend><?php __('Añadir Parte de Taller'); ?></legend>
     <table class="view" style="font-size: 75%;">
         <tr>
             <th>Número</th>
@@ -18,7 +18,7 @@
                 <?php echo $this->Form->input('fecha', array('label' => false, 'dateFormat' => 'DMY')); ?>
             </td>
             <td>
-                <?php echo $this->Form->input('mecanico_id', array('label' => false, 'empty' => '-- Seleccione el Mecánico --')); ?>
+                <?php echo $this->Form->input('mecanico_id', array('label' => false, 'data-placeholder' => 'Selecione el Mecánico...', 'empty' => '', 'class' => 'chzn-select-required')); ?>
             </td>
         </tr>
         <tr>
@@ -44,15 +44,32 @@
             </td>
             <td colspan="2">
                 <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+                <p><span>Observaciones</span></p>
+                <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
             </td>
         </tr>
         <tr>
-            <td colspan="5">
+            <td colspan="2">
                 <?php
-                echo 'Parte de Taller Escaneado Actual: ' . $this->Html->link(__($this->Form->value('TareasAlbaranesclientesreparacionesPartestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('TareasAlbaranesclientesreparacionesPartestallere.parteescaneado'));
+                echo 'Adjunto Actual: ' . $this->Html->link(__($this->Form->value('TareasAlbaranesclientesreparacionesPartestallere.parteescaneado'), true), '/files/partestallere/' . $this->Form->value('TareasAlbaranesclientesreparacionesPartestallere.parteescaneado'));
                 echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Parte de Taller Escaneado Actual', 'hiddenField' => false));
                 echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
                 ?>
+            </td>
+            <td colspan="3">
+                <table>
+                    <tr><th colspan="2">Otros Servicios</th></tr>
+                    <tr><td colspan="2">Descripción</td></tr>
+                    <tr><td colspan="2"><?php echo $this->Form->input('varios_descripcion', array('label' => false)); ?></td></tr>
+                    <tr>
+                        <td>Real</td>
+                        <td>Imputable</td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>
+                        <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false)); ?></td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -76,6 +93,7 @@
     function calcula_horasreales(){
         var minutos = (parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorafinalHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorafinalMin').val()))- (parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorainicioHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorainicioMin').val())) ;
         var horasreales = minutos / 60 ;
+        horasreales =Math.round(horasreales *100)/100 ;
         $('#TareasAlbaranesclientesreparacionesPartestallereHorasreales').val(horasreales)
         $('#TareasAlbaranesclientesreparacionesPartestallereHorasimputables').val(horasreales)
     }

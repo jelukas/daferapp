@@ -4,7 +4,7 @@ class AlbaranesclientesreparacionesController extends AppController {
 
     var $name = 'Albaranesclientesreparaciones';
     var $components = array('RequestHandler', 'Session', 'FileUpload');
-    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Number');
+    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Number','Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -42,11 +42,12 @@ class AlbaranesclientesreparacionesController extends AppController {
                             'TareasAlbaranesclientesreparacionesPartestallere' => 'Mecanico',
                             'ArticulosTareasAlbaranesclientesreparacione' => 'Articulo'),
                         'Ordene' => array(
-                            'Avisostallere' => 'Centrostrabajo'),
+                            'Avisostallere' => array('Centrostrabajo','Cliente')),
                         'Centrosdecoste',
                         'Comerciale',
                         'Almacene',
                         'Maquina',
+                        'FacturasCliente' => 'Cliente',
                         'Cliente' => 'Formapago',
                         'Centrostrabajo',
                         'Tiposiva'

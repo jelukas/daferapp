@@ -1,6 +1,6 @@
-<?php echo $this->Form->create('TareasAlbaranesclientesreparacionesPartestallere', array('type' => 'file',array('action' => 'add'))); ?>
+<?php echo $this->Form->create('TareasAlbaranesclientesreparacionesPartestallere', array('type' => 'file', array('action' => 'add'))); ?>
 <fieldset style=" width: 100%;">
-    <legend><?php __('Añadir Parte de Taller a la Tarea de Albarán'); ?></legend>
+    <legend><?php __('Añadir Parte de Taller'); ?></legend>
     <table class="view" style="font-size: 75%;">
         <tr>
             <th>Número</th>
@@ -18,13 +18,13 @@
                 <?php echo $this->Form->input('fecha', array('label' => false, 'dateFormat' => 'DMY')); ?>
             </td>
             <td>
-                <?php echo $this->Form->input('mecanico_id', array('label' => false ,'empty' => '-- Seleccione el Mecánico --')); ?>
+                <?php echo $this->Form->input('mecanico_id',array('label' => false, 'data-placeholder' => 'Selecione el Mecánico...', 'empty' => '', 'class' => 'chzn-select-required')); ?>
             </td>
 
         </tr>
         <tr>
             <th>Horas de Trabajo</th>
-            <th colspan="2">Descripción de Operaciónes</th>
+            <th colspan="2">Descripción de Operaciones</th>
         </tr>
         <tr>
             <td>
@@ -45,13 +45,30 @@
             </td>
             <td colspan="2">
                 <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+                <p><span>Observaciones</span></p>
+                <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
             </td>
         </tr>
         <tr>
-            <td colspan="5">
+            <td colspan="2">
                 <?php
-                echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Taller Escaneado'));
+                echo $this->Form->input('file', array('type' => 'file', 'label' => 'Adjunto'));
                 ?>
+            </td>
+            <td colspan="3">
+                <table>
+                    <tr><th colspan="2">Otros Servicios</th></tr>
+                    <tr><td colspan="2">Descripción</td></tr>
+                    <tr><td colspan="2"><?php echo $this->Form->input('varios_descripcion', array('label' => false)); ?></td></tr>
+                    <tr>
+                        <td>Real</td>
+                        <td>Imputable</td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false, 'value' => 0)); ?></td>
+                        <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false, 'value' => 0)); ?></td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -75,6 +92,7 @@
     function calcula_horasreales(){
         var minutos = (parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorafinalHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorafinalMin').val()))- (parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorainicioHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesPartestallereHorainicioMin').val())) ;
         var horasreales = minutos / 60 ;
+        horasreales =Math.round(horasreales *100)/100 ;
         $('#TareasAlbaranesclientesreparacionesPartestallereHorasreales').val(horasreales)
         $('#TareasAlbaranesclientesreparacionesPartestallereHorasimputables').val(horasreales)
     }

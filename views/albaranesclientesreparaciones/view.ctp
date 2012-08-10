@@ -494,6 +494,63 @@
             </tr>
         </table>
     </div>
+    <div class="datagrid">
+        <table>
+            <caption>Documentos Relacionados</caption>
+            <thead>
+                <tr><th>Tipo Documento</th><th>Número</th><th>Fecha</th><th>Cliente / Proveedor</th><th>Ver</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="5"></td></tr>
+            </tfoot>
+            <tbody>
+                <?php
+                $i = 0;
+                if (!empty($albaranesclientesreparacione['Ordene']['Avisostallere']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Aviso de Taller</td>
+                        <td><?php echo $albaranesclientesreparacione['Ordene']['Avisostallere']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesclientesreparacione['Ordene']['Avisostallere']['fechaaviso']) ? $this->Time->format('d-m-Y', $albaranesclientesreparacione['Ordene']['Avisostallere']['fechaaviso']) : '' ?></td>
+                        <td><?php echo $albaranesclientesreparacione['Ordene']['Avisostallere']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'avisostalleres', 'action' => 'view', $albaranesclientesreparacione['Ordene']['Avisostallere']['id']), array('class' => 'button_brownie')) ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if (!empty($albaranesclientesreparacione['Ordene']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Orden</td>
+                        <td><?php echo $albaranesclientesreparacione['Ordene']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesclientesreparacione['Ordene']['fecha']) ? $this->Time->format('d-m-Y', $albaranesclientesreparacione['Ordene']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesclientesreparacione['Ordene']['Avisostallere']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'ordenes', 'action' => 'view', $albaranesclientesreparacione['Ordene']['id']), array('class' => 'button_brownie')) ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if (!empty($albaranesclientesreparacione['FacturasCliente']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Factura de Cliente</td>
+                        <td><?php echo $albaranesclientesreparacione['FacturasCliente']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesclientesreparacione['FacturasCliente']['fecha']) ? $this->Time->format('d-m-Y', $albaranesclientesreparacione['FacturasCliente']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesclientesreparacione['FacturasCliente']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'facturas_clientes', 'action' => 'view', $albaranesclientesreparacione['FacturasCliente']['id']), array('class' => 'button_brownie')) ?></td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

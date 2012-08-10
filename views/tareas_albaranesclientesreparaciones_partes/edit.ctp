@@ -3,8 +3,7 @@
     <tr>
         <th>Nº Parte</th>
         <th style="width: 200px">Fecha</th>
-        <th style="width: 150px">Mecánico</th>
-        <th>Descripción Operación</th>
+        <th colspan="2">Mecánico</th>
     </tr>
     <tr>
         <td>
@@ -14,8 +13,19 @@
             ?>
         </td>
         <td><?php echo $this->Form->input('fecha', array('label' => false)); ?></td>
-        <td><?php echo $this->Form->input('mecanico_id', array('label' => false, 'style' => 'width: 150px')); ?></td>
-        <td><?php echo $this->Form->input('operacion', array('label' => false)); ?></td>
+        <td colspan="2"><?php echo $this->Form->input('mecanico_id', array('label' => false, 'data-placeholder' => 'Selecione el Mecánico...', 'empty' => '', 'class' => 'chzn-select-required')); ?></td>
+    </tr>
+    <tr>
+        <th colspan="2">Descripción Operación</th>
+        <th colspan="2">Observaciones</th>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+        </td>
+        <td colspan="2">
+            <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
+        </td>
     </tr>
     <tr>
         <th colspan="2">Horas Desplazamiento</th>
@@ -105,13 +115,14 @@
             echo $this->Form->input('file', array('type' => 'file', 'label' => 'Parte de Centro de Trabajo Escaneado'));
             ?>
         </td>
-        
         <td colspan="2">
             <table>
                 <tr><th colspan="2">Otros Servicios</th></tr>
+                <tr><td colspan="2">Descripción</td></tr>
+                <tr><td colspan="2"><?php echo $this->Form->input('varios_descripcion', array('label' => false)); ?></td></tr>
                 <tr>
-                    <th>Real</th>
-                    <th>Imputable</th>
+                    <td>Real</td>
+                    <td>Imputable</td>
                 </tr>
                 <tr>
                     <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>
@@ -169,18 +180,21 @@
         function calcula_horasreales_desplazamiento_ida(){
             var minutos = (parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientofinIdaHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientofinIdaMin').val()))- (parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientoinicioIdaHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientoinicioIdaMin').val())) ;
             var horasreales = minutos / 60 ;
+            horasreales =Math.round(horasreales *100)/100 ;
             $('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientorealesIda').val(horasreales)
             $('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientoimputablesIda').val(horasreales)
         }
         function calcula_horasreales_desplazamiento_vuelta(){
             var minutos = (parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientofinVueltaHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientofinVueltaMin').val()))- (parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientoinicioVueltaHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientoinicioVueltaMin').val())) ;
             var horasreales = minutos / 60 ;
+            horasreales =Math.round(horasreales *100)/100 ;
             $('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientorealesVuelta').val(horasreales)
             $('#TareasAlbaranesclientesreparacionesParteHorasdesplazamientoimputablesVuelta').val(horasreales)
         }
         function calcula_horasreales_trabajo(){
             var minutos = (parseFloat($('#TareasAlbaranesclientesreparacionesParteHorafinalHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesParteHorafinalMin').val()))- (parseFloat($('#TareasAlbaranesclientesreparacionesParteHorainicioHour').val()) * 60 + parseFloat($('#TareasAlbaranesclientesreparacionesParteHorainicioMin').val())) ;
             var horasreales = minutos / 60 ;
+            horasreales =Math.round(horasreales *100)/100 ;
             $('#TareasAlbaranesclientesreparacionesParteHorasreales').val(horasreales)
             $('#TareasAlbaranesclientesreparacionesParteHorasimputables').val(horasreales)
         }
