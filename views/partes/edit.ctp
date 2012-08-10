@@ -26,7 +26,7 @@
         <td colspan="2">
             <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
         </td>
-    </tr>d
+    </tr>
     <tr>
         <th colspan="2">Horas Desplazamiento</th>
         <th>Kilometraje</th>
@@ -118,9 +118,11 @@
         <td colspan="2">
             <table>
                 <tr><th colspan="2">Otros Servicios</th></tr>
+                <tr><td colspan="2">Descripción</td></tr>
+                <tr><td colspan="2"><?php echo $this->Form->input('varios_descripcion', array('label' => false)); ?></td></tr>
                 <tr>
-                    <th>Real</th>
-                    <th>Imputable</th>
+                    <td>Real</td>
+                    <td>Imputable</td>
                 </tr>
                 <tr>
                     <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>

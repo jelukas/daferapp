@@ -161,3 +161,9 @@ span.button_css_span {
 .datagrid table caption{
     font-size: 1.5em;
 }
+
+/* Importe de la Tarea */
+span.importe_tarea {
+    font-weight: bold;
+    float: right;
+}

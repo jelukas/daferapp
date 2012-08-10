@@ -18,7 +18,7 @@
                 <?php echo $this->Form->input('fecha', array('label' => false, 'dateFormat' => 'DMY')); ?>
             </td>
             <td>
-                <?php echo $this->Form->input('mecanico_id', array('label' => false, 'empty' => '-- Seleccione el Mecánico --')); ?>
+                <?php echo $this->Form->input('mecanico_id', array('label' => false, 'data-placeholder' => 'Selecione el Mecánico...', 'empty' => '', 'class' => 'chzn-select-required')); ?>
             </td>
         </tr>
         <tr>
@@ -44,6 +44,8 @@
             </td>
             <td colspan="2">
                 <?php echo $this->Form->input('operacion', array('label' => false)); ?>
+                <p><span>Observaciones</span></p>
+                <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
             </td>
         </tr>
         <tr>
@@ -55,18 +57,20 @@
                 ?>
             </td>
             <td colspan="3">
-            <table>
-                <tr><th colspan="2">Otros Servicios</th></tr>
-                <tr>
-                    <th>Real</th>
-                    <th>Imputable</th>
-                </tr>
-                <tr>
-                    <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>
-                    <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false)); ?></td>
-                </tr>
-            </table>
-        </td>
+                <table>
+                    <tr><th colspan="2">Otros Servicios</th></tr>
+                    <tr><td colspan="2">Descripción</td></tr>
+                    <tr><td colspan="2"><?php echo $this->Form->input('varios_descripcion', array('label' => false)); ?></td></tr>
+                    <tr>
+                        <td>Real</td>
+                        <td>Imputable</td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->Form->input('otrosservicios_real', array('label' => false)); ?></td>
+                        <td><?php echo $this->Form->input('otrosservicios_imputable', array('label' => false)); ?></td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
 </fieldset>
