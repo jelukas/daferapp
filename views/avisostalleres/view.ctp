@@ -102,8 +102,7 @@
         </tr>
     </table>    
 </div>
-<div style="clear:both;"></div><hr/>
-<div style="margin-top: 25px">
+<div style="display: block; margin: 10px 0;">
     <?php echo $this->Html->link(__('Nuevo Presupueso a Cliente', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'avisostallere', $avisostallere['Avisostallere']['id']), array('class' => 'button_link')); ?>
     <?php echo $this->Html->link(__('Nuevo Presupuesto de Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', -1, $avisostallere['Avisostallere']['id'], -1), array('class' => 'button_link')); ?>
     <?php if ($numOrdenes == 0): ?>
@@ -111,4 +110,63 @@
         <?php echo $this->Html->link(__('Generar Orden de taller', true), array('controller' => 'ordenes', 'action' => 'add', $avisostallere['Avisostallere']['id']), array('class' => 'button_link')); ?>
     <?php endif; ?>
 </div>
-
+<hr/>
+<div class="datagrid">
+    <table>
+        <caption>Documentos Relacionados</caption>
+        <thead>
+            <tr><th>Tipo Documento</th><th>Número</th><th>Fecha</th><th>Cliente / Proveedor</th><th>Ver</th></tr>
+        </thead>
+        <tfoot>
+            <tr><td colspan="5"></td></tr>
+        </tfoot>
+        <tbody>
+            <?php
+            $i = 0;
+            foreach ($avisostallere['Ordene'] as $ordene):
+                $class = null;
+                $i++;
+                if ($i % 2 == 0)
+                    $class = ' class="alt"';
+                ?>
+                <tr <?php echo $class ?>>
+                    <td>Orden</td>
+                    <td><?php echo $ordene['numero'] ?></td>
+                    <td><?php echo !empty($ordene['fecha'])? $this->Time->format('d-m-Y',$ordene['fecha']) : '' ?></td>
+                    <td><?php echo $avisostallere['Cliente']['nombre'] ?></td>
+                    <td><?php echo $this->Html->link('Ver',array('controller'=>'ordenes','action'=>'view',$ordene['id']),array('class'=>'button_brownie')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php
+            foreach ($avisostallere['Presupuestoscliente'] as $presupuestoscliente):
+                $class = null;
+                $i++;
+                if ($i % 2 == 0)
+                    $class = ' class="alt"';
+                ?>
+                <tr <?php echo $class ?>>
+                    <td>Presupuesto a Cliente</td>
+                    <td><?php echo $presupuestoscliente['numero'] ?></td>
+                    <td><?php echo !empty($presupuestoscliente['fecha'])? $this->Time->format('d-m-Y',$presupuestoscliente['fecha']) : '' ?></td>
+                    <td><?php echo $presupuestoscliente['Cliente']['nombre'] ?></td>
+                    <td><?php echo $this->Html->link('Ver',array('controller'=>'presupuestosclientes','action'=>'view',$presupuestoscliente['id']),array('class'=>'button_brownie')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php
+            foreach ($avisostallere['Presupuestosproveedore'] as $presupuestosproveedore):
+                $class = null;
+                $i++;
+                if ($i % 2 == 0)
+                    $class = ' class="alt"';
+                ?>
+                <tr <?php echo $class ?>>
+                    <td>Presupuesto a Proveedor</td>
+                    <td><?php echo $presupuestosproveedore['numero'] ?></td>
+                    <td><?php echo !empty($presupuestosproveedore['fecha'])? $this->Time->format('d-m-Y',$presupuestosproveedore['fecha']) : '' ?></td>
+                    <td><?php echo $presupuestosproveedore['Proveedore']['nombre'] ?></td>
+                    <td><?php echo $this->Html->link('Ver',array('controller'=>'presupuestosproveedores','action'=>'view',$presupuestosproveedore['id']),array('class'=>'button_brownie')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

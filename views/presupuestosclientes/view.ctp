@@ -1,6 +1,6 @@
 <div class="presupuestosclientes">
     <h2>
-        <?php __('Presupuestoscliente'); ?>
+        <?php __('Presupuestos a Cliente'); ?>
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link')); ?> 
         <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['Presupuestoscliente']['numero'])); ?> 
         <?php echo $this->Html->link(__('Listar Presupuestos a Clientes', true), array('action' => 'index'), array('class' => 'button_link')); ?> 
@@ -88,6 +88,8 @@
                 <td><span><?php __('Presupuesto de Proveedor') ?></span></td>
                 <td><?php echo $this->Html->link($presupuestoscliente['Presupuestosproveedore']['numero'], array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestoscliente['Presupuestosproveedore']['id'])); ?></td>
             <?php endif; ?>
+            <td><span>Estado</span></td>
+            <td colspan="3"><?php echo $presupuestoscliente['Estadospresupuestoscliente']['estado']; ?></td>
         </tr>
     </table>
     <div class="related">
@@ -111,7 +113,7 @@
                         <?php if (empty($tarea['TareaspresupuestoclientesOtrosservicio'])): ?>
                             <?php echo $this->Html->link(__('+ Otros Conceptos', true), array('controller' => 'tareaspresupuestoclientes_otrosservicios', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                         <?php endif; ?>
-                        <?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'edit', $tarea['id'])); ?>
+                        <?php echo $this->Html->link(__('Editar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'edit', $tarea['id']), array('class' => 'popup')); ?>
                         <?php echo $this->Html->link(__('Borrar', true), array('controller' => 'tareaspresupuestoclientes', 'action' => 'delete', $tarea['id'])); ?>
                     </td>
                 </tr>
@@ -154,6 +156,7 @@
                         <h4>Materiales</h4>              
                         <table class="tabla_materiales_tarea" id="tareaid-<?php echo $tarea['id'] ?>">
                             <tr class="tr_titulos">
+                                <th>Ref.</th>
                                 <th>Articulo</th>
                                 <th>Cantidad</th>
                                 <th>Precio Ud.</th>
@@ -163,11 +166,12 @@
                             <?php if (!empty($tarea['Materiale'])): ?>
                                 <?php foreach ($tarea['Materiale'] as $materiale): ?>
                                     <tr id="materialeid-<?php echo $materiale['id'] ?>">
+                                        <td><?php echo $materiale['Articulo']['ref'] ?></td>
                                         <td><?php echo $materiale['Articulo']['nombre'] ?></td>
                                         <td><?php echo $materiale['cantidad'] ?></td>
                                         <td><?php echo $materiale['precio_unidad'] ?></td>
                                         <td><?php echo $materiale['descuento'] ?> %</td>
-                                        <td><?php echo $materiale['importe'] ?></td>
+                                        <td><?php echo redondear_dos_decimal($materiale['importe']) ?></td>
                                         <td class="actions"><?php echo $this->Html->link('Eliminar', array('controller' => 'materiales', 'action' => 'delete', $materiale['id']), null, sprintf(__('Seguro que quieres borrar el material?', true), $materiale['id'])) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -201,23 +205,100 @@
                 </td>
             </tr>
         </table>
-        <div class="actions">
-            <ul>
-                <li><?php echo $this->Html->link(__('Nuevo Pedido de Cliente', true), array('controller' => 'pedidosclientes', 'action' => 'add', $presupuestoscliente['Presupuestoscliente']['id'])); ?></li>
-            </ul>
+        <div style="margin:20px;">
+            <?php echo $this->Html->link(__('Nuevo Pedido de Cliente', true), array('controller' => 'pedidosclientes', 'action' => 'add', $presupuestoscliente['Presupuestoscliente']['id']), array('class' => 'button_link')); ?>
+             <?php echo $this->Html->link(__('Imprimir', true), 'javascript:window.print(); void 0;', array('class' => 'button_link')); ?>
+        </div>
+        <div class="datagrid">
+            <table>
+                <caption>Documentos Relacionados</caption>
+                <thead>
+                    <tr><th>Tipo Documento</th><th>Número</th><th>Fecha</th><th>Cliente / Proveedor</th><th>Ver</th></tr>
+                </thead>
+                <tfoot>
+                    <tr><td colspan="5"></td></tr>
+                </tfoot>
+                <tbody>
+                    <?php
+                    $i = 0;
+                    if (!empty($presupuestoscliente['Avisostallere']['id'])):
+                        $class = null;
+                        $i++;
+                        if ($i % 2 == 0)
+                            $class = ' class="alt"';
+                        ?>
+                        <tr <?php echo $class ?>>
+                            <td>Aviso de Taller</td>
+                            <td><?php echo $presupuestoscliente['Avisostallere']['numero'] ?></td>
+                            <td><?php echo!empty($presupuestoscliente['Avisostallere']['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['Avisostallere']['fecha']) : '' ?></td>
+                            <td><?php echo $presupuestoscliente['Avisostallere']['Cliente']['nombre'] ?></td>
+                            <td><?php echo $this->Html->link('Ver', array('controller' => 'avisostallere', 'action' => 'view', $presupuestoscliente['Avisostallere']['id']), array('class' => 'button_brownie')) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php
+                    if (!empty($presupuestoscliente['Avisosrepuesto']['id'])):
+                        $class = null;
+                        $i++;
+                        if ($i % 2 == 0)
+                            $class = ' class="alt"';
+                        ?>
+                        <tr <?php echo $class ?>>
+                            <td>Aviso de Repuestos</td>
+                            <td><?php echo $presupuestoscliente['Avisosrepuesto']['numero'] ?></td>
+                            <td><?php echo!empty($presupuestoscliente['Avisosrepuesto']['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['Avisosrepuesto']['fecha']) : '' ?></td>
+                            <td><?php echo $presupuestoscliente['Avisosrepuesto']['Cliente']['nombre'] ?></td>
+                            <td><?php echo $this->Html->link('Ver', array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestoscliente['Avisosrepuesto']['id']), array('class' => 'button_brownie')) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php
+                    if (!empty($presupuestoscliente['Ordene']['id'])):
+                        $class = null;
+                        $i++;
+                        if ($i % 2 == 0)
+                            $class = ' class="alt"';
+                        ?>
+                        <tr <?php echo $class ?>>
+                            <td>Orden</td>
+                            <td><?php echo $presupuestoscliente['Ordene']['numero'] ?></td>
+                            <td><?php echo!empty($presupuestoscliente['Ordene']['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['Ordene']['fecha']) : '' ?></td>
+                            <td><?php echo $presupuestoscliente['Ordene']['Avisostallere']['Cliente']['nombre'] ?></td>
+                            <td><?php echo $this->Html->link('Ver', array('controller' => 'ordenes', 'action' => 'view', $presupuestoscliente['Ordene']['id']), array('class' => 'button_brownie')) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php
+                    foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente):
+                        $class = null;
+                        $i++;
+                        if ($i % 2 == 0)
+                            $class = ' class="alt"';
+                        ?>
+                        <tr <?php echo $class ?>>
+                            <td>Pedido de Cliente</td>
+                            <td><?php echo $pedidoscliente['numero'] ?></td>
+                            <td><?php echo!empty($pedidoscliente['fecha']) ? $this->Time->format('d-m-Y', $pedidoscliente['fecha']) : '' ?></td>
+                            <td><?php echo $presupuestoscliente['Cliente']['nombre'] ?></td>
+                            <td><?php echo $this->Html->link('Ver', array('controller' => 'pedidosclientes', 'action' => 'view', $pedidoscliente['id']), array('class' => 'button_brownie')) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php
+                    if (!empty($presupuestoscliente['Presupuestoproveedores']['id'])):
+                        $class = null;
+                        $i++;
+                        if ($i % 2 == 0)
+                            $class = ' class="alt"';
+                        ?>
+                        <tr <?php echo $class ?>>
+                            <td>Presupuesto de Proveedor</td>
+                            <td><?php echo $presupuestoscliente['Presupuestoproveedores']['numero'] ?></td>
+                            <td><?php echo!empty($presupuestoscliente['Presupuestoproveedores']['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['Presupuestoproveedores']['fecha']) : '' ?></td>
+                            <td><?php echo $presupuestoscliente['Presupuestoproveedores']['Proveedore']['nombre'] ?></td>
+                            <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestoproveedores', 'action' => 'view', $presupuestoscliente['Presupuestoproveedores']['id']), array('class' => 'button_brownie')) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div>
-        <table>
-            <tr><th>Pedido</th><th>Acciones</th></tr>
-            <?php foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente): ?>
-                <tr><td>Pedido de Cliente <?php echo $pedidoscliente['id'] ?></td><td class="actions"><?php echo $this->Html->link('Ver', array('action' => 'view', 'controller' => 'pedidosclientes', $pedidoscliente['id'])) ?></td></tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-</div>
-<div id="loading_background">
-    <div id="loading_animation"></div>
 </div>
 <script>
     $(function() {

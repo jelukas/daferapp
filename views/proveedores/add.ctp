@@ -16,7 +16,7 @@
                 <td><span><?php __('Tipo de IVA'); ?></span></td>
                 <td><?php echo $this->Form->input('tiposiva_id', array('label' => false)) ?></td>
                 <td><span><?php __('Cuenta Contable'); ?></span></td>
-                <td><?php echo $this->Form->input('cuentacontable', array('label' => false)) ?></td>
+                <td><?php echo $this->Autocomplete->replace_select('Cuentascontable', null, true, null);?></td>
             </tr>
             <tr>
                 <td><span><?php __('Población'); ?></span></td>
@@ -29,7 +29,7 @@
                 <td><?php echo $this->Form->input('pais', array('label' => false)) ?></td>
             </tr>
             <tr>
-                <td><span><?php __('Teléfono'); ?></span></td>
+                <td><span><?php __('Teléfono Principal'); ?></span></td>
                 <td colspan="3"><?php echo $this->Form->input('telefono', array('label' => false)) ?></td>
                 <td><span><?php __('Dirección Fiscal'); ?></span></td>
                 <td colspan="5"><?php echo $this->Form->input('direccionfiscal', array('label' => false)) ?></td>

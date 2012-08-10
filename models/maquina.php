@@ -6,11 +6,16 @@ class Maquina extends AppModel {
 		'nombre' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'codigo' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+			),
+		),
+		'nombre' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
 			),
 		),
 		
@@ -50,6 +55,32 @@ class Maquina extends AppModel {
 		),
 		'Otrosrepuesto' => array(
 			'className' => 'Otrosrepuesto',
+			'foreignKey' => 'maquina_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Albaranescliente' => array(
+			'className' => 'Albaranescliente',
+			'foreignKey' => 'maquina_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Albaranesclientesreparacione' => array(
+			'className' => 'Albaranesclientesreparacione',
 			'foreignKey' => 'maquina_id',
 			'dependent' => false,
 			'conditions' => '',

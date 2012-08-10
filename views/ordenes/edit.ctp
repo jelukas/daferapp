@@ -8,11 +8,17 @@
         </legend>
         <table class="view">
             <tr>
-                <td colspan="3" style="font-size: 120%;">
+                <td style="font-size: 120%;">
                     <span>Número</span>
                     <?php
                     echo $this->Form->input('id');
                     echo $this->Form->input('numero', array('label' => false));
+                    ?>
+                </td>
+                <td colspan="2">
+                    <span>Comercial</span>
+                    <?php
+                    echo $this->Form->input('comerciale_id', array('label' => false));
                     ?>
                 </td>
                 <td>

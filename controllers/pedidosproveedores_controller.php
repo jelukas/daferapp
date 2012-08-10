@@ -4,6 +4,7 @@ class PedidosproveedoresController extends AppController {
 
     var $name = 'Pedidosproveedores';
     var $components = array('FileUpload');
+    var $helpers = array('Ajax', 'Js', 'Autocomplete', 'Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -18,24 +19,8 @@ class PedidosproveedoresController extends AppController {
     }
 
     function index() {
-        $this->Pedidosproveedore->recursive = 2;
         $conditions = array();
-        if (!empty($this->params['url']['proveedore_id'])) {
-            $conditions['Pedidosproveedore.proveedore_id ='] = $this->params['url']['proveedore_id'];
-        }
-
-        if (!empty($this->params['url']['almacene_id'])) {
-            $conditions['Pedidosproveedore.almacene_id ='] = $this->params['url']['almacene_id'];
-        }
-
-        if (!empty($this->params['url']['day_pedido_f']) && !empty($this->params['url']['month_pedido_f']) && !empty($this->params['url']['year_pedido_f'])) {
-            $conditions['Pedidosproveedore.fecha >='] = $this->params['url']['year_pedido_f'] . '-' . $this->params['url']['month_pedido_f'] . '-' . $this->params['url']['day_pedido_f'];
-        }
-        if (!empty($this->params['url']['day_pedido_t']) && !empty($this->params['url']['month_pedido_t']) && !empty($this->params['url']['year_pedido_t'])) {
-            $conditions['Pedidosproveedore.fecha <='] = $this->params['url']['year_pedido_t'] . '-' . $this->params['url']['month_pedido_t'] . '-' . $this->params['url']['day_pedido_t'];
-        }
-
-        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene')));
+        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Presupuestosproveedore' => array('Avisostallere', 'Ordene', 'Avisosrepuesto', 'Proveedore', 'Almacene')));
         $pedidosproveedores = $this->paginate('Pedidosproveedore', $conditions);
 
         $this->set('pedidosproveedores', $pedidosproveedores);
@@ -50,15 +35,25 @@ class PedidosproveedoresController extends AppController {
             $this->flashWarnings(__('Pedido a Proveedor No válido', true));
             $this->redirect(array('action' => 'index'));
         }
-
-        $this->Pedidosproveedore->recursive = 2;
-        $pedidosproveedore = $this->Pedidosproveedore->read(null, $id);
+        $pedidosproveedore = $this->Pedidosproveedore->find('first', array(
+            'contain' => array(
+                'ArticulosPedidosproveedore' => array('Articulo','Tarea'),
+                'Albaranesproveedore'=>'Proveedore',
+                'Estadospedidosproveedore',
+                'Transportista',
+                'Presupuestosproveedore' => array(
+                    'Proveedore' =>'Tiposiva',
+                    'Estadospresupuestosproveedore',
+                    'Presupuestoscliente' => 'Cliente',
+                    'Pedidoscliente' => array('Presupuestoscliente' => 'Cliente'),
+                    'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
+                    'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
+                    'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
+                    'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene')
+            ),
+            'conditions' => array('Pedidosproveedore.id' => $id)
+                ));
         $this->set('pedidosproveedore', $pedidosproveedore);
-        $this->Pedidosproveedore->Presupuestosproveedore->recursive = 2;
-        $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->findById($pedidosproveedore['Pedidosproveedore']['presupuestosproveedore_id']);
-        $this->set('presupuestosproveedore', $presupuestosproveedore);
-        $this->Pedidosproveedore->ArticulosPedidosproveedore->recursive = 1;
-        $this->set('articulos_pedidosproveedore', $this->Pedidosproveedore->ArticulosPedidosproveedore->findAllByPedidosproveedoreId($id));
     }
 
     function edit($id = null) {
@@ -87,10 +82,20 @@ class PedidosproveedoresController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Pedidosproveedore->read(null, $id);
         }
-        $this->Pedidosproveedore->Presupuestosproveedore->recursive = 2;
-        $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->findById($this->data['Pedidosproveedore']['presupuestosproveedore_id']);
-        $this->set('presupuestosproveedore', $presupuestosproveedore);
+        $this->set('presupuestosproveedore', $this->Pedidosproveedore->Presupuestosproveedore->find(
+                        'first', array('contain' =>
+                    array(
+                        'Estadospresupuestosproveedore',
+                        'Presupuestoscliente' => 'Cliente',
+                        'Pedidoscliente' => array('Presupuestoscliente' => 'Cliente'),
+                        'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
+                        'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
+                        'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
+                        'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'),
+                    'conditions' => array('Presupuestosproveedore.id' => $this->data['Pedidosproveedore']['presupuestosproveedore_id']))));
+        $this->set('transportistas', $this->Pedidosproveedore->Transportista->find('list'));
         $this->set('articulos_pedidosproveedore', $this->Pedidosproveedore->ArticulosPedidosproveedore->findAllByPedidosproveedoreId($id));
+        $this->set('estadospedidosproveedores', $this->Pedidosproveedore->Estadospedidosproveedore->find('list'));
     }
 
     function delete($id = null, $presupuestosproveedore_id = null) {
@@ -152,7 +157,7 @@ class PedidosproveedoresController extends AppController {
                 $data = array();
                 foreach ($this->data['ArticulosPresupuestosproveedore'] as $articulo_presupuestosproveedore) {
                     if ($articulo_presupuestosproveedore['id'] != 0) {
-                        $articulo_presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('first', array('contain'=>'','conditions' => array('ArticulosPresupuestosproveedore.id' => $articulo_presupuestosproveedore['id'])));
+                        $articulo_presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('first', array('contain' => '', 'conditions' => array('ArticulosPresupuestosproveedore.id' => $articulo_presupuestosproveedore['id'])));
                         $articulo_pedidoproveedore = array();
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['pedidosproveedore_id'] = $id;
                         $articulo_pedidoproveedore['ArticulosPedidosproveedore']['tarea_id'] = $articulo_presupuestosproveedore['ArticulosPresupuestosproveedore']['tarea_id'];
@@ -182,8 +187,22 @@ class PedidosproveedoresController extends AppController {
             $this->flashWarnings(__('No se puede crear un Pedido a Proveedor sin venir desde un Presupuesto a Proveedor.', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Pedidosproveedore->Presupuestosproveedore->recursive = 2;
-        $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->findById($presupuestosproveedore_id);
+
+        $this->set('numero', $this->Pedidosproveedore->dime_siguiente_numero());
+        $this->set('transportistas', $this->Pedidosproveedore->Transportista->find('list'));
+        $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->find(
+                'first', array('contain' =>
+            array(
+                'Pedidosproveedore',
+                'Presupuestoscliente',
+                'Pedidoscliente',
+                'Ordene',
+                'Avisostallere',
+                'Avisosrepuesto',
+                'ArticulosPresupuestosproveedore' => array('Articulo', 'Tarea')),
+            'conditions' => array('Presupuestosproveedore.id' => $presupuestosproveedore_id)));
+        $this->set('estadospedidosproveedores', $this->Pedidosproveedore->Estadospedidosproveedore->find('list'));
+
         $this->set(compact('presupuestosproveedore'));
     }
 
@@ -223,6 +242,7 @@ class PedidosproveedoresController extends AppController {
             $this->flashWarnings(__('No se puede crear un Pedido a Proveedor sin venir desde un Presupuesto a Proveedor.', true));
             $this->redirect(array('action' => 'index'));
         }
+        $this->set('transportistas', $this->Pedidosproveedore->Transportista->find('list'));
         $albaranesproveedore = $this->Pedidosproveedore->Albaranesproveedore->find('first', array('contain' => array('Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene', 'Avisosrepuesto' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo')))), 'conditions' => array('Albaranesproveedore.id' => $albaranesproveedore_id))); //findById($albaranesproveedore_id);
         $presupuestosproveedore = $this->Pedidosproveedore->Presupuestosproveedore->find('first', array('contain' => array('Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene', 'Avisosrepuesto' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo')))), 'conditions' => array('Presupuestosproveedore.id' => $presupuestosproveedore_id))); //findById($presupuestosproveedore_id);
         $this->set(compact('albaranesproveedore', 'presupuestosproveedore'));

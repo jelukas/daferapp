@@ -1,6 +1,6 @@
 <?php echo $this->Form->create('ArticulosPresupuestosproveedore');?>
 	<fieldset>
- 		<legend><?php __('Edit Articulos Presupuestosproveedore'); ?></legend>
+ 		<legend><?php __('Editar Articulos Presupuestos Proveedor'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('articulo',array('type'=>'text','disabled'=>true,'value'=>$articulo['Articulo']['ref'].' ---- '.$articulo['Articulo']['nombre']));

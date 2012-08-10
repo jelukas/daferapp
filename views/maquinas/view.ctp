@@ -40,6 +40,8 @@
         <tr>
             <td><span>Horas de la Máquina</span></td>
             <td><?php echo $maquina['Maquina']['horas']; ?></td>
+            <td><span>Archivo Adjunto</span></td>
+            <td colspan="3"><?php echo $this->Html->link(__($maquina['Maquina']['maquinaescaneada'], true), '/files/maquina/' . $maquina['Maquina']['maquinaescaneada']); ?></td>
         </tr>
     </table>
     <?php echo $this->Form->create('Presupuestoscliente', array('action' => 'add')); ?>
@@ -91,6 +93,7 @@
                 <th>Cantidad</th>
                 <th>Stock</th>
                 <th>Localización</th>
+                <th>Observaciones</th>
                 <th>Precio Ud.</th>
                 <th>Eliminar</th>
             </tr>
@@ -103,6 +106,7 @@
                         <td><?php echo $otrosrepuesto['cantidad'] ?></td>
                         <td><?php echo $otrosrepuesto['Articulo']['existencias'] ?></td>
                         <td><?php echo $otrosrepuesto['Articulo']['localizacion'] ?></td>
+                        <td><?php echo $otrosrepuesto['observaciones'] ?></td>
                         <td><?php echo $otrosrepuesto['Articulo']['precio_sin_iva'] ?></td>
                         <td class="actions"><?php echo $this->Html->link(__('Borrar', true), array('controller' => 'otrosrepuestos', 'action' => 'delete', $otrosrepuesto['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $otrosrepuesto['Articulo']['ref'])); ?></td>
                     </tr>

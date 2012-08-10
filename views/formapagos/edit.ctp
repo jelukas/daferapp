@@ -1,29 +1,40 @@
-<div class="formapagos form">
-<?php echo $this->Form->create('Formapago');?>
-	<fieldset>
- 		<legend><?php __('Edit Formapago'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('nombre');
-		echo $this->Form->input('tipodepago');
-		echo $this->Form->input('numero_vencimientos');
-		echo $this->Form->input('dias_entre_vencimiento');
-		echo $this->Form->input('dia_mes_fijo_vencimiento');
-		echo $this->Form->input('proveedore_id');
-		echo $this->Form->input('cliente_id');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit', true));?>
-</div>
-<div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('Formapago.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('Formapago.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Formapagos', true), array('action' => 'index'));?></li>
-		<li><?php echo $this->Html->link(__('List Proveedores', true), array('controller' => 'proveedores', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Proveedore', true), array('controller' => 'proveedores', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Clientes', true), array('controller' => 'clientes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Cliente', true), array('controller' => 'clientes', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="formapagos">
+    <?php echo $this->Form->create('Formapago'); ?>
+    <fieldset>
+        <legend>
+            <?php __('Editar Forma de pago'); ?>
+            <?php echo $this->Html->link(__('Ver', true), array('action' => 'index', $this->Form->value('Formapago.id')),array('class'=>'button_link')); ?>
+            <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $this->Form->value('Formapago.id')),array('class'=>'button_link'), sprintf(__('¿ Seguro que quieres borrar la forma de pago # %s?', true), $this->Form->value('Formapago.nombre'))); ?>
+            <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'),array('class'=>'button_link')); ?>
+        </legend>
+        <?php
+        echo $this->Form->input('id');
+        ?>
+        <table class="view edit">
+            <tr>
+                <td colspan="3"><?php echo $this->Form->input('nombre'); ?></td>
+            </tr>
+            <tr>
+                <td><p><span style="padding-bottom: 5px;">Tipo de Pago</span></p>
+                    <?php
+                    $options = array('efectivo' => 'Efectivo', 'contado' => 'Contado', 'talon' => 'Talón', 'pagare' => 'Pagare', 'transferencia' => 'Transferencia', 'giro' => 'Giro', 'recibo' => 'Recibo', 'confirming' => 'Confirming', 'efecto' => 'Efecto');
+                    $attributes = array('legend' => false);
+                    echo $this->Form->radio('Formapago.tipodepago', $options, $attributes);
+                    ?>
+                </td>
+                <td><?php echo$this->Form->input('numero_vencimientos'); ?></td>
+                <td><?php echo$this->Form->input('dias_entre_vencimiento'); ?></td>
+            </tr>
+            <tr>
+                <td colspan="3"><?php echo $this->Form->input('dia_mes_fijo_vencimiento'); ?></td>
+            </tr>
+            <tr>
+                <td colspan="3"><?php echo $this->Form->input('proveedore_id', array('empty' => '-- Ninguno --', 'class' => 'chzn-select')); ?></td>
+            </tr>
+            <tr>
+                <td colspan="3"><?php echo $this->Form->input('cliente_id', array('empty' => '-- Ninguno --', 'class' => 'chzn-select')); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+    <?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>

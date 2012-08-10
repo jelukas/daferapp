@@ -7,6 +7,11 @@
         </legend>
         <table class="view edit">
             <tr>
+                <td colspan="6"></td>
+                <td><span>Estado</span></td>
+                <td><?php echo $this->Form->input('estadosalbaranesclientesreparacione_id', array('label' => false));?></td>
+            </tr>
+            <tr>
                 <td><span><?php __('Número'); ?></span></td>
                 <td><?php echo $this->Form->input('numero', array('value' => $numero, 'label' => false)); ?></td>
                 <td><span><?php __('Fecha'); ?></span></td>

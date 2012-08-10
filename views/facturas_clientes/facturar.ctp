@@ -1,5 +1,5 @@
-<div class="facturasClientes index">
-    <h2><?php __('Facturas Clientes'); ?></h2>
+<div class="facturasClientes">
+    <h2><?php __('Facturas Clientes Creadas'); ?></h2>
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo __('Numero'); ?></th>

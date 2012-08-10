@@ -1,24 +1,56 @@
 <div class="albaranesclientes">
     <?php echo $this->Form->create('Albaranescliente', array('type' => 'file')); ?>
     <fieldset>
-        <legend><?php __('Nuevo Albaran de Cliente proveniente del Pedido de Cliente ' . $pedidoscliente['Pedidoscliente']['id']); ?></legend>
-        <?php
-        echo "<h3>Cliente: " . $pedidoscliente['Presupuestoscliente']['Cliente']['nombre'] . '</h3>';
-        if (!empty($pedidoscliente['Presupuestoscliente']['Centrostrabajo']['centrotrabajo']))
-            echo "<h3>Centros de Trabajo: " . $pedidoscliente['Presupuestoscliente']['Centrostrabajo']['centrotrabajo'] . '</h3>';
-        if (!empty($pedidoscliente['Presupuestoscliente']['Maquina']['nombre']))
-            echo "<h3>Máquina: " . $pedidoscliente['Presupuestoscliente']['Maquina']['nombre'] . '</h3>';
-        echo $this->Form->input('fecha');
-        echo $this->Form->input('numero',array('value' => $numero));
-        echo $this->Form->input('observaciones');
-        echo $this->Form->input('file', array('type' => 'file', 'label' => 'Albaran Escaneado'));
-        echo $this->Form->input('pedidoscliente_id', array('type' => 'hidden', 'value' => $pedidoscliente['Pedidoscliente']['id']));
-        echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $pedidoscliente['Presupuestoscliente']['cliente_id']));
-        echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden', 'value' => $pedidoscliente['Presupuestoscliente']['centrostrabajo_id']));
-        echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $pedidoscliente['Presupuestoscliente']['maquina_id']));
-        echo $this->Form->input('tiposiva_id');
-        echo $this->Form->input('facturable');
-        ?>
+        <legend><?php __('Nuevo Albaran de Cliente proveniente del Pedido de Cliente ' . $pedidoscliente['Pedidoscliente']['numero']); ?></legend>
+        <table class="view">
+            <tr>
+                <td><span><?php __('Número'); ?></span></td>
+                <td>
+                    <?php
+                    echo $this->Form->input('id');
+                    echo $this->Form->input('numero', array('label' => False, 'value' => $numero));
+                    ?>
+                </td>
+                <td><span><?php __('Fecha'); ?></span></td>
+                <td><?php echo $this->Form->input('fecha', array('label' => False)); ?></td>
+                <td><span><?php __('Almacén de los Materiales'); ?></span></td>
+                <td><?php echo $this->Form->input('almacene_id', array('label' => False)); ?></td>
+                <td><span><?php __('Comercial'); ?></span></td>
+                <td><?php echo $this->Form->input('comerciale_id', array('label' => False, 'empty' => ' -- Ninguno --')); ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Cliente') ?></span></td>
+                <td><?php echo $this->Form->input('cliente_id', array('type' => 'hidden', 'label' => False, 'value' => @$pedidoscliente['Presupuestoscliente']['Cliente']['id'])); ?><?php echo @$pedidoscliente['Presupuestoscliente']['Cliente']['nombre']; ?></td>
+                <td><span><?php __('Centro de Trabajo') ?> </span></td>
+                <td><?php echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden', 'label' => False, 'value' => $pedidoscliente['Presupuestoscliente']['centrostrabajo_id'])); ?><?php echo $pedidoscliente['Presupuestoscliente']['Centrostrabajo']['centrotrabajo']; ?></td>
+                <td><span><?php __('Maquina') ?> </span></td>
+                <td><?php echo $this->Form->input('maquina_id', array('type' => 'hidden', 'label' => False, 'value' => @$pedidoscliente['Presupuestoscliente']['maquina_id'])); ?><?php echo @$pedidoscliente['Presupuestoscliente']['Maquina']['nombre']; ?></td>
+                <td><span><?php __('Pedido de cliente'); ?></span></td>
+                <td><span><?php echo $this->Form->input('pedidoscliente_id', array('type' => 'hidden', 'label' => False, 'value' => $pedidoscliente['Pedidoscliente']['id'])); ?><?php echo $pedidoscliente['Pedidoscliente']['numero']; ?></span></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Albarán Escaneado'); ?></span></td>
+                <td colspan="5">
+                    <?php
+                    echo $this->Form->input('file', array('type' => 'file', 'label' => False));
+                    ?>
+                </td>
+                <td><span><?php __('Estado') ?></span></td>
+                <td><?php echo $this->Form->input('estadosalbaranescliente_id', array('label' => False)) ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Observaciones'); ?></span></td>
+                <td colspan="5"><?php echo $this->Form->input('observaciones', array('label' => False)); ?></td>
+            </tr>
+            <tr>
+                <td><span><?php __('Centro de Coste') ?></span></td>
+                <td><?php echo $this->Form->input('centrosdecoste_id', array('label' => False)); ?></td>
+                <td><span><?php __('Tipo de IVA Aplicado') ?></span></td>
+                <td><?php echo $this->Form->input('tiposiva_id', array('label' => False)); ?></td>
+                <td><span><?php __('Facturable'); ?></span></td>
+                <td><?php echo $this->Form->input('facturable', array('label' => False, 'checked' => True)); ?></td>
+            </tr>
+        </table>
     </fieldset>
     <div class="related">
         <h3>Tareas a realizar </h3>

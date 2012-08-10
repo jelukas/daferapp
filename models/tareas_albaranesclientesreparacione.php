@@ -165,6 +165,8 @@ class TareasAlbaranesclientesreparacione extends AppModel {
                 if ($partetaller['id'] != $deleted_id) {
                     $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'] += $partetaller['horasreales'] * $config['Config']['costo_hora_en_taller'];
                     $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'] += $partetaller['horasimputables'] * $tarea['Albaranesclientesreparacione']['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraentraller'];
+                    $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'] += $partetaller['otrosservicios_real'];
+                    $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'] += $partetaller['otrosservicios_imputable'];
                 }
             }
             $tarea['TareasAlbaranesclientesreparacione']['total_partes_real'] = $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'] + $tarea['TareasAlbaranesclientesreparacione']['totaldietasreales'] + $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'];

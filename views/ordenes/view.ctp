@@ -6,9 +6,13 @@
     </h2>
     <table class="view">
         <tr>
-            <td colspan="3" style="font-size: 120%;">
+            <td style="font-size: 120%;">
                 <span>Número</span>
                 <?php echo $ordene['Ordene']['numero']; ?>
+            </td>
+            <td colspan="2">
+                <span>Comercial</span>
+                <?php echo $ordene['Comerciale']['nombre'] . ' ' . $ordene['Comerciale']['apellidos']; ?>
             </td>
             <td>
                 <span>Aviso de Taller</span>
@@ -137,26 +141,40 @@
                                 <h4>Partes de Centro de Trabajo</h4>
                                 <table>
                                     <tr>
-                                        <th>Número</th>
+                                        <td colspan="4"></td>
+                                        <th colspan="4">Horas de Desplazamiento</th>
+                                        <th colspan="4">Desplazamiento</th>
+                                        <td colspan="2"></td>
+                                        <th colspan="5">Horas de Trabajo</th>
+                                        <th colspan="3">Dietas</th>
+                                        <th colspan="3">Otros Servicios</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Núm.</th>
                                         <th>Fecha</th>
                                         <th>Mecánico</th>
                                         <th>Descripción Operación</th>
-                                        <th>Horas de Desplazamiento</th>
+                                        <th>Real</th>
+                                        <th>Imput.</th>
                                         <th>Costo</th>
                                         <th>PVP</th>
-                                        <th>Kilometraje</th>
+                                        <th>km. Real</th>
+                                        <th>km. Imput.</th>
                                         <th>Costo</th>
                                         <th>PVP</th>
-                                        <th>Precio Fijo<br/>Desplazamiento</th>
-                                        <th class="columna-presupuestado">Desplazamiento<br/>Presupuestado</th>
-                                        <th>Horas de Trabajo</th>
+                                        <th>Precio Fijo<br/>Desplaz.</th>
+                                        <th class="columna-presupuestado">Desplaz.<br/>Presup.</th>
+                                        <th>H. Real</th>
+                                        <th>H. Imput.</th>
                                         <th>Costo</th>
                                         <th>PVP</th>
-                                        <th class="columna-presupuestado">PVP H. Trabajo<br/>Presupuestado</th>
-                                        <th>Dietas</th>
-                                        <th class="columna-presupuestado">Dietas<br/>Presupuestadas</th>
-                                        <th>Otros Servicios</th>
-                                        <th class="columna-presupuestado">Otros Servicios<br/>Presupuestados</th>
+                                        <th class="columna-presupuestado">PVP H.<br/>Trabajo<br/>Presup.</th>
+                                        <th>Real</th>
+                                        <th>Imput.</th>
+                                        <th class="columna-presupuestado">Presup.</th>
+                                        <th>Real</th>
+                                        <th>Imput.</th>
+                                        <th class="columna-presupuestado">Presup.</th>
                                         <th>Parte<br/> Adjunto</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -168,26 +186,16 @@
                                                 <td><?php echo (!empty($partecentro['Mecanico'])) ? $partecentro['Mecanico']['nombre'] : '' ?></td>
                                                 <td><?php echo $partecentro['operacion'] ?></td>
                                                 <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>Real</th>
-                                                            <th>Imput.</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <?php
-                                                                echo $partecentro['horasdesplazamientoreales_ida'] + $partecentro['horasdesplazamientoreales_vuelta'];
-                                                                $total_horas_desplazamiento_real += $partecentro['horasdesplazamientoreales_ida'] + $partecentro['horasdesplazamientoreales_vuelta']
-                                                                ?> h
-                                                            </td>
-                                                            <td>
-                                                                <?php
-                                                                echo $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta'];
-                                                                $total_horas_desplazamiento_imputable += $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta']
-                                                                ?> h
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                    <?php
+                                                    echo $partecentro['horasdesplazamientoreales_ida'] + $partecentro['horasdesplazamientoreales_vuelta'];
+                                                    $total_horas_desplazamiento_real += $partecentro['horasdesplazamientoreales_ida'] + $partecentro['horasdesplazamientoreales_vuelta']
+                                                    ?> h
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    echo $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta'];
+                                                    $total_horas_desplazamiento_imputable += $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta']
+                                                    ?> h
                                                 </td>
                                                 <td>
                                                     <?php
@@ -200,26 +208,16 @@
                                                     ?>
                                                 </td>
                                                 <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>Real</th>
-                                                            <th>Imput.</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <?php
-                                                                echo $partecentro['kilometrajereal_ida'] + $partecentro['kilometrajereal_vuelta'];
-                                                                $total_km_desplazamiento_real += $partecentro['kilometrajereal_ida'] + $partecentro['kilometrajereal_vuelta']
-                                                                ?> Km.
-                                                            </td>
-                                                            <td>
-                                                                <?php
-                                                                echo $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta'];
-                                                                $total_km_desplazamiento_imputable += $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta']
-                                                                ?> Km.
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                    <?php
+                                                    echo $partecentro['kilometrajereal_ida'] + $partecentro['kilometrajereal_vuelta'];
+                                                    $total_km_desplazamiento_real += $partecentro['kilometrajereal_ida'] + $partecentro['kilometrajereal_vuelta']
+                                                    ?> Km.
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    echo $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta'];
+                                                    $total_km_desplazamiento_imputable += $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta']
+                                                    ?> Km.
                                                 </td>
                                                 <td>
                                                     <?php
@@ -234,55 +232,25 @@
                                                 <td><?php echo $partecentro['preciodesplazamiento'] ?> €</td>
                                                 <td class="columna-presupuestado"></td>
                                                 <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>Real</th>
-                                                            <th>Imput.</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <?php
-                                                                echo $partecentro['horasreales'];
-                                                                $total_horas_trabajo_tarea_real += $partecentro['horasreales']
-                                                                ?> h
-                                                            </td>
-                                                            <td>
-                                                                <?php
-                                                                echo $partecentro['horasimputables'];
-                                                                $total_horas_trabajo_tarea_imputable += $partecentro['horasimputables']
-                                                                ?> h
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                    <?php
+                                                    echo $partecentro['horasreales'];
+                                                    $total_horas_trabajo_tarea_real += $partecentro['horasreales']
+                                                    ?> h
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    echo $partecentro['horasimputables'];
+                                                    $total_horas_trabajo_tarea_imputable += $partecentro['horasimputables']
+                                                    ?> h
                                                 </td>
                                                 <td><?php echo $partecentro['horasreales'] * $config['Config']['costo_hora_en_centrotrabajo'] ?></td>
                                                 <td><?php echo $partecentro['horasimputables'] * $ordene['Avisostallere']['Centrostrabajo']['preciohoraencentro'] ?></td>
                                                 <td class="columna-presupuestado"></td>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>Real</th>
-                                                            <th>Imput.</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><?php echo $partecentro['dietasreales'] ?> €</td>
-                                                            <td><?php echo $partecentro['dietasimputables'] ?> €</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
+                                                <td><?php echo $partecentro['dietasreales'] ?> €</td>
+                                                <td><?php echo $partecentro['dietasimputables'] ?> €</td>
                                                 <td class="columna-presupuestado"></td>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>Real</th>
-                                                            <th>Imput.</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><?php echo $partecentro['otrosservicios_real'] ?> €</td>
-                                                            <td><?php echo $partecentro['otrosservicios_imputable'] ?> €</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
+                                                <td><?php echo $partecentro['otrosservicios_real'] ?> €</td>
+                                                <td><?php echo $partecentro['otrosservicios_imputable'] ?> €</td>
                                                 <td class="columna-presupuestado"></td>
                                                 <td>
                                                     <?php echo!empty($partecentro['parteescaneado']) ? $this->Html->link($this->Html->image("clip.png"), '/files/parte/' . $partecentro['parteescaneado'], array('target' => '_blank', 'escape' => false)) : '' ?>
@@ -297,77 +265,27 @@
                                     <tr style="background-color: #27642;">
                                         <td colspan="3" class="total_partes"></td>
                                         <td class="total_partes">Totales</td>
-                                        <td class="total_partes">
-                                            <table>
-                                                <tr>
-                                                    <th>Real</th>
-                                                    <th>Imput.</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><?php echo $total_horas_desplazamiento_real ?> h</td>
-                                                    <td><?php echo $total_horas_desplazamiento_imputable ?> h</td>
-                                                </tr>
-                                            </table>
-                                        </td>
+                                        <td class="total_partes"><?php echo $total_horas_desplazamiento_real ?> h</td>
+                                        <td class="total_partes"><?php echo $total_horas_desplazamiento_imputable ?> h</td>
                                         <td class="total_partes"><?php echo $tarea['totaldesplazamientoreal'] ?> €</td>
                                         <td class="total_partes"><?php echo $tarea['totaldesplazamientoimputado'] ?> €</td>
-                                        <td class="total_partes">
-                                            <table>
-                                                <tr>
-                                                    <th>Real</th>
-                                                    <th>Imput.</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><?php echo $total_km_desplazamiento_real ?> Km.</td>
-                                                    <td><?php echo $total_km_desplazamiento_imputable ?> Km.</td>
-                                                </tr>
-                                            </table>
-                                        </td>
+                                        <td class="total_partes"><?php echo $total_km_desplazamiento_real ?> Km.</td>
+                                        <td class="total_partes"><?php echo $total_km_desplazamiento_imputable ?> Km.</td>
                                         <td class="total_partes"><?php echo $tarea['totalkilometrajereal'] ?> €</td>
                                         <td class="total_partes"><?php echo $tarea['totalkilometrajeimputable'] ?> €</td>
                                         <td class="total_partes"> <?php echo $tarea['totalpreciodesplazamiento'] ?> €</td>
-                                        <td class="columna-presupuestado total_partes"> <?php echo $tarea['total_desplazamiento_presupuestado'] ?> €</td>
-                                        <td class="total_partes">
-                                            <table>
-                                                <tr>
-                                                    <th>Real</th>
-                                                    <th>Imput.</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><?php echo $total_horas_trabajo_tarea_real ?> h</td>
-                                                    <td><?php echo $total_horas_trabajo_tarea_imputable ?> h</td>
-                                                </tr>
-                                            </table>
-                                        </td>
+                                        <td class="columna-presupuestado total_partes"> <?php echo redondear_dos_decimal($tarea['total_desplazamiento_presupuestado']) ?> €</td>
+                                        <td  class="total_partes"><?php echo $total_horas_trabajo_tarea_real ?> h</td>
+                                        <td  class="total_partes"><?php echo $total_horas_trabajo_tarea_imputable ?> h</td>
                                         <td class="total_partes"><?php echo $tarea['total_horastrabajoprecio_real'] ?> €</td>
                                         <td class="total_partes"><?php echo $tarea['total_horastrabajoprecio_imputable'] ?> €</td>
-                                        <td class="columna-presupuestado total_partes"><?php echo $tarea['total_manoobra_presupuestada'] ?> €</td>
-                                        <td class="total_partes">
-                                            <table>
-                                                <tr>
-                                                    <th>Real</th>
-                                                    <th>Imput.</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><?php echo $tarea['totaldietasreales'] ?> €</td>
-                                                    <td><?php echo $tarea['totaldietasimputables'] ?> €</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td class="columna-presupuestado total_partes"><?php echo $tarea['total_dietas_presupuestada'] ?> €</td>
-                                        <td class="total_partes">
-                                            <table>
-                                                <tr>
-                                                    <th>Real</th>
-                                                    <th>Imput.</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><?php echo $tarea['totalotroserviciosreales'] ?> €</td>
-                                                    <td><?php echo $tarea['totalotroserviciosimputables'] ?> €</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td class="columna-presupuestado total_partes"> <?php echo $tarea['total_varios_presupuestado'] ?> €</td>
+                                        <td class="columna-presupuestado total_partes"><?php echo redondear_dos_decimal($tarea['total_manoobra_presupuestada']) ?> €</td>
+                                        <td class="total_partes"><?php echo $tarea['totaldietasreales'] ?> €</td>
+                                        <td class="total_partes"><?php echo $tarea['totaldietasimputables'] ?> €</td>
+                                        <td class="columna-presupuestado total_partes"><?php echo redondear_dos_decimal($tarea['total_dietas_presupuestada']) ?> €</td>
+                                        <td class="total_partes"><?php echo $tarea['totalotroserviciosreales'] ?> €</td>
+                                        <td class="total_partes"><?php echo $tarea['totalotroserviciosimputables'] ?> €</td>
+                                        <td class="columna-presupuestado total_partes"> <?php echo redondear_dos_decimal($tarea['total_varios_presupuestado']) ?> €</td>
                                     </tr>
                                     <tr>
                                         <td colspan="12" style="font-weight: bold; text-align: center;">
@@ -421,10 +339,10 @@
                                         <th class="horas_de_trabajo_column">Imput.</th>
                                         <th class="horas_de_trabajo_column">Costo</th>
                                         <th class="horas_de_trabajo_column">PVP</th>
-                                        <th class="columna-presupuestado">Presupuestado</th>
+                                        <th class="columna-presupuestado">Presup.</th>
                                         <th class="otros_servicios_column">Real</th>
                                         <th class="otros_servicios_column">Imput.</th>
-                                        <th class="columna-presupuestado">Presupuestado</th>
+                                        <th class="columna-presupuestado">Presup.</th>
                                         <th>Parte<br/> Adjunto</th>
                                         <th class="actions">Acciones</th>
                                     </tr>
@@ -480,10 +398,10 @@
                                         <td class="total_partes"><?php echo $total_horas_trabajo_tarea_imputable ?></td>
                                         <td class="total_partes"><?php echo $tarea['total_horastrabajoprecio_real'] ?> €</td>
                                         <td class="total_partes"><?php echo $tarea['total_horastrabajoprecio_imputable'] ?> €</td>
-                                        <td class="columna-presupuestado total_partes"><?php echo $tarea['total_manoobra_presupuestada'] ?> €</td>
-                                        <td class="total_partes"><?php echo $tarea['totalotroserviciosreales'] ?> €</td>
-                                        <td class="total_partes"><?php echo $tarea['totalotroserviciosimputables'] ?> €</td>
-                                        <td class="columna-presupuestado total_partes"> <?php echo $tarea['total_varios_presupuestado'] ?> €</td>
+                                        <td class="columna-presupuestado total_partes"><?php echo redondear_dos_decimal($tarea['total_manoobra_presupuestada']) ?> €</td>
+                                        <td class="total_partes"><?php echo redondear_dos_decimal($tarea['totalotroserviciosreales']) ?> €</td>
+                                        <td class="total_partes"><?php echo redondear_dos_decimal($tarea['totalotroserviciosimputables']) ?> €</td>
+                                        <td class="columna-presupuestado total_partes"> <?php echo redondear_dos_decimal($tarea['total_varios_presupuestado']) ?> €</td>
                                     </tr>
                                 </table>
                             <?php endif; ?>
@@ -493,15 +411,16 @@
                                     <thead>
                                     <th>Ref.</th>
                                     <th>Nombre</th>
-                                    <th>Cant. Real</th>
-                                    <th class="columna-presupuestado">Cant. Presup</th>
-                                    <th>Cant. Imputable</th>
-                                    <th>Ultimo <br/>Precio Costo</th>
-                                    <th>Total Costo</th>
+                                    <th>Localizacion</th>
+                                    <th>Cant.<br/>Real</th>
+                                    <th class="columna-presupuestado">Cant.<br/>Presup</th>
+                                    <th>Cant.<br/>Imp.</th>
+                                    <th>Precio<br/>Costo</th>
+                                    <th>Total<br/>Costo</th>
                                     <th>PVP</th>
                                     <th>Total PVP</th>
                                     <th>Descuento</th>
-                                    <th class="columna-presupuestado">Presupuestado</th>
+                                    <th class="columna-presupuestado">Presup.</th>
                                     <th>Total con<br/> Descuento Aplicado</th>
                                     <th>Acciones</th>
                                     </thead>
@@ -513,6 +432,7 @@
                                         <tr>
                                             <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
                                             <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
+                                            <td><?php echo $articulo_tarea['Articulo']['localizacion'] ?></td>
                                             <td>
                                                 <?php
                                                 echo $articulo_tarea['cantidadreal'];
@@ -521,7 +441,7 @@
                                             </td>
                                             <td class="columna-presupuestado">
                                                 <?php
-                                                echo $articulo_tarea['cantidad_presupuestada'];
+                                                echo redondear_dos_decimal($articulo_tarea['cantidad_presupuestada']);
                                                 $total_cantidad_materiales_presupuestados += $articulo_tarea['cantidad_presupuestada']
                                                 ?>
                                             </td>
@@ -536,39 +456,42 @@
                                             <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
                                             <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
-                                            <td class="columna-presupuestado"><?php echo $articulo_tarea['presupuestado']; ?></td>
+                                            <td class="columna-presupuestado"><?php echo redondear_dos_decimal($articulo_tarea['presupuestado']); ?></td>
                                             <td>
                                                 <?php
                                                 $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
-                                                echo $totalcondescuento;
+                                                echo redondear_dos_decimal($totalcondescuento);
                                                 ?>
                                             </td>
-                                            <td class="actions"><?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?></td>
+                                            <td class="actions">
+                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_tareas', 'action' => 'edit', $articulo_tarea['id']), array('class' => 'popup')); ?>
+                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                     <tr>
-                                        <td colspan="2" style="text-align: right;" class="total_articulos">Totales</td>
+                                        <td colspan="3" style="text-align: right;" class="total_articulos">Totales</td>
                                         <td class="total_articulos"><?php echo $total_cantidad_material_real ?></td>
                                         <td class="columna-presupuestado total_articulos"><?php echo $total_cantidad_materiales_presupuestados ?></td>
                                         <td class="total_articulos"><?php echo $total_cantidad_material_imputable ?></td>
                                         <td class="total_articulos"></td>
-                                        <td class="total_articulos"><?php echo $tarea['total_materiales_costo'] ?> &euro; </td>
+                                        <td class="total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_costo']) ?> &euro; </td>
                                         <td class="total_articulos"></td>
                                         <td class="total_articulos"></td>
                                         <td class="total_articulos"></td>
-                                        <td class="columna-presupuestado total_articulos"><?php echo $tarea['total_materiales_presupuestado'] ?> &euro; </td>
-                                        <td class="total_articulos"><?php echo $tarea['total_materiales_imputables'] ?> &euro; </td>
+                                        <td class="columna-presupuestado total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_presupuestado']) ?> &euro; </td>
+                                        <td class="total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_imputables']) ?> &euro; </td>
                                         <td class="total_articulos"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="5" class="beneficio_articulos" style="background-color: #ca87ce;">
-                                            Beneficio Neto Artículos: <?php echo $tarea['total_materiales_imputables'] - $tarea['total_materiales_costo'] ?> &euro; -- <?php echo redondear_dos_decimal((1 - @($tarea['total_materiales_costo'] / $tarea['total_materiales_imputables'])) * 100) ?> &percnt;
+                                            Beneficio Neto Artículos: <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] - $tarea['total_materiales_costo']) ?> &euro; -- <?php echo redondear_dos_decimal((1 - @($tarea['total_materiales_costo'] / $tarea['total_materiales_imputables'])) * 100) ?> &percnt;
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="10"></td>
                                         <td colspan="3" class="total_importe_tarea" style="background-color: #ca87ce;">
-                                            TOTAL IMPORTE TAREA <?php echo $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']; ?>
+                                            TOTAL IMPORTE TAREA <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']); ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -577,17 +500,17 @@
                                 <tr>
                                     <td><span>RENDIMIENTOS TAREA</span></td>
                                     <td>REAL</td>
-                                    <td><?php echo $tarea['total_materiales_costo'] + $tarea['total_partes_real'] ?> &euro;</td>
+                                    <td><?php echo redondear_dos_decimal($tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro;</td>
                                     <td>IMPUTABLE</td>
                                     <td>
                                         <?php
-                                        echo $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable'];
-                                        $total_orden+= $tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']
+                                        echo redondear_dos_decimal($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']);
+                                        $total_orden+= $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']
                                         ?> &euro;
                                     </td>
                                     <td>BENEFICIO NETO</td>
                                     <td>
-                                        <?php echo ($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real']) ?> &euro; --
+                                        <?php echo redondear_dos_decimal(($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real'])) ?> &euro; --
                                         <?php if (($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable']) != 0): ?>
                                             <?php echo redondear_dos_decimal(((($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']) - ($tarea['total_materiales_costo'] + $tarea['total_partes_real'])) / ($tarea['total_materiales_imputables'] + $tarea['total_materiales_costo'] + $tarea['total_partes_imputable'])) * 100) ?> &percnt;
                                         <?php else: ?>
@@ -601,7 +524,16 @@
                 <?php endforeach; ?>
             </table>
         <?php endif; ?>
-        <p class="total_orden">Total Orden: <?php echo $total_orden ?> &euro;</p>
+        <table>
+            <tr>
+                <td class="total_orden">Total Mano de Obra y Otros Servicios</td>
+                <td class="total_orden"></td>
+                <td class="total_orden">Total Repuestos</td>
+                <td class="total_orden"></td>
+                <td class="total_orden">Base Imponible</td>
+                <td class="total_orden"><?php echo redondear_dos_decimal($total_orden) ?> &euro;</td>
+            </tr>
+        </table>
         <div class="actions">
             <ul>
                 <li><?php echo $this->Html->link(__('Nueva Tarea', true), array('controller' => 'tareas', 'action' => 'add', $ordene['Ordene']['id']), array('class' => 'popup')); ?> </li>

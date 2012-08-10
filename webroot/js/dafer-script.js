@@ -172,9 +172,18 @@ jQuery(document).ready(function() {
     });
     $("#loading_background").ajaxStop(function(){
         $(this).hide();
+        $(".chzn-select").chosen();
+        $(".chzn-select-not-required").chosen({
+            allow_single_deselect: true
+        });
+        $(".chzn-select-required").chosen();
     });
     
-   
+    $(".chzn-select").chosen();
+    $(".chzn-select-not-required").chosen({
+        allow_single_deselect: true
+    });
+    $(".chzn-select-required").chosen();
 });
 function showgif_popup(){
     alert("mostrando loader");

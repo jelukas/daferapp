@@ -26,6 +26,13 @@ class Cliente extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
+        ),
+        'Cuentascontable' => array(
+            'className' => 'Cuentascontable',
+            'foreignKey' => 'cuentascontable_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
         )
     );
     var $hasMany = array(
@@ -46,6 +53,19 @@ class Cliente extends AppModel {
             'className' => 'Albaranescliente',
             'foreignKey' => 'cliente_id',
             'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
+        'Telefono' => array(
+            'className' => 'Telefono',
+            'foreignKey' => 'cliente_id',
+            'dependent' => true,
             'conditions' => '',
             'fields' => '',
             'order' => '',
@@ -96,53 +116,88 @@ class Cliente extends AppModel {
         )
     );
 
-    public function get_albaranesrepuestos_para_facturar($fecha_inicio, $fecha_fin) {
-        $cliente = $this->find('first', array('contain' => array('Centrostrabajo' => 'Maquina'), 'conditions' => array('Cliente.id' => $this->id)));
-        $albaranes_para_facturar = array();
+    public function get_cliente_facturable($fecha_inicio, $fecha_fin) {
+        $cliente = $this->find('first', array('contain' => '', 'conditions' => array('Cliente.id' => $this->id)));
+        $cliente_facturable = array();
         if ($cliente['Cliente']['modo_facturacion'] == 'albaran') {
-            $albaranesrepuestos_list = $this->Albaranescliente->find(
-                    'all', array(
-                'contain' => '',
-                'conditions' => array(
-                    'Albaranescliente.cliente_id' => $this->id,
-                    'Albaranescliente.facturable' => 1,
-                    'Albaranescliente.facturas_cliente_id' => null,
-                    'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
+            $cliente_facturable = $this->find('first', array(
+                'contain' => array(
+                    'Albaranescliente' => array(
+                        'Centrostrabajo',
+                        'Maquina',
+                        'conditions' => array(
+                            'Albaranescliente.facturable' => 1,
+                            'Albaranescliente.facturas_cliente_id' => null,
+                            'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
+                    'Albaranesclientesreparacione' => array(
+                        'Centrostrabajo',
+                        'Maquina',
+                        'conditions' => array(
+                            'Albaranesclientesreparacione.facturable' => 1,
+                            'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                            'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
                 ),
+                'conditions' => array('Cliente.id' => $this->id)
                     ));
-            $albaranes_para_facturar['Albaranescliente'] =  $albaranesrepuestos_list;
         } elseif ($cliente['Cliente']['modo_facturacion'] == 'centrotrabajo') {
-            foreach ($cliente['Centrostrabajo'] as $centrostrabajo) {
-                $albaranesrepuestos_list = $this->Albaranescliente->find(
-                        'all', array(
-                    'contain' => '',
-                    'conditions' => array(
-                        'Albaranescliente.centrostrabajo_id' => $centrostrabajo['id'],
-                        'Albaranescliente.facturable' => 1,
-                        'Albaranescliente.facturas_cliente_id' => null,
-                        'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
-                    ),
-                        ));
-                $centrostrabajo['Albaranescliente'] = $albaranesrepuestos_list;
-                $albaranes_para_facturar['Centrostrabajo'][] = $centrostrabajo;
-            }
+            $cliente_facturable = $this->find('first', array(
+                'contain' => array(
+                    'Centrostrabajo' => array(
+                        'Albaranescliente' => array(
+                            'Maquina',
+                            'conditions' => array(
+                                'Albaranescliente.facturable' => 1,
+                                'Albaranescliente.facturas_cliente_id' => null,
+                                'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
+                        'Albaranesclientesreparacione' => array(
+                            'Maquina',
+                            'conditions' => array(
+                                'Albaranesclientesreparacione.facturable' => 1,
+                                'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                                'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
+                    )
+                ),
+                'conditions' => array('Cliente.id' => $this->id)
+                    ));
+        } elseif ($cliente['Cliente']['modo_facturacion'] == 'maquina') {
+            $cliente_facturable = $this->find('first', array(
+                'contain' => array(
+                    'Centrostrabajo' => array(
+                        'Maquina' => array(
+                            'Albaranescliente' => array(
+                                'conditions' => array(
+                                    'Albaranescliente.facturable' => 1,
+                                    'Albaranescliente.facturas_cliente_id' => null,
+                                    'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
+                            'Albaranesclientesreparacione' => array(
+                                'conditions' => array(
+                                    'Albaranesclientesreparacione.facturable' => 1,
+                                    'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                                    'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
+                        )
+                    )
+                ),
+                'conditions' => array('Cliente.id' => $this->id)
+                    ));
+        } else { // Por defecto factura por albaran
+            $cliente_facturable = $this->find('first', array(
+                'contain' => array(
+                    'Albaranescliente' => array(
+                        'conditions' => array(
+                            'Albaranescliente.facturable' => 1,
+                            'Albaranescliente.facturas_cliente_id' => null,
+                            'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
+                    'Albaranesclientesreparacione' => array(
+                        'conditions' => array(
+                            'Albaranesclientesreparacione.facturable' => 1,
+                            'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                            'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
+                ),
+                'conditions' => array('Cliente.id' => $this->id)
+                    ));
         }
 
-        return $albaranes_para_facturar;
-    }
-
-    public function get_albaranesreparaciones_para_facturar($fecha_inicio, $fecha_fin) {
-        $albaranesreparacion_list = $this->Albaranesclientesreparacione->find(
-                'all', array(
-            'contain' => '',
-            'conditions' => array(
-                'Albaranescliente.cliente_id' => $this->id,
-                'Albaranesclientesreparacione.facturable' => 1,
-                'Albaranesclientesreparacione.facturas_cliente_id' => null,
-                'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)
-            )
-                ));
-        return $albaranesreparacion_list;
+        return $cliente_facturable;
     }
 
 }

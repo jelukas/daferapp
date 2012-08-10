@@ -3,10 +3,11 @@
 class MaquinasController extends AppController {
 
     var $name = 'Maquinas';
+    var $components = array('FileUpload');
 
     function index() {
         $maquinas = $this->paginate('Maquina');
-        $this->paginate = array('limit' => 20,'contain' => array('Centrostrabajo' => 'Cliente', 'Cliente'));
+        $this->paginate = array('limit' => 20, 'contain' => array('Centrostrabajo' => 'Cliente', 'Cliente'));
         $this->set('maquinas', $this->paginate());
     }
 
@@ -22,10 +23,10 @@ class MaquinasController extends AppController {
         if (!empty($this->data)) {
             $this->Maquina->create();
             if ($this->Maquina->save($this->data)) {
-                $this->Session->setFlash(__('The maquina has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                $this->Session->setFlash(__('La Máquina ha sido guardada', true));
+                $this->redirect(array('action' => 'view', $this->id));
             } else {
-                $this->Session->setFlash(__('The maquina could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('La Máquina no ha podido ser guardada. Inténtalo de nuevo.', true));
             }
         }
         $centrostrabajos = $this->Maquina->Centrostrabajo->find('list');
@@ -33,17 +34,56 @@ class MaquinasController extends AppController {
         $this->set(compact('centrostrabajos', 'clientes'));
     }
 
+    function add_popup($cliente_id = null, $centrostrabajo_id = null) {
+        if (!empty($this->data)) {
+            $this->Maquina->create();
+            if ($this->Maquina->save($this->data)) {
+                /* Guarda fichero */
+                if ($this->FileUpload->finalFile != null) {
+                    $this->Maquina->saveField('maquinaescaneada', $this->FileUpload->finalFile);
+                }
+                /* Fin de Guarda Fichero */
+                $this->Session->setFlash(__('La Máquina ha sido guardada', true));
+                $this->redirect($this->referer());
+            } else {
+                $this->flashWarnings(__('La Máquina no ha podido ser guardada. Inténtalo de nuevo.', true));
+                $this->redirect($this->referer());
+            }
+        }
+        $centrostrabajos = $this->Maquina->Centrostrabajo->find('list');
+        $clientes = $this->Maquina->Cliente->find('list');
+        if (!empty($cliente_id)) {
+            $this->data = array('Maquina' => array('cliente_id' => $cliente_id));
+            $centrostrabajos = $this->Maquina->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $cliente_id)));
+            if (!empty($centrostrabajo_id))
+                $this->data['Maquina']['centrostrabajo_id'] = $centrostrabajo_id;
+        }
+        $this->set(compact('centrostrabajos', 'clientes'));
+    }
+
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Invalid maquina', true));
+            $this->Session->setFlash(__('Máquina no Válida', true));
             $this->redirect(array('action' => 'index'));
         }
         if (!empty($this->data)) {
             if ($this->Maquina->save($this->data)) {
-                $this->Session->setFlash(__('The maquina has been saved', true));
-                $this->redirect(array('action' => 'index'));
+                /* Edicion de  fichero */
+                $id = $this->Maquina->id;
+                $upload = $this->Maquina->findById($id);
+                if (!empty($this->data['Maquina']['remove_file'])) {
+                    $this->FileUpload->RemoveFile($upload['Maquina']['maquinaescaneada']);
+                    $this->Maquina->saveField('maquinaescaneada', null);
+                }
+                if ($this->FileUpload->finalFile != null) {
+                    $this->FileUpload->RemoveFile($upload['Maquina']['maquinaescaneada']);
+                    $this->Maquina->saveField('maquinaescaneada', $this->FileUpload->finalFile);
+                }
+                /* Fin de Edicion Fichero */
+                $this->Session->setFlash(__('La Máquina ha sido guardada', true));
+                $this->redirect(array('action' => 'view', $id));
             } else {
-                $this->Session->setFlash(__('The maquina could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('La Máquina no ha podido ser guardada. Inténtalo de nuevo.', true));
             }
         }
         if (empty($this->data)) {
@@ -56,15 +96,17 @@ class MaquinasController extends AppController {
 
     function delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid id for maquina', true));
+            $this->flashWarnings(__('Id de Máquina no válido', true));
             $this->redirect(array('action' => 'index'));
         }
+        $upload = $this->Maquina->findById($id);
         if ($this->Maquina->delete($id)) {
-            $this->Session->setFlash(__('Maquina deleted', true));
+            $this->FileUpload->RemoveFile($upload['Maquina']['maquinaescaneada']);
+            $this->Session->setFlash(__('Máquina borrada', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Maquina was not deleted', true));
-        $this->redirect(array('action' => 'index'));
+        $this->flashWarnings(__('No se ha podido borrar la máquina', true));
+        $this->redirect($this->referer());
     }
 
     function search() {
@@ -113,10 +155,12 @@ class MaquinasController extends AppController {
         $maquinas = $this->Maquina->find('list', array('conditions' => array('Maquina.centrostrabajo_id' => $this->data['Avisosrepuesto']['centrostrabajo_id'])));
         $this->set(compact('maquinas'));
     }
+
     function selectAlbaranesclientesreparaciones() {
         $maquinas = $this->Maquina->find('list', array('conditions' => array('Maquina.centrostrabajo_id' => $this->data['Albaranesclientesreparacione']['centrostrabajo_id'])));
         $this->set(compact('maquinas'));
     }
+
     function selectAlbaranesclientes() {
         $maquinas = $this->Maquina->find('list', array('conditions' => array('Maquina.centrostrabajo_id' => $this->data['Albaranescliente']['centrostrabajo_id'])));
         $this->set(compact('maquinas'));
@@ -128,7 +172,13 @@ class MaquinasController extends AppController {
     }
 
     function beforeFilter() {
+        parent::beforeFilter();
         $this->checkPermissions('Maquina', $this->params['action']);
+        if ($this->params['action'] == 'edit' || $this->params['action'] == 'add'|| $this->params['action'] == 'add_popup') {
+            $this->FileUpload->fileModel = 'Maquina';
+            $this->FileUpload->uploadDir = 'files/maquina';
+            $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
+        }
     }
 
 }

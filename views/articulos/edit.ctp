@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <td><span>Familia</span></td>
-                <td><?php echo $this->Form->input('familia_id', array('label' => false)); ?></td>
+                <td><?php echo $this->Form->input('familia_id', array('label' => false,'empty'=>'','data-placeholder'=>'Seleccione la Familia...','class'=>'chzn-select-required')); ?></td>
                 <td><span>Imágen Actual</span></td>
                 <td>
                     <?php echo $this->Html->link(__($this->Form->value('Articulo.articuloescaneado'), true), '/files/articulo/' . $this->Form->value('Articulo.articuloescaneado')); ?>
@@ -55,7 +55,7 @@
                 <td><span>Observaciones</span></td>
                 <td><?php echo $this->Form->input('observaciones', array('label' => false)); ?></td>
                 <td><span>Proveedor habitual</span></td>
-                <td><?php echo $this->Form->input('proveedore_id', array('label' => false)); ?></td>
+                <td><?php echo $this->Form->input('proveedore_id', array('label' => false,'empty'=>'','data-placeholder'=>'Seleccione el Proveedor...','class'=>'chzn-select-required')); ?></td>
             </tr>
         </table>
     </fieldset>

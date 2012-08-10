@@ -23,7 +23,7 @@ class AutocompleteHelper extends AppHelper {
        <div class="autocompletador input select ' . $required_text . '">
             <label for="' . $this->model() . $model . 'Id">' . $label_text . '</label>'
                 . $this->Form->input(strtolower($model) . '_id', array('type' => 'hidden')) .
-                '<p><input id="autocomplete-' . $model . '" type="text" value="" /></p>
+                '<p><input id="autocomplete-' . $model . '" type="text" value="" autofocus="autofocus" /></p>
         </div>
         <script type="text/javascript">
                if($( "#autocomplete-' . $model . '" ).length != 0){
@@ -44,12 +44,15 @@ class AutocompleteHelper extends AppHelper {
             select: function( event, ui ) {
                 $(\'.autocompletador input[type="hidden"]\').val(ui.item.id);
                 $(\'.autocompletador input[type="hidden"]\').change();
+                if($(\'#ArticulosPresupuestosproveedorePrecioProveedor\').length != 0){
+                    $(\'#ArticulosPresupuestosproveedorePrecioProveedor\').val(ui.item.ultimopreciocompra);
+                }
             }
         });
         autocomplete_' . $model . '.data( "autocomplete" )._renderItem = function( ul, item ) {
             return $( "<li></li>" )
             .data( "item.autocomplete", item )
-            .append( "<a>" + item.label + "</a>" )
+            .append( "<a>"+ item.label + "</a>" )
             .appendTo( ul );
         };
     }

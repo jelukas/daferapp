@@ -1,4 +1,4 @@
-<div class="facturasproveedore form">
+<div>
     <h2><?php __('Filtro de Facturación'); ?></h2>
     <?php echo $this->Form->create('Albaranesproveedore'); ?>
     <fieldset>

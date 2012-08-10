@@ -147,14 +147,71 @@
             <?php endforeach; ?>
         </table>      
     <?php endif; ?>
-    <div style="clear:both;"></div><hr/>
-    <div style="margin-top: 25px">
+    <div style="display: block; padding: 25px">
         <?php echo $this->Html->link(__('Nuevo Presupuesto Proveedor', true), array('controller' => 'presupuestosproveedores', 'action' => 'add', $avisosrepuesto['Avisosrepuesto']['id']), array('class' => 'button_link')) ?>
         <?php echo $this->Html->link(__('Nuevo Presupuesto a Cliente', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'avisosrepuesto', $avisosrepuesto['Avisosrepuesto']['id']), array('class' => 'button_link')) ?>
         <?php echo $this->Html->link(__('Nuevo Albaran a Cliente', true), array('controller' => 'albaranesclientes', 'action' => 'add', 'avisosrepuesto', $avisosrepuesto['Avisosrepuesto']['id']), array('class' => 'button_link')) ?>
     </div>
 </div>
-
+<div class="datagrid">
+    <table>
+        <caption>Documentos Relacionados</caption>
+        <thead>
+            <tr><th>Tipo Documento</th><th>Número</th><th>Fecha</th><th>Cliente / Proveedor</th><th>Ver</th></tr>
+        </thead>
+        <tfoot>
+            <tr><td colspan="5"></td></tr>
+        </tfoot>
+        <tbody>
+            <?php
+            $i = 0;
+            foreach ($avisosrepuesto['Albaranescliente'] as $albaranescliente):
+                $class = null;
+                $i++;
+                if ($i % 2 == 0)
+                    $class = ' class="alt"';
+                ?>
+                <tr <?php echo $class ?>>
+                    <td>Albarán de Cliente Directo ( Sin pasar por Presupuestoo y Pedido )</td>
+                    <td><?php echo $albaranescliente['numero'] ?></td>
+                    <td><?php echo !empty($albaranescliente['fecha'])? $this->Time->format('d-m-Y',$albaranescliente['fecha']) : '' ?></td>
+                    <td><?php echo $albaranescliente['Cliente']['nombre'] ?></td>
+                    <td><?php echo $this->Html->link('Ver',array('controller'=>'albaranesclientes','action'=>'view',$albaranescliente['id']),array('class'=>'button_brownie')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php
+            foreach ($avisosrepuesto['Presupuestoscliente'] as $presupuestoscliente):
+                $class = null;
+                $i++;
+                if ($i % 2 == 0)
+                    $class = ' class="alt"';
+                ?>
+                <tr <?php echo $class ?>>
+                    <td>Presupuesto a Cliente</td>
+                    <td><?php echo $presupuestoscliente['numero'] ?></td>
+                    <td><?php echo !empty($presupuestoscliente['fecha'])? $this->Time->format('d-m-Y',$presupuestoscliente['fecha']) : '' ?></td>
+                    <td><?php echo $presupuestoscliente['Cliente']['nombre'] ?></td>
+                    <td><?php echo $this->Html->link('Ver',array('controller'=>'presupuestosclientes','action'=>'view',$presupuestoscliente['id']),array('class'=>'button_brownie')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php
+            foreach ($avisosrepuesto['Presupuestosproveedore'] as $presupuestosproveedore):
+                $class = null;
+                $i++;
+                if ($i % 2 == 0)
+                    $class = ' class="alt"';
+                ?>
+                <tr <?php echo $class ?>>
+                    <td>Presupuesto a Proveedor</td>
+                    <td><?php echo $presupuestosproveedore['numero'] ?></td>
+                    <td><?php echo !empty($presupuestosproveedore['fecha'])? $this->Time->format('d-m-Y',$presupuestosproveedore['fecha']) : '' ?></td>
+                    <td><?php echo $presupuestosproveedore['Proveedore']['nombre'] ?></td>
+                    <td><?php echo $this->Html->link('Ver',array('controller'=>'presupuestosproveedores','action'=>'view',$presupuestosproveedore['id']),array('class'=>'button_brownie')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 <script type="text/javascript">
     $(function() {
         $( "#dialog:ui-dialog" ).dialog( "destroy" );

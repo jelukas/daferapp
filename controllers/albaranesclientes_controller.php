@@ -4,7 +4,7 @@ class AlbaranesclientesController extends AppController {
 
     var $name = 'Albaranesclientes';
     var $components = array('RequestHandler', 'Session', 'FileUpload');
-    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Javascript');
+    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Javascript','Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -25,7 +25,21 @@ class AlbaranesclientesController extends AppController {
             $this->Session->setFlash(__('Invalid albaranescliente', true));
             $this->redirect($this->referer());
         }
-        $albaranescliente = $this->Albaranescliente->find('first', array('contain' => array('Maquina','Tiposiva', 'Comerciale', 'Centrosdecoste', 'Almacene', 'Cliente', 'Centrostrabajo', 'Pedidoscliente' => array('Presupuestoscliente' => 'Cliente'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Tareasalbaranescliente' => array('MaterialesTareasalbaranescliente' => 'Articulo', 'ManodeobrasTareasalbaranescliente', 'TareasalbaranesclientesOtrosservicio'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Albaranescliente.id' => $id)));
+        $albaranescliente = $this->Albaranescliente->find('first', array(
+            'contain' => array(
+                'FacturasCliente' => 'Cliente',
+                'Estadosalbaranescliente',
+                'Maquina',
+                'Tiposiva', 
+                'Comerciale', 
+                'Centrosdecoste', 
+                'Almacene', 
+                'Cliente', 
+                'Centrostrabajo', 
+                'Pedidoscliente' => array(
+                    'Presupuestoscliente' => 'Cliente'), 
+                'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 
+                'Tareasalbaranescliente' => array('MaterialesTareasalbaranescliente' => 'Articulo', 'ManodeobrasTareasalbaranescliente', 'TareasalbaranesclientesOtrosservicio'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Albaranescliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($albaranescliente['Tareasalbaranescliente'] as $tarea) {
@@ -63,7 +77,6 @@ class AlbaranesclientesController extends AppController {
                     $this->Albaranescliente->saveField('albaranescaneado', $this->FileUpload->finalFile);
                 }
                 /* Fin de Guardar Fichero */
-
                 $this->Session->setFlash(__('El Albaran de Venta ha sido guardado', true));
                 $this->redirect(array('action' => 'view', $this->Albaranescliente->id));
             } else {
@@ -71,20 +84,22 @@ class AlbaranesclientesController extends AppController {
                 $this->redirect($this->referer());
             }
         }
+        $estadosalbaranesclientes = $this->Albaranescliente->Estadosalbaranescliente->find('list');
         $almacenes = $this->Albaranescliente->Almacene->find('list');
         $tiposivas = $this->Albaranescliente->Tiposiva->find('list');
+        $comerciales = $this->Albaranescliente->Comerciale->find('list');
         $centrosdecostes = $this->Albaranescliente->Centrosdecoste->find('list');
         $numero = $this->Albaranescliente->dime_siguiente_numero();
         if ($vienede == 'pedidoscliente') {
             $pedidoscliente = $this->Albaranescliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Cliente', 'Centrostrabajo','Maquina'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $iddedondeviene)));
-            $this->set(compact('pedidoscliente', 'tiposivas', 'numero'));
+            $this->set(compact('pedidoscliente', 'tiposivas', 'numero','centrosdecostes','comerciales','estadosalbaranesclientes', 'almacenes'));
             $this->render('add_from_pedidoscliente');
         } elseif ($vienede == 'avisosrepuesto') {
             $avisosrepuesto = $this->Albaranescliente->Avisosrepuesto->find('first', array('contain' => array('Cliente', 'Centrostrabajo','Maquina', 'ArticulosAvisosrepuesto' => 'Articulo'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
-            $this->set(compact('avisosrepuesto', 'tiposivas', 'numero'));
+            $this->set(compact('avisosrepuesto', 'tiposivas', 'numero','centrosdecostes','comerciales','estadosalbaranesclientes', 'almacenes'));
             $this->render('add_from_avisosrepuesto');
         } else {
-            $this->set(compact('tiposivas', 'almacenes', 'numero'));
+            $this->set(compact('tiposivas', 'almacenes', 'numero','comerciales','estadosalbaranesclientes','centrosdecostes'));
             $this->render('add_direct');
         }
     }
@@ -115,12 +130,16 @@ class AlbaranesclientesController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Albaranescliente->read(null, $id);
         }
+        
+        $almacenes = $this->Albaranescliente->Almacene->find('list');
+        $comerciales = $this->Albaranescliente->Comerciale->find('list');
+        $estadosalbaranesclientes = $this->Albaranescliente->Estadosalbaranescliente->find('list');
         $centrosdecostes = $this->Albaranescliente->Centrosdecoste->find('list');
         $tiposivas = $this->Albaranescliente->Tiposiva->find('list');
         $avisosrepuestos = $this->Albaranescliente->Avisosrepuesto->find('list');
         $pedidosclientes = $this->Albaranescliente->Pedidoscliente->find('list');
         $facturasClientes = $this->Albaranescliente->FacturasCliente->find('list');
-        $this->set(compact('avisosrepuestos', 'pedidosclientes', 'facturasClientes', 'tiposivas','centrosdecostes'));
+        $this->set(compact('avisosrepuestos', 'pedidosclientes', 'facturasClientes', 'tiposivas','centrosdecostes','almacenes','comerciales','estadosalbaranesclientes'));
     }
 
     function delete($id = null) {

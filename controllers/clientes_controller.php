@@ -3,7 +3,8 @@
 class ClientesController extends AppController {
 
     var $name = 'Clientes';
-
+    var $helpers = array('Autocomplete');
+    
     function index() {
         $this->Cliente->recursive = 0;
         $this->set('clientes', $this->paginate());
@@ -45,7 +46,7 @@ class ClientesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Cliente->find('first',array('contain'=>array('Cuentasbancaria','Formapago'),'conditions'=>array('Cliente.id' => $id)));
+            $this->data = $this->Cliente->find('first',array('contain'=>array('Cuentascontable','Cuentasbancaria','Formapago'),'conditions'=>array('Cliente.id' => $id)));
         }
         $comerciales = $this->Cliente->Comerciale->find('list');
         $this->set(compact('comerciales'));

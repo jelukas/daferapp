@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <?php echo $this->Html->charset(); ?>
+<!DOCTYPE html>
+<html lang="es-ES"
+      <head>
+              <?php echo $this->Html->charset(); ?>
         <title>
             <?php __('DAFER Gestión 1.0'); ?>
             <?php echo $title_for_layout; ?>
@@ -11,20 +11,23 @@
         echo $this->Html->css('cake.generic');
         echo $this->Html->css('menu_style');
         echo $this->Html->css('jquery-ui-1.8.16.custom');
+        echo $this->Html->css('new_style');
+        echo $this->Html->css('chosen');
+        echo $this->Html->css('select2');
         echo $scripts_for_layout;
         echo $javascript->link(array('prototype'));
         echo $this->Javascript->link('jquery-1.6.2.min');
         echo $this->Javascript->link('jquery-ui-1.8.16.custom.min');
         echo $this->Javascript->link('dafer-script');
+        echo $this->Javascript->link('chosen.jquery');
+        echo $this->Javascript->link('select2.min');
         echo $javascript->link('jquery.form.js');
         ?>
     </head>
     <body>
         <div id="container">
             <div id="header">
-                <div id="header">
-                    <h1><?php echo date("d/m/Y"); ?>&nbsp&nbsp</h1>
-                </div>
+                <?php echo $this->Html->image('logo_dafer.png',array('url' =>array('controller' => 'pages','action' => 'index'))); ?>
             </div>
             <?php require_once '../plugins/menu.php'; ?>
             <div id="content">
@@ -39,6 +42,9 @@
             </div>
         </div>
         <div id="dialog-modal" title="Dafer">
+        </div>
+        <div id="loading_background">
+            <div id="loading_animation"></div>
         </div>
     </body>
 </html>

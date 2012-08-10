@@ -27,7 +27,7 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->flashWarnings(__('Albarán de Reparación Inválido', true));
             $this->redirect($this->referer());
         }
-        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('TareasAlbaranesclientesreparacione' => array('TareasAlbaranesclientesreparacionesParte' => 'Mecanico', 'TareasAlbaranesclientesreparacionesPartestallere' => 'Mecanico', 'ArticulosTareasAlbaranesclientesreparacione' => 'Articulo'), 'Ordene' => array('Avisostallere' => 'Centrostrabajo'), 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente' => 'Formapago', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
+        $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find('first', array('contain' => array('Estadosalbaranesclientesreparacione','TareasAlbaranesclientesreparacione' => array('TareasAlbaranesclientesreparacionesParte' => 'Mecanico', 'TareasAlbaranesclientesreparacionesPartestallere' => 'Mecanico', 'ArticulosTareasAlbaranesclientesreparacione' => 'Articulo'), 'Ordene' => array('Avisostallere' => 'Centrostrabajo'), 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente' => 'Formapago', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id))));
     }
 
     function add($ordene_id = null) {
@@ -58,7 +58,8 @@ class AlbaranesclientesreparacionesController extends AppController {
         $almacenes = $this->Albaranesclientesreparacione->Almacene->find('list');
         $comerciales = $this->Albaranesclientesreparacione->Comerciale->find('list');
         $centrosdecostes = $this->Albaranesclientesreparacione->Centrosdecoste->find('list');
-        $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes', 'numero'));
+        $estadosalbaranesclientesreparaciones = $this->Albaranesclientesreparacione->Estadosalbaranesclientesreparacione->find('list');
+        $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes', 'numero','estadosalbaranesclientesreparaciones'));
         if (!empty($ordene_id)) {
             $ordene = $this->Albaranesclientesreparacione->Ordene->find('first', array('contain' => array('Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Ordene.id' => $ordene_id)));
             $this->set('ordene', $ordene);
@@ -91,13 +92,14 @@ class AlbaranesclientesreparacionesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Albaranesclientesreparacione->find('first', array('contain' => array('Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente' => 'Formapago', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id)));
+            $this->data = $this->Albaranesclientesreparacione->find('first', array('contain' => array('Estadosalbaranesclientesreparacione','Ordene', 'Centrosdecoste', 'Comerciale', 'Almacene', 'Maquina', 'Cliente' => 'Formapago', 'Centrostrabajo', 'Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $id)));
         }
+        $estadosalbaranesclientesreparaciones = $this->Albaranesclientesreparacione->Estadosalbaranesclientesreparacione->find('list');
         $tiposivas = $this->Albaranesclientesreparacione->Tiposiva->find('list');
         $almacenes = $this->Albaranesclientesreparacione->Almacene->find('list');
         $comerciales = $this->Albaranesclientesreparacione->Comerciale->find('list');
         $centrosdecostes = $this->Albaranesclientesreparacione->Centrosdecoste->find('list');
-        $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes'));
+        $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes','estadosalbaranesclientesreparaciones'));
     }
 
     function delete($id = null) {

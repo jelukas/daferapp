@@ -33,6 +33,7 @@ class ArticulosAvisosrepuestosController extends AppController {
         $avisosrepuestos = $this->ArticulosAvisosrepuesto->Avisosrepuesto->find('list');
         $this->set(compact('articulos', 'avisosrepuestos'));
     }
+ 
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
@@ -84,6 +85,21 @@ class ArticulosAvisosrepuestosController extends AppController {
         }
         $avisosrepuesto = $this->ArticulosAvisosrepuesto->Avisosrepuesto->find('first',array('conditions' => array('Avisosrepuesto.id' => $avisosrepuesto_id)));
         $this->set(compact('avisosrepuesto_id', 'avisosrepuesto'));
+    }
+    function add_ajax($avisosrepuesto_id = null) {
+        $this->layout = 'ajax';
+        $this->ArticulosAvisosrepuesto->recursive = 1;
+        if (!empty($this->data)) {
+            $this->ArticulosAvisosrepuesto->create();
+            if ($this->ArticulosAvisosrepuesto->save($this->data)) {
+                $this->Session->setFlash(__('El Articulo para el Aviso de Repuestos '.$this->data['ArticulosAvisosrepuesto']['avisosrepuesto_id'].' a sido guardado', true));
+            } else {
+                $this->flashWarnings(__('El artículo para el Aviso de Repuestos No ha podido ser guardado.', true));
+            }
+        }
+        $avisosrepuesto = $this->ArticulosAvisosrepuesto->Avisosrepuesto->find('first',array('conditions' => array('Avisosrepuesto.id' => $avisosrepuesto_id)));
+        $this->set(compact('avisosrepuesto_id', 'avisosrepuesto'));
+        $this->render('/articulos_avisosrepuestos/add_popup');
     }
 
 }

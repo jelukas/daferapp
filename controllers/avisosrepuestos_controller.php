@@ -4,7 +4,7 @@ class AvisosrepuestosController extends AppController {
 
     var $name = 'Avisosrepuestos';
     var $components = array('RequestHandler', 'Session', 'FileUpload');
-    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js');
+    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js', 'Time','Autocomplete');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -27,7 +27,7 @@ class AvisosrepuestosController extends AppController {
         }
         $articulo_aviso_repuesto = $this->Avisosrepuesto->ArticulosAvisosrepuesto->id;
         $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('list');
-        $this->set('avisosrepuesto', $this->Avisosrepuesto->find('first', array('contain' => array('ArticulosAvisosrepuesto' => 'Articulo', 'Cliente', 'Centrostrabajo', 'Maquina', 'Almacene', 'Estadosaviso'), 'conditions' => array('Avisosrepuesto.id' => $id))), 'estadosaviso');
+        $this->set('avisosrepuesto', $this->Avisosrepuesto->find('first', array('contain' => array('Albaranescliente' => 'Cliente','Presupuestosproveedore'=>'Proveedore','Presupuestoscliente' => 'Cliente','ArticulosAvisosrepuesto' => 'Articulo', 'Cliente', 'Centrostrabajo', 'Maquina', 'Almacene', 'Estadosaviso'), 'conditions' => array('Avisosrepuesto.id' => $id))), 'estadosaviso');
         $this->Session->write('idAvisorepuesto', $this->Avisosrepuesto->id);
     }
 
@@ -48,9 +48,6 @@ class AvisosrepuestosController extends AppController {
                 $this->Session->setFlash(__('No se pudo guardar el aviso de repuestos' . $valid, true));
             }
         }
-        $clientes = $this->Avisosrepuesto->Cliente->find('list');
-        $centrostrabajos = $this->Avisosrepuesto->Centrostrabajo->find('list');
-        $maquinas = $this->Avisosrepuesto->Maquina->find('list');
         $almacenes = $this->Avisosrepuesto->Almacene->find('list');
         $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('list');
         $numero = $this->Avisosrepuesto->dime_siguiente_numero();
@@ -142,10 +139,7 @@ class AvisosrepuestosController extends AppController {
     }
 
     function mapa() {
-        $this->Avisosrepuesto->recursive = 1;
-        $avisosrepuestos = $this->Avisosrepuesto->findAllByEstadosaviso_id(array("1", "2", "3", "4"));
-        $estadosavisos = $this->Avisosrepuesto->Estadosaviso->find('all');
-
+        $avisosrepuestos = $this->Avisosrepuesto->find('all',array('contain'=>array('Cliente','Centrostrabajo','Maquina','Estadosaviso','Presupuestoscliente'),'conditions'=>array('Avisosrepuesto.estadosaviso_id' =>array("1", "2", "3", "4"))));
         $this->set('avisosrepuestos', $avisosrepuestos);
         $this->set(compact('avisosrepuestos'));
     }
@@ -162,7 +156,15 @@ class AvisosrepuestosController extends AppController {
     }
 
     function descartar($id = null) {
+        $this->Avisosrepuesto->id($id);
         $this->Avisosrepuesto->saveField('estadosaviso_id', 7);
+        $this->redirect(array('action' => 'mapa'));
+    }
+
+    function aceptar($id = null) {
+        $this->Avisosrepuesto->id($id);
+        $this->Avisosrepuesto->saveField('fechaaceptacion', date('Y-m-d H:i:s'));
+        $this->Avisosrepuesto->saveField('estadosaviso_id', 3);
         $this->redirect(array('action' => 'mapa'));
     }
 
@@ -185,7 +187,7 @@ class AvisosrepuestosController extends AppController {
         /* Fin de comprobación de Stock */
         return $warnings;
     }
-
+    
 }
 
 ?>

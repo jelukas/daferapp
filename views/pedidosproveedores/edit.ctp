@@ -9,9 +9,12 @@
     <fieldset>
         <table class="view">
             <tr>
-                <td colspan="4">
+                <td colspan="2">
                     <?php echo $this->Form->input('id'); ?>
                     <?php echo $this->Form->input('numero'); ?>
+                </td>
+                <td colspan="2">
+                    <?php echo $this->Form->input('estadospedidosproveedore_id',array('label' => 'Estado')); ?>
                 </td>
             </tr>
             <tr>
@@ -34,7 +37,18 @@
                     <?php echo $this->Form->input('file', array('type' => 'file', 'label' => 'Pedidos escaneado')); ?>
                 </td>
                 <td>
-                    <?php echo $this->Form->input('fecharecepcion',array( 'label' => 'Fecha de Recepcion')); ?>
+                    <?php echo $this->Form->input('fecharecepcion', array('label' => 'Fecha de Recepcion')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo $this->Form->input('transportista_id', array('label' => 'Transportista')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('numero_expedicion', array('label' => 'Nº Expedición')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('tipo_envio', array('label' => 'Tipo de Envio')); ?>
                 </td>
             </tr>
         </table>  

@@ -1,6 +1,6 @@
 <?php echo $this->Form->create('ArticulosPresupuestosproveedore', array('action' => 'add')); ?>
 <fieldset>
-    <legend><?php __('Add Articulos Presupuestosproveedore'); ?></legend>
+    <legend><?php __('Añadir Articulos Presupuestos Proveedor'); ?></legend>
     <?php
     echo $this->Autocomplete->replace_select('Articulo', null, true, $presupuestosproveedore['Presupuestosproveedore']['almacene_id']);
     if (!empty($presupuestosproveedore_id)) {

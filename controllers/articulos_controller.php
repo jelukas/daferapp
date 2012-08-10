@@ -200,6 +200,24 @@ class ArticulosController extends AppController {
         }
         $this->set(compact('nueva_existencias'));
     }
+    
+    function json(){
+        $this->layout = 'ajax';
+        $articulos = $this->Articulo->find('all',array(
+            'fields' => array('id','ref','nombre'),
+            'contain' => '',
+            'conditions' => array('Articulo.nombre LIKE' => '%'.$this->params['url']['q'].'%'),
+        ));
+        $articulos_array = array();
+        foreach ($articulos as $articulo) {
+            $articulos_array[] = array("id" => $articulo["Articulo"]["id"], "nombre" => $articulo["Articulo"]["nombre"], "ref" => $articulo["Articulo"]["ref"]);
+        }
+        $json['results'] = $articulos_array;
+        $this->set('articulos', $json);
+    }
+    function prueba(){
+        
+    }
 
 }
 

@@ -32,6 +32,20 @@ class MaterialesTareasalbaranesclientesController extends AppController {
         $tareasalbaranescliente = $this->MaterialesTareasalbaranescliente->Tareasalbaranescliente->find('first', array('contain' => array('Albaranescliente' => array('Pedidoscliente' => 'Presupuestoscliente')), 'conditions' => array('Tareasalbaranescliente.id' => $tareasalbaranescliente_id)));
         $this->set(compact('tareasalbaranescliente_id', 'tareasalbaranescliente'));
     }
+    function add_ajax($tareasalbaranescliente_id) {
+        $this->layout = 'ajax';
+        if (!empty($this->data)) {
+            $this->MaterialesTareasalbaranescliente->create();
+            if ($this->MaterialesTareasalbaranescliente->save($this->data)) {
+                $this->Session->setFlash(__('El material ha sido añadido', true));
+            } else {
+                $this->flashWarnings(__('El material no se pudo añadir. Prueba de nuevo.', true));
+            }
+        }
+        $tareasalbaranescliente = $this->MaterialesTareasalbaranescliente->Tareasalbaranescliente->find('first',array('contain' => 'Albaranescliente','conditions' => array('Tareasalbaranescliente.id' => $tareasalbaranescliente_id)));
+        $this->set(compact('tareasalbaranescliente_id','tareasalbaranescliente'));
+        $this->render('add');
+    }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
@@ -62,6 +76,26 @@ class MaterialesTareasalbaranesclientesController extends AppController {
             $this->flashWarnings(__('Materiales tareasalbaranescliente was not deleted', true));
         }
         $this->redirect($this->referer());
+    }
+
+    function ver_ultima_venta($id) {
+        $materiale = $this->MaterialesTareasalbaranescliente->find('first', array(
+            'contain' => array('Tareasalbaranescliente' => 'Albaranescliente'),
+            'conditions' => array('MaterialesTareasalbaranescliente.id' => $id)
+                ));
+        $cliente_id = $materiale['Tareasalbaranescliente']['Albaranescliente']['cliente_id'];
+        $albaranescliente_id = $materiale['Tareasalbaranescliente']['Albaranescliente']['id'];
+        $articulo_id = $materiale['MaterialesTareasalbaranescliente']['articulo_id'];
+
+        $ultimo_precio_venta = 0;
+        $sql = "SELECT * FROM materiales_tareasalbaranesclientes as MaterialesTareasalbaranescliente WHERE MaterialesTareasalbaranescliente.articulo_id = '".$articulo_id."' AND  MaterialesTareasalbaranescliente.tareasalbaranescliente_id IN (SELECT Tareasalbaranescliente.id FROM tareasalbaranesclientes as Tareasalbaranescliente WHERE Tareasalbaranescliente.albaranescliente_id IN (SELECT Albaranescliente.id FROM albaranesclientes as Albaranescliente WHERE Albaranescliente.cliente_id = '".$cliente_id."' AND Albaranescliente.id != '".$albaranescliente_id."')) ORDER BY  MaterialesTareasalbaranescliente.id DESC;";
+        $materiales_ultimo_vendidos = $this->MaterialesTareasalbaranescliente->query($sql);
+        $materiale = array_shift($materiales_ultimo_vendidos);
+        $materiale = $this->MaterialesTareasalbaranescliente->find('first', array(
+            'contain' => array('Tareasalbaranescliente' => 'Albaranescliente'),
+            'conditions' => array('MaterialesTareasalbaranescliente.id' => $materiale['MaterialesTareasalbaranescliente']['id'])
+                ));
+        $this->set(compact('materiale'));
     }
 
 }

@@ -7,15 +7,19 @@
         </legend>
         <table class="view">
             <tr>
-                <td colspan="4">
+                <td colspan="2">
                     <?php echo $this->Form->input('id'); ?>
                     <?php echo $this->Form->input('numero', array('readonly' => true , 'value' => $numero)); ?>
+                </td>
+                
+                <td colspan="2">
+                    <?php echo $this->Form->input('estadosalbaranesproveedore_id', array('label' => 'Estado')); ?>
                 </td>
             </tr>
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('pedidosproveedore_id', array('label' => 'Pedido de proveedor', 'type' => 'text', 'value' => $pedidosproveedore_id, 'disabled' => 'true'));
+                    echo $this->Form->input('pedidosproveedore_id', array('label' => 'Pedido de proveedor', 'type' => 'text', 'value' => $pedidosproveedore['Pedidosproveedore']['numero'], 'disabled' => 'true'));
                     echo $this->Form->input('pedidosproveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore_id));
                     echo $this->Form->input('proveedore_id', array('type' => 'hidden', 'value' => $pedidosproveedore['Presupuestosproveedore']['proveedore_id']));
                     ?>
@@ -24,12 +28,15 @@
                     <?php echo $this->Form->input('fecha', array('label' => 'Fecha')); ?>
                 </td>
                 <td>
-                    <?php echo $this->Form->input('confirmado', array('label' => 'Confirmado')); ?>
+                    <?php echo $this->Form->input('confirmado', array('label' => 'Confirmado para Facturar','checked' => True)); ?>
                 </td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="3">
                     <?php echo $this->Form->input('observaciones', array('label' => 'Observaciones')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('centrosdecoste_id', array('label' => 'Centros de Coste')); ?>
                 </td>
             </tr>
             <tr>
@@ -66,7 +73,7 @@
                             <tr<?php echo $class; ?>>
                                 <td><?php echo $articulo_pedidosproveedore['Articulo']['ref']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['Articulo']['nombre']; ?></td>
-                                <td><?php echo $articulo_pedidosproveedore['Tarea']['descripcion']; ?></td>
+                                <td><?php echo @$articulo_pedidosproveedore['Tarea']['descripcion']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['cantidad']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['precio_proveedor']; ?></td>
                                 <td><?php echo $articulo_pedidosproveedore['descuento']; ?></td>

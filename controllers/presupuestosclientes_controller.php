@@ -3,7 +3,7 @@
 class PresupuestosclientesController extends AppController {
 
     var $name = 'Presupuestosclientes';
-    var $helpers = array('Ajax', 'Js', 'Autocomplete');
+    var $helpers = array('Ajax', 'Js', 'Autocomplete', 'Time');
 
     function index() {
         $this->Presupuestoscliente->recursive = 0;
@@ -15,7 +15,7 @@ class PresupuestosclientesController extends AppController {
             $this->flashWarnings(__('Presupuestos Cliente Inválido', true));
             $this->redirect(array('action' => 'index'));
         }
-        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Maquina','Centrostrabajo', 'Mensajesinformativo', 'Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina')), 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
+        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Estadospresupuestoscliente', 'Maquina', 'Centrostrabajo', 'Mensajesinformativo', 'Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Presupuestosproveedore' => 'Proveedore', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($presupuestoscliente['Tareaspresupuestocliente'] as $tarea) {
@@ -144,12 +144,13 @@ class PresupuestosclientesController extends AppController {
                 $this->Session->setFlash(__('El Presupuestoscliente no ha podido ser guardado. Por favor, inténtelo de nuevo', true));
             }
         }
+        $estadospresupuestosclientes = $this->Presupuestoscliente->Estadospresupuestoscliente->find('list');
         $comerciales = $this->Presupuestoscliente->Comerciale->find('list');
         $tiposivas = $this->Presupuestoscliente->Tiposiva->find('list');
         $almacenes = $this->Presupuestoscliente->Almacene->find('list');
         $mensajesinformativos = $this->Presupuestoscliente->Mensajesinformativo->find('list');
         $numero = $this->Presupuestoscliente->dime_siguiente_numero();
-        $this->set(compact('comerciales', 'tiposivas', 'almacenes', 'numero', 'mensajesinformativos'));
+        $this->set(compact('estadospresupuestosclientes', 'comerciales', 'tiposivas', 'almacenes', 'numero', 'mensajesinformativos'));
         switch ($vienede) {
             case 'avisosrepuesto':
                 $avisosrepuesto = $this->Presupuestoscliente->Avisosrepuesto->find('first', array('contain' => array('Almacene', 'Cliente', 'Centrostrabajo', 'Maquina'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
@@ -167,7 +168,7 @@ class PresupuestosclientesController extends AppController {
                 $this->render('add_from_ordene');
                 break;
             case 'presupuestosproveedore':
-                $presupuestosproveedore = $this->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => array('Almacene', 'Avisostallere' => array('Centrostrabajo','Maquina'), 'Avisosrepuesto' => array('Centrostrabajo','Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo','Maquina'))), 'conditions' => array('Presupuestosproveedore.id' => $iddedondeviene)));
+                $presupuestosproveedore = $this->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => array('Almacene', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina'))), 'conditions' => array('Presupuestosproveedore.id' => $iddedondeviene)));
                 $cliente = $this->Presupuestoscliente->Cliente->find('first', array('contain' => '', 'conditions' => array('Cliente.id' => $cliente_id)));
                 $this->set(compact('presupuestosproveedore', 'cliente'));
                 $this->render('add_from_presupuestosproveedore');
@@ -194,6 +195,7 @@ class PresupuestosclientesController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Presupuestoscliente->read(null, $id);
         }
+        $estadospresupuestosclientes = $this->Presupuestoscliente->Estadospresupuestoscliente->find('list');
         $tiposivas = $this->Presupuestoscliente->Tiposiva->find('list');
         $comerciales = $this->Presupuestoscliente->Comerciale->find('list');
         $almacenes = $this->Presupuestoscliente->Almacene->find('list');
@@ -201,7 +203,7 @@ class PresupuestosclientesController extends AppController {
         $ordenes = $this->Presupuestoscliente->Ordene->find('list');
         $avisostalleres = $this->Presupuestoscliente->Avisostallere->find('list');
         $mensajesinformativos = $this->Presupuestoscliente->Mensajesinformativo->find('list');
-        $this->set(compact('mensajesinformativos', 'almacenes', 'comerciales', 'avisosrepuestos', 'ordenes', 'avisostalleres', 'tiposivas'));
+        $this->set(compact('estadospresupuestosclientes', 'mensajesinformativos', 'almacenes', 'comerciales', 'avisosrepuestos', 'ordenes', 'avisostalleres', 'tiposivas'));
     }
 
     function delete($id = null) {
@@ -215,6 +217,31 @@ class PresupuestosclientesController extends AppController {
         }
         $this->Session->setFlash(__('Presupuestoscliente was not deleted', true));
         $this->redirect(array('action' => 'index'));
+    }
+
+    function reogranizardatos() {
+        $presupuestosclientes = $this->Presupuestoscliente->find('list');
+        die(pr($presupuestosclientes));
+        foreach ($presupuestosclientes as $id => $fecha) {
+            $presupuestoscliente_modelo = $this->Presupuestoscliente->find('first', array(
+                'contain' => array(
+                    'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'),
+                    'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'),
+                    'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
+                ),
+                'conditions' => array('Presupuestoscliente.id' => $id)));
+            $this->Presupuestoscliente->id = $presupuestoscliente_modelo['Presupuestoscliente']['id'];
+            if (!empty($presupuestoscliente_modelo['Avisosrepuesto'])) {
+                $presupuestoscliente_modelo['Presupuestoscliente']['cliente_id'] = $presupuestoscliente_modelo['Avisosrepuesto']['cliente_id'];
+            }
+            if (!empty($presupuestoscliente_modelo['Ordene'])) {
+                $presupuestoscliente_modelo['Presupuestoscliente']['cliente_id'] = $presupuestoscliente_modelo['Ordene']['Avisostallere']['cliente_id'];
+            }
+            if (!empty($presupuestoscliente_modelo['Avisostallere'])) {
+                $presupuestoscliente_modelo['Presupuestoscliente']['cliente_id'] = $presupuestoscliente_modelo['Avisostallere']['cliente_id'];
+            }
+            $this->Presupuestoscliente->save($presupuestoscliente_modelo['Presupuestoscliente']);
+        }
     }
 
 }

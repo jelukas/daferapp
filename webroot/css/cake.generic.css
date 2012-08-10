@@ -87,8 +87,7 @@ ul, li {
 
 }
 #header h1 {
-    line-height:50px;
-    background: #8E9397 url('../img/dafer.jpg') no-repeat left;
+    line-height:60px;
     color: #fff;
     padding: 0px 30px;
     text-align:right;
@@ -882,14 +881,22 @@ td, #articulos_albarancompra td{
 }
 .avisot_mapa{
     width: 300px;
-    height: 300px;
+    height: 375px;
     float: left;
     background-color: #FFDB6F;
     border: 1px solid #F18813;
     margin: 5px;
     text-align: justify;
 }
-
+.avisot_mapa p span {
+    font-weight: bold;
+}
+.orden_mapa p span {
+    font-weight: bold;
+}
+div.informacion{
+    height: 250px;
+}
 
 table#articulos_autotable thead tr{
     font-weight: bold;
@@ -1029,8 +1036,8 @@ div.submit {
     text-align: center;
 }
 form input[type=radio].horizontal_radio {
-margin:3px 0px 0px 3px; 
-float:none;
+    margin:3px 0px 0px 3px; 
+    float:none;
 }
 .albaranesclientesreparaciones fieldset input, .albaranesclientesreparaciones fieldset textarea {
     clear: both;
@@ -1074,4 +1081,9 @@ table.rendimientos_tarea{
 }
 .tabla_materiales_tarea tr:not(.tr_titulos) {
     cursor: move;
+}
+form .required span::after {
+    color: #E32;
+    content: '*';
+    display: inline;
 }

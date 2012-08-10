@@ -42,7 +42,7 @@ $class = ' class="altrow"';
     </dl>
 
     <fieldset>
-        <legend>Albaranes en esta Factura</legend>
+        <legend>Albaranes de Repuestos en esta Factura</legend>
         <table>
             <tr>
                 <th><?php echo __('numero'); ?></th>
@@ -71,6 +71,30 @@ $class = ' class="altrow"';
                     <td><?php echo $this->Html->link($albaranescliente['pedidoscliente_id'], array('controller' => 'pedidosclientes', 'action' => 'view', $albaranescliente['pedidoscliente_id'])); ?></td>
                     <td><?php echo $albaranescliente['precio']; ?>&nbsp;</td>
                     <td class="actions"><?php echo $this->Html->link('Quitar', array('controller' => 'facturas_clientes', 'action' => 'quitar_albaran', $albaranescliente['id'])); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>Albaranes de Reparacion en esta Factura</legend>
+        <table>
+            <tr>
+                <th><?php echo __('numero'); ?></th>
+                <th><?php echo __('fecha'); ?></th>
+                <th><?php echo __('ordene_id'); ?></th>
+            </tr>
+            <?php
+            $i = 0;
+            foreach ($facturasCliente['Albaranesclientesreparacione'] as $albaranesclientesreparacione):
+                $class = null;
+                if ($i++ % 2 == 0) {
+                    $class = ' class="altrow"';
+                }
+                ?>
+                <tr<?php echo $class; ?>>
+                    <td><?php echo $this->Html->link($albaranesclientesreparacione['numero'], array('controller' => 'albaranesclientesreparaciones', 'action' => 'view', $albaranesclientesreparacione['id'])); ?>&nbsp;</td>
+                    <td><?php echo $this->Html->link($albaranesclientesreparacione['fecha'], array('controller' => 'albaranesclientesreparaciones', 'action' => 'view', $albaranesclientesreparacione['id'])); ?>&nbsp;</td>
+                    <td><?php echo $this->Html->link($albaranesclientesreparacione['ordene_id'], array('controller' => 'ordenes', 'action' => 'view', $albaranesclientesreparacione['ordene_id'])); ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

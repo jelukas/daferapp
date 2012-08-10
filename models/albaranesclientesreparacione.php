@@ -4,7 +4,7 @@ class Albaranesclientesreparacione extends AppModel {
 
     var $name = 'Albaranesclientesreparacione';
     var $displayField = 'numero';
-    var $order = "Albaranesclientesreparacione.numero DESC";
+    var $order = "Albaranesclientesreparacione.fecha DESC";
     var $validate = array(
         'fecha' => array(
             'date' => array(
@@ -64,6 +64,13 @@ class Albaranesclientesreparacione extends AppModel {
         'Centrostrabajo' => array(
             'className' => 'Centrostrabajo',
             'foreignKey' => 'centrostrabajo_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Estadosalbaranesclientesreparacione' => array(
+            'className' => 'Estadosalbaranesclientesreparacione',
+            'foreignKey' => 'estadosalbaranesclientesreparacione_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''
@@ -132,7 +139,14 @@ class Albaranesclientesreparacione extends AppModel {
         else
             return $resultado[0][0]['siguiente'];
     }
-    
+
+    public function get_precio_total_albaran() {
+        $total_albaranreparación = 0;
+        $albaranescliente = $this->find('first', array('contain' => 'TareasAlbaranesclientesreparacione','conditions' => array('Albaranesclientesreparacione.id' => $this->id)));
+        foreach ($albaranescliente['TareasAlbaranesclientesreparacione'] as $tarea) {
+                    $total_albaranreparación+= $tarea['total_materiales_imputables'] + $tarea['total_partes_imputable'];
+        }
+    }
 
 }
 

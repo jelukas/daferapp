@@ -3,6 +3,7 @@
 class ProveedoresController extends AppController {
 
     var $name = 'Proveedores';
+    var $helpers = array('Autocomplete');
 
     function index() {
         $this->Proveedore->recursive = 0;

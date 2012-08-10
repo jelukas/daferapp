@@ -1,9 +1,14 @@
 <div class="presupuestosclientes">
     <h2>
-        <?php __('Presupuestosclientes'); ?>
+        <?php __('Presupuestos a Clientes'); ?>
         <?php echo $this->Html->link(__('Nuevo Presupuesto a Cliente', true), array('action' => 'add'), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Listar Presupuestos a Clientes', true), array( 'action' => 'index'), array('class' => 'button_link')); ?> 
+        <?php echo $this->Html->link(__('Imprimir', true),'#?', array('class' => 'button_link')); ?> 
     </h2>
+    
+    <?php echo $this->Form->create('Presupuestoscliente', array('type' => 'get', 'action' => 'index')); ?>
+    <?php echo $this->Form->input('buscar', array('type' => 'text')); ?>
+    <?php echo $this->Form->end(__('Buscar', true)); ?>
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Paginator->sort('Nº Presu.', 'numero'); ?></th>
@@ -14,12 +19,13 @@
             <th><?php echo $this->Paginator->sort('precio_obra'); ?></th>
             <th><?php echo $this->Paginator->sort('precio'); ?></th>
             <th><?php echo $this->Paginator->sort('impuestos'); ?></th>
-            <th><?php echo $this->Paginator->sort('avisosrepuesto_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('ordene_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('avisostallere_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('comerciale_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Av. Repuestos', 'avisosrepuesto_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Orden', 'ordene_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Av. Taller', 'avisostallere_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Estado','estadospresupuestoscliente_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Comercial','comerciale_id'); ?></th>
             <th><?php echo $this->Paginator->sort('avisar'); ?></th>
-            <th class="actions"><?php __('Actions'); ?></th>
+            <th class="actions"><?php __('Acciones'); ?></th>
         </tr>
         <?php
         $i = 0;
@@ -41,6 +47,7 @@
                 <td><?php echo $this->Html->link($presupuestoscliente['Avisosrepuesto']['id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestoscliente['Avisosrepuesto']['id'])); ?></td>
                 <td><?php echo $this->Html->link($presupuestoscliente['Ordene']['id'], array('controller' => 'ordenes', 'action' => 'view', $presupuestoscliente['Ordene']['id'])); ?></td>
                 <td><?php echo $this->Html->link($presupuestoscliente['Avisostallere']['id'], array('controller' => 'avisostalleres', 'action' => 'view', $presupuestoscliente['Avisostallere']['id'])); ?></td>
+                <td><?php echo $presupuestoscliente['Estadospresupuestoscliente']['estado']; ?>&nbsp;</td>
                 <td><?php echo $this->Html->link($presupuestoscliente['Comerciale']['nombre'], array('controller' => 'comerciales', 'action' => 'view', $presupuestoscliente['Comerciale']['id'])); ?></td>
                 <td><?php echo $presupuestoscliente['Presupuestoscliente']['avisar']; ?>&nbsp;</td>
                 <td class="actions">

@@ -19,12 +19,11 @@
             <tr>
                 <td><span><?php __('Confirmado'); ?></span></td>
                 <td><?php echo $this->Form->input('confirmado', array('label' => false)); ?></td>
-                <td colspan="4"></td>
                 <td><span><?php __('Nº Aceptación aportado por el cliente'); ?></span></td>
                 <td><?php echo $this->Form->input('numero_aceptacion_aportado', array('label' => false)); ?></td>
             </tr>
             <tr>
-                <td  colspan="6">
+                <td>
                     <?php
                     echo $this->Html->link(__('Pedido Escaneado Actual: ' . $this->Form->value('Pedidoscliente.pedidoescaneado'), true), '/files/pedidoscliente/' . $this->Form->value('Pedidoscliente.pedidoescaneado'));
                     echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Pedido Escaneado Actual', 'hiddenField' => false));
@@ -33,10 +32,13 @@
                 </td>
                 <td><span><?php __('Recepcion'); ?></span></td>
                 <td><?php echo $this->Form->input('recepcion', array('label' => false)); ?></td>
+                <td>
+                    <?php echo $this->Form->input('estadospedidoscliente_id', array('label' => 'Estado')); ?>
+                </td>
             </tr>
             <tr>
                 <td><span><?php __('Observaciones'); ?></span></td>
-                <td  colspan="5"><?php echo $this->Form->input('observaciones', array('label' => false)); ?></td>
+                <td><?php echo $this->Form->input('observaciones', array('label' => false)); ?></td>
                 <td><span><?php __('Plazo de Entrega'); ?></span></td>
                 <td><?php echo $this->Form->input('fecha_plazo', array('label' => false)); ?></td>
             </tr>

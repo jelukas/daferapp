@@ -27,17 +27,19 @@ class OrdenesController extends AppController {
             $this->flashWarnings(__('Orden Inválida', true));
             $this->redirect(array('action' => 'index'));
         }
-        $orden = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => array('Proveedore', 'Pedidosproveedore'), 'Presupuestoscliente' => array('Cliente', 'Pedidoscliente'), 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
+        $orden = $this->Ordene->find('first', array('contain' => array('Comerciale','Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => array('Proveedore', 'Pedidosproveedore'), 'Presupuestoscliente' => array('Cliente', 'Pedidoscliente'), 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
+        $baseimponible = $this->Ordene->get_baseimponible($id);
         $this->set('ordene', $orden);
         $avisostallere_id = $orden['Avisostallere']['id'];
         $this->set('avisostallere', $this->Ordene->Avisostallere->read(null, $avisostallere_id));
         $estadosordene_id = $orden['Estadosordene']['id'];
         $this->set('estadosordene', $this->Ordene->Estadosordene->read(null, $estadosordene_id));
+        $this->set('comerciales', $this->Ordene->Comerciale->find('list'));
         $this->loadModel('Config');
         $this->set('config', $this->Config->read(null, 1));
     }
 
-    function add($idAvisoTaller = null) {
+    function add($avisostallere_id = null) {
         if (!empty($this->data)) {
             $this->Ordene->create();
             $this->data['Ordene']['fecha'] = date('d-m-Y');
@@ -54,18 +56,19 @@ class OrdenesController extends AppController {
                 $this->Session->setFlash(__('La orden de taller no ha podido ser creada correctamente. Vuelva a intentarlo', true));
             }
         }
-        $avisotaller = $this->Ordene->Avisostallere->read(null, $idAvisoTaller);
-        $this->set('avisotaller', $avisotaller, 'estadosordenes');
-        if ($idAvisoTaller != null && $idAvisoTaller >= 0) {
+        $avisotallere = $this->Avisostallere->find('first',array('contain' => array('Cliente','Maquina','Centrostrabajo'),'conditions' => array('Avisostallere.id' => $avisostallere_id)));
+        $this->set('avisotallere', $avisotallere);
+        if ($avisostallere_id != null && $avisostallere_id >= 0) {
             $this->loadModel('Avisostallere');
-            $avisotallere = $this->Avisostallere->read(null, $idAvisoTaller);
+            $avisotallere = $this->Avisostallere->find('first',array('contain' => array('Cliente','Maquina','Centrostrabajo'),'conditions' => array('Avisostallere.id' => $avisostallere_id)));
 
-            $this->set('avisotaller', $avisotaller, 'estadosordenes');
+            $this->set('avisotallere', $avisotallere);
         }
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
         $almacenes = $this->Ordene->Almacene->find('list');
+        $this->set('comerciales', $this->Ordene->Comerciale->find('list'));
         $numero = $this->Ordene->dime_siguiente_numero();
-        $this->set(compact('avisostalleres', 'estadosordenes', 'almacenes', 'numero'));
+        $this->set(compact('estadosordenes', 'almacenes', 'numero'));
     }
 
     function edit($id = null) {
@@ -84,13 +87,14 @@ class OrdenesController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
         }
+        $this->set('comerciales', $this->Ordene->Comerciale->find('list'));
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
         $this->set(compact('estadosordenes'));
     }
 
     function mapa() {
         //Estados de las ordenes a mostrar array("1", "2", "3")
-        $ordenes = $this->Ordene->find('all', array('contain' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Almacene', 'Estadosordene'), 'conditions' => array('Ordene.estadosordene_id' => array("1", "2", "3"))));
+        $ordenes = $this->Ordene->find('all', array('contain' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Almacene', 'Estadosordene'), 'conditions' => array('Ordene.estadosordene_id' => array("1", "2", "3","5"))));
         $this->set('ordenes', $ordenes);
         $this->set(compact('ordenes'));
     }

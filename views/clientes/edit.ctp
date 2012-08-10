@@ -16,10 +16,12 @@
                 <td><?php echo $form->input('cif', array('label' => false)); ?></td>
             </tr>
             <tr>
-                <td><span>Teléfono</span></td>
+                <td><span>Teléfono Principal</span></td>
                 <td><?php echo $form->input('telefono', array('label' => false)); ?></td>
                 <td><span>Dirección Fiscal</span></td>
-                <td colspan="3"><?php echo $form->input('direccion_fiscal', array('label' => false)); ?></td>
+                <td><?php echo $form->input('direccion_fiscal', array('label' => false)); ?></td>
+                <td><span>Cuenta Contable</span></td>
+                <td><?php echo $this->Form->value('Cuentascontable.codigo') ?><?php echo $this->Autocomplete->replace_select('Cuentascontable', null, true, null);?></td>
             </tr>
             <tr>
                 <td><span>Fax</span></td>
@@ -37,13 +39,15 @@
                 <td><span>Personas de Contacto</span></td>
                 <td><?php echo $form->input('personascontacto', array('label' => false)); ?></td>
                 <td><span>Modo Envio Factura</span></td>
-                <td colspan="3"><?php echo $form->input('modoenviofactura', array('type' => 'select', 'options' => array('direccionfiscal' => 'Dirección Fiscal', 'direccionpostal' => 'Dirección Postal', 'email' => 'Email'), 'label' => false)); ?></td>
+                <td><?php echo $form->input('modoenviofactura', array('type' => 'select', 'options' => array('direccionfiscal' => 'Dirección Fiscal', 'direccionpostal' => 'Dirección Postal', 'email' => 'Email'), 'label' => false)); ?></td>
+                <td><span>Imprimir con Ref.</span></td>
+                <td><?php echo $form->input('imprimir_con_ref', array('label' => false)); ?></td>
             </tr>
             <tr>
                 <td><span>Riesgos</span></td>
                 <td><?php echo $form->input('riesgos', array('label' => false)); ?></td>
                 <td><span>Modo Facturación</span></td>
-                <td><?php echo $form->input('modo_facturacion', array('type' => 'select', 'options' => array('maquina' => 'Por Máquina', 'centrotrabajo' => 'Por Centro de Trabajo', 'albaran' => 'Por Alabrán'), 'label' => false)); ?></td>
+                <td><?php echo $form->input('modo_facturacion', array('type' => 'select', 'options' => array('maquina' => 'Por Máquina', 'centrotrabajo' => 'Por Centro de Trabajo', 'albaran' => 'Por Albarán'), 'label' => false)); ?></td>
                 <td><span>Comercial</span></td>
                 <td><?php echo $form->input('comerciale_id', array('label' => false)); ?></td>
             </tr>

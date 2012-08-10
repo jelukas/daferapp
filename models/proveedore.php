@@ -15,6 +15,13 @@ class Proveedore extends AppModel {
             'conditions' => '',
             'fields' => '',
             'order' => ''
+        ),
+        'Cuentascontable' => array(
+            'className' => 'Cuentascontable',
+            'foreignKey' => 'cuentascontable_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
         )
     );
     
@@ -44,6 +51,11 @@ class Proveedore extends AppModel {
             'exclusive' => '',
             'finderQuery' => '',
             'counterQuery' => ''
+        ),
+        'Telefono' => array(
+            'className' => 'Telefono',
+            'foreignKey' => 'proveedore_id',
+            'dependent' => true,
         ),
     );
     var $hasOne = array(

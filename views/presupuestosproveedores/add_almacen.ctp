@@ -12,14 +12,11 @@
                 <td>
                     <?php echo $this->Autocomplete->replace_select('Proveedore', 'Proveedor', true); ?>
                 </td>
-                <td>
+                <td colspan="2">
                     <?php echo $this->Form->input('fecha', array('label' => 'Fecha', 'dateFormat' => 'DMY', 'timeFormat' => '24')); ?>
                 </td>
                 <td>
                     <?php echo $this->Form->input('almacene_id', array('label' => 'Almacén')); ?>
-                </td>
-                <td>
-                    <?php echo $this->Form->input('confirmado', array('Confirmado')); ?>
                 </td>
             </tr>
             <tr>
@@ -30,6 +27,9 @@
             <tr>
                 <td colspan="2">
                     <?php echo $this->Form->input('file', array('type' => 'file', 'label' => 'Presupuesto escaneado')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('estadospresupuestosproveedore_id', array('label' => 'Estado del Presupuesto')); ?>
                 </td>
                 <td>
                     <?php echo $this->Form->input('fechaplazo', array('label' => 'Plazo de Entrega', 'dateFormat' => 'DMY', 'empty' => '--')); ?>

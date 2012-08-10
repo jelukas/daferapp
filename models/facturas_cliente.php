@@ -3,6 +3,7 @@
 class FacturasCliente extends AppModel {
 
     var $name = 'FacturasCliente';
+    var $order = "FacturasCliente.fecha DESC";
     var $belongsTo = array(
         'Cliente' => array(
             'className' => 'Cliente',

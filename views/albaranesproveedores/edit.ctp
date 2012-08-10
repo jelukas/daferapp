@@ -9,9 +9,12 @@
         </legend>
         <table class="view">
             <tr>
-                <td colspan="4">
+                <td colspan="2">
                     <?php echo $this->Form->input('id'); ?>
                     <?php echo $this->Form->input('numero', array('readonly' => true)); ?>
+                </td>
+                <td colspan="2">
+                    <?php echo $this->Form->input('estadosalbaranesproveedore_id', array('label' => 'Estado')); ?>
                 </td>
             </tr>
             <tr>
@@ -27,8 +30,11 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="3">
                     <?php echo $this->Form->input('observaciones', array('label' => 'Observaciones')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('centrosdecoste_id', array('label' => 'Centros de Coste')); ?>
                 </td>
             </tr>
             <tr>

@@ -10,15 +10,15 @@
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Paginator->sort('Nº', 'numero'); ?></th>
-            <th style="min-width: 100px;"><?php echo $this->Paginator->sort('Fecha', 'fecha'); ?></th>
-            <th style="width: 200px;"><?php echo $this->Paginator->sort('Proveedor'); ?></th>
+            <th><?php echo $this->Paginator->sort('Fecha', 'fecha'); ?></th>
+            <th style="width: 200px;"><?php echo $this->Paginator->sort('Proveedor','proveedore_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Almacén', 'almacene_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Aviso de Repuesto', 'avisosrepuesto_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Aviso de Taller', 'avisostallere_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Orden', 'ordene_id'); ?></th>
             <th style="min-width: 150px;"><?php echo $this->Paginator->sort('Plazo de Entrega', 'fechaplazo'); ?></th>
             <th><?php echo $this->Paginator->sort('Observaciones', 'observaciones'); ?></th>
-            <th><?php echo $this->Paginator->sort('Estado', 'confirmado'); ?></th>
+            <th><?php echo $this->Paginator->sort('Estado', 'estadospresupuestosproveedore_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Presupuesto escaneado', 'presupuestoescaneado'); ?></th>
             <th class="actions"><?php __('Acciones'); ?></th>
         </tr>
@@ -32,7 +32,7 @@
             ?>
             <tr<?php echo $class; ?>>
                 <td><?php echo $presupuestosproveedore['Presupuestosproveedore']['numero']; ?>&nbsp;</td>
-                <td><?php echo $presupuestosproveedore['Presupuestosproveedore']['fecha']; ?>&nbsp;</td>
+                <td><?php echo $this->Time->format('d-m-Y',$presupuestosproveedore['Presupuestosproveedore']['fecha']); ?>&nbsp;</td>
                 <td><?php echo $this->Html->link($presupuestosproveedore['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $presupuestosproveedore['Proveedore']['id'])); ?></td>
                 <td><?php echo $this->Html->link($presupuestosproveedore['Almacene']['nombre'], array('controller' => 'almacenes', 'action' => 'view', $presupuestosproveedore['Almacene']['id'])); ?></td>     
                 <td><?php echo $this->Html->link($presupuestosproveedore['Avisosrepuesto']['id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $presupuestosproveedore['Avisosrepuesto']['id'])); ?></td>    
@@ -40,7 +40,7 @@
                 <td><?php echo $this->Html->link($presupuestosproveedore['Ordene']['id'], array('controller' => 'ordenes', 'action' => 'view', $presupuestosproveedore['Ordene']['id'])); ?></td>
                 <td><?php echo $presupuestosproveedore['Presupuestosproveedore']['fechaplazo']; ?>&nbsp;</td>
                 <td><?php echo $presupuestosproveedore['Presupuestosproveedore']['observaciones']; ?>&nbsp;</td>
-                <td><?php echo $presupuestosproveedore['Presupuestosproveedore']['confirmado']; ?>&nbsp;</td>
+                <td><?php echo $presupuestosproveedore['Estadospresupuestosproveedore']['estado']; ?>&nbsp;</td>
                 <td><?php echo $this->Html->link(__($presupuestosproveedore['Presupuestosproveedore']['presupuestoescaneado'], true), '/files/presupuestosproveedore/' . $presupuestosproveedore['Presupuestosproveedore']['presupuestoescaneado']); ?></td>
                 <td class="actions">
                     <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $presupuestosproveedore['Presupuestosproveedore']['id'])); ?>

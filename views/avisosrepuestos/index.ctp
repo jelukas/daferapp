@@ -10,12 +10,12 @@
     </div>
     <table cellpadding="0" cellspacing="0">
         <tr>
-            <th><?php echo $this->Paginator->sort('Numero','numero'); ?></th>
-            <th><?php echo $this->Paginator->sort('Fecha'); ?></th>
+            <th><?php echo $this->Paginator->sort('Nº','numero'); ?></th>
+            <th><?php echo $this->Paginator->sort('Fecha','fechahora'); ?></th>
             <th><?php echo $this->Paginator->sort('Cliente','cliente_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Centro de trabajo','centrostrabajo_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Máquina','maquina_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('Descripción'); ?></th>
+            <th style="width: 30%"><?php echo $this->Paginator->sort('Descripción'); ?></th>
             <th><?php echo $this->Paginator->sort('Estado','estado_id'); ?></th>
             <th class="actions"><?php __('Acciones'); ?></th>
         </tr>
@@ -29,7 +29,7 @@
             ?>
             <tr<?php echo $class; ?>>
                 <td><?php echo $avisosrepuesto['Avisosrepuesto']['numero']; ?>&nbsp;</td>
-                <td><?php echo $avisosrepuesto['Avisosrepuesto']['fechahora']; ?>&nbsp;</td>
+                <td><?php echo $this->Time->format('d-m-Y',$avisosrepuesto['Avisosrepuesto']['fechahora']); ?>&nbsp;</td>
                 <td>
                     <?php echo $this->Html->link($avisosrepuesto['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $avisosrepuesto['Cliente']['id'])); ?>
                 </td>

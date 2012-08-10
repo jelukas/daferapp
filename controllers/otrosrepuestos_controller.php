@@ -32,6 +32,18 @@ class OtrosrepuestosController extends AppController {
         }
         $this->set(compact('maquina_id'));
     }
+    function add_ajax($maquina_id = null) {
+        if (!empty($this->data)) {
+            $this->Otrosrepuesto->create();
+            if ($this->Otrosrepuesto->save($this->data)) {
+                $this->Session->setFlash(__('The otrosrepuesto has been saved', true));
+            } else {
+                $this->flashWarnings(__('The otrosrepuesto could not be saved. Please, try again.', true));
+            }
+        }
+        $this->set(compact('maquina_id'));
+        $this->render('add');
+    }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {

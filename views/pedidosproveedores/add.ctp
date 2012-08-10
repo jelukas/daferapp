@@ -4,13 +4,16 @@
         <legend><?php __('Añadir Pedido a proveedor al Presupuesto a Proveedor ' . $presupuestosproveedore['Presupuestosproveedore']['id']); ?></legend>
         <table class="view">
             <tr>
-                <td colspan="4">
+                <td colspan="2">
                     <?php echo $this->Form->input('id'); ?>
-                    <?php echo $this->Form->input('numero'); ?>
+                    <?php echo $this->Form->input('numero', array('value' => $numero)); ?>
                     <?php
                     echo $this->Form->input('presupuestosproveedore_id', array('label' => 'Presupuesto de Proveedor', 'type' => 'text', 'disabled' => true, 'value' => $presupuestosproveedore['Presupuestosproveedore']['id']));
                     echo $this->Form->input('presupuestosproveedore_id', array('type' => 'hidden', 'value' => $presupuestosproveedore['Presupuestosproveedore']['id']));
                     ?>
+                </td>
+                <td colspan="2">
+                    <?php echo $this->Form->input('estadospedidosproveedore_id',array('label' => 'Estado')); ?>
                 </td>
             </tr>
             <tr>
@@ -34,6 +37,17 @@
                 </td>
                 <td>
                     <?php echo $this->Form->input('fecharecepcion', array('label' => 'Fecha de Recepcion')); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo $this->Form->input('transportista_id', array('label' => 'Transportista')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('numero_expedicion', array('label' => 'Nº Expedición')); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('tipo_envio', array('label' => 'Tipo de Envio')); ?>
                 </td>
             </tr>
         </table>  

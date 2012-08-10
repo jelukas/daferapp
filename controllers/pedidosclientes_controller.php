@@ -4,6 +4,7 @@ class PedidosclientesController extends AppController {
 
     var $name = 'Pedidosclientes';
     var $components = array('FileUpload');
+    var $helpers = array('Javascript', 'Form', 'Html', 'Autocomplete', 'Time', 'Js');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -18,18 +19,8 @@ class PedidosclientesController extends AppController {
     }
 
     function index() {
-        $this->Pedidoscliente->recursive = 2;
+        $this->paginate = array('limit' => 20, 'contain' => array('Estadospedidoscliente','Presupuestoscliente' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Ordene', 'Avisostallere', 'Avisosrepuesto', 'Presupuestosproveedore', 'Comerciale')));
         $conditions = array();
-        if (!empty($this->params['url']['cliente_id'])) {
-            $conditions['OR'] = array(array('Avisostallere.cliente_id' => $this->params['url']['cliente_id']), array('Avisosrepuesto.cliente_id' => $this->params['url']['cliente_id']));
-        }
-        if (!empty($this->params['url']['day_pedido_f']) && !empty($this->params['url']['month_pedido_f']) && !empty($this->params['url']['year_pedido_f'])) {
-            $conditions['Pedidoscliente.fecha_plazo >='] = $this->params['url']['year_pedido_f'] . '-' . $this->params['url']['month_pedido_f'] . '-' . $this->params['url']['day_pedido_f'];
-        }
-        if (!empty($this->params['url']['day_pedido_t']) && !empty($this->params['url']['month_pedido_t']) && !empty($this->params['url']['year_pedido_t'])) {
-            $conditions['Pedidoscliente.fecha_plazo <='] = $this->params['url']['year_pedido_t'] . '-' . $this->params['url']['month_pedido_t'] . '-' . $this->params['url']['day_pedido_t'];
-        }
-
         $pedidosclientes = $this->paginate('Pedidoscliente', $conditions);
         $this->set('pedidosclientes', $pedidosclientes);
         if (!empty($this->params['url']['pdf'])) {
@@ -43,7 +34,7 @@ class PedidosclientesController extends AppController {
             $this->flashWarnings(__('Pedido de Cliente Inválido', true));
             $this->redirect($this->referer());
         }
-        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Tiposiva','Presupuestoscliente' => array('Almacene','Comerciale','Presupuestosproveedore', 'Avisosrepuesto' => array('Centrostrabajo', 'Maquina'), 'Presupuestosproveedore', 'Avisostallere' => array('Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Centrostrabajo', 'Maquina'))), 'Tareaspedidoscliente' => array('TareaspedidosclientesOtrosservicio', 'MaterialesTareaspedidoscliente' => array('Articulo'), 'ManodeobrasTareaspedidoscliente')), 'conditions' => array('Pedidoscliente.id' => $id)));
+        $pedidoscliente = $this->Pedidoscliente->find('first', array('contain' => array('Albaranescliente','Estadospedidoscliente','Tiposiva', 'Presupuestoscliente' => array('Cliente','Almacene', 'Comerciale', 'Presupuestosproveedore', 'Avisosrepuesto' => array('Cliente','Centrostrabajo', 'Maquina'), 'Presupuestosproveedore' => 'Proveedore', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'))), 'Tareaspedidoscliente' => array('TareaspedidosclientesOtrosservicio', 'MaterialesTareaspedidoscliente' => array('Articulo'), 'ManodeobrasTareaspedidoscliente')), 'conditions' => array('Pedidoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($pedidoscliente['Tareaspedidoscliente'] as $tarea) {
@@ -120,7 +111,7 @@ class PedidosclientesController extends AppController {
                 if ($this->FileUpload->finalFile != null) {
                     $this->Pedidoscliente->saveField('pedidoescaneado', $this->FileUpload->finalFile);
                 }
-                /*Fin de Guarda Fichero*/
+                /* Fin de Guarda Fichero */
                 $this->Session->setFlash(__('El Pedido de Cliente ha sido guardado', true));
                 $this->redirect(array('action' => 'view', $this->Pedidoscliente->id));
             } else {
@@ -130,9 +121,10 @@ class PedidosclientesController extends AppController {
             }
         }
         $numero = $this->Pedidoscliente->dime_siguiente_numero();
+        $estadospedidosclientes = $this->Pedidoscliente->Estadospedidoscliente->find('list');
         $presupuestoscliente = $this->Pedidoscliente->Presupuestoscliente->find('first', array('contain' => array('Tareaspresupuestocliente' => array('Materiale' => 'Articulo', 'Manodeobra', 'TareaspresupuestoclientesOtrosservicio')), 'conditions' => array('Presupuestoscliente.id' => $presupuestoscliente_id)));
         $tiposivas = $this->Pedidoscliente->Presupuestoscliente->Tiposiva->find('list');
-        $this->set(compact('presupuestoscliente', 'tiposiva','numero'));
+        $this->set(compact('presupuestoscliente', 'tiposiva', 'numero', 'estadospedidosclientes'));
     }
 
     function edit($id = null) {
@@ -161,6 +153,8 @@ class PedidosclientesController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Pedidoscliente->read(null, $id);
         }
+        $estadospedidosclientes = $this->Pedidoscliente->Estadospedidoscliente->find('list');
+        $this->set(compact('estadospedidosclientes'));
     }
 
     function delete($id = null) {

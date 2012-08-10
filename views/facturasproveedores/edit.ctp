@@ -10,9 +10,12 @@
         </legend>
         <table class="view">
             <tr>
-                <td colspan="4">
+                <td colspan="3">
                     <?php echo $this->Form->input('id'); ?>
                     <?php echo $this->Form->input('numero', array('readonly' => true)); ?>
+                </td>
+                <td>
+                    <?php echo $this->Form->input('estadosfacturasproveedore_id', array('label'=>'Estado')); ?>
                 </td>
             </tr>
             <tr>

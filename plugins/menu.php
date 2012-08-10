@@ -41,7 +41,7 @@
                 <li><a href="/daferapp/pedidosclientes" title="Pedidos de clientes" target="_self" >Pedidos de clientes</a></li>
                 <li><a href="/daferapp/albaranesclientes" title="Albaranes de Repuestos" target="_self" >Albaranes de Repuestos</a></li>
                 <li><a href="/daferapp/albaranesclientesreparaciones" title="Albaranes de Reparación" target="_self" >Albaranes de Reparación</a></li>
-                <!--<li><a href="/daferapp/albaranesclientes/facturacion" title="Facturación de Albaranes" target="_self" >Facturación de Albaranes</a></li>-->
+                <li><a href="/daferapp/facturas_clientes/facturacion" title="Facturación de Albaranes" target="_self" >Facturación de Albaranes</a></li>
                 <li><a href="/daferapp/facturas_clientes" title="Facturas de venta" target="_self" >Facturas de venta</a></li>
             </ul>
         </li>
@@ -68,6 +68,7 @@
                 <li><a href="/daferapp/roles" title="Roles" target="_self">Roles</a></li>
                 <li><a href="/daferapp/restricciones" title="Restricciones" target="_self">Restricciones</a></li>
                 <li><a href="/daferapp/centrosdecostes" title="Tipos de IVA" target="_self">Centros de Coste</a></li>
+                <li><a href="/daferapp/cuentascontables" title="Cuentas Contables" target="_self">Cuentas Contables</a></li>
                 <li><a href="/daferapp/tiposivas" title="Tipos de IVA" target="_self">Tipos de IVA</a></li>
                 <li><a href="/daferapp/configs/edit/1" title="Configuración" target="_self" >Configuración</a></li>
             </ul>

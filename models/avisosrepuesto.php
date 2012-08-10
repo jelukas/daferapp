@@ -85,6 +85,19 @@ class Avisosrepuesto extends AppModel {
             'finderQuery' => '',
             'counterQuery' => ''
         ),
+        'Presupuestosproveedore' => array(
+            'className' => 'Presupuestosproveedore',
+            'foreignKey' => 'avisosrepuesto_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
         'Albaranescliente' => array(
             'className' => 'Albaranescliente',
             'foreignKey' => 'avisosrepuesto_id',

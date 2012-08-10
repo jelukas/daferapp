@@ -78,6 +78,13 @@ class Presupuestoscliente extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Estadospresupuestoscliente' => array(
+            'className' => 'Estadospresupuestoscliente',
+            'foreignKey' => 'estadospresupuestoscliente_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
         'Avisostallere' => array(
             'className' => 'Avisostallere',
             'foreignKey' => 'avisostallere_id',

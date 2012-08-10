@@ -4,6 +4,7 @@ class FacturasproveedoresController extends AppController {
 
     var $name = 'Facturasproveedores';
     var $components = array('FileUpload');
+    var $helpers = array('Javascript', 'Form', 'Html', 'Autocomplete', 'Time', 'Js');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -58,7 +59,15 @@ class FacturasproveedoresController extends AppController {
             $this->flashWarnings(__('Factura de Proveedor No Existe', true));
             $this->redirect($this->redirect());
         }
-        $facturasproveedore = $this->Facturasproveedore->find('first', array('conditions' => array('Facturasproveedore.id' => $id), 'contain' => array('Proveedore', 'Tiposiva', 'Formapago', 'Albaranesproveedore')));
+        $facturasproveedore = $this->Facturasproveedore->find('first', array(
+            'conditions' => array('Facturasproveedore.id' => $id),
+            'contain' => array(
+                'Proveedore' => 'Formapago',
+                'Estadosfacturasproveedore',
+                'Tiposiva',
+                'Albaranesproveedore',
+            ),
+                ));
         $this->set('facturasproveedore', $facturasproveedore);
     }
 
@@ -81,7 +90,8 @@ class FacturasproveedoresController extends AppController {
         }
         $albaranesproveedore = $this->Facturasproveedore->Albaranesproveedore->find('first', array('contain' => array('ArticulosAlbaranesproveedore' => 'Articulo'), 'conditions' => array('Albaranesproveedore.id' => $albaranesproveedore_id)));
         $tiposivas = $this->Facturasproveedore->Tiposiva->find('list');
-        $this->set(compact('tiposivas', 'albaranesproveedore_id', 'albaranesproveedore'));
+        $estadosfacturasproveedores = $this->Facturasproveedore->Estadosfacturasproveedore->find('list');
+        $this->set(compact('tiposivas', 'albaranesproveedore_id', 'albaranesproveedore','estadosfacturasproveedores'));
     }
 
     function edit($id = null) {
@@ -107,9 +117,11 @@ class FacturasproveedoresController extends AppController {
                 $this->flashWarnings(__('La Factura de Proveedor No ha podido ser guardada.', true));
             }
         }
-        $this->data = $this->Facturasproveedore->find('first', array('contain' => array('Proveedore', 'Formapago', 'Tiposiva'), 'conditions' => array('Facturasproveedore.id' => $id)));
+        $this->data = $this->Facturasproveedore->find('first', array('contain' => array('Proveedore', 'Tiposiva','Estadosfacturasproveedore'), 'conditions' => array('Facturasproveedore.id' => $id)));
+        
+        $estadosfacturasproveedores = $this->Facturasproveedore->Estadosfacturasproveedore->find('list');
         $tiposivas = $this->Facturasproveedore->Tiposiva->find('list');
-        $this->set(compact('tiposivas'));
+        $this->set(compact('tiposivas','estadosfacturasproveedores'));
     }
 
     function delete($id = null) {

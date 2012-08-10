@@ -1,6 +1,6 @@
 <div class="pedidosproveedores">
     <h2>
-        <?php __('Pedidosproveedores'); ?>
+        <?php __('Pedidos a Proveedores'); ?>
         <?php echo $this->Html->link(__('Listar Presupuestos', true), array('controller' => 'presupuestosproveedores', 'action' => 'index'), array('class' => 'button_link')); ?>
     </h2>
     <?php echo $this->Form->create('Pedidosproveedore', array('type' => 'get', 'action' => 'index')); ?>
@@ -12,9 +12,9 @@
             <th><?php echo $this->Paginator->sort('Proveedor', 'Presupuestosproveedore.proveedore_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Proveedor', 'Presupuestosproveedore.almacene_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Aviso de repuesto', 'Presupuestosproveedore.avisosrepuesto_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('Aviso de taller', 'Presupuestosproveedore.avisostallere'); ?></th>
-            <th><?php echo $this->Paginator->sort('Orden', 'Presupuestosproveedore.ordene'); ?></th>
-            <th><?php echo $this->Paginator->sort('Fecha de entrega', 'Presupuestosproveedore.fecharecepcion'); ?></th>
+            <th><?php echo $this->Paginator->sort('Aviso de taller', 'Presupuestosproveedore.avisostallere_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Orden', 'Presupuestosproveedore.ordene_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Fecha de entrega', 'fecharecepcion'); ?></th>
             <th><?php echo $this->Paginator->sort('Observaciones', 'Presupuestosproveedore.observaciones'); ?></th>
             <th><?php echo $this->Paginator->sort('confirmado');    ?></th>
             <th><?php echo $this->Paginator->sort('pedidoescaneado'); ?></th>
@@ -32,9 +32,9 @@
                 <td><?php echo $pedidosproveedore['Pedidosproveedore']['numero']; ?>&nbsp;</td>
                 <td><?php echo $this->Html->link($pedidosproveedore['Presupuestosproveedore']['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['Proveedore']['id'])); ?></td>
                 <td><?php echo $this->Html->link($pedidosproveedore['Presupuestosproveedore']['Almacene']['nombre'], array('controller' => 'almacenes', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['Almacene']['id'])); ?></td>  
-                <td><?php echo $this->Html->link($pedidosproveedore['Presupuestosproveedore']['avisosrepuesto_id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['avisosrepuesto_id'])); ?></td>    
-                <td><?php echo $this->Html->link($pedidosproveedore['Presupuestosproveedore']['avisostallere_id'], array('controller' => 'avisostalleres', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['avisostallere_id'])); ?></td>   
-                <td><?php echo $this->Html->link($pedidosproveedore['Presupuestosproveedore']['ordene_id'], array('controller' => 'ordenes', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['ordene_id'])); ?></td>
+                <td><?php echo @$this->Html->link($pedidosproveedore['Presupuestosproveedore']['Avisosrepuesto']['numero'], array('controller' => 'avisosrepuestos', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['avisosrepuesto_id'])); ?></td>    
+                <td><?php echo @$this->Html->link($pedidosproveedore['Presupuestosproveedore']['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['avisostallere_id'])); ?></td>   
+                <td><?php echo @$this->Html->link($pedidosproveedore['Presupuestosproveedore']['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $pedidosproveedore['Presupuestosproveedore']['ordene_id'])); ?></td>
                 <td><?php echo $pedidosproveedore['Pedidosproveedore']['fecharecepcion']; ?>&nbsp;</td>
                 <td><?php echo $pedidosproveedore['Pedidosproveedore']['observaciones']; ?>&nbsp;</td>
                 <td><?php echo!empty($pedidosproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?></td>
@@ -42,7 +42,6 @@
                 <td class="actions">
                     <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $pedidosproveedore['Pedidosproveedore']['id'])); ?>
                     <?php echo $this->Html->link(__('Pdf', true), array('action' => 'pdf', $pedidosproveedore['Pedidosproveedore']['id'])); ?>
-                    <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $pedidosproveedore['Pedidosproveedore']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pedidosproveedore['Pedidosproveedore']['id'])); ?>
                 </td>
             </tr>
         <?php endforeach; ?>

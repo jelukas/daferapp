@@ -7,9 +7,13 @@
     </h2>
     <table class="view">
         <tr>
-            <td colspan="4">
+            <td colspan="2">
                 <span>Número</span>
                 <?php echo $albaranesproveedore['Albaranesproveedore']['numero']; ?>
+            </td>
+            <td colspan="2">
+                <span>Estado</span>
+                <?php echo $albaranesproveedore['Estadosalbaranesproveedore']['estado']; ?>
             </td>
         </tr>
         <tr>
@@ -31,9 +35,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="4">
+            <td colspan="3">
                 <span>Base Imponible</span>
                 <?php echo $albaranesproveedore['Albaranesproveedore']['baseimponible'] ?> &euro;
+            </td>
+            <td>
+                <span>Centro de Coste</span>
+                <?php echo @$albaranesproveedore['Centrosdecoste']['codigo'].' -- '.@$albaranesproveedore['Centrosdecoste']['denominacion'] ?> 
             </td>
         </tr>
         <tr>
@@ -43,9 +51,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="4">
+            <td colspan="3">
                 <span>Albarán Escaneado</span>
                 <?php echo $this->Html->link(__($albaranesproveedore['Albaranesproveedore']['albaranescaneado'], true), '/files/albaranproveedore/' . $albaranesproveedore['Albaranesproveedore']['albaranescaneado']); ?>
+            </td>
+            <td>
+                <span>Forma de Pago</span>
+                <?php echo $albaranesproveedore['Proveedore']['Formapago']['nombre'] ?>
             </td>
         </tr>
     </table>
@@ -72,6 +84,7 @@
                 <?php
                 if (!empty($articulos_albaranesproveedore)) {
                     $i = 0;
+                    $total = 0;
                     foreach ($articulos_albaranesproveedore as $articulo_albaranesproveedore):
                         $class = null;
                         if ($i++ % 2 == 0) {
@@ -87,6 +100,7 @@
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['descuento']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['neto']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['total'] ?></td>
+                            <?php $total += $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['total']; ?>
                             <td class="actions">
                                 <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_albaranesproveedores', 'action' => 'edit', $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['id']), array('class' => 'popup')); ?>
                                 <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_albaranesproveedores', 'action' => 'delete', $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['id']), null, sprintf(__('Seguro que quieres borrar el Artículo del Albarán # %s?', true), $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['id'])); ?>
@@ -96,169 +110,167 @@
                     endforeach;
                 }
                 ?>
+                <tr>
+                    <td colspan="6"></td>
+                    <td><span style="font-weight: bold">Base Imponible</span></td>
+                    <td><?php echo $total ?> &euro;</td>
+                    <td>
+                        <span style="font-weight: bold">Impuestos</span>
+                        <?php echo $total * ($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100) ?> &euro;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="text-align: center">
+                        <span style="font-weight: bold">Total Albarán</span>
+                        <?php echo $total + ($total * ($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;
+                    </td>
+                </tr>
             </table>
         <?php endif; ?>
     </div>
-    <div class="actions">
-        <ul>   
-            <li><?php echo $this->Html->link(__('Nueva Devolución', true), array('controller' => 'pedidosproveedores', 'action' => 'devolucion', $albaranesproveedore['Albaranesproveedore']['id'], $presupuestosproveedore['Presupuestosproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
-            <?php if (!empty($presupuestosproveedore['Presupuestosproveedore']['ordene_id'])): ?>
-                <li><?php echo $this->Html->link(__('Imputar a Orden', true), array('controller' => 'ordenes', 'action' => 'imputar_albaranproveedor', $albaranesproveedore['Albaranesproveedore']['id']), array('style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?> </li>
-            <?php endif; ?>
-        </ul>
+    <div style="clear: both"></div>
+    <div style="margin: 20px;">
+        <?php echo $this->Html->link(__('Nueva Devolución', true), array('controller' => 'pedidosproveedores', 'action' => 'devolucion', $albaranesproveedore['Albaranesproveedore']['id'], $presupuestosproveedore['Presupuestosproveedore']['id']), array('class' => 'button_link', 'style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?>
+        <?php if (!empty($presupuestosproveedore['Presupuestosproveedore']['ordene_id'])): ?>
+            <?php echo $this->Html->link(__('Imputar a Orden', true), array('controller' => 'ordenes', 'action' => 'imputar_albaranproveedor', $albaranesproveedore['Albaranesproveedore']['id']), array('class' => 'button_link', 'style' => 'background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#EEECA9));')); ?>
+        <?php endif; ?>
+        <?php echo $this->Html->link(__('Imprimir', true), 'javascript:window.print(); void 0;', array('class' => 'button_link')); ?>
     </div>
-    <div style="clear: both">
-        <p style="text-align: center;"><?php echo $this->Html->link(__('Relacionados con el Albarán de Proveedor', true), '#', array('id' => 'show_relations', 'class' => 'button_link')); ?></p>
-        <div id="relations-presupuestoproveedor" style="display: none;">
-            <?php if (!empty($albaranesproveedore['Pedidosproveedore']['id'])): ?>
-                <h3 style="margin-top: 40px;"><?php __('Pedido Relacionado con el Albarán de Proveedor'); ?></h3>
-                <table cellpadding = "0" cellspacing = "0">
-                    <tr>
-                        <th>Número</th>
-                        <th>Proveedor</th>
-                        <th>Almacen</th>
-                        <th>Aviso de repuesto</th>
-                        <th>Aviso de taller</th>
-                        <th>Orden</th>
-                        <th>Fecha de entrega</th>
-                        <th>Observaciones</th>
-                        <th>Confirmado</th>
-                        <th>Pedidoescaneado</th>
-                        <th class="actions"><?php __('Actions'); ?></th>
+    <div class="datagrid">
+        <table>
+            <caption>Documentos Relacionados</caption>
+            <thead>
+                <tr><th>Tipo Documento</th><th>Número</th><th>Fecha</th><th>Cliente / Proveedor</th><th>Ver</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="5"></td></tr>
+            </tfoot>
+            <tbody>
+                <?php
+                $i = 0;
+                if (!empty($albaranesproveedore['Pedidosproveedore']['id'])  && empty($albaranesproveedore['Pedidosproveedore']['albaranproveedoredevolucion_id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Pedido de Proveedor</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['fecha']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'pedidosproveedores', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                    <tr>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['numero']; ?>&nbsp;</td>
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['id'])); ?></td>
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Almacene']['nombre'], array('controller' => 'almacenes', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Almacene']['id'])); ?></td>  
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisosrepuesto_id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisosrepuesto_id'])); ?></td>    
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisostallere_id'], array('controller' => 'avisostalleres', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisostallere_id'])); ?></td>   
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'], array('controller' => 'ordenes', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'])); ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['fecharecepcion']; ?>&nbsp;</td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['observaciones']; ?>&nbsp;</td>
-                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?></td>
-                        <td><?php echo $this->Html->link(__($albaranesproveedore['Pedidosproveedore']['pedidoescaneado'], true), '/files/pedidosproveedore/' . $albaranesproveedore['Pedidosproveedore']['pedidoescaneado']); ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $albaranesproveedore['Pedidosproveedore']['id'])); ?>
-                            <?php echo $this->Html->link(__('Pdf', true), array('action' => 'pdf', $albaranesproveedore['Pedidosproveedore']['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $albaranesproveedore['Pedidosproveedore']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $albaranesproveedore['Pedidosproveedore']['id'])); ?>
-                        </td>
+                <?php endif; ?>
+                <?php
+                if (!empty($albaranesproveedore['Pedidosproveedore']['id']) && !empty($albaranesproveedore['Pedidosproveedore']['albaranproveedoredevolucion_id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Devolución</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['fecha']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'pedidosproveedores', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                </table>
-            <?php endif; ?>
-            <?php if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id'])): ?>
-                <h3 style="margin-top: 40px;"><?php __('Pedido Relacionado con el Albarán de Proveedor'); ?></h3>
-                <table cellpadding = "0" cellspacing = "0">
-                    <tr>
-                        <th>Número</th>
-                        <th style="min-width: 100px;">Fecha</th>
-                        <th style="width: 200px;">Proveedor</th>
-                        <th>Almacén</th>
-                        <th>Aviso de Repuesto</th>
-                        <th>Aviso de Taller</th>
-                        <th>Orden</th>
-                        <th style="min-width: 150px;">Plazo de Entrega</th>
-                        <th>Observaciones</th>
-                        <th>Estado</th>
-                        <th>Presupuesto escaneado</th>
-                        <th class="actions"><?php __('Acciones'); ?></th>
+                <?php endif; ?>
+                <?php
+                if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Aviso de Taller</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['fechaaviso']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['fechaaviso']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'avisostalleres', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                    <tr>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['numero']; ?>&nbsp;</td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['fecha']; ?>&nbsp;</td>
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['id'])); ?></td>
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Almacene']['nombre'], array('controller' => 'almacenes', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Almacene']['id'])); ?></td>     
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisosrepuesto_id'], array('controller' => 'avisosrepuestos', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisosrepuesto_id'])); ?></td>    
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisostallere_id'], array('controller' => 'avisostalleres', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['avisostallere_id'])); ?></td>   
-                        <td><?php echo $this->Html->link($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'], array('controller' => 'ordenes', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'])); ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['fechaplazo']; ?>&nbsp;</td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['observaciones']; ?>&nbsp;</td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['confirmado']; ?>&nbsp;</td>
-                        <td><?php echo $this->Html->link(__($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['presupuestoescaneado'], true), '/files/presupuestosproveedore/' . $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['presupuestoescaneado']); ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id'])); ?>
-                            <?php echo $this->Html->link(__('Pdf', true), array('action' => 'pdf', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id'])); ?>
-                        </td>
+                <?php endif; ?>
+                    <?php
+                if (!empty($pedidosproveedore['Presupuestosproveedore']['Avisosrepuesto']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Aviso de Repuestos</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['fechahora']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['fechahora']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'avisosrepuestos', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                </table>
-            <?php endif; ?>
-            <?php if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['id'])): ?>
-                <h3 style="margin-top: 40px;"><?php __('Orden Relacionada con el Albarán de Proveedor'); ?></h3>
-                <table cellpadding = "0" cellspacing = "0">
-                    <tr>
-                        <th><?php __('Id Orden'); ?></th>
-                        <th><?php __('Cliente'); ?></th>
-                        <th><?php __('Fecha Prevista de Reparación'); ?></th>
-                        <th><?php __('Observaciones'); ?></th>
-                        <th><?php __('Aviso de Taller'); ?></th>
-                        <th class="actions"><?php __('Acciones'); ?></th>
+                <?php endif; ?>
+                <?php
+                if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Presupuesto de Proveedorr</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['fecha']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosproveedores', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                    <tr>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['id']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['Avisostallere']['Cliente']['nombre']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['fecha_prevista_reparacion']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['observaciones']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['avisostallere_id']; ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'ordene', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['id'])); ?>
-                        </td>
+                <?php endif; ?>
+                <?php
+                if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Orden</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['fecha']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['Avisostallere']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'ordenes', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Ordene']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                </table>
-            <?php endif; ?>
-            <?php if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['id'])): ?>
-                <h3 style="margin-top: 40px;"><?php __('Aviso de Taller Relacionado con el Presupuesto de Proveedor'); ?></h3>
-                <table cellpadding = "0" cellspacing = "0">
-                    <tr>
-                        <th><?php __('Nº'); ?></th>
-                        <th><?php __('Fecha'); ?></th>
-                        <th><?php __('Cliente'); ?></th>
-                        <th><?php __('Centro de Trabajo'); ?></th>
-                        <th><?php __('Maquina'); ?></th>
-                        <th><?php __('Observaciones'); ?></th>
-                        <th><?php __('Estados Aviso'); ?></th>
-                        <th class="actions"><?php __('Acciones'); ?></th>
+                <?php endif; ?>
+                <?php
+                if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Pedidoscliente']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Pedido de Cliente</td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Pedidoscliente']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Pedidoscliente']['fecha']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Pedidoscliente']['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Pedidoscliente']['Presupuestoscliente']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'pedidosclientes', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Pedidoscliente']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                    <tr>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['numero']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['fechaaviso']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['Cliente']['nombre']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['Centrostrabajo']['centrotrabajo']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['Maquina']['nombre']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['observaciones']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['Estadosavisostallere']['estado']; ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'avisostalleres', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['id'])); ?>
-                        </td>
+                <?php endif; ?>
+
+                <?php
+                if (!empty($albaranesproveedore['Facturasproveedore']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Factura de Proveedor</td>
+                        <td><?php echo $albaranesproveedore['Facturasproveedore']['numero'] ?></td>
+                        <td><?php echo!empty($albaranesproveedore['Facturasproveedore']['fechafactura']) ? $this->Time->format('d-m-Y', $albaranesproveedore['Facturasproveedore']['fechafactura']) : '' ?></td>
+                        <td><?php echo $albaranesproveedore['Proveedore']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'facturasproveedores', 'action' => 'view', $albaranesproveedore['Facturasproveedore']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                </table>
-            <?php endif; ?>
-            <?php if (!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['id'])): ?>
-                <h3 style="margin-top: 40px;"><?php __('Aviso de Repuestos Relacionado con el Presupuesto de Proveedor'); ?></h3>
-                <table cellpadding = "0" cellspacing = "0">
-                    <tr>
-                        <th><?php __('Nº'); ?></th>
-                        <th><?php __('Fecha'); ?></th>
-                        <th><?php __('Cliente'); ?></th>
-                        <th><?php __('Centro de Trabajo'); ?></th>
-                        <th><?php __('Maquina'); ?></th>
-                        <th><?php __('Observaciones'); ?></th>
-                        <th><?php __('Estados Aviso'); ?></th>
-                        <th class="actions"><?php __('Acciones'); ?></th>
-                    </tr>
-                    <tr>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['numero']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['fechahora']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Cliente']['nombre']; ?></td>
-                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Centrostrabajo']['centrotrabajo']) ? $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Centrostrabajo']['centrotrabajo'] : $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Centrostrabajo']['direccion']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Maquina']['nombre']; ?></td>
-                        <td><?php echo $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['observaciones']; ?></td>
-                        <td><?php echo!empty($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Estadosaviso']['estado']) ? $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['Estadosaviso']['estado'] : ''; ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'avisosrepuestos', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisosrepuesto']['id'])); ?>
-                        </td>
-                    </tr>
-                </table>
-            <?php endif; ?>
-        </div>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </div>
 <script type="text/javascript">

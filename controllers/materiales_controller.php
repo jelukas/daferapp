@@ -37,6 +37,20 @@ class MaterialesController extends AppController {
         $tareaspresupuestocliente = $this->Materiale->Tareaspresupuestocliente->find('first',array('contain' => 'Presupuestoscliente','conditions' => array('Tareaspresupuestocliente.id' => $tareaspresupuestocliente_id)));
         $this->set(compact('tareaspresupuestocliente_id','tareaspresupuestocliente'));
     }
+    function add_ajax($tareaspresupuestocliente_id) {
+        $this->layout = 'ajax';
+        if (!empty($this->data)) {
+            $this->Materiale->create();
+            if ($this->Materiale->save($this->data)) {
+                $this->Session->setFlash(__('El material ha sido añadido', true));
+            } else {
+                $this->flashWarnings(__('El material no se pudo añadir. Prueba de nuevo.', true));
+            }
+        }
+        $tareaspresupuestocliente = $this->Materiale->Tareaspresupuestocliente->find('first',array('contain' => 'Presupuestoscliente','conditions' => array('Tareaspresupuestocliente.id' => $tareaspresupuestocliente_id)));
+        $this->set(compact('tareaspresupuestocliente_id','tareaspresupuestocliente'));
+        $this->render('add');
+    }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {

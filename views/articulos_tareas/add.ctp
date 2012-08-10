@@ -1,6 +1,6 @@
 <?php echo $this->Form->create('ArticulosTarea'); ?>
 <fieldset>
-    <legend><?php __('Add Articulos Tarea'); ?></legend>
+    <legend><?php __('Añadir Artículo a la Tarea'); ?></legend>
     <?php 
     echo $this->Autocomplete->replace_select('Articulo', null, true,$tarea['Ordene']['almacene_id']);
     echo $this->Form->input('tarea_id', array('type' => 'hidden', 'value' => $tarea_id));

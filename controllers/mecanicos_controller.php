@@ -14,6 +14,7 @@ class MecanicosController extends AppController {
             $this->Session->setFlash(__('Invalid mecanico', true));
             $this->redirect(array('action' => 'index'));
         }
+        $this->Mecanico->recursive = -1;
         $this->set('mecanico', $this->Mecanico->read(null, $id));
     }
 
@@ -43,6 +44,7 @@ class MecanicosController extends AppController {
             }
         }
         if (empty($this->data)) {
+            $this->Mecanico->recursive = -1;
             $this->data = $this->Mecanico->read(null, $id);
         }
     }

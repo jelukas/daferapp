@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <td><span><?php __('Cliente'); ?></span></td>
-                <td colspan="9">
+                <td colspan="3">
                     <?php
                     echo $this->Html->link($avisosrepuesto['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $avisosrepuesto['Cliente']['id']));
                     echo $this->Form->input('Presupuestoscliente.cliente_id', array('type' => 'hidden', 'value' => $avisosrepuesto['Avisosrepuesto']['cliente_id']));
@@ -38,6 +38,13 @@
                     echo $this->Form->input('Presupuestoscliente.centrostrabajo_id', array('type' => 'hidden', 'value' => $avisosrepuesto['Avisosrepuesto']['centrostrabajo_id']));
                     ?>
                 </td>
+                <td><span><?php __('Máquina'); ?></span></td>
+                <td>
+                    <?php
+                    echo $this->Html->link($avisosrepuesto['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $avisosrepuesto['Avisosrepuesto']['maquina_id']));
+                    echo $this->Form->input('Presupuestoscliente.maquina_id', array('type' => 'hidden', 'value' => $avisosrepuesto['Avisosrepuesto']['maquina_id']));
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td><h4><?php __('Nº Aviso de Repuestos'); ?></h4></td>
@@ -48,7 +55,6 @@
                 <td>
                     <?php
                     echo $this->Html->link($avisosrepuesto['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $avisosrepuesto['Avisosrepuesto']['maquina_id']));
-                    echo $this->Form->input('Presupuestoscliente.maquina_id', array('type' => 'hidden', 'value' => $avisosrepuesto['Avisosrepuesto']['maquina_id']));
                     ?>
                 </td>
                 <td><span><?php __('Nº Serie Máquina'); ?></span></td>
@@ -71,6 +77,8 @@
                 <td><?php echo $this->Form->input('fecha_enviado', array('label' => false, 'empty' => '--')); ?></td>
                 <td><span><?php __('Tipo de IVA') ?></span></td>
                 <td><?php echo $this->Form->input('tiposiva_id', array('label' => false)); ?></td>
+                <td><span>Estado</span></td>
+                <td colspan="3"><?php echo $this->Form->input('estadospresupuestoscliente_id', array('label' => false)); ?></td>
             </tr>
         </table>
     </fieldset>

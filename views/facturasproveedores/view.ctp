@@ -3,31 +3,35 @@
         <?php __('Factura de proveedor'); ?>
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $facturasproveedore['Facturasproveedore']['id']), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?>
-        <?php echo $this->Html->link(__('Eliminar Factura de proveedor', true), array('action' => 'delete',$facturasproveedore['Facturasproveedore']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true),$facturasproveedore['Facturasproveedore']['numero'])); ?>
+        <?php echo $this->Html->link(__('Eliminar Factura de proveedor', true), array('action' => 'delete', $facturasproveedore['Facturasproveedore']['id']), array('class' => 'button_link'), sprintf(__('Are you sure you want to delete # %s?', true), $facturasproveedore['Facturasproveedore']['numero'])); ?>
     </h2>
     <table class="view">
         <tr>
-            <td colspan="4">
+            <td colspan="3">
                 <span>Número</span>
                 <?php echo $facturasproveedore['Facturasproveedore']['numero']; ?>
+            </td>
+            <td>
+                <span>Estado</span>
+                <?php echo $facturasproveedore['Estadosfacturasproveedore']['estado']; ?>
             </td>
         </tr>
         <tr>
             <td>
                 <span>Proveedor</span>
-                <?php echo $facturasproveedore['Proveedore']['nombre']; ?>
+                <?php echo $this->Html->link($facturasproveedore['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $facturasproveedore['Proveedore']['id'])); ?>
             </td>
             <td>
                 <span>Fecha</span>
-                <?php echo $facturasproveedore['Facturasproveedore']['fechafactura']; ?>
+                <?php echo $this->Time->format('d-m-Y', $facturasproveedore['Facturasproveedore']['fechafactura']); ?>
             </td>
             <td>
                 <span>Fecha Pagada</span>
-                <?php echo $facturasproveedore['Facturasproveedore']['fechapagada']; ?>
+                <?php echo $this->Time->format('d-m-Y', $facturasproveedore['Facturasproveedore']['fechapagada']); ?>
             </td>
             <td>
                 <span>Fecha Límite de Pago</span>
-                <?php echo $facturasproveedore['Facturasproveedore']['fechalimitepago']; ?>
+                <?php echo $this->Time->format('d-m-Y', $facturasproveedore['Facturasproveedore']['fechalimitepago']); ?>
             </td>
         </tr>
         <tr>
@@ -47,9 +51,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="4">
+            <td colspan="3">
                 <span>Factura Escaneada</span>
                 <?php echo $this->Html->link(__($facturasproveedore['Facturasproveedore']['facturaescaneada'], true), '/files/facturasproveedore/' . $facturasproveedore['Facturasproveedore']['facturaescaneada']); ?>
+            </td>
+            <td>
+                <span>Forma de Pago</span>
+                <?php echo!empty($facturasproveedore['Proveedore']['Formapago']['nombre']) ? $facturasproveedore['Proveedore']['Formapago']['nombre'] : 'El proveedor no tiene forma de Pago Establecida' ?>
             </td>
         </tr>
     </table>
@@ -73,14 +81,19 @@
                 }
                 ?>
                 <tr<?php echo $class; ?>>
-                    <td><?php echo $this->Html->link(__($albaranesproveedore['numero'], true), array('controller' => 'albaranesproveedores','action' => 'view', $albaranesproveedore['id'])); ?></td>
+                    <td><?php echo $this->Html->link(__($albaranesproveedore['numero'], true), array('controller' => 'albaranesproveedores', 'action' => 'view', $albaranesproveedore['id'])); ?></td>
                     <td><?php echo $albaranesproveedore['fecha']; ?>&nbsp;</td>
                     <td><?php echo $albaranesproveedore['baseimponible']; ?>&nbsp;</td>
                     <td><?php echo $albaranesproveedore['observaciones']; ?>&nbsp;</td>
                     <td><?php echo $this->Html->link(__($albaranesproveedore['albaranescaneado'], true), '/files/albaranesproveedore/' . $albaranesproveedore['albaranescaneado']); ?></td>
                     <td class="actions"><?php echo $this->Html->link(__('Quitar', true), array('action' => 'quitar_albaran', $albaranesproveedore['id'])); ?></td>
                 </tr>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </table>
+    </div>
+    <div class="total_orden">
+        <p>Base imponible: <?php echo redondear_dos_decimal($facturasproveedore['Facturasproveedore']['baseimponible']); ?> &euro;</p>
+        <p>Impuestos: <?php echo redondear_dos_decimal($facturasproveedore['Facturasproveedore']['baseimponible'] * ($facturasproveedore['Tiposiva']['porcentaje_aplicable'] / 100)); ?> &euro;</p>
+        <p>Total: <?php echo redondear_dos_decimal($facturasproveedore['Facturasproveedore']['baseimponible']) + redondear_dos_decimal($facturasproveedore['Facturasproveedore']['baseimponible'] * ($facturasproveedore['Tiposiva']['porcentaje_aplicable'] / 100)); ?> &euro;</p>
     </div>
 </div>

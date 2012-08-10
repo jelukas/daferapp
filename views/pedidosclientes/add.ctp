@@ -12,6 +12,12 @@
                 <td><?php echo $this->Form->input('numero', array('label' => false, 'value' => $numero)); ?></td>
                 <td><span><?php __('Fecha'); ?></span></td>
                 <td><?php echo $this->Form->input('fecha', array('label' => false)); ?></td>
+                <td></td>
+                <td></td>
+                <td><span><?php __('Estado'); ?></span></td>
+                <td>
+                    <?php echo $this->Form->input('estadospedidoscliente_id', array('label' => false)); ?>
+                </td>
             </tr>
             <tr>
                 <td><span><?php __('Confirmado'); ?></span></td>

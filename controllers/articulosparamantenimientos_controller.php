@@ -32,6 +32,18 @@ class ArticulosparamantenimientosController extends AppController {
         }
         $this->set(compact('maquina_id'));
     }
+    function add_ajax($maquina_id = null) {
+        if (!empty($this->data)) {
+            $this->Articulosparamantenimiento->create();
+            if ($this->Articulosparamantenimiento->save($this->data)) {
+                $this->Session->setFlash(__('The articulosparamantenimiento has been saved', true));
+            } else {
+                $this->Session->setFlash(__('The articulosparamantenimiento could not be saved. Please, try again.', true));
+            }
+        }
+        $this->set(compact('maquina_id'));
+        $this->render('add');
+    }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {

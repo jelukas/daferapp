@@ -3,7 +3,8 @@
 class CentrostrabajosController extends AppController {
 
     var $name = 'Centrostrabajos';
-    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js');
+    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js', 'Autocomplete', 'Javascript');
+    var $components = array('RequestHandler');
 
     function index() {
         $this->Centrostrabajo->recursive = 0;
@@ -17,7 +18,7 @@ class CentrostrabajosController extends AppController {
         }
         $centrostrabajo = $this->Centrostrabajo->read(null, $id);
         $this->set('centrostrabajo', $centrostrabajo);
-        $maquinas = $this->Centrostrabajo->Maquina->find('list',array('conditions'=>array('Maquina.centrostrabajo_id' => $id)));
+        $maquinas = $this->Centrostrabajo->Maquina->find('list', array('conditions' => array('Maquina.centrostrabajo_id' => $id)));
         $this->set('maquinas', $maquinas);
     }
 
@@ -31,6 +32,22 @@ class CentrostrabajosController extends AppController {
                 $this->Session->setFlash(__('The centrostrabajo could not be saved. Please, try again.', true));
             }
         }
+        $this->set(compact('clientes'));
+    }
+
+    function add_popup($cliente_id = null) {
+        if (!empty($this->data)) {
+            $this->Centrostrabajo->create();
+            if ($this->Centrostrabajo->save($this->data)) {
+                $this->Session->setFlash(__('The centrostrabajo has been saved', true));
+                $this->redirect($this->referer());
+            } else {
+                $this->Session->setFlash(__('The centrostrabajo could not be saved. Please, try again.', true));
+                $this->redirect($this->referer());
+            }
+        }
+        if (!empty($cliente_id))
+            $this->data = array('Centrostrabajo' => array('cliente_id' => $cliente_id));
         $clientes = $this->Centrostrabajo->Cliente->find('list');
         $this->set(compact('clientes'));
     }
@@ -43,7 +60,7 @@ class CentrostrabajosController extends AppController {
         if (!empty($this->data)) {
             if ($this->Centrostrabajo->save($this->data)) {
                 $this->Session->setFlash(__('The centrostrabajo has been saved', true));
-                $this->redirect(array('action' => 'view',$this->Centrostrabajo->id));
+                $this->redirect(array('action' => 'view', $this->Centrostrabajo->id));
             } else {
                 $this->Session->setFlash(__('The centrostrabajo could not be saved. Please, try again.', true));
             }
@@ -113,14 +130,17 @@ class CentrostrabajosController extends AppController {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Avisostallere']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
     }
+
     function selectAlbaranesclientesreparaciones() {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Albaranesclientesreparacione']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
     }
+
     function selectAlbaranesclientes() {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Albaranescliente']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
     }
+
     function selectPresupuestoscliente() {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Presupuestoscliente']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
@@ -130,7 +150,13 @@ class CentrostrabajosController extends AppController {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Avisosrepuesto']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
     }
+
     function selectMaquina() {
+        $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Maquina']['cliente_id'])));
+        $this->set(compact('centrostrabajos'));
+    }
+
+    function selectMaquinaAdd() {
         $centrostrabajos = $this->Centrostrabajo->find('list', array('conditions' => array('Centrostrabajo.cliente_id' => $this->data['Maquina']['cliente_id'])));
         $this->set(compact('centrostrabajos'));
     }

@@ -63,8 +63,7 @@ class FileUploadComponent extends Object {
         'image/png',
         'image/pjpeg',
         'image/x-png',
-        'P',
-        'application/pdf'
+        'application/pdf',
     );
 
     /*     * ************************************************* 
@@ -151,7 +150,7 @@ class FileUploadComponent extends Object {
      */
 
     function startup(&$controller) {
-        $this->uploadDetected = ($this->_multiArrayKeyExists("tmp_name", $this->data) || $this->_multiArrayKeyExists("tmp_name", $this->data));
+        $this->uploadDetected = ($this->_multiArrayKeyExists("tmp_name", $this->data) || $this->_multiArrayKeyExists("tmp_name", $this->params));
         $this->uploadedFile = $this->_uploadedFileArray();
         if ($this->_checkFile() && $this->_checkType()) {
             $this->_processFile();
@@ -337,7 +336,6 @@ class FileUploadComponent extends Object {
         } else {
             $retval = isset($this->params['form'][$this->fileVar]) ? $this->params['form'][$this->fileVar] : false;
         }
-
         if ($this->uploadDetected && $retval === false) {
             $this->_error("FileUpload: A file was detected, but was unable to be processed due to a misconfiguration of FileUpload. Current config -- fileModel:'{$this->fileModel}' fileVar:'{$this->fileVar}'");
         }
@@ -356,7 +354,7 @@ class FileUploadComponent extends Object {
     function _multiArrayKeyExists($needle, $haystack) {
         if (is_array($haystack)) {
             foreach ($haystack as $key => $value) {
-                if ($needle == $key) {
+                if ($needle === $key && $value) {
                     return true;
                 }
                 if (is_array($value)) {

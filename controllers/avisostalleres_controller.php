@@ -3,7 +3,7 @@
 class AvisostalleresController extends AppController {
 
     var $name = 'Avisostalleres';
-    var $helpers = array('Html', 'Form', 'Ajax', 'Js');
+    var $helpers = array('Html', 'Form', 'Ajax', 'Js','Time','Autocomplete');
     var $components = array('RequestHandler', 'FileUpload');
 
     function beforeFilter() {
@@ -17,7 +17,7 @@ class AvisostalleresController extends AppController {
     }
 
     function index() {
-        $this->Avisostallere->recursive = -2;
+        $this->Avisostallere->recursive = 1;
         $this->set('avisostalleres', $this->paginate());
     }
 
@@ -27,9 +27,8 @@ class AvisostalleresController extends AppController {
             $this->redirect(array('action' => 'index'));
         }
         $estadosavisostalleres = $this->Avisostallere->Estadosavisostallere->find('list');
-        $this->set('avisostallere', $this->Avisostallere->read(null, $id), 'estadosavisostallere');
-        $this->loadModel('Ordene');
-        $numOrdenes = $this->Ordene->find('count', array('conditions' => array('Ordene.avisostallere_id' => $id)));
+        $this->set('avisostallere', $this->Avisostallere->find('first',array('contain'=>array('Cliente','Centrostrabajo','Maquina','Estadosavisostallere','Ordene','Presupuestoscliente'=>'Cliente','Presupuestosproveedore' => 'Proveedore'),'conditions'=>array('Avisostallere.id' => $id))));
+        $numOrdenes = $this->Avisostallere->Ordene->find('count', array('conditions' => array('Ordene.avisostallere_id' => $id)));
         $this->set('numOrdenes', $numOrdenes);
     }
 
@@ -48,12 +47,9 @@ class AvisostalleresController extends AppController {
                 $this->Session->setFlash(__('El aviso de taller no ha podido ser creado. Vuelva a intentarlo.', true));
             }
         }
-        $clientes = $this->Avisostallere->Cliente->find('list');
-        $maquinas = $this->Avisostallere->Maquina->find('list');
         $estadosavisostalleres = $this->Avisostallere->Estadosavisostallere->find('list');
-        $centrostrabajos = $this->Avisostallere->Centrostrabajo->find('list');
         $numero = $this->Avisostallere->dime_siguiente_numero();
-        $this->set(compact('clientes', 'maquinas', 'centrostrabajos', 'estadosavisostalleres', 'numero'));
+        $this->set(compact( 'estadosavisostalleres', 'numero'));
     }
 
     function edit($id = null) {
@@ -182,7 +178,13 @@ class AvisostalleresController extends AppController {
     }
 
     function descartar($id = null) {
+        $this->Avisostallere->id = $id;
         $this->Avisostallere->saveField('estadosavisostallere_id', 4);
+        $this->redirect(array('action' => 'mapa'));
+    }
+    function aceptar($id = null) {
+        $this->Avisostallere->id = $id;
+        $this->Avisostallere->saveField('fechaaceptacion', date('Y-m-d'));
         $this->redirect(array('action' => 'mapa'));
     }
 

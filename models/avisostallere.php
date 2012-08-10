@@ -48,6 +48,11 @@ class Avisostallere extends AppModel {
             'finderQuery' => '',
             'counterQuery' => ''
         ),
+        'Ordene' => array(
+            'className' => 'Ordene',
+            'foreignKey' => 'avisostallere_id',
+            'dependent' => false,
+        ),
         'Presupuestoscliente' => array(
             'className' => 'Presupuestoscliente',
             'foreignKey' => 'avisostallere_id',

@@ -42,6 +42,7 @@ class TareaspresupuestoclientesController extends AppController {
                 $this->redirect(array('controller'=>'presupuestosclientes','action' => 'view',$this->data['Tareaspresupuestocliente']['presupuestoscliente_id']));
             } else {
                 $this->flashWarnings(__('La Tarea Presupuestada no ha podido ser guardada. Por favor, inténtalo de nuevo.', true));
+                $this->redirect($this->referer());
             }
         }
         if (empty($this->data)) {

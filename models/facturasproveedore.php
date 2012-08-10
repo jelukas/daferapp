@@ -3,6 +3,7 @@
 class Facturasproveedore extends AppModel {
 
     var $name = 'Facturasproveedore';
+    var $order = "Facturasproveedore.fechafactura DESC";
     var $validate = array(
         'numero' => array(
             'notempty' => array(
@@ -37,9 +38,9 @@ class Facturasproveedore extends AppModel {
             'fields' => '',
             'order' => ''
         ),
-        'Formapago' => array(
-            'className' => 'Formapago',
-            'foreignKey' => 'formapago_id',
+        'Estadosfacturasproveedore' => array(
+            'className' => 'Estadosfacturasproveedore',
+            'foreignKey' => 'estadosfacturasproveedore_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''

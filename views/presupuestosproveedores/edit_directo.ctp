@@ -19,14 +19,11 @@
                         <p><input id="autocomplete-proveedores" type="text" value="" /></p>
                     </div>
                 </td>
-                <td>
+                <td colspan="2">
                     <?php echo $this->Form->input('fecha', array('label' => 'Fecha', 'dateFormat' => 'DMY', 'timeFormat' => '24')); ?>
                 </td>
                 <td>
                     <?php echo $this->Form->input('almacene_id', array('label' => 'Almacén')); ?>
-                </td>
-                <td>
-                    <?php echo $this->Form->input('confirmado', array('Confirmado')); ?>
                 </td>
             </tr>
             <tr>
@@ -40,7 +37,10 @@
                     <?php echo $this->Form->input('remove_file', array('type' => 'checkbox', 'label' => 'Borrar Documento Escaneado Actual', 'hiddenField' => false)); ?>
                     <?php echo $this->Form->input('file', array('type' => 'file', 'label' => 'Presupuesto escaneado')); ?>
                 </td>
-                <td colspan="2">
+                <td>
+                    <?php echo $this->Form->input('estadospresupuestosproveedore_id', array('label' => 'Estado del Presupuesto')); ?>
+                </td>
+                <td>
                     <?php echo $this->Form->input('fechaplazo', array('label' => 'Plazo de Entrega', 'dateFormat' => 'DMY', 'empty' => '--')); ?>
                 </td>
             </tr>

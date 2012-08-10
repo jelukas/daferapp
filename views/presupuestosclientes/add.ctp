@@ -77,6 +77,8 @@
                 <td colspan="3"><?php echo $this->Form->input('fecha_enviado', array('label' => false, 'empty' => '--')); ?></td>
                 <td><span><?php __('Tipo de IVA') ?></span></td>
                 <td><?php echo $this->Form->input('tiposiva_id', array('label' => false)); ?></td>
+                <td><span>Estado</span></td>
+                <td colspan="3"><?php echo $this->Form->input('estadospresupuestoscliente_id', array('label' => false)); ?></td>
             </tr>
         </table>
     </fieldset>

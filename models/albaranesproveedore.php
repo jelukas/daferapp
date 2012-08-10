@@ -3,6 +3,9 @@
 class Albaranesproveedore extends AppModel {
 
     var $name = 'Albaranesproveedore';
+    var $displayField = 'numero';
+    var $order = "Albaranesproveedore.fecha DESC";
+    
     var $validate = array(
         'pedidosproveedore_id' => array(
             'numeric' => array(
@@ -19,6 +22,11 @@ class Albaranesproveedore extends AppModel {
                 'rule' => array('notempty'),
             ),
         ),
+        'centrosdecoste_id' => array(
+            'notempty' => array(
+                'rule' => array('notempty'),
+            ),
+        ),
     );
     var $belongsTo = array(
         'Pedidosproveedore' => array(
@@ -31,6 +39,20 @@ class Albaranesproveedore extends AppModel {
         'Proveedore' => array(
             'className' => 'Proveedore',
             'foreignKey' => 'proveedore_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Centrosdecoste' => array(
+            'className' => 'Centrosdecoste',
+            'foreignKey' => 'centrosdecoste_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Estadosalbaranesproveedore' => array(
+            'className' => 'Estadosalbaranesproveedore',
+            'foreignKey' => 'estadosalbaranesproveedore_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''

@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('Materiale'); ?>
+<?php echo $this->Form->create('Materiale', array('action' => 'add')); ?>
 <fieldset>
     <legend><?php __('Añadir Material a la Tarea ' . $tareaspresupuestocliente_id . ' del Presupuesto'); ?></legend>
     <div class="input required">
@@ -17,7 +17,8 @@
     ?>
     <span>Precios sin IVA</span>
 </fieldset>
-<?php echo $this->Form->end(__('Guardar', true)); ?>
+<?php echo $this->Ajax->submit(__('Guardar y Nuevo', true), array('url' => array('controller'=>'materiales','action' => 'add_ajax',$tareaspresupuestocliente_id), 'update' => 'dialog-modal')); ?>
+<?php echo $this->Form->end(__('Guardar y Cerrar', true)); ?>
 <script type="text/javascript">
     /*Autcocomplete basico de Articulos en los MAteriales de los Presupuestos en sustitucion del select de articulos*/
     if($( "#autocomplete-materiales" ).length != 0){

@@ -9,11 +9,11 @@
         </legend>
         <table class="edit">
             <tr>
-                <td><span>Centro de Trabajo</span></td>
+                <td class="required"><span>Centro de Trabajo</span></td>
                 <td><?php echo $this->Form->input('id'); ?><?php echo $this->Form->input('centrotrabajo', array('label' => false)); ?></td>
-                <td><span>Cliente</span></td>
-                <td colspan="3"><?php echo $this->Form->input('cliente_id', array('label' => false)); ?></td>
-                <td><span>Responsable</span></td>
+                <td class="required"><span>Cliente</span></td>
+                <td colspan="3"><?php echo $this->Form->input('cliente_id', array('label' => false,'class'=>'chzn-select-required','empty'=>'','data-placeholder' =>'Seleciona el Cliente...')); ?></td>
+                <td class="required"><span>Responsable</span></td>
                 <td><?php echo $this->Form->input('responsable', array('label' => false)); ?></td>
             </tr>
             <tr>
@@ -27,7 +27,7 @@
                 <td><?php echo $this->Form->input('cp', array('label' => false)); ?></td>
             </tr>
             <tr>
-                <td><span>Teléfono</span></td>
+                <td class="required"><span>Teléfono Principal</span></td>
                 <td><?php echo $this->Form->input('telefono', array('label' => false)); ?></td>
                 <td><span>Fax</span></td>
                 <td><?php echo $this->Form->input('fax', array('label' => false)); ?></td>

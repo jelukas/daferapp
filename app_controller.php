@@ -10,8 +10,6 @@ class AppController extends Controller {
         $this->RequestHandler->setContent('json', 'text/x-json');
     }
 
-    
-    
     function checkPermissions($model, $action) {
         $this->loadModel('User');
         $this->loadModel('Restriccione');
@@ -54,16 +52,16 @@ class AppController extends Controller {
 
     public function autocomplete() {
         $model_class = $this->modelClass;
-        if($model_class == 'Articulo'){
-            $this->$model_class->virtualFields['autocomplete'] = sprintf("CONCAT(". $this->$model_class->alias.".ref, ' --- ',". $this->$model_class->alias.".nombre)");
+        if ($model_class == 'Articulo') {
+            $this->$model_class->virtualFields['autocomplete'] = sprintf("CONCAT(" . $this->$model_class->alias . ".ref, ' --- '," . $this->$model_class->alias . ".nombre)");
         }
         if ($this->$model_class->hasField('autocomplete', true))
             $fields = array('nombre', 'id', 'autocomplete');
         else
             $fields = array('nombre', 'id');
 
-        if ($this->$model_class->hasField('ref', false)) {
-            $fields = array('nombre', 'id', 'ref', 'autocomplete');
+        if ($model_class == 'Articulo') {
+            $fields = array('nombre', 'id', 'ref', 'ultimopreciocompra', 'autocomplete');
 
             if (!empty($this->params['pass'][0])) {
                 $objects = $this->$model_class->find('all', array(
@@ -104,10 +102,14 @@ class AppController extends Controller {
 
         $objects_array = array();
         foreach ($objects as $object) {
-            if (isset($object[$model_class]["autocomplete"]))
-                $objects_array[] = array("id" => $object[$model_class]["id"], "value" => $object[$model_class]["autocomplete"]);
-            else
-                $objects_array[] = array("id" => $object[$model_class]["id"], "value" => $object[$model_class]["nombre"]);
+            if (isset($object[$model_class]["ultimopreciocompra"])) {
+                $objects_array[] = array("id" => $object[$model_class]["id"], "value" => 'Ref. '.$object[$model_class]["autocomplete"], 'ultimopreciocompra' => $object[$model_class]["ultimopreciocompra"]);
+            } else {
+                if (isset($object[$model_class]["autocomplete"]))
+                    $objects_array[] = array("id" => $object[$model_class]["id"], "value" => $object[$model_class]["autocomplete"]);
+                else
+                    $objects_array[] = array("id" => $object[$model_class]["id"], "value" => $object[$model_class]["nombre"]);
+            }
         }
 
         $this->set('objects', $objects_array);

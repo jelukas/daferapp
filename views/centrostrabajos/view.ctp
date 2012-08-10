@@ -1,4 +1,4 @@
-<div class="centrostrabajos">
+<div>
     <h2>
         <?php __('Ficha de Centro de Trabajo'); ?>
         <?php echo $this->Html->link(__('Editar Centro Trabajo', true), array('action' => 'edit', $centrostrabajo['Centrostrabajo']['id']), array('class' => 'button_link')); ?>
@@ -25,7 +25,7 @@
             <td><?php echo $centrostrabajo['Centrostrabajo']['cp']; ?></td>
         </tr>
         <tr>
-            <td><span>Teléfono</span></td>
+            <td><span>Teléfono Principal</span></td>
             <td><?php echo $centrostrabajo['Centrostrabajo']['telefono']; ?></td>
             <td><span>Fax</span></td>
             <td><?php echo $centrostrabajo['Centrostrabajo']['fax']; ?></td>
@@ -40,8 +40,11 @@
             <td colspan="2">
                 <span>Máquinas</span>
             </td>
-            <td colspan="6">
-                <?php echo $this->Form->input('vermaquina', array('label' => 'Selecione que Máquina desea Ver', 'type' => 'select', 'options' => $maquinas, 'empty' => '-- Elije la Maquina para Ver --')); ?>
+            <td colspan="3">
+                <?php echo $this->Form->input('vermaquina', array('label' => 'Selecione que Máquina desea Ver', 'type' => 'select', 'options' => $maquinas, 'class' => 'chzn-select-not-required')); ?>
+            </td>
+            <td>
+                <?php echo $this->Html->link('Nueva Máquina',array('controller'=>'maquinas', 'action'=>'add_popup',$centrostrabajo['Centrostrabajo']['cliente_id'],$centrostrabajo['Centrostrabajo']['id']),array('class'=>'button_link popup')) ?>
             </td>
         </tr>
         <tr>
@@ -77,6 +80,27 @@
             <td><?php echo $centrostrabajo['Centrostrabajo']['preciokm']; ?></td>
         </tr>
     </table>
+    <div class="datagrid">
+        <table>
+            <caption>Teléfonos <?php echo $this->Html->link('Añadir', array('controller' => 'telefonos', 'action' => 'add', 'centrostrabajo', $centrostrabajo['Centrostrabajo']['id']), array('class' => 'popup button_brownie')); ?> </caption>
+            <thead>
+                <tr><th>Número</th><th>Eliminar</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="2"></td></tr>
+            </tfoot>
+            <tbody>
+                <?php foreach ($centrostrabajo['Telefono'] as $telefono): ?>
+                    <tr>
+                        <td><?php echo $telefono['telefono'] ?></td>
+                        <td>
+                            <?php echo $html->link(__('Eliminar', true), array('controller' => 'telefonos', 'action' => 'delete', $telefono['id']), array('class' => 'button_brownie'), sprintf(__('¿Seguro que quieres borrar el teléfono # %s?', true), $telefono['telefono'])); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
     $('#vermaquina').change(function(){

@@ -34,10 +34,22 @@ class Pedidoscliente extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Estadospedidoscliente' => array(
+            'className' => 'Estadospedidoscliente',
+            'foreignKey' => 'estadospedidoscliente_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
     );
     var $hasMany = array(
         'Presupuestosproveedore' => array(
             'className' => 'Presupuestosproveedore',
+            'foreignKey' => 'pedidoscliente_id',
+            'dependent' => false,
+        ),
+        'Albaranescliente' => array(
+            'className' => 'Albaranescliente',
             'foreignKey' => 'pedidoscliente_id',
             'dependent' => false,
         ),

@@ -3,6 +3,7 @@
 class Presupuestosproveedore extends AppModel {
 
     var $name = 'Presupuestosproveedore';
+    var $order = "Presupuestosproveedore.numero DESC";
     var $validate = array(
         'proveedore_id' => array(
             'numeric' => array(
@@ -41,6 +42,10 @@ class Presupuestosproveedore extends AppModel {
         'Pedidoscliente' => array(
             'className' => 'Pedidoscliente',
             'foreignKey' => 'pedidoscliente_id',
+        ),
+        'Estadospresupuestosproveedore' => array(
+            'className' => 'Estadospresupuestosproveedore',
+            'foreignKey' => 'estadospresupuestosproveedore_id',
         ),
     );
     var $hasMany = array(

@@ -16,7 +16,7 @@
             <td><span><?php __('Tipo de IVA'); ?></span></td>
             <td><?php echo $proveedore['Tiposiva']['tipoiva']; ?> - <?php echo $proveedore['Tiposiva']['porcentaje_aplicable']; ?> &percnt;</td>
             <td><span><?php __('Cuenta Contable'); ?></span></td>
-            <td><?php echo $proveedore['Proveedore']['cuentacontable']; ?></td>
+            <td><?php echo $proveedore['Cuentascontable']['codigo']; ?></td>
         </tr>
         <tr>
             <td><span><?php __('Población'); ?></span></td>
@@ -29,7 +29,7 @@
             <td><?php echo $proveedore['Proveedore']['pais']; ?></td>
         </tr>
         <tr>
-            <td><span><?php __('Teléfono'); ?></span></td>
+            <td><span><?php __('Teléfono Principal'); ?></span></td>
             <td colspan="3"><?php echo $proveedore['Proveedore']['telefono']; ?></td>
             <td><span><?php __('Dirección Fiscal'); ?></span></td>
             <td colspan="5"><?php echo $proveedore['Proveedore']['direccionfiscal']; ?></td>
@@ -100,6 +100,27 @@
             </td>
         </tr>
     </table>
+    <div class="datagrid">
+        <table>
+            <caption>Teléfonos <?php echo $this->Html->link('Añadir', array('controller' => 'telefonos', 'action' => 'add', 'proveedore', $proveedore['Proveedore']['id']), array('class' => 'popup button_brownie')); ?> </caption>
+            <thead>
+                <tr><th>Número</th><th>Eliminar</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="2"></td></tr>
+            </tfoot>
+            <tbody>
+                <?php foreach ($proveedore['Telefono'] as $telefono): ?>
+                    <tr>
+                        <td><?php echo $telefono['telefono'] ?></td>
+                        <td>
+                            <?php echo $html->link(__('Eliminar', true), array('controller' => 'telefonos', 'action' => 'delete', $telefono['id']), array('class' => 'button_brownie'), sprintf(__('¿Seguro que quieres borrar el teléfono # %s?', true), $telefono['telefono'])); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
     $(function(){

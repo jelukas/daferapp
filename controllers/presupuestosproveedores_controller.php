@@ -3,7 +3,7 @@
 class PresupuestosproveedoresController extends AppController {
 
     var $name = 'Presupuestosproveedores';
-    var $helpers = array('Ajax', 'Js', 'Autocomplete');
+    var $helpers = array('Ajax', 'Js', 'Autocomplete', 'Time');
     var $components = array('FileUpload', 'RequestHandler');
 
     function beforeFilter() {
@@ -31,9 +31,6 @@ class PresupuestosproveedoresController extends AppController {
         if (!empty($this->params['url']['observaciones'])) {
             $conditions['Presupuestosproveedore.observaciones LIKE'] = '%' . $this->params['url']['observaciones'] . '%';
         }
-        if (!empty($this->params['url']['confirmado'])) {
-            $conditions['Presupuestosproveedore.confirmado ='] = $this->params['url']['confirmado'];
-        }
         if (!empty($this->params['url']['day_fechaplazo_f']) && !empty($this->params['url']['month_fechaplazo_f']) && !empty($this->params['url']['year_fechaplazo_f'])) {
             $conditions['Presupuestosproveedore.fechaplazo >='] = $this->params['url']['year_fechaplazo_f'] . '-' . $this->params['url']['month_fechaplazo_f'] . '-' . $this->params['url']['day_fechaplazo_f'];
         }
@@ -58,14 +55,18 @@ class PresupuestosproveedoresController extends AppController {
         }
         $this->set('presupuestosproveedore', $this->Presupuestosproveedore->find(
                         'first', array('contain' =>
-                    array('Pedidosproveedore',
-                        'Pedidoscliente',
+                    array(
+                        'Proveedore' => 'Tiposiva',
+                        'Estadospresupuestosproveedore',
+                        'Pedidosproveedore',
+                        'Presupuestoscliente'=>'Cliente',
+                        'Pedidoscliente'=>array('Presupuestoscliente'=>'Cliente'),
                         'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
                         'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
                         'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
                         'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'),
                     'conditions' => array('Presupuestosproveedore.id' => $id))));
-        $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('all', array('contain' => array('Articulo','Tarea'), 'conditions' => array('ArticulosPresupuestosproveedore.presupuestosproveedore_id' => $id))));
+        $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->find('all', array('contain' => array('Articulo', 'Tarea'), 'conditions' => array('ArticulosPresupuestosproveedore.presupuestosproveedore_id' => $id))));
     }
 
     function add($avisorepuestos_id = null, $avisostallere_id = null, $ordene_id = null) {
@@ -76,6 +77,8 @@ class PresupuestosproveedoresController extends AppController {
                 /* Guarda fichero */
                 if ($this->FileUpload->finalFile != null) {
                     $this->Presupuestosproveedore->saveField('presupuestoescaneado', $this->FileUpload->finalFile);
+                    // Se cambia el estado a Recibido:
+                    $this->Presupuestosproveedore->saveField('estadospresupuestosproveedore_id',3); 
                 }
                 /* FIn Guardar Fichero */
                 if (!empty($this->data['Presupuestosproveedore']['avisosrepuesto_id'])) {
@@ -132,10 +135,11 @@ class PresupuestosproveedoresController extends AppController {
             }
         }
 
+        $estadospresupuestosproveedores = $this->Presupuestosproveedore->Estadospresupuestosproveedore->find('list');
         $proveedores = $this->Presupuestosproveedore->Proveedore->find('list');
         $almacenes = $this->Presupuestosproveedore->Almacene->find('list');
         $numero = $this->Presupuestosproveedore->dime_siguiente_numero();
-        $this->set(compact('proveedores', 'almacenes', 'ordene_id', 'numero'));
+        $this->set(compact('proveedores', 'almacenes', 'ordene_id', 'numero','estadospresupuestosproveedores'));
         if ($avisorepuestos_id == null && $avisostallere_id == null && $ordene_id == null) {
             if (empty($this->data['articulos_validados'])) {
                 $this->render('add_directo');
@@ -174,10 +178,14 @@ class PresupuestosproveedoresController extends AppController {
                 if (!empty($this->data['Presupuestosproveedore']['remove_file'])) {
                     $this->FileUpload->RemoveFile($upload['Presupuestosproveedore']['presupuestoescaneado']);
                     $this->Presupuestosproveedore->saveField('presupuestoescaneado', null);
+                    // Se cambia el estado a Pendiente:
+                    $this->Presupuestosproveedore->saveField('estadospresupuestosproveedore_id',1);
                 }
                 if ($this->FileUpload->finalFile != null) {
                     $this->FileUpload->RemoveFile($upload['Presupuestosproveedore']['presupuestoescaneado']);
                     $this->Presupuestosproveedore->saveField('presupuestoescaneado', $this->FileUpload->finalFile);
+                    // Se cambia el estado a Recibido:
+                    $this->Presupuestosproveedore->saveField('estadospresupuestosproveedore_id',3);
                 }
                 $this->Session->setFlash(__('El presupuesto de proveedor ha sido guardado correctamente', true));
                 $this->redirect($this->referer());
@@ -186,14 +194,23 @@ class PresupuestosproveedoresController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->Presupuestosproveedore->recursive = 2;
-            $this->data = $this->Presupuestosproveedore->read(null, $id);
+            $this->data = $this->Presupuestosproveedore->find('first',array('contain' =>
+                    array(
+                        'Estadospresupuestosproveedore',
+                        'Pedidosproveedore',
+                        'Presupuestoscliente',
+                        'Pedidoscliente',
+                        'Ordene',
+                        'Avisostallere',
+                        'Avisosrepuesto',
+                        'ArticulosPresupuestosproveedore' => 'Articulo', 'Proveedore', 'Almacene'),'conditions' =>array('Presupuestosproveedore.id' => $id)) );
         }
         $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->recursive = 2;
         $this->set('articulos_presupuestosproveedore', $this->Presupuestosproveedore->ArticulosPresupuestosproveedore->findAllByPresupuestosproveedoreId($id));
         $proveedores = $this->Presupuestosproveedore->Proveedore->find('list');
         $almacenes = $this->Presupuestosproveedore->Almacene->find('list');
-        $this->set(compact('proveedores', 'almacenes'));
+        $estadospresupuestosproveedores = $this->Presupuestosproveedore->Estadospresupuestosproveedore->find('list');
+        $this->set(compact('proveedores', 'almacenes','estadospresupuestosproveedores'));
         if (empty($this->data['Presupuestosproveedore']['avisostallere_id']) && empty($this->data['Presupuestosproveedore']['avisosrepuesto_id']) && empty($this->data['Presupuestosproveedore']['ordene_id'])) {
             $this->render('edit_directo');
         }
@@ -247,6 +264,7 @@ class PresupuestosproveedoresController extends AppController {
         $this->set(compact('proveedores', 'almacenes'));
     }
 
+    
 }
 
 ?>

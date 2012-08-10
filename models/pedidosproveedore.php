@@ -3,6 +3,7 @@
 class Pedidosproveedore extends AppModel {
 
     var $name = 'Pedidosproveedore';
+    var $order = "Pedidosproveedore.numero DESC";
     var $validate = array(
         'fecha' => array(
             'date' => array(
@@ -19,6 +20,20 @@ class Pedidosproveedore extends AppModel {
         'Presupuestosproveedore' => array(
             'className' => 'Presupuestosproveedore',
             'foreignKey' => 'presupuestosproveedore_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Transportista' => array(
+            'className' => 'Transportista',
+            'foreignKey' => 'transportista_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Estadospedidosproveedore' => array(
+            'className' => 'Estadospedidosproveedore',
+            'foreignKey' => 'estadospedidosproveedore_id',
             'conditions' => '',
             'fields' => '',
             'order' => ''

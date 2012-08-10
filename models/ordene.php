@@ -22,6 +22,13 @@ class Ordene extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Comerciale' => array(
+            'className' => 'Comerciale',
+            'foreignKey' => 'comerciale_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
         'Almacene' => array(
             'className' => 'Almacene',
             'foreignKey' => 'almacene_id',
@@ -88,6 +95,20 @@ class Ordene extends AppModel {
         $query = 'SELECT MAX(o.numero)+1 as siguiente  FROM ordenes o ';
         $resultado = $this->query($query);
         return $resultado[0][0]['siguiente'];
+    }
+    
+    public function get_baseimponible($ordene_id){
+        $query = 'SELECT SUM(t.total_materiales_imputables + t.total_partes_imputable) as baseimponible FROM tareas t WHERE t.ordene_id = "'.$ordene_id.'" ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['baseimponible'];
+    }
+    public function get_totalrepuestos(){
+        $query = 'SELECT SUM(t.total_materiales_imputables) as repuestos FROM tareas t WHERE t.ordene_id = "'.$ordene_id.'" ';
+        $resultado = $this->query($query);
+        return $resultado[0][0]['repuestos'];
+    }
+    public function get_totalmanoobra_servicios(){
+        /* TODO HACER*/
     }
 
 }

@@ -19,6 +19,7 @@
             <th><?php echo $this->Paginator->sort('Descripcion'); ?></th>
             <th><?php echo $this->Paginator->sort('Urgente','marcarurgente'); ?></th>
             <th><?php echo $this->Paginator->sort('Estado','estadosavisostallere_id'); ?></th>
+            <th><?php __('Orden'); ?></th>
             <th class="actions"><?php __('Acciones'); ?></th>
         </tr>
         <?php
@@ -31,13 +32,18 @@
             ?>
             <tr<?php echo $class; ?>>
                 <td><?php echo $avisostallere['Avisostallere']['numero']; ?></td>
-                <td><?php echo $avisostallere['Avisostallere']['fechaaviso']; ?></td>
+                <td><?php echo $this->Time->format('d-m-Y', $avisostallere['Avisostallere']['fechaaviso']); ?></td>
                 <td><?php echo $this->Html->link($avisostallere['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $avisostallere['Cliente']['id'])); ?></td>
                 <td><?php echo $this->Html->link($avisostallere['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $avisostallere['Centrostrabajo']['id'])); ?></td>
                 <td><?php echo $this->Html->link($avisostallere['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $avisostallere['Maquina']['id'])); ?></td>
                 <td><?php echo $avisostallere['Avisostallere']['descripcion']; ?></td>
                 <td><?php echo !empty($avisostallere['Avisostallere']['marcarurgente']) ? 'Sí' : 'No'; ?></td>
                 <td><?php echo $avisostallere['Estadosavisostallere']['estado']; ?></td>
+                <td>
+                    <?php foreach($avisostallere['Ordene'] as $ordene): ?>
+                        <?php echo $this->Html->link($ordene['numero'], array('controller' => 'ordenes', 'action' => 'view', $ordene['id'])); ?> | 
+                    <?php endforeach; ?>
+                </td>
                 <td class="actions">
                     <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $avisostallere['Avisostallere']['id'])); ?>
                     <?php echo $this->Html->link(__('Pdf', true), array('action' => 'pdf', $avisostallere['Avisostallere']['id'])); ?>

@@ -1,39 +1,24 @@
-<div class="mecanicos view">
-<h2><?php  __('Ficha de Mecánico');?></h2>
-	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('ID'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $mecanico['Mecanico']['id']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('DNI'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $mecanico['Mecanico']['dni']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Nombre'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $mecanico['Mecanico']['nombre']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Fecha de alta'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $mecanico['Mecanico']['fechaalta']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Observaciones'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $mecanico['Mecanico']['observaciones']; ?>
-			&nbsp;
-		</dd>
-	</dl>
-</div>
-<div class="actions">
-	<h3><?php __('Acciones'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Editar Mecánico', true), array('action' => 'edit', $mecanico['Mecanico']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Eliminar Mecánico', true), array('action' => 'delete', $mecanico['Mecanico']['id']), null, sprintf(__('¿Está seguro que desea eliminar # %s?', true), $mecanico['Mecanico']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Listar Mecánicos', true), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Mecánico', true), array('action' => 'add')); ?> </li>
-	</ul>
+<div class="mecanicos">
+    <h2>
+        <?php __('Ficha de Mecánico ' . $mecanico['Mecanico']['nombre']); ?>
+        <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $mecanico['Mecanico']['id']), array('class' => 'button_link')); ?> 
+        <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $mecanico['Mecanico']['id']), array('class' => 'button_link'), sprintf(__('¿Está seguro que desea eliminar # %s?', true), $mecanico['Mecanico']['nombre'])); ?> 
+        <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?> 
+    </h2>
+    <table class="view">
+        <tr>
+            <td><span>Nombre</span></td>
+            <td><?php echo $mecanico['Mecanico']['nombre']; ?></td>
+            <td><span>DNI</span></td>
+            <td><?php echo $mecanico['Mecanico']['dni']; ?></td>
+        </tr>
+        <tr>
+            <td><span>Fecha de Alta</span></td>
+            <td><?php echo $mecanico['Mecanico']['fechaalta']; ?></td>
+        </tr>
+        <tr>
+           <td><span>Observaciones</span></td>
+            <td><?php echo $mecanico['Mecanico']['observaciones']; ?></td>
+        </tr>
+    </table>
 </div>

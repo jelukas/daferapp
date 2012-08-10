@@ -4,7 +4,7 @@ class TransportistasController extends AppController {
 	var $name = 'Transportistas';
 
 	function index() {
-		$this->Transportista->recursive = 0;
+		$this->Transportista->recursive = 1;
 		$this->set('transportistas', $this->paginate());
 	}
 

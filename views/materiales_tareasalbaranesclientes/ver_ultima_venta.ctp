@@ -1,0 +1,3 @@
+<p style="font-size: 2.5em; text-align: center;"><?php echo $materiale['MaterialesTareasalbaranescliente']['precio_unidad'] ?> &euro;</p>
+<p style="font-size: 1.4em; text-align: center; color: #3AA29C">Fecha: <?php echo $materiale['Tareasalbaranescliente']['Albaranescliente']['fecha'] ?></p>
+<p style="font-size: 1.4em; text-align: center; color: #3AA29C">Ver Albarán: <?php echo $this->Html->link($materiale['Tareasalbaranescliente']['Albaranescliente']['numero'],array('controller'=>'albaranesclientes','action'=>'view',$materiale['Tareasalbaranescliente']['Albaranescliente']['id'])) ?></p>

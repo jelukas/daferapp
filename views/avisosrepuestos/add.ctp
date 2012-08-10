@@ -28,7 +28,7 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('cliente_id', array('label' => 'Cliente', 'empty' => '--- Seleccione un cliente ---', 'style' => 'width: 300px;'));
+                    echo $this->Autocomplete->replace_select('Cliente', null, true, null);
                     echo $ajax->observeField('AvisosrepuestoClienteId', array(
                         'frequency' => '1',
                         'update' => 'CentrostrabajoSelectDiv',
@@ -57,6 +57,7 @@
                             ))
                     );
                     ?>
+                    <?php echo $this->Html->link(__('Nuevo Centro de Trabajo', true), array('controller' => 'centrostrabajos', 'action' => 'add_popup'), array('class' => 'button_link popup')); ?>
                 </td>
                 <td>
                     <?php
@@ -68,6 +69,7 @@
                         )
                     ));
                     ?>
+                    <?php echo $this->Html->link(__('Nueva Máquina', true), array('controller' => 'maquinas', 'action' => 'add_popup'), array('class' => 'button_link popup')); ?>
                 </td>
             </tr>
             <tr>

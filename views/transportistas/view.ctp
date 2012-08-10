@@ -1,44 +1,45 @@
-<div class="transportistas view">
-<h2><?php  __('Transportista');?></h2>
-	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('ID'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $transportista['Transportista']['id']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Nombre'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $transportista['Transportista']['nombre']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Teléfono'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $transportista['Transportista']['telefono']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Código cliente'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $transportista['Transportista']['codigocliente']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Descripción'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $transportista['Transportista']['descripcion']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Observaciones'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $transportista['Transportista']['observaciones']; ?>
-			&nbsp;
-		</dd>
-	</dl>
-</div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('Editar Transportista', true), array('action' => 'edit', $transportista['Transportista']['id'])); ?> </li>
-		<li><?php echo $html->link(__('Eliminar Transportista', true), array('action' => 'delete', $transportista['Transportista']['id']), null, sprintf(__('¿Está seguro que quiere eliminar # %s?', true), $transportista['Transportista']['id'])); ?> </li>
-		<li><?php echo $html->link(__('Listar Transportistas', true), array('action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('Nuevo Transportista', true), array('action' => 'add')); ?> </li>
-		
-	</ul>
+<div class="transportistas">
+    <h2>
+        <?php __('Transportista'); ?>
+        <?php echo $html->link(__('Editar Transportista', true), array('action' => 'edit', $transportista['Transportista']['id']), array('class' => 'button_link')); ?>
+        <?php echo $html->link(__('Listar Transportistas', true), array('action' => 'index'), array('class' => 'button_link')); ?>
+        <?php echo $html->link(__('Nuevo Transportista', true), array('action' => 'add'), array('class' => 'button_link')); ?>
+    </h2>
+    <table class="view">
+        <tr>
+            <td><span><?php __('Nombre'); ?></span></td>
+            <td><?php echo $transportista['Transportista']['nombre']; ?></td>
+            <td><span><?php __('Código cliente'); ?></span></td>
+            <td><?php echo $transportista['Transportista']['codigocliente']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Descripción'); ?></span></td>
+            <td colspan="3"><?php echo $transportista['Transportista']['descripcion']; ?></td>
+        </tr>
+        <tr>
+            <td><span><?php __('Observaciones'); ?></span></td>
+            <td colspan="3"><?php echo $transportista['Transportista']['observaciones']; ?></td>
+        </tr>
+    </table>
+    <div class="datagrid">
+        <table>
+            <caption>Teléfonos <?php echo $this->Html->link('Añadir', array('controller' => 'telefonos', 'action' => 'add', 'transportista', $transportista['Transportista']['id']), array('class' => 'popup button_brownie')); ?> </caption>
+            <thead>
+                <tr><th>Número</th><th>Eliminar</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="2"></td></tr>
+            </tfoot>
+            <tbody>
+                <?php foreach ($transportista['Telefono'] as $telefono): ?>
+                    <tr>
+                        <td><?php echo $telefono['telefono'] ?></td>
+                        <td>
+                            <?php echo $html->link(__('Eliminar', true), array('controller' => 'telefonos', 'action' => 'delete', $telefono['id']), array('class' => 'button_brownie'), sprintf(__('¿Seguro que quieres borrar el teléfono # %s?', true), $telefono['telefono'])); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>

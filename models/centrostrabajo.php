@@ -41,8 +41,39 @@ class Centrostrabajo extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		'Telefono' => array(
+			'className' => 'Telefono',
+			'foreignKey' => 'centrostrabajo_id',
+			'dependent' => true,
+		),
 		'Maquina' => array(
 			'className' => 'Maquina',
+			'foreignKey' => 'centrostrabajo_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Albaranescliente' => array(
+			'className' => 'Albaranescliente',
+			'foreignKey' => 'centrostrabajo_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Albaranesclientesreparacione' => array(
+			'className' => 'Albaranesclientesreparacione',
 			'foreignKey' => 'centrostrabajo_id',
 			'dependent' => false,
 			'conditions' => '',

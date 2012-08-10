@@ -15,10 +15,12 @@
             <td><?php echo $cliente['Cliente']['cif']; ?></td>
         </tr>
         <tr>
-            <td><span>Teléfono</span></td>
+            <td><span>Teléfono Principal</span></td>
             <td><?php echo $cliente['Cliente']['telefono']; ?></td>
             <td><span>Dirección Fiscal</span></td>
-            <td colspan="3"><?php echo $cliente['Cliente']['direccion_fiscal']; ?></td>
+            <td><?php echo $cliente['Cliente']['direccion_fiscal']; ?></td>
+            <td><span>Cuenta Contable</span></td>
+            <td><?php echo $cliente['Cuentascontable']['codigo']; ?></td>
         </tr>
         <tr>
             <td><span>Fax</span></td>
@@ -73,7 +75,11 @@
         </tr>
     </table>
     <div class="related">
-        <h3>Centros de Trabajo</h3>
+        <h3>
+            Centros de Trabajo
+            <?php echo $this->Html->link('Nuevo Centro de Trabajo', array('controller' => 'centrostrabajos', 'action' => 'add_popup', $cliente['Cliente']['id']), array('class' => 'button_link popup')) ?>
+            <?php echo $this->Html->link('Nueva Máquina', array('controller' => 'maquinas', 'action' => 'add_popup', $cliente['Cliente']['id']), array('class' => 'button_link popup')) ?>
+        </h3>
         <table class="view">
             <tr>
                 <th>Centro de Trabajo</th>
@@ -87,6 +93,27 @@
                     <td class="actions"><?php echo $html->link(__('Ver', true), array('controller' => 'centrostrabajos', 'action' => 'view', $centrostrabajo['id'])); ?> </td>
                 </tr>
             <?php endforeach; ?>
+        </table>
+    </div>
+    <div class="datagrid">
+        <table>
+            <caption>Teléfonos <?php echo $this->Html->link('Añadir', array('controller' => 'telefonos', 'action' => 'add', 'cliente', $cliente['Cliente']['id']), array('class' => 'popup button_brownie')); ?> </caption>
+            <thead>
+                <tr><th>Número</th><th>Eliminar</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="2"></td></tr>
+            </tfoot>
+            <tbody>
+                <?php foreach ($cliente['Telefono'] as $telefono): ?>
+                    <tr>
+                        <td><?php echo $telefono['telefono'] ?></td>
+                        <td>
+                            <?php echo $html->link(__('Eliminar', true), array('controller' => 'telefonos', 'action' => 'delete', $telefono['id']), array('class' => 'button_brownie'), sprintf(__('¿Seguro que quieres borrar el teléfono # %s?', true), $telefono['telefono'])); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
         </table>
     </div>
 </div>
