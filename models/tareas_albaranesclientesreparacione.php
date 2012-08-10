@@ -17,6 +17,11 @@ class TareasAlbaranesclientesreparacione extends AppModel {
     );
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 
+    var $virtualFields = array(
+         'total_partes_real' =>  'TareasAlbaranesclientesreparacione.totalkilometrajereal + TareasAlbaranesclientesreparacione.totalpreciodesplazamiento + TareasAlbaranesclientesreparacione.totaldesplazamientoreal + TareasAlbaranesclientesreparacione.total_horastrabajoprecio_real + TareasAlbaranesclientesreparacione.totaldietasreales + TareasAlbaranesclientesreparacione.totalotroserviciosreales',
+         'total_partes_imputable' => 'TareasAlbaranesclientesreparacione.totalkilometrajeimputable + TareasAlbaranesclientesreparacione.totalpreciodesplazamiento + TareasAlbaranesclientesreparacione.totaldesplazamientoimputado + TareasAlbaranesclientesreparacione.total_horastrabajoprecio_imputable + TareasAlbaranesclientesreparacione.totaldietasimputables + TareasAlbaranesclientesreparacione.totalotroserviciosimputables',
+    );
+    
     var $belongsTo = array(
         'Albaranesclientesreparacione' => array(
             'className' => 'Albaranesclientesreparacione',
@@ -154,12 +159,6 @@ class TareasAlbaranesclientesreparacione extends AppModel {
                     $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'] += $partecentro['otrosservicios_imputable'];
                 }
             }
-            $tarea['TareasAlbaranesclientesreparacione']['total_partes_real'] = $tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoreal'] + $tarea['TareasAlbaranesclientesreparacione']['totalkilometrajereal'] + $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'] + $tarea['TareasAlbaranesclientesreparacione']['totaldietasreales'] + $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'];
-
-            if ($tarea['Albaranesclientesreparacione']['Ordene']['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio')
-                $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] = $tarea['TareasAlbaranesclientesreparacione']['totalpreciodesplazamiento'] + $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'] + $tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables'] + $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'];
-            else
-                $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] = $tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoimputado'] + $tarea['TareasAlbaranesclientesreparacione']['totalkilometrajeimputable'] + $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'] + $tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables'] + $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'];
         } else { //  La Tarea es de Taller
             foreach ($tarea['TareasAlbaranesclientesreparacionesPartestallere'] as $partetaller) {
                 if ($partetaller['id'] != $deleted_id) {
@@ -169,8 +168,6 @@ class TareasAlbaranesclientesreparacione extends AppModel {
                     $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'] += $partetaller['otrosservicios_imputable'];
                 }
             }
-            $tarea['TareasAlbaranesclientesreparacione']['total_partes_real'] = $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'] + $tarea['TareasAlbaranesclientesreparacione']['totaldietasreales'] + $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'];
-            $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] = $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'] + $tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables'] + $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'];
         }
         /*
          * Recalculamos los totales de Articulos 
@@ -182,21 +179,19 @@ class TareasAlbaranesclientesreparacione extends AppModel {
             }
         }
         /* Reformateo Antes de Guardar */
-        $tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoreal'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoreal'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoimputado'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoimputado'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totalkilometrajereal'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totalkilometrajereal'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totalkilometrajeimputable'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totalkilometrajeimputable'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totalpreciodesplazamiento'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totalpreciodesplazamiento'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'] = number_format($tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'] = number_format($tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totaldietasreales'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totaldietasreales'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'] = number_format($tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'] = number_format($tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'] = number_format($tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['total_partes_real'] = number_format($tarea['TareasAlbaranesclientesreparacione']['total_partes_real'], 5, '.', '');
-        $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] = number_format($tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'], 5, '.', '');
+        $tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoreal'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoreal']);
+        $tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoimputado'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totaldesplazamientoimputado']);
+        $tarea['TareasAlbaranesclientesreparacione']['totalkilometrajereal'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totalkilometrajereal']);
+        $tarea['TareasAlbaranesclientesreparacione']['totalkilometrajeimputable'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totalkilometrajeimputable']);
+        $tarea['TareasAlbaranesclientesreparacione']['totalpreciodesplazamiento'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totalpreciodesplazamiento']);
+        $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_real']);
+        $tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['total_horastrabajoprecio_imputable']);
+        $tarea['TareasAlbaranesclientesreparacione']['totaldietasreales'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totaldietasreales']);
+        $tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totaldietasimputables']);
+        $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosreales']);
+        $tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['totalotroserviciosimputables']);
+        $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables']);
+        $tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo']);
         $this->save($tarea['TareasAlbaranesclientesreparacione']);
     }
 

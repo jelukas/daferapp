@@ -104,12 +104,6 @@ class Tarea extends AppModel {
                     $tarea['Tarea']['totalotroserviciosimputables'] += $partecentro['otrosservicios_imputable'];
                 }
             }
-            $tarea['Tarea']['total_partes_real'] = $tarea['Tarea']['totaldesplazamientoreal'] + $tarea['Tarea']['totalkilometrajereal'] + $tarea['Tarea']['total_horastrabajoprecio_real'] + $tarea['Tarea']['totaldietasreales'] + $tarea['Tarea']['totalotroserviciosreales'];
-
-            if ($tarea['Ordene']['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio')
-                $tarea['Tarea']['total_partes_imputable'] = $tarea['Tarea']['totalpreciodesplazamiento'] + $tarea['Tarea']['total_horastrabajoprecio_imputable'] + $tarea['Tarea']['totaldietasimputables'] + $tarea['Tarea']['totalotroserviciosimputables'];
-            else
-                $tarea['Tarea']['total_partes_imputable'] = $tarea['Tarea']['totaldesplazamientoimputado'] + $tarea['Tarea']['totalkilometrajeimputable'] + $tarea['Tarea']['total_horastrabajoprecio_imputable'] + $tarea['Tarea']['totaldietasimputables'] + $tarea['Tarea']['totalotroserviciosimputables'];
         } else { //  La Tarea es de Taller
             foreach ($tarea['Partestallere'] as $partetaller) {
                 if ($partetaller['id'] != $deleted_id) {
@@ -119,8 +113,6 @@ class Tarea extends AppModel {
                     $tarea['Tarea']['total_horastrabajoprecio_imputable'] += $partetaller['horasimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraentraller'];
                 }
             }
-            $tarea['Tarea']['total_partes_real'] =  $tarea['Tarea']['total_horastrabajoprecio_real'] + $tarea['Tarea']['totaldietasreales'] + $tarea['Tarea']['totalotroserviciosreales'];
-            $tarea['Tarea']['total_partes_imputable'] = $tarea['Tarea']['total_horastrabajoprecio_imputable'] + $tarea['Tarea']['totaldietasimputables'] + $tarea['Tarea']['totalotroserviciosimputables'];
         }
         /*
          * Recalculamos los totales de Articulos 
@@ -132,21 +124,19 @@ class Tarea extends AppModel {
             }
         }
         /* Reformateo Antes de Guardar */
-        $tarea['Tarea']['totaldesplazamientoreal'] = number_format($tarea['Tarea']['totaldesplazamientoreal'], 5, '.', '');
-        $tarea['Tarea']['totaldesplazamientoimputado'] = number_format($tarea['Tarea']['totaldesplazamientoimputado'], 5, '.', '');
-        $tarea['Tarea']['totalkilometrajereal'] = number_format($tarea['Tarea']['totalkilometrajereal'], 5, '.', '');
-        $tarea['Tarea']['totalkilometrajeimputable'] = number_format($tarea['Tarea']['totalkilometrajeimputable'], 5, '.', '');
-        $tarea['Tarea']['totalpreciodesplazamiento'] = number_format($tarea['Tarea']['totalpreciodesplazamiento'], 5, '.', '');
-        $tarea['Tarea']['total_horastrabajoprecio_real'] = number_format($tarea['Tarea']['total_horastrabajoprecio_real'], 5, '.', '');
-        $tarea['Tarea']['total_horastrabajoprecio_imputable'] = number_format($tarea['Tarea']['total_horastrabajoprecio_imputable'], 5, '.', '');
-        $tarea['Tarea']['totaldietasreales'] = number_format($tarea['Tarea']['totaldietasreales'], 5, '.', '');
-        $tarea['Tarea']['totaldietasimputables'] = number_format($tarea['Tarea']['totaldietasimputables'], 5, '.', '');
-        $tarea['Tarea']['totalotroserviciosreales'] = number_format($tarea['Tarea']['totalotroserviciosreales'], 5, '.', '');
-        $tarea['Tarea']['totalotroserviciosimputables'] = number_format($tarea['Tarea']['totalotroserviciosimputables'], 5, '.', '');
-        $tarea['Tarea']['total_materiales_imputables'] = number_format($tarea['Tarea']['total_materiales_imputables'], 5, '.', '');
-        $tarea['Tarea']['total_materiales_costo'] = number_format($tarea['Tarea']['total_materiales_costo'], 5, '.', '');
-        $tarea['Tarea']['total_partes_real'] = number_format($tarea['Tarea']['total_partes_real'], 5, '.', '');
-        $tarea['Tarea']['total_partes_imputable'] = number_format($tarea['Tarea']['total_partes_imputable'], 5, '.', '');
+        $tarea['Tarea']['totaldesplazamientoreal'] = redondear_dos_decimal($tarea['Tarea']['totaldesplazamientoreal']);
+        $tarea['Tarea']['totaldesplazamientoimputado'] = redondear_dos_decimal($tarea['Tarea']['totaldesplazamientoimputado']);
+        $tarea['Tarea']['totalkilometrajereal'] = redondear_dos_decimal($tarea['Tarea']['totalkilometrajereal']);
+        $tarea['Tarea']['totalkilometrajeimputable'] = redondear_dos_decimal($tarea['Tarea']['totalkilometrajeimputable']);
+        $tarea['Tarea']['totalpreciodesplazamiento'] = redondear_dos_decimal($tarea['Tarea']['totalpreciodesplazamiento']);
+        $tarea['Tarea']['total_horastrabajoprecio_real'] = redondear_dos_decimal($tarea['Tarea']['total_horastrabajoprecio_real']);
+        $tarea['Tarea']['total_horastrabajoprecio_imputable'] = redondear_dos_decimal($tarea['Tarea']['total_horastrabajoprecio_imputable']);
+        $tarea['Tarea']['totaldietasreales'] = redondear_dos_decimal($tarea['Tarea']['totaldietasreales']);
+        $tarea['Tarea']['totaldietasimputables'] = redondear_dos_decimal($tarea['Tarea']['totaldietasimputables']);
+        $tarea['Tarea']['totalotroserviciosreales'] = redondear_dos_decimal($tarea['Tarea']['totalotroserviciosreales']);
+        $tarea['Tarea']['totalotroserviciosimputables'] = redondear_dos_decimal($tarea['Tarea']['totalotroserviciosimputables']);
+        $tarea['Tarea']['total_materiales_imputables'] = redondear_dos_decimal($tarea['Tarea']['total_materiales_imputables']);
+        $tarea['Tarea']['total_materiales_costo'] = redondear_dos_decimal($tarea['Tarea']['total_materiales_costo']);
         $this->save($tarea['Tarea']);
     }
 
