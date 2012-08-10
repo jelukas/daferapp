@@ -6,7 +6,6 @@ class Ordene extends AppModel {
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 
     var $order = "Ordene.numero DESC";
-    
     var $belongsTo = array(
         'Avisostallere' => array(
             'className' => 'Avisostallere',
@@ -64,6 +63,19 @@ class Ordene extends AppModel {
             'finderQuery' => '',
             'counterQuery' => ''
         ),
+        'Albaranesclientesreparacione' => array(
+            'className' => 'Albaranesclientesreparacione',
+            'foreignKey' => 'ordene_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
         'Tarea' => array(
             'className' => 'Tarea',
             'foreignKey' => 'ordene_id',
@@ -96,19 +108,44 @@ class Ordene extends AppModel {
         $resultado = $this->query($query);
         return $resultado[0][0]['siguiente'];
     }
-    
-    public function get_baseimponible($ordene_id){
-        $query = 'SELECT SUM(t.total_materiales_imputables + t.total_partes_imputable) as baseimponible FROM tareas t WHERE t.ordene_id = "'.$ordene_id.'" ';
-        $resultado = $this->query($query);
-        return $resultado[0][0]['baseimponible'];
+
+    public function get_baseimponible($ordene_id) {
+        $baseimponible = 0;
+        $tareas = $this->Tarea->find('all', array(
+            'fields' => array('total_partes_imputable', 'total_materiales_imputables'),
+            'contain' => '',
+            'conditions' => array('Tarea.ordene_id' => $ordene_id),
+                ));
+        foreach ($tareas as $tarea) {
+            $baseimponible += $tarea['Tarea']['total_partes_imputable'] + $tarea['Tarea']['total_materiales_imputables'];
+        }
+        return $baseimponible;
     }
-    public function get_totalrepuestos(){
-        $query = 'SELECT SUM(t.total_materiales_imputables) as repuestos FROM tareas t WHERE t.ordene_id = "'.$ordene_id.'" ';
-        $resultado = $this->query($query);
-        return $resultado[0][0]['repuestos'];
+
+    public function get_totalmanoobra_servicios($ordene_id) {
+        $manoobraotroservicios = 0;
+        $tareas = $this->Tarea->find('all', array(
+            'fields' => array('total_partes_imputable'),
+            'contain' => '',
+            'conditions' => array('Tarea.ordene_id' => $ordene_id),
+                ));
+        foreach ($tareas as $tarea) {
+            $manoobraotroservicios += $tarea['Tarea']['total_partes_imputable'];
+        }
+        return $manoobraotroservicios;
     }
-    public function get_totalmanoobra_servicios(){
-        /* TODO HACER*/
+
+    public function get_totalrepuestos($ordene_id) {
+        $total_repuestos = 0;
+        $tareas = $this->Tarea->find('all', array(
+            'fields' => array('total_materiales_imputables'),
+            'contain' => '',
+            'conditions' => array('Tarea.ordene_id' => $ordene_id),
+                ));
+        foreach ($tareas as $tarea) {
+            $total_repuestos += $tarea['Tarea']['total_materiales_imputables'];
+        }
+        return $total_repuestos;
     }
 
 }

@@ -27,8 +27,27 @@ class OrdenesController extends AppController {
             $this->flashWarnings(__('Orden Inválida', true));
             $this->redirect(array('action' => 'index'));
         }
-        $orden = $this->Ordene->find('first', array('contain' => array('Comerciale','Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => array('Proveedore', 'Pedidosproveedore'), 'Presupuestoscliente' => array('Cliente', 'Pedidoscliente'), 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
+        $orden = $this->Ordene->find('first', array(
+            'contain' => array(
+                'Comerciale',
+                'Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'),
+                'Presupuestosproveedore' => array('Proveedore', 'Pedidosproveedore'),
+                'Presupuestoscliente' => array('Cliente', 'Pedidoscliente'),
+                'Albaranesclientesreparacione' => array('Cliente'),
+                'Estadosordene',
+                'Almacene',
+                'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))
+            ),
+            'conditions' => array(
+                'Ordene.id' => $id)
+                )
+        );
         $baseimponible = $this->Ordene->get_baseimponible($id);
+        $totalrepuestos = $this->Ordene->get_totalrepuestos($id);
+        $totalmanoobra_servicios = $this->Ordene->get_totalmanoobra_servicios($id);
+        $this->set('baseimponible', $baseimponible);
+        $this->set('totalrepuestos', $totalrepuestos);
+        $this->set('totalmanoobra_servicios', $totalmanoobra_servicios);
         $this->set('ordene', $orden);
         $avisostallere_id = $orden['Avisostallere']['id'];
         $this->set('avisostallere', $this->Ordene->Avisostallere->read(null, $avisostallere_id));
@@ -56,11 +75,11 @@ class OrdenesController extends AppController {
                 $this->Session->setFlash(__('La orden de taller no ha podido ser creada correctamente. Vuelva a intentarlo', true));
             }
         }
-        $avisotallere = $this->Avisostallere->find('first',array('contain' => array('Cliente','Maquina','Centrostrabajo'),'conditions' => array('Avisostallere.id' => $avisostallere_id)));
+        $avisotallere = $this->Avisostallere->find('first', array('contain' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'conditions' => array('Avisostallere.id' => $avisostallere_id)));
         $this->set('avisotallere', $avisotallere);
         if ($avisostallere_id != null && $avisostallere_id >= 0) {
             $this->loadModel('Avisostallere');
-            $avisotallere = $this->Avisostallere->find('first',array('contain' => array('Cliente','Maquina','Centrostrabajo'),'conditions' => array('Avisostallere.id' => $avisostallere_id)));
+            $avisotallere = $this->Avisostallere->find('first', array('contain' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'conditions' => array('Avisostallere.id' => $avisostallere_id)));
 
             $this->set('avisotallere', $avisotallere);
         }
@@ -94,7 +113,7 @@ class OrdenesController extends AppController {
 
     function mapa() {
         //Estados de las ordenes a mostrar array("1", "2", "3")
-        $ordenes = $this->Ordene->find('all', array('contain' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Almacene', 'Estadosordene'), 'conditions' => array('Ordene.estadosordene_id' => array("1", "2", "3","5"))));
+        $ordenes = $this->Ordene->find('all', array('contain' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Almacene', 'Estadosordene'), 'conditions' => array('Ordene.estadosordene_id' => array("1", "2", "3", "5"))));
         $this->set('ordenes', $ordenes);
         $this->set(compact('ordenes'));
     }
@@ -229,26 +248,25 @@ class OrdenesController extends AppController {
         $this->set(compact('pedidoscliente', 'avisostallere_id', 'ordene_id', 'almacene_id'));
     }
 
-    function imputar_albaranproveedor($albaranesproveedore_id = null){
+    function imputar_albaranproveedor($albaranesproveedore_id = null) {
         if (!empty($this->data)) {
             foreach ($this->data['ArticulosAlbaranesproveedore'] as $articulos_albaranesproveedore) {
                 $this->Ordene->Tarea->ArticulosTarea->create();
-                $articulos_albaranesproveedore_modelo = $this->Ordene->Presupuestosproveedore->Pedidosproveedore->Albaranesproveedore->ArticulosAlbaranesproveedore->find('first',array('contain'=>'','conditions'=>array('ArticulosAlbaranesproveedore.id' => $articulos_albaranesproveedore['id'])));
+                $articulos_albaranesproveedore_modelo = $this->Ordene->Presupuestosproveedore->Pedidosproveedore->Albaranesproveedore->ArticulosAlbaranesproveedore->find('first', array('contain' => '', 'conditions' => array('ArticulosAlbaranesproveedore.id' => $articulos_albaranesproveedore['id'])));
                 $articulos_tarea['ArticulosTarea']['articulo_id'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['articulo_id'];
                 $articulos_tarea['ArticulosTarea']['tarea_id'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['tarea_id'];
                 $articulos_tarea['ArticulosTarea']['cantidadreal'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['cantidad'];
                 $articulos_tarea['ArticulosTarea']['cantidad'] = $articulos_albaranesproveedore_modelo['ArticulosAlbaranesproveedore']['cantidad'];
                 $this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea);
             }
-            $this->redirect(array('action'=>'view',$this->data['Ordene']['id'] ));
-        }else{
-            $albaranesproveedore = $this->Ordene->Presupuestosproveedore->Pedidosproveedore->Albaranesproveedore->find('first',array('contain' =>array('Pedidosproveedore' => 'Presupuestosproveedore','ArticulosAlbaranesproveedore' =>array('Articulo','Tarea')),'conditions' =>array('Albaranesproveedore.id' => $albaranesproveedore_id)));
-            $ordene = $this->Ordene->find('first',array('contain'=>'','conditions'=>array('Ordene.id' =>$albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'] )));
+            $this->redirect(array('action' => 'view', $this->data['Ordene']['id']));
+        } else {
+            $albaranesproveedore = $this->Ordene->Presupuestosproveedore->Pedidosproveedore->Albaranesproveedore->find('first', array('contain' => array('Pedidosproveedore' => 'Presupuestosproveedore', 'ArticulosAlbaranesproveedore' => array('Articulo', 'Tarea')), 'conditions' => array('Albaranesproveedore.id' => $albaranesproveedore_id)));
+            $ordene = $this->Ordene->find('first', array('contain' => '', 'conditions' => array('Ordene.id' => $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['ordene_id'])));
         }
-        $this->set(compact('ordene','albaranesproveedore'));
+        $this->set(compact('ordene', 'albaranesproveedore'));
     }
-    
-    
+
     function cambiar_estado($ordene_id, $estadosordene_id) {
         $this->Ordene->id = $ordene_id;
         $estadosordene = $this->Ordene->Estadosordene->find('first', array('contain' => '', 'conditions' => array('Estadosordene.id' => $estadosordene_id)));

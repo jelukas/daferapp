@@ -12,6 +12,11 @@ class Tarea extends AppModel {
             ),
         ),
     );
+    
+    var $virtualFields = array(
+         'total_partes_real' =>  'Tarea.totalkilometrajereal + Tarea.totalpreciodesplazamiento + Tarea.totaldesplazamientoreal + Tarea.total_horastrabajoprecio_real + Tarea.totaldietasreales + Tarea.totalotroserviciosreales',
+         'total_partes_imputable' => 'Tarea.totalkilometrajeimputable + Tarea.totalpreciodesplazamiento + Tarea.totaldesplazamientoimputado + Tarea.total_horastrabajoprecio_imputable + Tarea.totaldietasimputables + Tarea.totalotroserviciosimputables',
+    );
 
     var $belongsTo = array(
         'Ordene' => array(

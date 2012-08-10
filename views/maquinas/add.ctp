@@ -25,6 +25,7 @@
                 <td class="required"><span>Centro de Trabajo</span></td>
                 <td><?php
                     echo $this->Form->input('centrostrabajo_id', array(
+                        'style' => 'width: 300px;',
                         'label' => false,
                         'div' => array(
                             'id' => 'CentrostrabajoSelectDiv'

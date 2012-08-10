@@ -98,7 +98,7 @@
     <br/><br/><br/>
     <?php $total_orden = 0; ?>
     <div class="related">
-        <h3><?php __('Tareas'); ?></h3>
+        <h3><?php __('Tareas'); ?> <?php echo $this->Html->link(__('Nueva Tarea', true), array('controller' => 'tareas', 'action' => 'add', $ordene['Ordene']['id']), array('class' => 'popup button_link')); ?></h3>
         <?php if (!empty($ordene['Tarea'])): ?>
             <table cellpadding = "0" cellspacing = "0">
                 <tr>
@@ -304,7 +304,7 @@
                                             <td colspan="2" class="beneficio_partes">Total Partes Real</td>
                                             <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_real']; ?> €</td> 
                                             <td colspan="2" class="beneficio_partes">Total Partes Imputable</td>
-                                            <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] - $tarea['total_partes_real']; ?> €</td>
+                                            <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] ?> €</td>
                                             <td colspan="2" class="beneficio_partes">Beneficio Neto</td> 
                                             <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] - $tarea['total_partes_real']; ?>  -- <?php echo redondear_dos_decimal((1 - @($tarea['total_partes_real'] / $tarea['total_partes_imputable'])) * 100); ?> %</td>
                                         <?php elseif ($ordene['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio'): ?>
@@ -405,97 +405,97 @@
                                     </tr>
                                 </table>
                             <?php endif; ?>
-                            <?php if (!empty($tarea['ArticulosTarea'])): ?>
-                                <h4>Articulos de la Tarea</h4>
-                                <table>
-                                    <thead>
-                                    <th>Ref.</th>
-                                    <th>Nombre</th>
-                                    <th>Localizacion</th>
-                                    <th>Cant.<br/>Real</th>
-                                    <th class="columna-presupuestado">Cant.<br/>Presup</th>
-                                    <th>Cant.<br/>Imp.</th>
-                                    <th>Precio<br/>Costo</th>
-                                    <th>Total<br/>Costo</th>
-                                    <th>PVP</th>
-                                    <th>Total PVP</th>
-                                    <th>Descuento</th>
-                                    <th class="columna-presupuestado">Presup.</th>
-                                    <th>Total con<br/> Descuento Aplicado</th>
-                                    <th>Acciones</th>
-                                    </thead>
-                                    <?php
-                                    $total_cantidad_material_real = 0;
-                                    $total_cantidad_material_imputable = 0;
-                                    ?>
-                                    <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
-                                        <tr>
-                                            <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
-                                            <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
-                                            <td><?php echo $articulo_tarea['Articulo']['localizacion'] ?></td>
-                                            <td>
-                                                <?php
-                                                echo $articulo_tarea['cantidadreal'];
-                                                $total_cantidad_material_real += $articulo_tarea['cantidadreal'];
-                                                ?>
-                                            </td>
-                                            <td class="columna-presupuestado">
-                                                <?php
-                                                echo redondear_dos_decimal($articulo_tarea['cantidad_presupuestada']);
-                                                $total_cantidad_materiales_presupuestados += $articulo_tarea['cantidad_presupuestada']
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php
-                                                echo $articulo_tarea['cantidad'];
-                                                $total_cantidad_material_imputable += $articulo_tarea['cantidad'];
-                                                ?>
-                                            </td>
-                                            <td><?php echo $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
-                                            <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
-                                            <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
-                                            <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
-                                            <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
-                                            <td class="columna-presupuestado"><?php echo redondear_dos_decimal($articulo_tarea['presupuestado']); ?></td>
-                                            <td>
-                                                <?php
-                                                $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
-                                                echo redondear_dos_decimal($totalcondescuento);
-                                                ?>
-                                            </td>
-                                            <td class="actions">
-                                                <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_tareas', 'action' => 'edit', $articulo_tarea['id']), array('class' => 'popup')); ?>
-                                                <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                            <?php //if (!empty($tarea['ArticulosTarea'])): ?>
+                            <h4>Articulos de la Tarea</h4>
+                            <table>
+                                <thead>
+                                <th>Ref.</th>
+                                <th>Nombre</th>
+                                <th>Localizacion</th>
+                                <th>Cant.<br/>Real</th>
+                                <th class="columna-presupuestado">Cant.<br/>Presup</th>
+                                <th>Cant.<br/>Imp.</th>
+                                <th>Precio<br/>Costo</th>
+                                <th>Total<br/>Costo</th>
+                                <th>PVP</th>
+                                <th>Total PVP</th>
+                                <th>Descuento</th>
+                                <th class="columna-presupuestado">Presup.</th>
+                                <th>Total con<br/> Descuento Aplicado</th>
+                                <th>Acciones</th>
+                                </thead>
+                                <?php
+                                $total_cantidad_material_real = 0;
+                                $total_cantidad_material_imputable = 0;
+                                ?>
+                                <?php foreach ($tarea['ArticulosTarea'] as $articulo_tarea): ?>
                                     <tr>
-                                        <td colspan="3" style="text-align: right;" class="total_articulos">Totales</td>
-                                        <td class="total_articulos"><?php echo $total_cantidad_material_real ?></td>
-                                        <td class="columna-presupuestado total_articulos"><?php echo $total_cantidad_materiales_presupuestados ?></td>
-                                        <td class="total_articulos"><?php echo $total_cantidad_material_imputable ?></td>
-                                        <td class="total_articulos"></td>
-                                        <td class="total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_costo']) ?> &euro; </td>
-                                        <td class="total_articulos"></td>
-                                        <td class="total_articulos"></td>
-                                        <td class="total_articulos"></td>
-                                        <td class="columna-presupuestado total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_presupuestado']) ?> &euro; </td>
-                                        <td class="total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_imputables']) ?> &euro; </td>
-                                        <td class="total_articulos"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5" class="beneficio_articulos" style="background-color: #ca87ce;">
-                                            Beneficio Neto Artículos: <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] - $tarea['total_materiales_costo']) ?> &euro; -- <?php echo redondear_dos_decimal((1 - @($tarea['total_materiales_costo'] / $tarea['total_materiales_imputables'])) * 100) ?> &percnt;
+                                        <td><?php echo $this->Html->link(__($articulo_tarea['Articulo']['ref'], true), array('controller' => 'articulos', 'action' => 'view', $articulo_tarea['Articulo']['id']), array('class' => 'popup')); ?></td>
+                                        <td><?php echo $articulo_tarea['Articulo']['nombre'] ?></td>
+                                        <td><?php echo $articulo_tarea['Articulo']['localizacion'] ?></td>
+                                        <td>
+                                            <?php
+                                            echo $articulo_tarea['cantidadreal'];
+                                            $total_cantidad_material_real += $articulo_tarea['cantidadreal'];
+                                            ?>
+                                        </td>
+                                        <td class="columna-presupuestado">
+                                            <?php
+                                            echo redondear_dos_decimal($articulo_tarea['cantidad_presupuestada']);
+                                            $total_cantidad_materiales_presupuestados += $articulo_tarea['cantidad_presupuestada']
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            echo $articulo_tarea['cantidad'];
+                                            $total_cantidad_material_imputable += $articulo_tarea['cantidad'];
+                                            ?>
+                                        </td>
+                                        <td><?php echo $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
+                                        <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
+                                        <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
+                                        <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
+                                        <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
+                                        <td class="columna-presupuestado"><?php echo redondear_dos_decimal($articulo_tarea['presupuestado']); ?></td>
+                                        <td>
+                                            <?php
+                                            $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
+                                            echo redondear_dos_decimal($totalcondescuento);
+                                            ?>
+                                        </td>
+                                        <td class="actions">
+                                            <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_tareas', 'action' => 'edit', $articulo_tarea['id']), array('class' => 'popup')); ?>
+                                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'articulos_tareas', 'action' => 'delete', $articulo_tarea['id']), null, sprintf(__('Eliminar el articulo Ref. %s de la Tarea ?', true), $articulo_tarea['Articulo']['ref'])); ?>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="10"></td>
-                                        <td colspan="3" class="total_importe_tarea" style="background-color: #ca87ce;">
-                                            TOTAL IMPORTE TAREA <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']); ?>
-                                        </td>
-                                    </tr>
-                                </table>
-                            <?php endif; ?>
+                                <?php endforeach; ?>
+                                <tr>
+                                    <td colspan="3" style="text-align: right;" class="total_articulos">Totales</td>
+                                    <td class="total_articulos"><?php echo $total_cantidad_material_real ?></td>
+                                    <td class="columna-presupuestado total_articulos"><?php echo $total_cantidad_materiales_presupuestados ?></td>
+                                    <td class="total_articulos"><?php echo $total_cantidad_material_imputable ?></td>
+                                    <td class="total_articulos"></td>
+                                    <td class="total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_costo']) ?> &euro; </td>
+                                    <td class="total_articulos"></td>
+                                    <td class="total_articulos"></td>
+                                    <td class="total_articulos"></td>
+                                    <td class="columna-presupuestado total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_presupuestado']) ?> &euro; </td>
+                                    <td class="total_articulos"><?php echo redondear_dos_decimal($tarea['total_materiales_imputables']) ?> &euro; </td>
+                                    <td class="total_articulos"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="beneficio_articulos" style="background-color: #ca87ce;">
+                                        Beneficio Neto Artículos: <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] - $tarea['total_materiales_costo']) ?> &euro; -- <?php echo redondear_dos_decimal((1 - @($tarea['total_materiales_costo'] / $tarea['total_materiales_imputables'])) * 100) ?> &percnt;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10"></td>
+                                    <td colspan="3" class="total_importe_tarea" style="background-color: #ca87ce;">
+                                        TOTAL IMPORTE TAREA <?php echo redondear_dos_decimal($tarea['total_materiales_imputables'] + $tarea['total_partes_imputable']); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                            <?php //endif; ?>
                             <table class="rendimientos_tarea">
                                 <tr>
                                     <td><span>RENDIMIENTOS TAREA</span></td>
@@ -527,137 +527,87 @@
         <table>
             <tr>
                 <td class="total_orden">Total Mano de Obra y Otros Servicios</td>
-                <td class="total_orden"></td>
+                <td class="total_orden"><?php echo redondear_dos_decimal($totalmanoobra_servicios) ?> &euro;</td>
                 <td class="total_orden">Total Repuestos</td>
-                <td class="total_orden"></td>
+                <td class="total_orden"><?php echo redondear_dos_decimal($totalrepuestos) ?> &euro;</td>
                 <td class="total_orden">Base Imponible</td>
-                <td class="total_orden"><?php echo redondear_dos_decimal($total_orden) ?> &euro;</td>
+                <td class="total_orden"><?php echo redondear_dos_decimal($baseimponible) ?> &euro;</td>
             </tr>
         </table>
-        <div class="actions">
-            <ul>
-                <li><?php echo $this->Html->link(__('Nueva Tarea', true), array('controller' => 'tareas', 'action' => 'add', $ordene['Ordene']['id']), array('class' => 'popup')); ?> </li>
-            </ul>
-        </div>
     </div>
-    <div style="clear: both"><?php echo $this->Html->link(__('Presupuestos y Pedidos Relacionados', true), '#?', array('class' => 'ver-relaciones-orden button_link')); ?></div>
-    <div class="orden-relations">
-        <h3><?php __('Presupuestos de Proveedores'); ?></h3>
-        <?php if (!empty($ordene['Presupuestosproveedore'])): ?>
-            <table cellpadding = "0" cellspacing = "0">
-                <tr>
-                    <th><?php __('ID'); ?></th>
-                    <th><?php __('Nº Orden'); ?></th>
-                    <th><?php __('Id Proveedor'); ?></th>
-                    <th class="actions"><?php __('Acciones'); ?></th>
-                </tr>
+    <div class="datagrid">
+        <table>
+            <caption>Documentos Relacionados</caption>
+            <thead>
+                <tr><th>Tipo Documento</th><th>Número</th><th>Fecha</th><th>Cliente / Proveedor</th><th>Ver</th></tr>
+            </thead>
+            <tfoot>
+                <tr><td colspan="5"></td></tr>
+            </tfoot>
+            <tbody>
                 <?php
                 $i = 0;
-                foreach ($ordene['Presupuestosproveedore'] as $presupuestoproveedore):
-                    $class = ' class="altrow"';
-                    if ($i++ % 2 == 0) {
-                        $class = ' class="altrow"';
-                    }
+                if (!empty($ordene['Avisostallere']['id'])):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
                     ?>
-                    <tr<?php echo $class; ?>>
-                        <td><?php echo $presupuestoproveedore['id']; ?></td>
-                        <td><?php echo $presupuestoproveedore['ordene_id']; ?></td>
-                        <td><?php echo $presupuestoproveedore['Proveedore']['nombre']; ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestoproveedore['id'])); ?>
-                            <?php echo $this->Html->link(__('Editar', true), array('controller' => 'presupuestosproveedores', 'action' => 'edit', $presupuestoproveedore['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosproveedores', 'action' => 'delete', $presupuestoproveedore['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoproveedore['id'])); ?>
-                        </td>
+                    <tr <?php echo $class ?>>
+                        <td>Presupuesto de Proveedor</td>
+                        <td><?php echo $ordene['Avisostallere']['numero'] ?></td>
+                        <td><?php echo!empty($ordene['Avisostallere']['fechaaviso']) ? $this->Time->format('d-m-Y', $ordene['Avisostallere']['fechaaviso']) : '' ?></td>
+                        <td><?php echo $ordene['Avisostallere']['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'avisostalleres', 'action' => 'view', $ordene['Avisostallere']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                    <?php if (!empty($presupuestoproveedore['Pedidosproveedore'])): ?>
-                        <tr>
-                            <td>
-                                <h4>Pedidos a Proveedores</h4>
-                                <table cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <th>Número</th>
-                                        <th>Proveedor</th>
-                                        <th>Fecha de entrega</th>
-                                        <th>Observaciones</th>
-                                        <th>confirmado</th>
-                                        <th>pedidoescaneado</th>
-                                    </tr>
-                                    <?php foreach ($presupuestoproveedore['Pedidosproveedore'] as $pedidosproveedore): ?>
-                                        <tr<?php echo $class; ?>>
-                                            <td><?php echo $pedidosproveedore['Pedidosproveedore']['numero']; ?>&nbsp;</td>
-                                            <td><?php echo $this->Html->link($presupuestoproveedore['Proveedore']['nombre'], array('controller' => 'proveedores', 'action' => 'view', $presupuestoproveedore['Proveedore']['id'])); ?></td>
-                                            <td><?php echo $pedidosproveedore['Pedidosproveedore']['fecharecepcion']; ?>&nbsp;</td>
-                                            <td><?php echo $pedidosproveedore['Pedidosproveedore']['observaciones']; ?>&nbsp;</td>
-                                            <td><?php echo!empty($pedidosproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?></td>
-                                            <td><?php echo $this->Html->link(__($pedidosproveedore['Pedidosproveedore']['pedidoescaneado'], true), '/files/pedidosproveedore/' . $pedidosproveedore['Pedidosproveedore']['pedidoescaneado']); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </table>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </table>
-        <?php endif; ?>
-        <h3><?php __('Presupuestos a Cliente ' . $avisostallere['Cliente']['nombre'] . ' en la Orden ' . $ordene['Ordene']['id']); ?></h3>
-        <?php if (!empty($ordene['Presupuestoscliente'])): ?>
-            <table cellpadding = "0" cellspacing = "0">
-                <tr>
-                    <th><?php __('Número'); ?></th>
-                    <th><?php __('Cliente'); ?></th>
-                    <th><?php __('Precio Material'); ?></th>
-                    <th><?php __('Precio Mano de Obra'); ?></th>
-                    <th><?php __('Impuestos'); ?></th>
-                    <th><?php __('Precio (Sin Impuestos)'); ?></th>
-                    <th class="actions"><?php __('Acciones'); ?></th>
-                </tr>
+                <?php endif; ?>
                 <?php
-                $i = 0;
                 foreach ($ordene['Presupuestoscliente'] as $presupuestoscliente):
-                    $class = ' class="altrow"';
-                    if ($i++ % 2 == 0) {
-                        $class = ' class="altrow"';
-                    }
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
                     ?>
-                    <tr<?php echo $class; ?>>
-                        <td><?php echo $presupuestoscliente['numero']; ?></td>
-                        <td><?php echo $presupuestoscliente['Cliente']['nombre']; ?></td>
-                        <td><?php echo $presupuestoscliente['precio_mat']; ?></td>
-                        <td><?php echo $presupuestoscliente['precio_obra']; ?></td>
-                        <td><?php echo $presupuestoscliente['impuestos']; ?></td>
-                        <td><?php echo $presupuestoscliente['precio']; ?></td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver', true), array('controller' => 'presupuestosclientes', 'action' => 'view', $presupuestoscliente['id'])); ?>
-                            <?php echo $this->Html->link(__('Editar', true), array('controller' => 'presupuestosclientes', 'action' => 'edit', $presupuestoscliente['id'])); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'presupuestosclientes', 'action' => 'delete', $presupuestoscliente['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $presupuestoscliente['id'])); ?>
-                        </td>
+                    <tr <?php echo $class ?>>
+                        <td>Prespupuesto a Cliente</td>
+                        <td><?php echo $presupuestoscliente['numero'] ?></td>
+                        <td><?php echo!empty($presupuestoscliente['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['fecha']) : '' ?></td>
+                        <td><?php echo $presupuestoscliente['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosclientes', 'action' => 'view', $presupuestoscliente['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
-                    <?php if (!empty($presupuestoscliente['Pedidoscliente'])): ?>
-                        <tr>
-                            <td>
-                                <h4>Pedidos de Cliente</h4>
-                                <table cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <th><?php echo __('id'); ?></th>
-                                        <th><?php echo __('fecha_plazo'); ?></th>
-                                        <th><?php echo __('confirmado'); ?></th>
-                                        <th><?php echo __('recepcion'); ?></th>
-                                    </tr>
-                                    <?php foreach ($presupuestoscliente['Pedidoscliente'] as $pedidoscliente): ?>
-                                        <tr>
-                                            <td><?php echo $pedidoscliente['id']; ?>&nbsp;</td>
-                                            <td><?php echo $pedidoscliente['fecha_plazo']; ?>&nbsp;</td>
-                                            <td><?php echo $pedidoscliente['confirmado']; ?>&nbsp;</td>
-                                            <td><?php echo $pedidoscliente['recepcion']; ?>&nbsp;</td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </table>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
                 <?php endforeach; ?>
-            </table>
-        <?php endif; ?>
+                <?php
+                foreach ($ordene['Albaranesclientesreparacione'] as $albaranesclientesreparacione):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Albarán de Reparación</td>
+                        <td><?php echo $albaranesclientesreparacione['numero'] ?></td>
+                        <td><?php echo!empty($albaranesclientesreparacione['fecha']) ? $this->Time->format('d-m-Y', $albaranesclientesreparacione['fecha']) : '' ?></td>
+                        <td><?php echo $albaranesclientesreparacione['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'albaranesclientesreparaciones', 'action' => 'view', $albaranesclientesreparacione['id']), array('class' => 'button_brownie')) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php
+                foreach ($ordene['Presupuestosproveedore'] as $presupuestosproveedore):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Prespupuesto de Proveedor</td>
+                        <td><?php echo $presupuestosproveedore['numero'] ?></td>
+                        <td><?php echo!empty($presupuestosproveedore['fecha']) ? $this->Time->format('d-m-Y', $presupuestosproveedore['fecha']) : '' ?></td>
+                        <td><?php echo $presupuestosproveedore['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestosproveedore['id']), array('class' => 'button_brownie')) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
     <div style="clear: both; margin-top: 30px;">
         <?php echo $this->Html->link(__('Nuevo Presupuesto a cliente', true), array('controller' => 'presupuestosclientes', 'action' => 'add', 'ordene', $ordene['Ordene']['id']), array('class' => 'button_link')); ?>
