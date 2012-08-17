@@ -4,7 +4,6 @@ class Tarea extends AppModel {
 
     var $name = 'Tarea';
     var $displayField = 'descripcion';
-
     var $validate = array(
         'ordene_id' => array(
             'numeric' => array(
@@ -12,12 +11,10 @@ class Tarea extends AppModel {
             ),
         ),
     );
-    
     var $virtualFields = array(
-         'total_partes_real' =>  'Tarea.totalkilometrajereal + Tarea.totalpreciodesplazamiento + Tarea.totaldesplazamientoreal + Tarea.total_horastrabajoprecio_real + Tarea.totaldietasreales + Tarea.totalotroserviciosreales',
-         'total_partes_imputable' => 'Tarea.totalkilometrajeimputable + Tarea.totalpreciodesplazamiento + Tarea.totaldesplazamientoimputado + Tarea.total_horastrabajoprecio_imputable + Tarea.totaldietasimputables + Tarea.totalotroserviciosimputables',
+        'total_partes_real' => 'Tarea.totalkilometrajereal + Tarea.totalpreciodesplazamiento + Tarea.totaldesplazamientoreal + Tarea.total_horastrabajoprecio_real + Tarea.totaldietasreales + Tarea.totalotroserviciosreales',
+        'total_partes_imputable' => 'Tarea.totalkilometrajeimputable + Tarea.totalpreciodesplazamiento + Tarea.totaldesplazamientoimputado + Tarea.total_horastrabajoprecio_imputable + Tarea.totaldietasimputables + Tarea.totalotroserviciosimputables',
     );
-
     var $belongsTo = array(
         'Ordene' => array(
             'className' => 'Ordene',
@@ -71,7 +68,7 @@ class Tarea extends AppModel {
 
     public function recalcularTotales($deleted_id = null) {
         $config = ClassRegistry::init("Config")->findById(1);
-        $tarea = $this->find('first', array('contain' => array('ArticulosTarea' => 'Articulo', 'Parte', 'Partestallere', 'Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $this->id)));
+        $tarea = $this->find('first', array('contain' => array('ArticulosTarea' => 'Articulo', 'Parte', 'Partestallere', 'Ordene' => array('Centrostrabajo')), 'conditions' => array('Tarea.id' => $this->id)));
         $tarea['Tarea']['totaldesplazamientoreal'] = 0;
         $tarea['Tarea']['totaldesplazamientoimputado'] = 0;
         $tarea['Tarea']['totalkilometrajereal'] = 0;
@@ -92,12 +89,12 @@ class Tarea extends AppModel {
             foreach ($tarea['Parte'] as $partecentro) {
                 if ($partecentro['id'] != $deleted_id) {
                     $tarea['Tarea']['totaldesplazamientoreal'] += ($partecentro['horasdesplazamientoreales_ida'] * $config['Config']['costohoradesplazamiento']) + ($partecentro['horasdesplazamientoreales_vuelta'] * $config['Config']['costohoradesplazamiento']);
-                    $tarea['Tarea']['totaldesplazamientoimputado'] += ($partecentro['horasdesplazamientoimputables_ida'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']) + ($partecentro['horasdesplazamientoimputables_vuelta'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoradesplazamiento']);
+                    $tarea['Tarea']['totaldesplazamientoimputado'] += ($partecentro['horasdesplazamientoimputables_ida'] * $tarea['Ordene']['Centrostrabajo']['preciohoradesplazamiento']) + ($partecentro['horasdesplazamientoimputables_vuelta'] * $tarea['Ordene']['Centrostrabajo']['preciohoradesplazamiento']);
                     $tarea['Tarea']['totalkilometrajereal'] += ($partecentro['kilometrajereal_ida'] * $config['Config']['costokmdesplazamiento']) + ($partecentro['kilometrajereal_vuelta'] * $config['Config']['costokmdesplazamiento']);
-                    $tarea['Tarea']['totalkilometrajeimputable'] += ($partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta'] ) * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciokm'];
+                    $tarea['Tarea']['totalkilometrajeimputable'] += ($partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta'] ) * $tarea['Ordene']['Centrostrabajo']['preciokm'];
                     $tarea['Tarea']['totalpreciodesplazamiento'] += $partecentro['preciodesplazamiento'];
                     $tarea['Tarea']['total_horastrabajoprecio_real'] += $partecentro['horasreales'] * $config['Config']['costo_hora_en_centrotrabajo'];
-                    $tarea['Tarea']['total_horastrabajoprecio_imputable'] += $partecentro['horasimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraencentro'];
+                    $tarea['Tarea']['total_horastrabajoprecio_imputable'] += $partecentro['horasimputables'] * $tarea['Ordene']['Centrostrabajo']['preciohoraencentro'];
                     $tarea['Tarea']['totaldietasreales'] += $partecentro['dietasreales'];
                     $tarea['Tarea']['totaldietasimputables'] += $partecentro['dietasimputables'];
                     $tarea['Tarea']['totalotroserviciosreales'] += $partecentro['otrosservicios_real'];
@@ -110,7 +107,7 @@ class Tarea extends AppModel {
                     $tarea['Tarea']['totalotroserviciosreales'] += $partetaller['otrosservicios_real'];
                     $tarea['Tarea']['totalotroserviciosimputables'] += $partetaller['otrosservicios_imputable'];
                     $tarea['Tarea']['total_horastrabajoprecio_real'] += $partetaller['horasreales'] * $config['Config']['costo_hora_en_taller'];
-                    $tarea['Tarea']['total_horastrabajoprecio_imputable'] += $partetaller['horasimputables'] * $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciohoraentraller'];
+                    $tarea['Tarea']['total_horastrabajoprecio_imputable'] += $partetaller['horasimputables'] * $tarea['Ordene']['Centrostrabajo']['preciohoraentraller'];
                 }
             }
         }
@@ -119,8 +116,10 @@ class Tarea extends AppModel {
          */
         if (!empty($tarea['ArticulosTarea'])) {
             foreach ($tarea['ArticulosTarea'] as $articulos_tarea) {
-                $tarea['Tarea']['total_materiales_imputables'] += ($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) - (($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) * ($articulos_tarea['descuento'] / 100));
-                $tarea['Tarea']['total_materiales_costo'] += $articulos_tarea['cantidadreal'] * $articulos_tarea['Articulo']['ultimopreciocompra'];
+                if ($articulos_tarea['id'] != $deleted_id) {
+                    $tarea['Tarea']['total_materiales_imputables'] += ($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) - (($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) * ($articulos_tarea['descuento'] / 100));
+                    $tarea['Tarea']['total_materiales_costo'] += $articulos_tarea['cantidadreal'] * $articulos_tarea['Articulo']['ultimopreciocompra'];
+                }
             }
         }
         /* Reformateo Antes de Guardar */
@@ -139,7 +138,7 @@ class Tarea extends AppModel {
         $tarea['Tarea']['total_materiales_costo'] = redondear_dos_decimal($tarea['Tarea']['total_materiales_costo']);
         $this->save($tarea['Tarea']);
     }
-
+    
 }
 
 ?>

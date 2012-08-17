@@ -9,36 +9,19 @@ class Albaranesclientesreparacione extends AppModel {
         'fecha' => array(
             'date' => array(
                 'rule' => array('date'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
         'numero' => array(
             'notempty' => array(
                 'rule' => array('notempty'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
         'tiposiva_id' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
     );
-    //The Associations below have been created with all possible keys, those that are not needed can be removed
-
     var $belongsTo = array(
         'Tiposiva' => array(
             'className' => 'Tiposiva',
@@ -140,43 +123,54 @@ class Albaranesclientesreparacione extends AppModel {
             return $resultado[0][0]['siguiente'];
     }
 
-    public function get_baseimponible($albaranesclientesreparacione_id) {
+    public function get_baseimponible($albaranesclientesreparacione_id, $deleted_id = null) {
         $baseimponible = 0;
         $tareas = $this->TareasAlbaranesclientesreparacione->find('all', array(
-            'fields' => array('total_partes_imputable', 'total_materiales_imputables'),
+            'fields' => array('id','total_partes_imputable', 'total_materiales_imputables'),
             'contain' => '',
             'conditions' => array('TareasAlbaranesclientesreparacione.albaranesclientesreparacione_id' => $albaranesclientesreparacione_id),
                 ));
         foreach ($tareas as $tarea) {
-            $baseimponible += $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] + $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'];
+            if ($tarea['TareasAlbaranesclientesreparacione']['id'] != $deleted_id)
+                $baseimponible += $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'] + $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'];
         }
-        return $baseimponible;
+        return redondear_dos_decimal($baseimponible);
     }
 
-    public function get_totalmanoobra_servicios($albaranesclientesreparacione_id) {
+    public function get_totalmanoobra_servicios($albaranesclientesreparacione_id, $deleted_id = null) {
         $manoobraotroservicios = 0;
         $tareas = $this->TareasAlbaranesclientesreparacione->find('all', array(
-            'fields' => array('total_partes_imputable'),
+            'fields' => array('id','total_partes_imputable'),
             'contain' => '',
             'conditions' => array('TareasAlbaranesclientesreparacione.albaranesclientesreparacione_id' => $albaranesclientesreparacione_id),
                 ));
         foreach ($tareas as $tarea) {
-            $manoobraotroservicios += $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'];
+            if ($tarea['TareasAlbaranesclientesreparacione']['id'] != $deleted_id)
+                $manoobraotroservicios += $tarea['TareasAlbaranesclientesreparacione']['total_partes_imputable'];
         }
-        return $manoobraotroservicios;
+        return redondear_dos_decimal($manoobraotroservicios);
     }
 
-    public function get_totalrepuestos($albaranesclientesreparacione_id) {
+    public function get_totalrepuestos($albaranesclientesreparacione_id, $deleted_id = null) {
         $total_repuestos = 0;
         $tareas = $this->TareasAlbaranesclientesreparacione->find('all', array(
-            'fields' => array('total_materiales_imputables'),
+            'fields' => array('id','total_materiales_imputables'),
             'contain' => '',
             'conditions' => array('TareasAlbaranesclientesreparacione.albaranesclientesreparacione_id' => $albaranesclientesreparacione_id),
                 ));
         foreach ($tareas as $tarea) {
-            $total_repuestos += $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'];
+            if ($tarea['TareasAlbaranesclientesreparacione']['id'] != $deleted_id)
+                $total_repuestos += $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'];
         }
-        return $total_repuestos;
+        return redondear_dos_decimal($total_repuestos);
+    }
+
+    function recalcularTotales($deleted_id = null) {
+        if (!empty($this->id)) {
+            $this->saveField('total_materiales', redondear_dos_decimal($this->get_totalrepuestos($this->id, $deleted_id)));
+            $this->saveField('total_manoobra', redondear_dos_decimal($this->get_totalmanoobra_servicios($this->id, $deleted_id)));
+            $this->saveField('baseimponible', redondear_dos_decimal($this->get_baseimponible($this->id, $deleted_id)));
+        }
     }
 
 }

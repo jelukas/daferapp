@@ -15,7 +15,29 @@ class PresupuestosclientesController extends AppController {
             $this->flashWarnings(__('Presupuestos Cliente Inválido', true));
             $this->redirect(array('action' => 'index'));
         }
-        $presupuestoscliente = $this->Presupuestoscliente->find('first', array('contain' => array('Estadospresupuestoscliente', 'Maquina', 'Centrostrabajo', 'Mensajesinformativo', 'Almacene', 'Cliente', 'Comerciale', 'Pedidoscliente', 'Tiposiva', 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Presupuestosproveedore' => 'Proveedore', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'Tareaspresupuestocliente' => array('TareaspresupuestoclientesOtrosservicio', 'Materiale' => array('Articulo'), 'Manodeobra')), 'conditions' => array('Presupuestoscliente.id' => $id)));
+        $presupuestoscliente = $this->Presupuestoscliente->find(
+                'first', array(
+            'contain' => array(
+                'Estadospresupuestoscliente',
+                'Maquina',
+                'Centrostrabajo',
+                'Mensajesinformativo',
+                'Almacene',
+                'Cliente',
+                'Comerciale',
+                'Pedidoscliente',
+                'Tiposiva',
+                'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'),
+                'Presupuestosproveedore' =>array( 'Proveedore','Avisostallere'=>'Cliente','Avisosrepuesto'=>'Cliente'),
+                'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'),
+                'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
+                'Tareaspresupuestocliente' => array(
+                    'TareaspresupuestoclientesOtrosservicio',
+                    'Materiale' => array('Articulo'),
+                    'Manodeobra'
+                )
+            ),
+            'conditions' => array('Presupuestoscliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
         foreach ($presupuestoscliente['Tareaspresupuestocliente'] as $tarea) {

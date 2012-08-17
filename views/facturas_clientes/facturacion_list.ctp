@@ -12,7 +12,7 @@
         <?php if (!empty($cliente_facturable['Albaranescliente']) || !empty($cliente_facturable['Albaranesclientesreparacione'])): ?>
             <h2><?php echo $cliente_facturable['Cliente']['nombre'] ?></h2>
             <?php foreach ($cliente_facturable['Albaranescliente'] as $albaranescliente): ?>
-                <h3>Nueva Posible Factura</h3>
+                <h3>Nueva Posible Factura Nº <?php echo $siguiente_numero ?></h3>
                 <?php $factura_index++ ?>
                 <table>
                     <caption>Albaranes de Repuestos</caption>
@@ -28,12 +28,17 @@
                         <td><?php echo $albaranescliente['fecha'] ?></td>
                         <td><?php echo @$albaranescliente['Centrostrabajo']['centrotrabajo'] ?></td>
                         <td><?php echo @$albaranescliente['Maquina']['nombre'] ?></td>
-                        <td><?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranescliente][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranescliente['id'])) ?></td>
+                        <td>
+                            <?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' .$factura_index . '][albaranescliente][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranescliente['id'])) ?>
+                            <?php echo $this->Form->hidden('cliente_id', array('name' => 'data[facturable][' .$factura_index . '][cliente_id]', 'value' => $cliente_facturable['Cliente']['id'])) ?>
+                            <?php echo $this->Form->hidden('numero', array('name' => 'data[facturable][' .$factura_index . '][numero]', 'value' => $siguiente_numero)); ?>
+                        </td>
                     </tr>
                 </table>
+                <?php $siguiente_numero++ ?>
             <?php endforeach; ?>
             <?php foreach ($cliente_facturable['Albaranesclientesreparacione'] as $albaranesclientesreparacione): ?>
-                <h3>Nueva Posible Factura</h3>
+                <h3>Nueva Posible Factura Nº <?php echo $siguiente_numero ?></h3>
                 <?php $factura_index++ ?>
                 <table>
                     <caption>Albaranes de Reparación</caption>
@@ -49,9 +54,14 @@
                         <td><?php echo $albaranesclientesreparacione['fecha'] ?></td>
                         <td><?php echo @$albaranesclientesreparacione['Centrostrabajo']['centrotrabajo'] ?></td>
                         <td><?php echo @$albaranesclientesreparacione['Maquina']['nombre'] ?></td>
-                        <td><?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranesclientesreparacione][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranesclientesreparacione['id'])) ?></td>
+                        <td>
+                            <?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranesclientesreparacione][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranesclientesreparacione['id'])) ?>
+                            <?php echo $this->Form->hidden('cliente_id', array('name' => 'data[facturable][' .$factura_index . '][cliente_id]', 'value' => $cliente_facturable['Cliente']['id'])) ?>
+                            <?php echo $this->Form->hidden('numero', array('name' => 'data[facturable][' .$factura_index . '][numero]', 'value' => $siguiente_numero)); ?>
+                        </td>
                     </tr>
                 </table>
+                <?php $siguiente_numero++ ?>
             <?php endforeach; ?>
         <?php endif; ?>
     <?php endif; ?>
@@ -64,7 +74,7 @@
         <h2><?php echo $cliente_facturable['Cliente']['nombre'] ?></h2>
         <?php foreach ($cliente_facturable['Centrostrabajo'] as $centrostrabajo): ?>
             <?php if (!empty($centrostrabajo['Albaranescliente']) || !empty($centrostrabajo['Albaranesclientesreparacione'])): ?>
-                <h3>Nueva Posible Factura -- Centro: <?php echo $centrostrabajo['centrotrabajo'] ?></h3>
+                <h3>Nueva Posible Factura Nº <?php echo $siguiente_numero ?> -- Centro: <?php echo $centrostrabajo['centrotrabajo'] ?></h3>
                 <?php $factura_index++ ?>
                 <?php if (!empty($centrostrabajo['Albaranescliente'])): ?>
                     <table>
@@ -82,7 +92,11 @@
                                 <td><?php echo $albaranescliente['fecha'] ?></td>
                                 <td><?php echo @$centrostrabajo['centrotrabajo'] ?></td>
                                 <td><?php echo @$albaranescliente['Maquina']['nombre'] ?></td>
-                                <td><?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranescliente][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranescliente['id'])) ?></td>
+                                <td>
+                                    <?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranescliente][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranescliente['id'])) ?>
+                                    <?php echo $this->Form->hidden('cliente_id', array('name' => 'data[facturable][' .$factura_index . '][cliente_id]', 'value' => $cliente_facturable['Cliente']['id'])) ?>
+                                    <?php echo $this->Form->hidden('numero', array('name' => 'data[facturable][' .$factura_index . '][numero]', 'value' => $siguiente_numero)); ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
@@ -103,11 +117,16 @@
                                 <td><?php echo $albaranesclientesreparacione['fecha'] ?></td>
                                 <td><?php echo @$centrostrabajo['centrotrabajo'] ?></td>
                                 <td><?php echo @$albaranesclientesreparacione['Maquina']['nombre'] ?></td>
-                                <td><?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranesclientesreparacione][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranesclientesreparacione['id'])) ?></td>
+                                <td>
+                                    <?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranesclientesreparacione][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranesclientesreparacione['id'])) ?>
+                                    <?php echo $this->Form->hidden('cliente_id', array('name' => 'data[facturable][' .$factura_index . '][cliente_id]', 'value' => $cliente_facturable['Cliente']['id'])) ?>
+                                    <?php echo $this->Form->hidden('numero', array('name' => 'data[facturable][' .$factura_index . '][numero]', 'value' => $siguiente_numero)); ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
                 <?php endif; ?>
+                <?php $siguiente_numero++ ?>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php endif; ?><?php
@@ -120,7 +139,7 @@
         <?php foreach ($cliente_facturable['Centrostrabajo'] as $centrostrabajo): ?>
             <?php foreach ($centrostrabajo['Maquina'] as $maquina): ?>
                 <?php if (!empty($maquina['Albaranescliente']) || !empty($maquina['Albaranesclientesreparacione'])): ?>
-                    <h3>Nueva Posible Factura -- Máquina:  <?php echo $maquina['nombre'] ?></h3>
+                    <h3>Nueva Posible Factura Nº <?php echo $siguiente_numero ?> -- Máquina:  <?php echo $maquina['nombre'] ?></h3>
                     <?php $factura_index++ ?>
                     <?php if (!empty($maquina['Albaranescliente'])): ?>
                         <table>
@@ -136,7 +155,11 @@
                                     <td><?php echo $albaranescliente['numero'] ?></td>
                                     <td><?php echo $albaranescliente['fecha'] ?></td>
                                     <td><?php echo @$maquina['nombre'] ?></td>
-                                    <td><?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranescliente][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranescliente['id'])) ?></td>
+                                    <td>
+                                        <?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranescliente][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranescliente['id'])) ?>
+                                        <?php echo $this->Form->hidden('cliente_id', array('name' => 'data[facturable][' .$factura_index . '][cliente_id]', 'value' => $cliente_facturable['Cliente']['id'])) ?>
+                                        <?php echo $this->Form->hidden('numero', array('name' => 'data[facturable][' .$factura_index . '][numero]', 'value' => $siguiente_numero)); ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
@@ -155,11 +178,16 @@
                                     <td><?php echo $albaranesclientesreparacione['numero'] ?></td>
                                     <td><?php echo $albaranesclientesreparacione['fecha'] ?></td>
                                     <td><?php echo @$maquina['nombre'] ?></td>
-                                    <td><?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranesclientesreparacione][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranesclientesreparacione['id'])) ?></td>
+                                    <td>
+                                        <?php echo $this->Form->checkbox('marcado', array('name' => 'data[facturable][' . $factura_index . '][albaranesclientesreparacione][]', 'hiddenField' => false, 'checked' => true, 'value' => $albaranesclientesreparacione['id'])) ?>
+                                        <?php echo $this->Form->hidden('cliente_id', array('name' => 'data[facturable][' .$factura_index . '][cliente_id]', 'value' => $cliente_facturable['Cliente']['id'])) ?>
+                                        <?php echo $this->Form->hidden('numero', array('name' => 'data[facturable][' .$factura_index . '][numero]', 'value' => $siguiente_numero)); ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
                     <?php endif; ?>
+                    <?php $siguiente_numero++ ?>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endforeach; ?>

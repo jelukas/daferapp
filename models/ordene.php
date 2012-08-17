@@ -14,6 +14,27 @@ class Ordene extends AppModel {
             'fields' => '',
             'order' => ''
         ),
+        'Cliente' => array(
+            'className' => 'Cliente',
+            'foreignKey' => 'cliente_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Centrostrabajo' => array(
+            'className' => 'Centrostrabajo',
+            'foreignKey' => 'centrostrabajo_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
+        'Maquina' => array(
+            'className' => 'Maquina',
+            'foreignKey' => 'maquina_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        ),
         'Estadosordene' => array(
             'className' => 'Estadosordene',
             'foreignKey' => 'estadosordene_id',
@@ -79,7 +100,7 @@ class Ordene extends AppModel {
         'Tarea' => array(
             'className' => 'Tarea',
             'foreignKey' => 'ordene_id',
-            'dependent' => false,
+            'dependent' => true,
             'conditions' => '',
             'fields' => '',
             'order' => '',

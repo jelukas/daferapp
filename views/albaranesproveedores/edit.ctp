@@ -23,6 +23,9 @@
                     <?php echo $this->Form->input('pedidosproveedore_id', array('type' => 'hidden')); ?>
                 </td>
                 <td>
+                    <?php echo $this->Form->input('numero_albaran_proporcionado', array('label' => 'Nº Albarán Proporcionado:')); ?>
+                </td>
+                <td>
                     <?php echo $this->Form->input('fecha', array('label' => 'Fecha')); ?>
                 </td>
                 <td>

@@ -3,6 +3,7 @@
     <h2>
         <?php __('Presupuesto de proveedor Nº ' . $presupuestosproveedore['Presupuestosproveedore']['numero']); ?>
         <?php echo $this->Html->link(__('Editar', true), array('action' => 'edit', $presupuestosproveedore['Presupuestosproveedore']['id']), array('class' => 'button_link')); ?>
+        <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $presupuestosproveedore['Presupuestosproveedore']['id']), array('class' => 'button_link'), sprintf(__('¿Seguro que quieres borrar el Presupuesto de Proveedore Nº # %s?', true), $presupuestosproveedore['Presupuestosproveedore']['numero'])); ?> 
         <?php echo $this->Html->link(__('Listar', true), array('action' => 'index'), array('class' => 'button_link')); ?>
         <?php echo $this->Html->link(__('Nuevo (Directo)', true), array('action' => 'add'), array('class' => 'button_link')); ?>
     </h2>  
@@ -125,14 +126,14 @@
                 <td><?php echo $total ?> &euro;</td>
                 <td>
                     <span style="font-weight: bold">Impuestos</span>
-                    <?php echo $total * ($presupuestosproveedore['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)  ?> &euro;
+                    <?php echo $total * ($presupuestosproveedore['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100) ?> &euro;
                 </td>
             </tr>
             <tr>
                 <td colspan="8"></td>
                 <td>
                     <span style="font-weight: bold">Total Presupuesto</span>
-                    <?php echo $total + ($total * ($presupuestosproveedore['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100))  ?> &euro;
+                    <?php echo $total + ($total * ($presupuestosproveedore['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;
                 </td>
             </tr>
         </table>

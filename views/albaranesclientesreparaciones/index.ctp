@@ -8,17 +8,22 @@
     <?php echo $this->Form->end(__('Buscar', true)); ?>
     <table cellpadding="0" cellspacing="0">
         <tr>  
-            <th><?php echo $this->Paginator->sort('Nº','numero'); ?></th>
+            <th><?php echo $this->Paginator->sort('Nº', 'numero'); ?></th>
             <th><?php echo $this->Paginator->sort('fecha'); ?></th>
             <th><?php echo $this->Paginator->sort('cliente_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('Orden','ordene_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('albaranescaneado'); ?></th>
-            <th><?php echo $this->Paginator->sort('facturable'); ?></th>
-            <th><?php echo $this->Paginator->sort('tiposiva_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('almacene_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('facturas_cliente_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('es_devolucion'); ?></th>
+            <th><?php echo $this->Paginator->sort('observaciones'); ?></th>
+            <th>Precio<br/>Mat.</th>
+            <th>Precio<br/>Obra.</th>
+            <th>Base<br/>Imponible</th>
+            <th>Impuestos</th>
+            <th>Total</th>
+            <th><?php echo $this->Paginator->sort('Aviso<br/>Taller', 'Ordene.avisostallere_id', array('escape' => False)); ?></th>
+            <th><?php echo $this->Paginator->sort('Orden', 'ordene_id'); ?></th>
             <th><?php echo $this->Paginator->sort('comerciale_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Albarán<br/>Escaneado', 'albaranescaneado', array('escape' => False)); ?></th>
+            <th><?php echo $this->Paginator->sort('Estado', 'estadosalbaranesclientesreparacione_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('facturable'); ?></th>
+            <th><?php echo $this->Paginator->sort('facturas_cliente_id'); ?></th>
             <th><?php echo $this->Paginator->sort('centrosdecoste_id'); ?></th>
             <th class="actions"><?php __('Acciones'); ?></th>
         </tr>
@@ -35,30 +40,28 @@
                 <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['fecha']; ?>&nbsp;</td>
                 <td>
                     <?php echo $this->Html->link($albaranesclientesreparacione['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $albaranesclientesreparacione['Cliente']['id'])); ?>
-                </td>   
-                <td>
-                    <?php echo $this->Html->link($albaranesclientesreparacione['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $albaranesclientesreparacione['Ordene']['id'])); ?>
                 </td>
-                <td><?php echo $this->Html->link(__($albaranesclientesreparacione['Albaranesclientesreparacione']['albaranescaneado'], true), '/files/albaranesclientesreparacione/' . $albaranesclientesreparacione['Albaranesclientesreparacione']['albaranescaneado']); ?>&nbsp;</td>
-                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['facturable']; ?>&nbsp;</td>
+                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['observaciones']; ?></td>
+                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['total_materiales']; ?>&nbsp;</td>
+                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['total_manoobra']; ?></td>
+                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible']; ?></td>
+                <td><?php echo redondear_dos_decimal($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] * $albaranesclientesreparacione['Tiposiva']['porcentaje_aplicable'] / 100); ?></td>
+                <td><?php echo redondear_dos_decimal($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] + ($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] * $albaranesclientesreparacione['Tiposiva']['porcentaje_aplicable'] / 100)); ?></td>
+                <td><?php echo $this->Html->link($albaranesclientesreparacione['Ordene']['numero'], array('controller' => 'ordenes', 'action' => 'view', $albaranesclientesreparacione['Ordene']['id'])); ?></td>
+                <td><?php echo $this->Html->link($albaranesclientesreparacione['Ordene']['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $albaranesclientesreparacione['Ordene']['avisostallere_id'])); ?></td>
+                <td><?php echo $this->Html->link($albaranesclientesreparacione['Comerciale']['nombre'], array('controller' => 'comerciales', 'action' => 'view', $albaranesclientesreparacione['Comerciale']['id'])); ?></td>
+                <td><?php if (!empty($albaranesclientesreparacione['Albaranesclientesreparacione']['albaranescaneado'])) echo $this->Html->image('clip.png', array('url' => '/files/albaranesclientesreparacione/' . $albaranesclientesreparacione['Albaranesclientesreparacione']['albaranescaneado'])); ?>&nbsp;</td>
+                <td><?php echo $albaranesclientesreparacione['Estadosalbaranesclientesreparacione']['estado']; ?>&nbsp;</td>
+                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['facturable'] == 1 ? 'Sí' : 'No'; ?>&nbsp;</td>
                 <td>
-                    <?php echo $this->Html->link($albaranesclientesreparacione['Tiposiva']['tipoiva'], array('controller' => 'tiposivas', 'action' => 'view', $albaranesclientesreparacione['Tiposiva']['id'])); ?>
-                </td>
-                <td>
-                    <?php echo $this->Html->link($albaranesclientesreparacione['Almacene']['nombre'], array('controller' => 'almacenes', 'action' => 'view', $albaranesclientesreparacione['Almacene']['id'])); ?>
-                </td>
-                <td>
-                    <?php echo $this->Html->link($albaranesclientesreparacione['FacturasCliente']['id'], array('controller' => 'facturas_clientes', 'action' => 'view', $albaranesclientesreparacione['FacturasCliente']['id'])); ?>
-                </td>
-                <td><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['es_devolucion']; ?>&nbsp;</td>
-                <td>
-                    <?php echo $this->Html->link($albaranesclientesreparacione['Comerciale']['nombre'], array('controller' => 'comerciales', 'action' => 'view', $albaranesclientesreparacione['Comerciale']['id'])); ?>
+                    <?php echo $this->Html->link($albaranesclientesreparacione['FacturasCliente']['numero'], array('controller' => 'facturas_clientes', 'action' => 'view', $albaranesclientesreparacione['FacturasCliente']['id'])); ?>
                 </td>
                 <td>
                     <?php echo $this->Html->link($albaranesclientesreparacione['Centrosdecoste']['denominacion'], array('controller' => 'centrosdecostes', 'action' => 'view', $albaranesclientesreparacione['Centrosdecoste']['id'])); ?>
                 </td>
                 <td class="actions">
                     <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $albaranesclientesreparacione['Albaranesclientesreparacione']['id'])); ?>
+                    <?php echo $this->Html->link(__('Eliminar', true), array('action' => 'delete', $albaranesclientesreparacione['Albaranesclientesreparacione']['id']), array('class' => 'button_link'), sprintf(__('¿Seguro que quieres borrar el Albaran de Reparación Nº # %s?', true), $albaranesclientesreparacione['Albaranesclientesreparacione']['numero'])); ?> 
                 </td>
             </tr>
         <?php endforeach; ?>

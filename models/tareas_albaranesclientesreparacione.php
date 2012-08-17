@@ -7,21 +7,14 @@ class TareasAlbaranesclientesreparacione extends AppModel {
         'albaranesclientesreparacione_id' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
     );
-    //The Associations below have been created with all possible keys, those that are not needed can be removed
 
     var $virtualFields = array(
-         'total_partes_real' =>  'TareasAlbaranesclientesreparacione.totalkilometrajereal + TareasAlbaranesclientesreparacione.totalpreciodesplazamiento + TareasAlbaranesclientesreparacione.totaldesplazamientoreal + TareasAlbaranesclientesreparacione.total_horastrabajoprecio_real + TareasAlbaranesclientesreparacione.totaldietasreales + TareasAlbaranesclientesreparacione.totalotroserviciosreales',
-         'total_partes_imputable' => 'TareasAlbaranesclientesreparacione.totalkilometrajeimputable + TareasAlbaranesclientesreparacione.totalpreciodesplazamiento + TareasAlbaranesclientesreparacione.totaldesplazamientoimputado + TareasAlbaranesclientesreparacione.total_horastrabajoprecio_imputable + TareasAlbaranesclientesreparacione.totaldietasimputables + TareasAlbaranesclientesreparacione.totalotroserviciosimputables',
+        'total_partes_real' => 'TareasAlbaranesclientesreparacione.totalkilometrajereal + TareasAlbaranesclientesreparacione.totalpreciodesplazamiento + TareasAlbaranesclientesreparacione.totaldesplazamientoreal + TareasAlbaranesclientesreparacione.total_horastrabajoprecio_real + TareasAlbaranesclientesreparacione.totaldietasreales + TareasAlbaranesclientesreparacione.totalotroserviciosreales',
+        'total_partes_imputable' => 'TareasAlbaranesclientesreparacione.totalkilometrajeimputable + TareasAlbaranesclientesreparacione.totalpreciodesplazamiento + TareasAlbaranesclientesreparacione.totaldesplazamientoimputado + TareasAlbaranesclientesreparacione.total_horastrabajoprecio_imputable + TareasAlbaranesclientesreparacione.totaldietasimputables + TareasAlbaranesclientesreparacione.totalotroserviciosimputables',
     );
-    
     var $belongsTo = array(
         'Albaranesclientesreparacione' => array(
             'className' => 'Albaranesclientesreparacione',
@@ -174,8 +167,10 @@ class TareasAlbaranesclientesreparacione extends AppModel {
          */
         if (!empty($tarea['ArticulosTareasAlbaranesclientesreparacione'])) {
             foreach ($tarea['ArticulosTareasAlbaranesclientesreparacione'] as $articulos_tarea) {
-                $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'] += ($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) - (($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) * ($articulos_tarea['descuento'] / 100));
-                $tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'] += $articulos_tarea['cantidadreal'] * $articulos_tarea['Articulo']['ultimopreciocompra'];
+                if ($articulos_tarea['id'] != $deleted_id) {
+                    $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'] += ($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) - (($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) * ($articulos_tarea['descuento'] / 100));
+                    $tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'] += $articulos_tarea['cantidadreal'] * $articulos_tarea['Articulo']['ultimopreciocompra'];
+                }
             }
         }
         /* Reformateo Antes de Guardar */
@@ -194,7 +189,17 @@ class TareasAlbaranesclientesreparacione extends AppModel {
         $tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'] = redondear_dos_decimal($tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo']);
         $this->save($tarea['TareasAlbaranesclientesreparacione']);
     }
-
+    function afterSave($created){
+        $tarea = $this->find('first', array('conditions' => array('TareasAlbaranesclientesreparacione.id' => $this->id)));
+        $this->Albaranesclientesreparacione->id = $tarea['TareasAlbaranesclientesreparacione']['albaranesclientesreparacione_id'];
+        $this->Albaranesclientesreparacione->recalcularTotales();
+    }
+    function beforeDelete($created){
+        $tarea = $this->find('first', array('conditions' => array('TareasAlbaranesclientesreparacione.id' => $this->id)));
+        $this->Albaranesclientesreparacione->id = $tarea['TareasAlbaranesclientesreparacione']['albaranesclientesreparacione_id'];
+        $this->Albaranesclientesreparacione->recalcularTotales($this->id);
+        return true;
+    }
 }
 
 ?>

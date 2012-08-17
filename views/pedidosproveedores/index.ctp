@@ -16,8 +16,9 @@
             <th><?php echo $this->Paginator->sort('Orden', 'Presupuestosproveedore.ordene_id'); ?></th>
             <th><?php echo $this->Paginator->sort('Fecha de entrega', 'fecharecepcion'); ?></th>
             <th><?php echo $this->Paginator->sort('Observaciones', 'Presupuestosproveedore.observaciones'); ?></th>
-            <th><?php echo $this->Paginator->sort('confirmado');    ?></th>
-            <th><?php echo $this->Paginator->sort('pedidoescaneado'); ?></th>
+            <th><?php echo $this->Paginator->sort('confirmado'); ?></th>
+            <th><?php echo $this->Paginator->sort('Adjunto', 'pedidoescaneado'); ?></th>
+            <th><?php echo $this->Paginator->sort('Estado', 'estadospedidosproveedore'); ?></th>
             <th class="actions"><?php __('Actions'); ?></th>
         </tr>
         <?php
@@ -38,7 +39,8 @@
                 <td><?php echo $pedidosproveedore['Pedidosproveedore']['fecharecepcion']; ?>&nbsp;</td>
                 <td><?php echo $pedidosproveedore['Pedidosproveedore']['observaciones']; ?>&nbsp;</td>
                 <td><?php echo!empty($pedidosproveedore['Pedidosproveedore']['confirmado']) ? 'Sí' : 'No'; ?></td>
-                <td><?php echo $this->Html->link(__($pedidosproveedore['Pedidosproveedore']['pedidoescaneado'], true), '/files/pedidosproveedore/' . $pedidosproveedore['Pedidosproveedore']['pedidoescaneado']); ?></td>
+                <td><?php if (!empty($pedidosproveedore['Pedidosproveedore']['pedidoescaneado'])) echo $this->Html->image('clip.png', array('url' => '/files/pedidosproveedore/' . $pedidosproveedore['Pedidosproveedore']['pedidoescaneado'])); ?></td>
+                <td><?php echo $pedidosproveedore['Estadospedidosproveedore']['estado']; ?>&nbsp;</td>
                 <td class="actions">
                     <?php echo $this->Html->link(__('Ver', true), array('action' => 'view', $pedidosproveedore['Pedidosproveedore']['id'])); ?>
                     <?php echo $this->Html->link(__('Pdf', true), array('action' => 'pdf', $pedidosproveedore['Pedidosproveedore']['id'])); ?>

@@ -1,19 +1,19 @@
 <div class="pedidosproveedores">
     <?php echo $this->Form->create('Pedidosproveedore', array('type' => 'file')); ?>
     <fieldset>
-        <legend><?php __('Añadir Pedido a proveedor al Presupuesto a Proveedor ' . $presupuestosproveedore['Presupuestosproveedore']['id']); ?></legend>
+        <legend><?php __('Nuevo Pedido a proveedor desde el Presupuesto a Proveedor ' . $presupuestosproveedore['Presupuestosproveedore']['numero']); ?></legend>
         <table class="view">
             <tr>
                 <td colspan="2">
                     <?php echo $this->Form->input('id'); ?>
                     <?php echo $this->Form->input('numero', array('value' => $numero)); ?>
-                    <?php
-                    echo $this->Form->input('presupuestosproveedore_id', array('label' => 'Presupuesto de Proveedor', 'type' => 'text', 'disabled' => true, 'value' => $presupuestosproveedore['Presupuestosproveedore']['id']));
-                    echo $this->Form->input('presupuestosproveedore_id', array('type' => 'hidden', 'value' => $presupuestosproveedore['Presupuestosproveedore']['id']));
-                    ?>
+                    <div class="input text required">
+                        <label for="PedidosproveedorePresupuestosproveedoreId">Presupuesto de Proveedor <?php echo $presupuestosproveedore['Presupuestosproveedore']['numero'] ?></label>
+                        <?php echo $this->Form->input('presupuestosproveedore_id', array('type' => 'hidden', 'value' => $presupuestosproveedore['Presupuestosproveedore']['id'])); ?>
+                    </div>
                 </td>
                 <td colspan="2">
-                    <?php echo $this->Form->input('estadospedidosproveedore_id',array('label' => 'Estado')); ?>
+                    <?php echo $this->Form->input('estadospedidosproveedore_id', array('label' => 'Estado')); ?>
                 </td>
             </tr>
             <tr>
@@ -80,7 +80,7 @@
                             <tr<?php echo $class; ?>>
                                 <td><?php echo $articulo_presupuestosproveedor['Articulo']['ref']; ?></td>
                                 <td><?php echo $articulo_presupuestosproveedor['Articulo']['nombre']; ?></td>
-                                <td><?php echo $articulo_presupuestosproveedor['Tarea']['descripcion']; ?></td>
+                                <td><?php echo!empty($articulo_presupuestosproveedor['Tarea']) ? $articulo_presupuestosproveedor['Tarea']['descripcion'] : 'No tiene Tarea de Orden Relacionada'; ?></td>
                                 <td><?php echo $articulo_presupuestosproveedor['cantidad']; ?></td>
                                 <td><?php echo $articulo_presupuestosproveedor['precio_proveedor']; ?></td>
                                 <td><?php echo $articulo_presupuestosproveedor['descuento']; ?></td>
@@ -97,5 +97,5 @@
             <?php endif; ?>
         </div>
     </fieldset>
-    <?php echo $this->Form->end(__('Añadir', true)); ?>
+    <?php echo $this->Form->end(__('Guardar', true)); ?>
 </div>

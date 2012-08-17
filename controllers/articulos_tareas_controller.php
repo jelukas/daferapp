@@ -27,7 +27,8 @@ class ArticulosTareasController extends AppController {
                 $this->Session->setFlash(__('The articulos tarea has been saved', true));
                 $this->redirect($this->referer());
             } else {
-                $this->flashWarnings(__('The articulos tarea could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('El Artículo de la Tarea no ha sido guardado. Por favor, inténtalo de nuevo.' . $this->ArticulosTarea->session_message, true));
+                $this->ArticulosTarea->session_message = null;
                 $this->redirect($this->referer());
             }
         }
@@ -37,6 +38,25 @@ class ArticulosTareasController extends AppController {
         else
             $descuento = 0;
         $this->set(compact('tarea_id', 'tarea', 'descuento'));
+    }
+
+    function add_ajax($tarea_id) {
+        if (!empty($this->data)) {
+            $this->ArticulosTarea->create();
+            if ($this->ArticulosTarea->save($this->data)) {
+                $this->Session->setFlash(__('The articulos tarea has been saved', true));
+            } else {
+                $this->flashWarnings(__('El Artículo de la Tarea no ha sido guardado. Por favor, inténtalo de nuevo.' . $this->ArticulosTarea->session_message, true));
+                $this->ArticulosTarea->session_message = null;
+            }
+        }
+        $tarea = $this->ArticulosTarea->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $tarea_id)));
+        if (!empty($tarea['Ordene']['Avisostallere']['Centrostrabajo']['descuentomaterial']))
+            $descuento = $tarea['Ordene']['Avisostallere']['Centrostrabajo']['descuentomaterial'];
+        else
+            $descuento = 0;
+        $this->set(compact('tarea_id', 'tarea', 'descuento'));
+        $this->render('add');
     }
 
     function edit($id = null) {
@@ -50,7 +70,8 @@ class ArticulosTareasController extends AppController {
                 $this->Session->setFlash(__('The articulos tarea has been saved', true));
                 $this->redirect($this->referer());
             } else {
-                $this->flashWarnings(__('The articulos tarea could not be saved. Please, try again.', true));
+                $this->flashWarnings(__('El Artículo de la Tarea no ha sido guardado. Por favor, inténtalo de nuevo.' . $this->ArticulosTarea->session_message, true));
+                $this->ArticulosTarea->session_message = null;
                 $this->redirect($this->referer());
             }
         }
@@ -67,7 +88,7 @@ class ArticulosTareasController extends AppController {
         if ($this->ArticulosTarea->delete($id)) {
             $this->Session->setFlash(__('Articulos tarea deleted', true));
         } else {
-            $this->flashWarnings(__('Articulos tarea was not deleted', true));
+            $this->flashWarnings(__('El Artículo no ha podido ser borrado', true));
         }
         if ($tarea_id != null)
             $this->redirect($this->referer());
@@ -84,7 +105,8 @@ class ArticulosTareasController extends AppController {
                 $this->Session->setFlash(__('El Articulo para la Tarea ' . $this->data['ArticulosTarea']['tarea_id'] . ' a sido guardado', true));
                 $this->redirect(array('controller' => 'tareas', 'action' => 'view', $this->data['ArticulosTarea']['tarea_id']));
             } else {
-                $this->flashWarnings(__('El artículo para la Tarea No ha podido ser guardado.', true));
+                $this->flashWarnings(__('El artículo para la Tarea No ha podido ser guardado.' . $this->ArticulosTarea->session_message, true));
+                $this->ArticulosTarea->session_message = null;
             }
         }
         $this->set('tarea_id', $tarea_id);

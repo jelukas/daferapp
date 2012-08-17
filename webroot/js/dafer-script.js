@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-
+    /*Autocompletes lives*/
     $(".autocomplete_input").live("click", function(){
         $(this).val("");
     });
@@ -147,26 +147,28 @@ jQuery(document).ready(function() {
       
    
     /*Popups DHTML*/
-   
-   
     $( "#dialog:ui-dialog" ).dialog( "destroy" );
-	
     $( "#dialog-modal" ).dialog({
         autoOpen: false,
+        close: function(event, ui) { 
+            $.post(location.href, function(data) {
+                $('#content').html(data);
+            });
+        /* window.location.reload(); */
+        },
         width: '60%',
         height: 'auto',
         modal: true
     });
-        
-    $('.popup').click(function(){
+    $(".popup").live("click", function(event){
         $( "#dialog-modal" ).load($(this).attr('href'),function(){
             $( "#dialog-modal" ).dialog('open');
         });
         return false;
     });
     
+    /* Animacion cuando se carga contenido por AJAX */
     $("#loading_background").hide();
-
     $("#loading_background").ajaxStart(function(){
         $(this).show();
     });
@@ -179,13 +181,10 @@ jQuery(document).ready(function() {
         $(".chzn-select-required").chosen();
     });
     
+    /*Selects con autocomplete NO AJAX*/
     $(".chzn-select").chosen();
     $(".chzn-select-not-required").chosen({
         allow_single_deselect: true
     });
     $(".chzn-select-required").chosen();
 });
-function showgif_popup(){
-    alert("mostrando loader");
-}
-   

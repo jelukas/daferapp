@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routes Configuration
  *
@@ -21,28 +22,22 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',
  * its action called 'display', and we pass a param to select the view file
  * to use (in this case, /app/views/pages/home.ctp)...
  */
-	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
-	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
-	Router::parseExtensions('json');
+Router::parseExtensions('json');
 
-        Router::connect(
-
-'/partestalleres/:idOrdene-:idTarea',
-array('controller' => 'partestalleres', 'action' => 'add'),
-array(
-
-'pass' => array('idOrdene', 'idTarea'),
-
-)
+Router::connect(
+        '/partestalleres/:idOrdene-:idTarea', array('controller' => 'partestalleres', 'action' => 'add'), array(
+    'pass' => array('idOrdene', 'idTarea'),
+        )
 );

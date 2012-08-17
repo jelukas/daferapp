@@ -4,7 +4,7 @@ class AlbaranesclientesreparacionesController extends AppController {
 
     var $name = 'Albaranesclientesreparaciones';
     var $components = array('RequestHandler', 'Session', 'FileUpload');
-    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Number','Time');
+    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Number', 'Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -18,7 +18,20 @@ class AlbaranesclientesreparacionesController extends AppController {
     }
 
     function index() {
-        $this->Albaranesclientesreparacione->recursive = 0;
+        $this->paginate = array(
+            'limit' => 20,
+            'contain' => array(
+                'Estadosalbaranesclientesreparacione',
+                'Cliente',
+                'Centrostrabajo',
+                'Maquina',
+                'Ordene' => 'Avisostallere',
+                'Tiposiva',
+                'Comerciale',
+                'FacturasCliente',
+                'Centrosdecoste',
+            )
+        );
         $this->set('albaranesclientesreparaciones', $this->paginate());
     }
 
@@ -27,12 +40,6 @@ class AlbaranesclientesreparacionesController extends AppController {
             $this->flashWarnings(__('Albarán de Reparación Inválido', true));
             $this->redirect($this->referer());
         }
-        $baseimponible = $this->Albaranesclientesreparacione->get_baseimponible($id);
-        $totalrepuestos = $this->Albaranesclientesreparacione->get_totalrepuestos($id);
-        $totalmanoobra_servicios = $this->Albaranesclientesreparacione->get_totalmanoobra_servicios($id);
-        $this->set('baseimponible', $baseimponible);
-        $this->set('totalrepuestos', $totalrepuestos);
-        $this->set('totalmanoobra_servicios', $totalmanoobra_servicios);
         $this->set('albaranesclientesreparacione', $this->Albaranesclientesreparacione->find(
                         'first', array(
                     'contain' => array(
@@ -42,7 +49,7 @@ class AlbaranesclientesreparacionesController extends AppController {
                             'TareasAlbaranesclientesreparacionesPartestallere' => 'Mecanico',
                             'ArticulosTareasAlbaranesclientesreparacione' => 'Articulo'),
                         'Ordene' => array(
-                            'Avisostallere' => array('Centrostrabajo','Cliente')),
+                            'Avisostallere' => array('Centrostrabajo', 'Cliente')),
                         'Centrosdecoste',
                         'Comerciale',
                         'Almacene',
@@ -86,7 +93,7 @@ class AlbaranesclientesreparacionesController extends AppController {
         $estadosalbaranesclientesreparaciones = $this->Albaranesclientesreparacione->Estadosalbaranesclientesreparacione->find('list');
         $this->set(compact('tiposivas', 'almacenes', 'comerciales', 'centrosdecostes', 'numero', 'estadosalbaranesclientesreparaciones'));
         if (!empty($ordene_id)) {
-            $ordene = $this->Albaranesclientesreparacione->Ordene->find('first', array('contain' => array('Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico')), 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Ordene.id' => $ordene_id)));
+            $ordene = $this->Albaranesclientesreparacione->Ordene->find('first', array('contain' => array('Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico')),'Cliente', 'Centrostrabajo', 'Maquina'), 'conditions' => array('Ordene.id' => $ordene_id)));
             $baseimponible = $this->Albaranesclientesreparacione->Ordene->get_baseimponible($ordene_id);
             $totalrepuestos = $this->Albaranesclientesreparacione->Ordene->get_totalrepuestos($ordene_id);
             $totalmanoobra_servicios = $this->Albaranesclientesreparacione->Ordene->get_totalmanoobra_servicios($ordene_id);
@@ -135,17 +142,18 @@ class AlbaranesclientesreparacionesController extends AppController {
 
     function delete($id = null) {
         if (!$id) {
-            $this->flashWarnings(__('Invalid id for albaranesclientesreparacione', true));
+            $this->flashWarnings(__('Id incorrecta del Albarán de Reparación', true));
             $this->redirect(array('action' => 'index'));
         }
         $id = $this->Albaranesclientesreparacione->id;
         $upload = $this->Albaranesclientesreparacione->findById($id);
-        $this->FileUpload->RemoveFile($upload['Albaranesclientesreparacione']['albaranescaneado']);
+        if (!empty($upload['Albaranesclientesreparacione']['albaranescaneado']))
+            $this->FileUpload->RemoveFile($upload['Albaranesclientesreparacione']['albaranescaneado']);
         if ($this->Albaranesclientesreparacione->delete($id)) {
-            $this->Session->setFlash(__('Albaran de Reparación borrado', true));
+            $this->Session->setFlash(__('Albarán de Reparación borrado', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->flashWarnings(__('Albaranesclientesreparacione was not deleted', true));
+        $this->flashWarnings(__('El Albarán de Reparación no puedo ser borrado', true));
         $this->redirect(array('action' => 'index'));
     }
 

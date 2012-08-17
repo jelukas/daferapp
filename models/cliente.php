@@ -135,6 +135,7 @@ class Cliente extends AppModel {
                         'conditions' => array(
                             'Albaranesclientesreparacione.facturable' => 1,
                             'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                            'Albaranesclientesreparacione.estadosalbaranesclientesreparacione_id' => 2,
                             'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
                 ),
                 'conditions' => array('Cliente.id' => $this->id)
@@ -148,12 +149,14 @@ class Cliente extends AppModel {
                             'conditions' => array(
                                 'Albaranescliente.facturable' => 1,
                                 'Albaranescliente.facturas_cliente_id' => null,
+                                'Albaranescliente.estadosalbaranescliente_id' => 2,
                                 'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
                         'Albaranesclientesreparacione' => array(
                             'Maquina',
                             'conditions' => array(
                                 'Albaranesclientesreparacione.facturable' => 1,
                                 'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                                'Albaranesclientesreparacione.estadosalbaranesclientesreparacione_id' => 2,
                                 'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
                     )
                 ),
@@ -168,11 +171,13 @@ class Cliente extends AppModel {
                                 'conditions' => array(
                                     'Albaranescliente.facturable' => 1,
                                     'Albaranescliente.facturas_cliente_id' => null,
+                                    'Albaranescliente.estadosalbaranescliente_id' => 2,
                                     'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
                             'Albaranesclientesreparacione' => array(
                                 'conditions' => array(
                                     'Albaranesclientesreparacione.facturable' => 1,
                                     'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                                    'Albaranesclientesreparacione.estadosalbaranesclientesreparacione_id' => 2,
                                     'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
                         )
                     )
@@ -186,17 +191,18 @@ class Cliente extends AppModel {
                         'conditions' => array(
                             'Albaranescliente.facturable' => 1,
                             'Albaranescliente.facturas_cliente_id' => null,
+                            'Albaranescliente.estadosalbaranescliente_id' => 2,
                             'Albaranescliente.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin))),
                     'Albaranesclientesreparacione' => array(
                         'conditions' => array(
                             'Albaranesclientesreparacione.facturable' => 1,
                             'Albaranesclientesreparacione.facturas_cliente_id' => null,
+                            'Albaranesclientesreparacione.estadosalbaranesclientesreparacione_id' => 2,
                             'Albaranesclientesreparacione.fecha BETWEEN ? AND ?' => array($fecha_inicio, $fecha_fin)))
                 ),
                 'conditions' => array('Cliente.id' => $this->id)
                     ));
         }
-
         return $cliente_facturable;
     }
 

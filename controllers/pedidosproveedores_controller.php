@@ -20,7 +20,14 @@ class PedidosproveedoresController extends AppController {
 
     function index() {
         $conditions = array();
-        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Presupuestosproveedore' => array('Avisostallere', 'Ordene', 'Avisosrepuesto', 'Proveedore', 'Almacene')));
+        $this->paginate = array(
+            'conditions' => $conditions, 
+            'limit' => 20,
+            'contain' => array(
+                'Presupuestosproveedore' => array('Avisostallere', 'Ordene', 'Avisosrepuesto', 'Proveedore', 'Almacene'),
+                'Estadospedidosproveedore', 
+                )
+            );
         $pedidosproveedores = $this->paginate('Pedidosproveedore', $conditions);
 
         $this->set('pedidosproveedores', $pedidosproveedores);

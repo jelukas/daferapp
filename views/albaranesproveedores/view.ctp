@@ -35,13 +35,17 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3">
+            <td colspan="2">
                 <span>Base Imponible</span>
-                <?php echo $albaranesproveedore['Albaranesproveedore']['baseimponible'] ?> &euro;
+                <?php echo redondear_dos_decimal($albaranesproveedore['Albaranesproveedore']['baseimponible']) ?> &euro;
+            </td>
+            <td>
+                <span>Nº Albarán Proporcionado</span>
+                <?php echo $albaranesproveedore['Albaranesproveedore']['numero_albaran_proporcionado'] ?> 
             </td>
             <td>
                 <span>Centro de Coste</span>
-                <?php echo @$albaranesproveedore['Centrosdecoste']['codigo'].' -- '.@$albaranesproveedore['Centrosdecoste']['denominacion'] ?> 
+                <?php echo @$albaranesproveedore['Centrosdecoste']['codigo'] . ' -- ' . @$albaranesproveedore['Centrosdecoste']['denominacion'] ?> 
             </td>
         </tr>
         <tr>
@@ -57,7 +61,7 @@
             </td>
             <td>
                 <span>Forma de Pago</span>
-                <?php echo $albaranesproveedore['Proveedore']['Formapago']['nombre'] ?>
+                <?php echo!empty($albaranesproveedore['Proveedore']['Formapago']) ? $albaranesproveedore['Proveedore']['Formapago']['nombre'] : 'No tiene forma de pago establecida' ?>
             </td>
         </tr>
     </table>
@@ -96,10 +100,10 @@
                             <td><?php echo $articulo_albaranesproveedore['Articulo']['nombre']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['Tarea']['descripcion']; ?></td>
                             <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['cantidad']; ?></td>
-                            <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor']; ?></td>
-                            <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['descuento']; ?></td>
-                            <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['neto']; ?></td>
-                            <td><?php echo $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['total'] ?></td>
+                            <td><?php echo redondear_dos_decimal($articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['precio_proveedor']); ?></td>
+                            <td><?php echo redondear_dos_decimal($articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['descuento']); ?></td>
+                            <td><?php echo redondear_dos_decimal($articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['neto']); ?></td>
+                            <td><?php echo redondear_dos_decimal($articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['total']) ?></td>
                             <?php $total += $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['total']; ?>
                             <td class="actions">
                                 <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_albaranesproveedores', 'action' => 'edit', $articulo_albaranesproveedore['ArticulosAlbaranesproveedore']['id']), array('class' => 'popup')); ?>
@@ -113,17 +117,17 @@
                 <tr>
                     <td colspan="6"></td>
                     <td><span style="font-weight: bold">Base Imponible</span></td>
-                    <td><?php echo $total ?> &euro;</td>
+                    <td><?php echo redondear_dos_decimal($total) ?> &euro;</td>
                     <td>
                         <span style="font-weight: bold">Impuestos</span>
-                        <?php echo $total * ($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100) ?> &euro;
+                        <?php echo redondear_dos_decimal($total * ($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;
                     </td>
                 </tr>
                 <tr>
                     <td colspan="7"></td>
                     <td style="text-align: center">
                         <span style="font-weight: bold">Total Albarán</span>
-                        <?php echo $total + ($total * ($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;
+                        <?php echo redondear_dos_decimal($total + ($total * ($albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100))) ?> &euro;
                     </td>
                 </tr>
             </table>
@@ -149,7 +153,7 @@
             <tbody>
                 <?php
                 $i = 0;
-                if (!empty($albaranesproveedore['Pedidosproveedore']['id'])  && empty($albaranesproveedore['Pedidosproveedore']['albaranproveedoredevolucion_id'])):
+                if (!empty($albaranesproveedore['Pedidosproveedore']['id']) && empty($albaranesproveedore['Pedidosproveedore']['albaranproveedoredevolucion_id'])):
                     $class = null;
                     $i++;
                     if ($i % 2 == 0)
@@ -193,7 +197,7 @@
                         <td><?php echo $this->Html->link('Ver', array('controller' => 'avisostalleres', 'action' => 'view', $albaranesproveedore['Pedidosproveedore']['Presupuestosproveedore']['Avisostallere']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
                 <?php endif; ?>
-                    <?php
+                <?php
                 if (!empty($pedidosproveedore['Presupuestosproveedore']['Avisosrepuesto']['id'])):
                     $class = null;
                     $i++;

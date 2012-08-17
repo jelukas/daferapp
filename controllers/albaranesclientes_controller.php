@@ -4,7 +4,7 @@ class AlbaranesclientesController extends AppController {
 
     var $name = 'Albaranesclientes';
     var $components = array('RequestHandler', 'Session', 'FileUpload');
-    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Javascript','Time');
+    var $helpers = array('Form', 'Autocomplete', 'Ajax', 'Js', 'Javascript', 'Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -30,15 +30,15 @@ class AlbaranesclientesController extends AppController {
                 'FacturasCliente' => 'Cliente',
                 'Estadosalbaranescliente',
                 'Maquina',
-                'Tiposiva', 
-                'Comerciale', 
-                'Centrosdecoste', 
-                'Almacene', 
-                'Cliente', 
-                'Centrostrabajo', 
+                'Tiposiva',
+                'Comerciale',
+                'Centrosdecoste',
+                'Almacene',
+                'Cliente',
+                'Centrostrabajo',
                 'Pedidoscliente' => array(
-                    'Presupuestoscliente' => 'Cliente'), 
-                'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'), 
+                    'Presupuestoscliente' => 'Cliente'),
+                'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'),
                 'Tareasalbaranescliente' => array('MaterialesTareasalbaranescliente' => 'Articulo', 'ManodeobrasTareasalbaranescliente', 'TareasalbaranesclientesOtrosservicio'), 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina')), 'conditions' => array('Albaranescliente.id' => $id)));
         $totalmanoobrayservicios = 0;
         $totalrepuestos = 0;
@@ -77,7 +77,11 @@ class AlbaranesclientesController extends AppController {
                     $this->Albaranescliente->saveField('albaranescaneado', $this->FileUpload->finalFile);
                 }
                 /* Fin de Guardar Fichero */
-                $this->Session->setFlash(__('El Albaran de Venta ha sido guardado', true));
+                if (!empty($this->$this->Albaranescliente->Tareasalbaranescliente->session_message)){
+                    $this->Session->setFlash(__('El Albarán de Venta ha sido guardado. Hay material que no ha sido añadido porque no hay existencías', true));
+                }else{
+                    $this->Session->setFlash(__('El Albarán de Venta ha sido guardado.', true));
+                }
                 $this->redirect(array('action' => 'view', $this->Albaranescliente->id));
             } else {
                 $this->Session->setFlash(__('El Albarán de Venta no ha podido ser guardado. Por favor, prueba de nuevo.', true));
@@ -91,15 +95,15 @@ class AlbaranesclientesController extends AppController {
         $centrosdecostes = $this->Albaranescliente->Centrosdecoste->find('list');
         $numero = $this->Albaranescliente->dime_siguiente_numero();
         if ($vienede == 'pedidoscliente') {
-            $pedidoscliente = $this->Albaranescliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Cliente', 'Centrostrabajo','Maquina'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $iddedondeviene)));
-            $this->set(compact('pedidoscliente', 'tiposivas', 'numero','centrosdecostes','comerciales','estadosalbaranesclientes', 'almacenes'));
+            $pedidoscliente = $this->Albaranescliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Cliente', 'Centrostrabajo', 'Maquina'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $iddedondeviene)));
+            $this->set(compact('pedidoscliente', 'tiposivas', 'numero', 'centrosdecostes', 'comerciales', 'estadosalbaranesclientes', 'almacenes'));
             $this->render('add_from_pedidoscliente');
         } elseif ($vienede == 'avisosrepuesto') {
-            $avisosrepuesto = $this->Albaranescliente->Avisosrepuesto->find('first', array('contain' => array('Cliente', 'Centrostrabajo','Maquina', 'ArticulosAvisosrepuesto' => 'Articulo'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
-            $this->set(compact('avisosrepuesto', 'tiposivas', 'numero','centrosdecostes','comerciales','estadosalbaranesclientes', 'almacenes'));
+            $avisosrepuesto = $this->Albaranescliente->Avisosrepuesto->find('first', array('contain' => array('Cliente', 'Centrostrabajo', 'Maquina', 'ArticulosAvisosrepuesto' => 'Articulo'), 'conditions' => array('Avisosrepuesto.id' => $iddedondeviene)));
+            $this->set(compact('avisosrepuesto', 'tiposivas', 'numero', 'centrosdecostes', 'comerciales', 'estadosalbaranesclientes', 'almacenes'));
             $this->render('add_from_avisosrepuesto');
         } else {
-            $this->set(compact('tiposivas', 'almacenes', 'numero','comerciales','estadosalbaranesclientes','centrosdecostes'));
+            $this->set(compact('tiposivas', 'almacenes', 'numero', 'comerciales', 'estadosalbaranesclientes', 'centrosdecostes'));
             $this->render('add_direct');
         }
     }
@@ -130,7 +134,7 @@ class AlbaranesclientesController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->Albaranescliente->read(null, $id);
         }
-        
+
         $almacenes = $this->Albaranescliente->Almacene->find('list');
         $comerciales = $this->Albaranescliente->Comerciale->find('list');
         $estadosalbaranesclientes = $this->Albaranescliente->Estadosalbaranescliente->find('list');
@@ -139,7 +143,7 @@ class AlbaranesclientesController extends AppController {
         $avisosrepuestos = $this->Albaranescliente->Avisosrepuesto->find('list');
         $pedidosclientes = $this->Albaranescliente->Pedidoscliente->find('list');
         $facturasClientes = $this->Albaranescliente->FacturasCliente->find('list');
-        $this->set(compact('avisosrepuestos', 'pedidosclientes', 'facturasClientes', 'tiposivas','centrosdecostes','almacenes','comerciales','estadosalbaranesclientes'));
+        $this->set(compact('avisosrepuestos', 'pedidosclientes', 'facturasClientes', 'tiposivas', 'centrosdecostes', 'almacenes', 'comerciales', 'estadosalbaranesclientes'));
     }
 
     function delete($id = null) {

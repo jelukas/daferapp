@@ -53,16 +53,16 @@
             <tr>
                 <td>
                     <span>Cliente</span>
-                    <?php echo $this->Form->value('Avisostallere.Cliente.nombre') ?>
+                    <?php echo $this->Form->value('Cliente.nombre') ?>
                 </td>
                 <td>
                     <span>Centro</span>
-                    <?php echo $this->Form->value('Avisostallere.Centrostrabajo.centrotrabajo') ?>
+                    <?php echo $this->Form->value('Centrostrabajo.centrotrabajo') ?>
                 </td>
                 <td>
                     <p>
                         <span>Máquina</span>
-                        <?php echo $this->Form->value('Avisostallere.Maquina.nombre') ?>
+                        <?php echo $this->Form->value('Maquina.nombre') ?>
                     </p>
                     <p>
                         <span>Horas Maquina</span>
@@ -72,15 +72,15 @@
                 <td>
                     <p>
                         <span>Nº Serie Máquina</span> 
-                        <?php echo $this->Form->value('Avisostallere.Maquina.serie_maquina') ?>
+                        <?php echo $this->Form->value('Maquina.serie_maquina') ?>
                     </p>
                     <p>
                         <span>Nº Serie Motor</span> 
-                        <?php echo $this->Form->value('Avisostallere.Maquina.serie_motor') ?>
+                        <?php echo $this->Form->value('Maquina.serie_motor') ?>
                     </p>
                     <p>
                         <span>Nº Serie Transmisión</span>
-                        <?php echo $this->Form->value('Avisostallere.Maquina.serie_transmision') ?>
+                        <?php echo $this->Form->value('Maquina.serie_transmision') ?>
                     </p>
                 </td>
             </tr>

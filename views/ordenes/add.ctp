@@ -52,15 +52,18 @@
                 <td>
                     <span>Cliente</span>
                     <?php echo $avisotallere['Cliente']['nombre']?>
+                    <?php echo $this->Form->input('cliente_id', array('type' => 'hidden','value' => $avisotallere['Cliente']['id'])); ?>
                 </td>
                 <td>
                     <span>Centro</span>
                     <?php echo $avisotallere['Centrostrabajo']['centrotrabajo'] ?>
+                    <?php echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden','value' => $avisotallere['Centrostrabajo']['id'])); ?>
                 </td>
                 <td>
                     <p>
                         <span>Máquina</span>
                         <?php echo $avisotallere['Maquina']['nombre']?>
+                        <?php echo $this->Form->input('maquina_id', array('type' => 'hidden','value' => $avisotallere['Maquina']['id'])); ?>
                     </p>
                     <p>
                         <span>Horas Maquina</span>
@@ -85,13 +88,13 @@
             <tr>
                 <td colspan="4">
                     <span>Descripción</span> 
-                    <?php echo $this->Form->input('descripcion', array('label' => false)); ?>
+                    <?php echo $this->Form->input('descripcion', array('label' => false,'value' => $avisotallere['Avisostallere']['descripcion'])); ?>
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <span>Observaciones</span> 
-                    <?php echo $this->Form->input('observaciones', array('label' => false)); ?>
+                    <?php echo $this->Form->input('observaciones', array('label' => false,'value' => $avisotallere['Avisostallere']['observaciones'])); ?>
                 </td>
             </tr>
         </table>

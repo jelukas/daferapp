@@ -29,7 +29,7 @@
             <td><span><?php __('Maquina') ?></span></td>
             <td><?php echo $this->Html->link($albaranesclientesreparacione['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $albaranesclientesreparacione['Maquina']['id'])); ?></td>
             <td><span><?php __('Forma de Pago') ?></span></td>
-            <td><?php echo $albaranesclientesreparacione['Cliente']['Formapago']['nombre']; ?></td>
+            <td><?php echo!empty($albaranesclientesreparacione['Cliente']['Formapago']) ? $albaranesclientesreparacione['Cliente']['Formapago']['nombre'] : 'El cliente no tiene forma de pago definida'; ?></td>
         </tr>
         <tr>
             <td><h4><?php __('Nº Orden'); ?></h4></td>
@@ -92,7 +92,7 @@
                                 <?php echo $this->Html->link(__('Añadir Parte C.Trabajo', true), array('controller' => 'tareas_albaranesclientesreparaciones_partes', 'action' => 'add', $tarea['id']), array('class' => 'popup')); ?>
                             <?php endif; ?>
                             <?php echo $this->Html->link(__('Ver Contenido', true), '#?', array('class' => 'ver-relaciones')); ?>
-                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareasalbaranesclientes_controller', 'action' => 'delete', $tarea['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tarea['id'])); ?>
+                            <?php echo $this->Html->link(__('Eliminar', true), array('controller' => 'tareas_albaranesclientesreparaciones', 'action' => 'delete', $tarea['id']), null, sprintf(__('¿Seguiro que quieres borrar la Tarea del Albarán de reparación  # %s?', true), $tarea['descripcion'])); ?>
                             <span class="importe_tarea">Importe Tarea <?php echo redondear_dos_decimal($tarea['total_partes_imputable'] + $tarea['total_materiales_imputables']) ?> &euro;</span>
                         </td>
                     </tr>
@@ -482,15 +482,15 @@
         <?php endif; ?>
         <table>
             <tr>
-                <td class="total_orden">Total Mano de Obra y Otros Servicios <span><?php echo redondear_dos_decimal($totalmanoobra_servicios) ?> &euro;</span></td>
-                <td class="total_orden">Total Repuestos <span><?php echo redondear_dos_decimal($totalrepuestos) ?> &euro;</span></td>
-                <td class="total_orden">Base Imponible <span><?php echo redondear_dos_decimal($baseimponible) ?> &euro;</span></td>
-                <td class="total_orden">Impuestos <span><?php echo redondear_dos_decimal($baseimponible*$albaranesclientesreparacione['Tiposiva']['porcentaje_aplicable']/100) ?> &euro;</span></td>
+                <td class="total_orden">Total Mano de Obra y Otros Servicios <span><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['total_manoobra'] ?> &euro;</span></td>
+                <td class="total_orden">Total Repuestos <span><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['total_materiales'] ?> &euro;</span></td>
+                <td class="total_orden">Base Imponible <span><?php echo $albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] ?> &euro;</span></td>
+                <td class="total_orden">Impuestos <span><?php echo redondear_dos_decimal($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] * $albaranesclientesreparacione['Tiposiva']['porcentaje_aplicable'] / 100) ?> &euro;</span></td>
             </tr>
             <tr>
-                <td class="total_orden">Cómision <span><?php echo redondear_dos_decimal($baseimponible*@$albaranesclientesreparacione['Comerciale']['porcentaje_comision']/100) ?> &euro;</span></td>
+                <td class="total_orden">Cómision <span><?php echo redondear_dos_decimal($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] * @$albaranesclientesreparacione['Comerciale']['porcentaje_comision'] / 100) ?> &euro;</span></td>
                 <td></td>
-                <td class="total_orden">Total Albarán <span><?php echo redondear_dos_decimal($baseimponible + ($baseimponible*$albaranesclientesreparacione['Tiposiva']['porcentaje_aplicable']/100)) ?> &euro;</span></td>
+                <td class="total_orden">Total Albarán <span><?php echo redondear_dos_decimal($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] + ($albaranesclientesreparacione['Albaranesclientesreparacione']['baseimponible'] * $albaranesclientesreparacione['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;</span></td>
             </tr>
         </table>
     </div>
@@ -520,7 +520,8 @@
                         <td><?php echo $this->Html->link('Ver', array('controller' => 'avisostalleres', 'action' => 'view', $albaranesclientesreparacione['Ordene']['Avisostallere']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if (!empty($albaranesclientesreparacione['Ordene']['id'])):
+                <?php
+                if (!empty($albaranesclientesreparacione['Ordene']['id'])):
                     $class = null;
                     $i++;
                     if ($i % 2 == 0)
@@ -534,7 +535,8 @@
                         <td><?php echo $this->Html->link('Ver', array('controller' => 'ordenes', 'action' => 'view', $albaranesclientesreparacione['Ordene']['id']), array('class' => 'button_brownie')) ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if (!empty($albaranesclientesreparacione['FacturasCliente']['id'])):
+                <?php
+                if (!empty($albaranesclientesreparacione['FacturasCliente']['id'])):
                     $class = null;
                     $i++;
                     if ($i % 2 == 0)

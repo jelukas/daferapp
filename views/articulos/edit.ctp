@@ -25,7 +25,7 @@
                 <td>PVP</td>
                 <td><?php echo $this->Form->input('precio_sin_iva', array('label' => false)); ?></td>
                 <td>Último Precio de Coste</td>
-                <td><?php echo $this->Form->input('ultimopreciocompra', array('label' => false)); ?></td>
+                <td><?php echo $this->Form->input('ultimopreciocompra', array('label' => false , 'readonly' => True)); ?></td>
             </tr>
             <tr>
                 <td>Almacén</td>
@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <td>Existencias</td>
-                <td><?php echo $this->Form->input('existencias', array('label' => false)); ?></td>
+                <td><?php echo $this->Form->input('existencias', array('label' => false , 'readonly' => True)); ?></td>
             </tr>
             <tr>
                 <td>Stock Mínimo</td>

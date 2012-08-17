@@ -4,7 +4,7 @@ class AlbaranesproveedoresController extends AppController {
 
     var $name = 'Albaranesproveedores';
     var $components = array('FileUpload', 'Session');
-    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js', 'Autocomplete','Time');
+    var $helpers = array('Form', 'MultipleRecords', 'Ajax', 'Js', 'Autocomplete', 'Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -20,7 +20,7 @@ class AlbaranesproveedoresController extends AppController {
 
     function index() {
         $conditions = array();
-        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Proveedore'=>'Tiposiva','Estadosalbaranesproveedore', 'Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene'))));
+        $this->paginate = array('conditions' => $conditions, 'limit' => 20, 'contain' => array('Proveedore' => 'Tiposiva', 'Estadosalbaranesproveedore', 'Pedidosproveedore' => array('Presupuestosproveedore' => array('Proveedore', 'Almacene'))));
         $albaranesproveedores = $this->paginate('Albaranesproveedore', $conditions);
         $this->set('albaranesproveedores', $albaranesproveedores);
 
@@ -37,12 +37,12 @@ class AlbaranesproveedoresController extends AppController {
         }
         $albaranesproveedore = $this->Albaranesproveedore->find('first', array('conditions' => array('Albaranesproveedore.id' => $id),
             'contain' => array(
-                'Proveedore' => array('Tiposiva','Formapago'),
+                'Proveedore' => array('Tiposiva', 'Formapago'),
                 'Estadosalbaranesproveedore',
                 'Centrosdecoste',
                 'Pedidosproveedore' => array(
                     'Presupuestosproveedore' => array(
-                        'Proveedore' => array('Tiposiva','Formapago'),
+                        'Proveedore' => array('Tiposiva', 'Formapago'),
                         'Almacene',
                         'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosavisostallere'),
                         'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Estadosaviso'),
@@ -100,7 +100,7 @@ class AlbaranesproveedoresController extends AppController {
         $numero = $this->Albaranesproveedore->dime_siguiente_numero();
         $estadosalbaranesproveedores = $this->Albaranesproveedore->Estadosalbaranesproveedore->find('list');
         $centrosdecostes = $this->Albaranesproveedore->Centrosdecoste->find('list');
-        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore', 'numero', 'estadosalbaranesproveedores','centrosdecostes'));
+        $this->set(compact('pedidosproveedore_id', 'pedidosproveedore', 'numero', 'estadosalbaranesproveedores', 'centrosdecostes'));
     }
 
     function edit($id = null) {
@@ -142,70 +142,24 @@ class AlbaranesproveedoresController extends AppController {
         $estadosalbaranesproveedores = $this->Albaranesproveedore->Estadosalbaranesproveedore->find('list');
         $pedidosproveedores = $this->Albaranesproveedore->Pedidosproveedore->find('list');
         $centrosdecostes = $this->Albaranesproveedore->Centrosdecoste->find('list');
-        $this->set(compact('pedidosproveedores', 'estadosalbaranesproveedores','centrosdecostes'));
+        $this->set(compact('pedidosproveedores', 'estadosalbaranesproveedores', 'centrosdecostes'));
     }
 
     function delete($id = null) {
         if (!$id) {
-            $this->flashWarnings(__('Id inválida para el Albrán de Proveedor', true));
+            $this->flashWarnings(__('Id inválida para el Albarán de Proveedor', true));
             $this->redirect(array('action' => 'index'));
         }
         $id = $this->Albaranesproveedore->id;
         $upload = $this->Albaranesproveedore->findById($id);
-        $this->FileUpload->RemoveFile($upload['Albaranesproveedore']['albaranescaneado']);
+        if (!empty($upload['Albaranesproveedore']['albaranescaneado']))
+            $this->FileUpload->RemoveFile($upload['Albaranesproveedore']['albaranescaneado']);
         if ($this->Albaranesproveedore->delete($id)) {
-            $this->Session->setFlash(__('Albrán de Proveedor Guardado', true));
+            $this->Session->setFlash(__('Albarán de Proveedor borrado', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->flashWarnings(__('El Albarán de Proveedor no ha podido ser Guardado.', true));
+        $this->flashWarnings(__('El Albarán de Proveedor no ha podido ser borrado.', true));
         $this->redirect(array('action' => 'index'));
-    }
-
-    function downloadFile($id = null) {
-        if (!$id) {
-            $this->flashWarnings(__('Id No válida para Albarán de proveedor', true));
-            $this->redirect(array('action' => 'index'));
-        } else {
-            $id = $this->Albaranesproveedore->id;
-            $upload = $this->Albaranesproveedore->findById($id);
-            $name = $upload['Albaranesproveedore']['albaranescaneado'];
-            $ruta = '../webroot/files/' . $name;
-            header("Content-disposition: attachment; filename=$name");
-            header("Content-type: application/octet-stream");
-            readfile($ruta);
-        }
-    }
-
-    function pdf($id = null) {
-        if ($id != null) {
-            $this->Albaranesproveedore->recursive = 2;
-            $this->layout = 'pdf';
-            $albaran = $this->Albaranesproveedore->read(null, $id);
-            if ($albaran['Albaranesproveedore']['avisosrepuesto_id'] != null) {
-                $this->set('albaran', $albaran);
-                $this->render('/albaranesproveedores/pdfAvisosrepuestos');
-            } elseif ($albaran['Albaranesproveedore']['avisostallere_id'] != null) {
-                $centrotrabajo = $albaran['Avisostallere']['Centrostrabajo'];
-                $this->set('centrotrabajo', $centrotrabajo);
-                $this->loadModel('Ordene');
-                $this->Ordene->recursive = 2;
-                $orden = $this->Ordene->findByAvisostallere_id($albaran['Albaranesproveedore']['avisostallere_id']);
-                $this->set('orden', $orden);
-                $this->set('cliente', $orden['Avisostallere']['Cliente']);
-                $this->Ordene->Tarea->recursive = 2;
-                $tareas = $this->Ordene->Tarea->findAllByOrdene_id($orden['Ordene']['id']);
-                $this->set('tareas', $tareas);
-                $this->set('albaran', $albaran);
-                $this->render('/albaranesproveedores/pdfAvisostalleres');
-            }
-        }
-    }
-
-    private function __list() {
-        /* $pedidosproveedores = $this->Albaranesproveedore->Pedidosproveedore->find('list');
-          $facturasproveedores = $this->Albaranesproveedore->Facturasproveedore->find('list');
-          $proveedores = $this->Albaranesproveedore->Pedidosproveedore->Proveedore->find('list');
-          $this->set(compact('pedidosproveedores', 'facturasproveedores', 'proveedores')); */
     }
 
     function select() {

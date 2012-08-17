@@ -17,7 +17,7 @@ class OrdenesController extends AppController {
     }
 
     function index() {
-        $this->paginate = array('limit' => 20, 'contain' => array('Estadosordene', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')));
+        $this->paginate = array('limit' => 20, 'contain' => array('Avisostallere', 'Estadosordene', 'Cliente', 'Maquina', 'Centrostrabajo'));
         $ordenes = $this->paginate();
         $this->set('ordenes', $ordenes);
     }
@@ -30,7 +30,10 @@ class OrdenesController extends AppController {
         $orden = $this->Ordene->find('first', array(
             'contain' => array(
                 'Comerciale',
-                'Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'),
+                'Cliente',
+                'Maquina',
+                'Centrostrabajo',
+                'Avisostallere' => 'Cliente',
                 'Presupuestosproveedore' => array('Proveedore', 'Pedidosproveedore'),
                 'Presupuestoscliente' => array('Cliente', 'Pedidoscliente'),
                 'Albaranesclientesreparacione' => array('Cliente'),
@@ -64,25 +67,20 @@ class OrdenesController extends AppController {
             $this->data['Ordene']['fecha'] = date('d-m-Y');
             if ($this->Ordene->save($this->data)) {
                 $id = $this->Ordene->id;
-                if (!empty($_POST["idAvisoTaller"])) {
-                    $this->Ordene->saveField('avisostallere_id', $_POST["idAvisoTaller"]);
-                    //Cambio el estado del Aviso de taller
-                    $this->Ordene->Avisostallere->updateAll(array('Avisostallere.estadosavisostallere_id' => 3), array('Avisostallere.id' => $_POST["idAvisoTaller"]));
-                }
+                $this->Ordene->Avisostallere->id = $this->data['Ordene']['avisostallere_id'];
+                $this->Ordene->Avisostallere->saveField('estadosavisostallere_id', 3);
                 $this->Session->setFlash(__('La nueva orden de taller ha sido creada correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Ordene->id));
             } else {
-                $this->Session->setFlash(__('La orden de taller no ha podido ser creada correctamente. Vuelva a intentarlo', true));
+                $this->flashWarnings(__('La orden de taller no ha podido ser creada correctamente. Vuelva a intentarlo', true));
             }
         }
-        $avisotallere = $this->Avisostallere->find('first', array('contain' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'conditions' => array('Avisostallere.id' => $avisostallere_id)));
-        $this->set('avisotallere', $avisotallere);
-        if ($avisostallere_id != null && $avisostallere_id >= 0) {
-            $this->loadModel('Avisostallere');
-            $avisotallere = $this->Avisostallere->find('first', array('contain' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'conditions' => array('Avisostallere.id' => $avisostallere_id)));
-
-            $this->set('avisotallere', $avisotallere);
+        $avisotallere = $this->Avisostallere->find('first', array('contain' => array('Cliente', 'Maquina', 'Centrostrabajo', 'Ordene'), 'conditions' => array('Avisostallere.id' => $avisostallere_id)));
+        if (!empty($avisotallere['Ordene'])) {
+            $this->flashWarnings(__('Este Aviso ya tiene una Orden Creada', true));
+            $this->redirect($this->referer());
         }
+        $this->set('avisotallere', $avisotallere);
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
         $almacenes = $this->Ordene->Almacene->find('list');
         $this->set('comerciales', $this->Ordene->Comerciale->find('list'));
@@ -104,7 +102,7 @@ class OrdenesController extends AppController {
             }
         }
         if (empty($this->data)) {
-            $this->data = $this->Ordene->find('first', array('contain' => array('Avisostallere' => array('Cliente', 'Maquina', 'Centrostrabajo'), 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
+            $this->data = $this->Ordene->find('first', array('contain' => array('Avisostallere', 'Cliente', 'Maquina', 'Centrostrabajo', 'Presupuestosproveedore' => 'Proveedore', 'Presupuestoscliente' => 'Cliente', 'Estadosordene', 'Almacene', 'Tarea' => array('ArticulosTarea' => 'Articulo', 'Parte' => array('Mecanico'), 'Partestallere' => array('Mecanico'))), 'conditions' => array('Ordene.id' => $id)));
         }
         $this->set('comerciales', $this->Ordene->Comerciale->find('list'));
         $estadosordenes = $this->Ordene->Estadosordene->find('list');
@@ -181,6 +179,8 @@ class OrdenesController extends AppController {
                 /* Se va ha convertir el aviso a orden imputandole los materiales */
                 $this->Ordene->create();
                 if ($this->Ordene->save($this->data)) {
+                    $this->Ordene->Avisostallere->id = $this->data['Ordene']['avisostallere_id'];
+                    $this->Ordene->Avisostallere->saveField('estadosavisostallere_id', 3);
                     $ordene_id = $this->Ordene->id;
                     /* Imputamos el material a la orden */
                     foreach ($this->data['Tareaspedidoscliente'] as $tareapedido) {
@@ -219,33 +219,33 @@ class OrdenesController extends AppController {
                     }
                     /* Fin de la Imputacion */
                 } else {
-                    $this->flashWarnings(__('The ordene could not be saved. Please, try again.', true));
+                    $this->flashWarnings(__('The ordene could not be saved. Please, try again.'.pr($this->Orden->invalidFields()), true));
                     $this->redirect($this->referer());
                 }
             }
             $this->redirect(array('action' => 'view', $ordene_id));
         }
 
-        $pedidoscliente = $this->Ordene->Presupuestoscliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente', 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $pedidoscliente_id)));
+        $pedidoscliente = $this->Ordene->Presupuestoscliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente'=>array('Cliente','Centrostrabajo','Maquina','Avisostallere'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $pedidoscliente_id)));
         if (!empty($pedidoscliente['Presupuestoscliente']['ordene_id'])) {
             // echo 'Imputamos las nuevas tareas que hemos selecionado a la orden';
             $ordene_id = $pedidoscliente['Presupuestoscliente']['ordene_id'];
         } elseif (!empty($pedidoscliente['Presupuestoscliente']['avisostallere_id'])) {
-            $avisostallere_id = $pedidoscliente['Presupuestoscliente']['avisostallere_id'];
+            $avisostallere = $pedidoscliente['Presupuestoscliente']['Avisostallere'];
             $almacene_id = $pedidoscliente['Presupuestoscliente']['almacene_id'];
             //echo 'Crear Orden NUEVA con las tareas que hemos selecionado';
         } elseif (!empty($pedidoscliente['Presupuestoscliente']['presupuestosproveedore_id'])) {
-            $presupuestosproveedore = $this->Ordene->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => '', 'conditions' => array('Presupuestosproveedore.id' => $pedidoscliente['Presupuestoscliente']['presupuestosproveedore_id'])));
+            $presupuestosproveedore = $this->Ordene->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => 'Avisostallere', 'conditions' => array('Presupuestosproveedore.id' => $pedidoscliente['Presupuestoscliente']['presupuestosproveedore_id'])));
             if (!empty($presupuestosproveedore['Presupuestosproveedore']['avisostallere_id'])) {
                 // echo 'Si viene el  presupuesto de proveedor de un Aviso de tallere';
-                $avisostallere_id = $presupuestosproveedore['Presupuestosproveedore']['avisostallere_id'];
+                $avisostallere = $presupuestosproveedore['Presupuestosproveedore']['Avisostallere'];
                 $almacene_id = $presupuestosproveedore['Presupuestosproveedore']['almacene_id'];
             } elseif (!empty($presupuestosproveedore['Presupuestosproveedore']['ordene_id'])) {
                 // echo 'Si viene de Una orden el PResupuestos de Proveedore ';
                 $ordene_id = $presupuestosproveedore['Presupuestosproveedore']['ordene_id'];
             }
         }
-        $this->set(compact('pedidoscliente', 'avisostallere_id', 'ordene_id', 'almacene_id'));
+        $this->set(compact('pedidoscliente', 'avisostallere', 'ordene_id', 'almacene_id'));
     }
 
     function imputar_albaranproveedor($albaranesproveedore_id = null) {
@@ -274,6 +274,61 @@ class OrdenesController extends AppController {
             $this->Session->setFlash(__('Se ha cambiado el estado de la Orden correctamente: ' . $estadosordene['Estadosordene']['estado'], true));
         else
             $this->flashWarnings(__('No Se ha podido cambiar el estado de la Orden', true));
+        $this->redirect($this->referer());
+    }
+
+    function search() {
+        //die(pr($this->data));
+        /* Con esto buscamos por cliente ID *//*
+          $contain = array('Avisostallere' => 'Cliente');
+          $conditions = array(
+          'Ordene.id >' => 8000,
+          '1' => '1 AND Ordene.avisostallere_id IN (SELECT Avisostallere.id FROM avisostalleres Avisostallere WHERE Avisostallere.cliente_id = 1 )'
+          );
+          $ordenes = $this->Ordene->find('all',array('contain'=>$contain,'conditions' => $conditions)); */
+        /* Fin de con esto buscamos por cliente ID */
+
+        /* Con esto buscamos por articulos Usados */
+        /*  $contain = array('Tarea' => array('ArticulosTarea' => 'Articulo'));
+          $conditions = array(
+          'Ordene.id >' => 8000,
+          '1' => '1 AND Ordene.id IN (SELECT Tarea.ordene_id FROM tareas Tarea WHERE Tarea.id IN (SELECT ArticulosTarea.tarea_id FROM articulos_tareas ArticulosTarea WHERE ArticulosTarea.articulo_id = 35649))'
+          );
+          $ordenes = $this->Ordene->find('all', array('contain' => $contain, 'conditions' => $conditions)); */
+        /* Fin de Con esto buscamos por articulos Usados */
+
+        /* Busqueda prueba */
+        $contain = array('Estadosordene', 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'));
+        $conditions = array();
+        if (!empty($this->params['url']['numero']))
+            $conditions [] = array('Ordene.numero' => $this->params['url']['numero']);
+        if (!empty($this->params['named']['numero']))
+            $conditions [] = array('Ordene.numero' => $this->params['named']['numero']);
+        if (!empty($this->params['url']['cliente_id']))
+            $conditions [] = array('1' => '1 AND Ordene.avisostallere_id IN (SELECT Avisostallere.id FROM avisostalleres Avisostallere WHERE Avisostallere.cliente_id = ' . $this->params['url']['cliente_id'] . ' )');
+        if (!empty($this->params['named']['cliente_id']))
+            $conditions [] = array('1' => '1 AND Ordene.avisostallere_id IN (SELECT Avisostallere.id FROM avisostalleres Avisostallere WHERE Avisostallere.cliente_id = ' . $this->params['named']['cliente_id'] . ' )');
+        if (!empty($this->params['url']['articulo_id']))
+            $conditions [] = array('1' => '1 AND Ordene.id IN (SELECT Tarea.ordene_id FROM tareas Tarea WHERE Tarea.id IN (SELECT ArticulosTarea.tarea_id FROM articulos_tareas ArticulosTarea WHERE ArticulosTarea.articulo_id = ' . $this->params['url']['articulo_id'] . '))');
+        if (!empty($this->params['named']['articulo_id']))
+            $conditions [] = array('1' => '1 AND Ordene.id IN (SELECT Tarea.ordene_id FROM tareas Tarea WHERE Tarea.id IN (SELECT ArticulosTarea.tarea_id FROM articulos_tareas ArticulosTarea WHERE ArticulosTarea.articulo_id = ' . $this->params['named']['articulo_id'] . '))');
+        $this->paginate = array('limit' => 20, 'contain' => $contain, 'conditions' => $conditions, 'url' => $this->params['pass']);
+        $ordenes = $this->paginate();
+        /* Fin de Busqueda Prueba */
+        $clientes = $this->Ordene->Avisostallere->Cliente->find('list');
+        $this->set(compact('ordenes', 'clientes'));
+    }
+
+    function delete($id = null) {
+        if (!$id) {
+            $this->flashWarnings(__('ID no válido', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        if ($this->Ordene->delete($id)) {
+            $this->Session->setFlash(__('Orden eliminada correctamente', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        $this->flashWarnings(__('Orden No eliminada: Es posible que haya documentos que dependan de ella', true));
         $this->redirect($this->referer());
     }
 

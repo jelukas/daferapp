@@ -28,7 +28,7 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Autocomplete->replace_select('Cliente', null, true, null);
+                    echo $this->Form->input('cliente_id', array('label' => 'Cliente','class'=>'chzn-select-required','empty'=>'Selecionar Cliente...'));
                     echo $ajax->observeField('AvisostallereClienteId', array(
                         'frequency' => '1',
                         'update' => 'CentrostrabajoSelectDiv',

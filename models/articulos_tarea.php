@@ -7,16 +7,10 @@ class ArticulosTarea extends AppModel {
         'cantidad' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
     );
-    //The Associations below have been created with all possible keys, those that are not needed can be removed
-
+    public $session_message = null;
     var $belongsTo = array(
         'Articulo' => array(
             'className' => 'Articulo',
@@ -42,14 +36,28 @@ class ArticulosTarea extends AppModel {
             $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosTarea']['articulo_id'])));
             $this->Articulo->id = $this->data['ArticulosTarea']['articulo_id'];
             $cantidad = $articulos_tarea['ArticulosTarea']['cantidad'] - $this->data['ArticulosTarea']['cantidad'];
-            $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $cantidad);
+            $existencias = $articulo['Articulo']['existencias'] + $cantidad;
+            if ($existencias <= 0) {
+                $this->session_message = 'No hay existencias suficientes del Artículo';
+                $guardar = False;
+            } else {
+                $this->Articulo->saveField('existencias', $existencias);
+                $guardar = True;
+            }
         } else {
-            /* Estmaos creando */
+            /* Estamos creando */
             $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosTarea']['articulo_id'])));
             $this->Articulo->id = $this->data['ArticulosTarea']['articulo_id'];
-            $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] - $this->data['ArticulosTarea']['cantidad']);
+            $existencias = $articulo['Articulo']['existencias'] - $this->data['ArticulosTarea']['cantidad'];
+            if ($existencias <= 0) {
+                $this->session_message = 'No hay existencias suficientes del Artículo';
+                $guardar = False;
+            } else {
+                $this->Articulo->saveField('existencias', $existencias);
+                $guardar = True;
+            }
         }
-        return true;
+        return $guardar;
     }
 
     function beforeDelete() {
@@ -57,11 +65,9 @@ class ArticulosTarea extends AppModel {
         $articulos_tarea = $this->find('first', array('contain' => '', 'conditions' => array('ArticulosTarea.id' => $this->id)));
         $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $articulos_tarea['ArticulosTarea']['articulo_id'])));
         $this->Articulo->id = $articulos_tarea['ArticulosTarea']['articulo_id'];
-        $cantidad = $articulos_tarea['ArticulosTarea']['cantidad'] - $articulo['Articulo']['cantidad'];
         $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $articulos_tarea['ArticulosTarea']['cantidad']);
-        
         $this->Tarea->id = $articulos_tarea['ArticulosTarea']['tarea_id'];
-        $this->Tarea->recalcularTotales();
+        $this->Tarea->recalcularTotales($this->id);
         return true;
     }
 

@@ -94,18 +94,6 @@ class ClientesController extends AppController {
         $this->render('index');
     }
 
-    function pdf() {
-        Configure::write('debug', 0);
-        $this->layout = 'pdf'; //this will use the pdf.ctp layout
-        if (isset($_SESSION["last_search"])) {
-            $this->set('clientes', $this->Cliente->find('all', $_SESSION["last_search"]));
-        } else {
-            $this->set('clientes', $this->Cliente->find('all', array('limit' => 200)));
-        }
-        unset($_SESSION["last_search"]);
-        $this->render();
-    }
-
     function beforeFilter() {
         $this->checkPermissions('Cliente', $this->params['action']);
     }
@@ -121,39 +109,7 @@ class ClientesController extends AppController {
         $this->render('/elements/ajax_dropdown');
     }
 
-    function select_albaranes1() {
-        $this->Cliente->recursive = 2;
-        $cliente_id = $this->data['FacturasCliente']['cliente_id'];
-        $avisosrepuestos = $this->Cliente->Avisosrepuesto->find('list', array('conditions' => array('Avisosrepuesto.cliente_id' => $cliente_id)));
-        $avisostalleres = $this->Cliente->Avisostallere->find('list', array('conditions' => array('Avisostallere.cliente_id' => $cliente_id)));
-        $albaranesclientes = array();
-        if (!empty($avisosrepuestos)) {
-            foreach ($avisosrepuestos as $avisosrepuesto_id) {
-                $albaran = $this->Cliente->Avisosrepuesto->Albaranescliente->find('list', array('conditions' => array('Albaranescliente.avisosrepuesto_id' => $avisosrepuesto_id)));
-                if (!empty($albaran))
-                    $albaranesclientes[] = $albaran;
-            }
-        }
-        elseif (!empty($avisostalleres)) {
-            foreach ($avisostalleres as $avisostaller_id) {
-                $albaran = $this->Cliente->Avisostallere->Albaranescliente->find('list', array('conditions' => array('Albaranescliente.avisostallere_id' => $avisostaller_id)));
-                if (!empty($albaran))
-                    $albaranesclientes[] = $albaran;
-            }
-        }
-        if (!empty($albaranesclientes[0]))
-            $albaranesclientes = $albaranesclientes[0];
-        $this->set(compact('albaranesclientes'));
-    }
-
-    function select_albaranes() {
-        $this->Cliente->recursive = 2;
-        $cliente_id = $this->data['FacturasCliente']['cliente_id'];
-        $avisos = $this->Cliente->Avisostallere->findByClienteId($cliente_id);
-        pr($avisos);
-        die();
-    }
-
+   
 }
 
 ?>

@@ -4,6 +4,29 @@ class Avisostallere extends AppModel {
 
     var $name = 'Avisostallere';
     var $order = "Avisostallere.numero DESC";
+    var $validate = array(
+        'cliente_id' => array(
+            'rule' => 'notEmpty',
+            'class' => 'hola',
+            'message' => 'Debes selecionar un Cliente'
+        ),
+        'centrostrabajo_id' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Debes selecionar un Centro de Trabajo'
+        ),
+        'maquina_id' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Debes selecionar una máquina'
+        ),
+        'numero' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Debe tener un número'
+        ),
+        'fechaaviso' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Debes selecionar una fecha'
+        ),
+    );
     var $belongsTo = array(
         'Cliente' => array(
             'className' => 'Cliente',
@@ -74,7 +97,7 @@ class Avisostallere extends AppModel {
             $resultado = $this->query($query);
             $this->data['Avisostallere']['numero'] = $resultado[0][0]['siguiente_factura_id'];
         }
-        
+
         /* Guardamos las horas de la maquina */
         if (!empty($this->data['Avisostallere']['maquina_id'])) {
             $maquina = $this->Maquina->find('first', array('contain' => null, 'conditions' => array('Maquina.id' => $this->data['Avisostallere']['maquina_id'])));

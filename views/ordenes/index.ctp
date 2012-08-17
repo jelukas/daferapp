@@ -11,9 +11,9 @@
             <th><?php echo $this->Paginator->sort('Nº','numero'); ?></th>
             <th style="width: 6.5em;"><?php echo $this->Paginator->sort('Fecha'); ?></th>
             <th><?php echo $this->Paginator->sort('Nº Aviso de taller', 'avisostallere_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('Cliente'); ?></th>
-            <th><?php echo $this->Paginator->sort('Centros de Trabajo'); ?></th>
-            <th><?php echo $this->Paginator->sort('Máquina'); ?></th>
+            <th><?php echo $this->Paginator->sort('Cliente','cliente_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Centros de Trabajo','centrostrabajo_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('Máquina','maquina_id'); ?></th>
             <th style="width: 25%"><?php echo $this->Paginator->sort('Descripción'); ?></th>
             <th><?php echo $this->Paginator->sort('Estado'); ?></th>
             <th><?php echo $this->Paginator->sort('Urgente'); ?></th>
@@ -41,11 +41,11 @@
         </script>
                 <td><?php echo $this->Time->format('d-m-Y',$ordene['Ordene']['fecha']); ?></td>
                 <td><?php echo $this->Html->link($ordene['Avisostallere']['numero'], array('controller' => 'avisostalleres', 'action' => 'view', $ordene['Avisostallere']['id'])); ?></td>
-                <td><?php echo !empty($ordene['Avisostallere']['Cliente']['nombre'])? $this->Html->link($ordene['Avisostallere']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $ordene['Avisostallere']['Cliente']['id'])) : ''; ?></td>
-                <td><?php echo !empty($ordene['Avisostallere']['Centrostrabajo'])? $this->Html->link($ordene['Avisostallere']['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $ordene['Avisostallere']['Centrostrabajo']['id'])) : ''; ?></td>
-                <td><?php echo !empty($ordene['Avisostallere']['Maquina']['nombre'])? $this->Html->link($ordene['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $ordene['Avisostallere']['Maquina']['id'])) : ''; ?></td>
+                <td><?php echo !empty($ordene['Cliente']['nombre'])? $this->Html->link($ordene['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $ordene['Cliente']['id'])) : ''; ?></td>
+                <td><?php echo !empty($ordene['Centrostrabajo'])? $this->Html->link($ordene['Centrostrabajo']['centrotrabajo'], array('controller' => 'centrostrabajos', 'action' => 'view', $ordene['Centrostrabajo']['id'])) : ''; ?></td>
+                <td><?php echo !empty($ordene['Maquina']['nombre'])? $this->Html->link($ordene['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $ordene['Maquina']['id'])) : ''; ?></td>
                 <td><?php echo $ordene['Ordene']['descripcion']; ?></td>
-                <td><?php echo $this->Html->link($ordene['Estadosordene']['estado'], array('controller' => 'avisostalleres', 'action' => 'view', $ordene['Avisostallere']['id'])); ?></td>
+                <td><?php echo $ordene['Estadosordene']['estado']; ?></td>
                 <td><?php echo!empty($ordene['Ordene']['urgente']) ? 'Sí' : 'No' ?></td>
                 <td><?php echo $ordene['Ordene']['fecha_prevista_reparacion']; ?></td>
                 <td class="actions">

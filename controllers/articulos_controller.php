@@ -45,17 +45,22 @@ class ArticulosController extends AppController {
     function add() {
         if (!empty($this->data)) {
             $this->Articulo->create();
-            if ($this->Articulo->save($this->data)) {
-                /* Guarda fichero */
-                if ($this->FileUpload->finalFile != null) {
-                    $this->Articulo->saveField('articuloescaneado', $this->FileUpload->finalFile);
-                }
-                /* FIn Guardar Fichero */
-                $this->Session->setFlash(__('The articulo has been saved', true));
-                $this->redirect($this->referer());
+            $cantidad = $this->Articulo->find('count', array('conditions' => array('Articulo.ref' => $this->data['Articulo']['ref'],'Articulo.almacene_id' => $this->data['Articulo']['almacene_id'])));
+            if ($cantidad > 0) {
+                $this->flashWarnings(__('No se ha guardado el Artículo: Ya existe un Artículo con la misma referencia en este almacén.', true));
             } else {
-                $this->flashWarnings(__('The articulo could not be saved. Please, try again.', true));
-                $this->redirect($this->referer());
+                if ($this->Articulo->save($this->data)) {
+                    /* Guarda fichero */
+                    if ($this->FileUpload->finalFile != null) {
+                        $this->Articulo->saveField('articuloescaneado', $this->FileUpload->finalFile);
+                    }
+                    /* FIn Guardar Fichero */
+                    $this->Session->setFlash(__('The articulo has been saved', true));
+                    $this->redirect($this->referer());
+                } else {
+                    $this->flashWarnings(__('The articulo could not be saved. Please, try again.', true));
+                    $this->redirect($this->referer());
+                }
             }
         }
         $familias = $this->Articulo->Familia->find('list');
@@ -200,23 +205,57 @@ class ArticulosController extends AppController {
         }
         $this->set(compact('nueva_existencias'));
     }
-    
-    function json(){
+
+    function json_infinite() {
+        Configure::write('debug', 0);
         $this->layout = 'ajax';
-        $articulos = $this->Articulo->find('all',array(
-            'fields' => array('id','ref','nombre'),
+        $articulos = $this->Articulo->find('all', array(
+            'fields' => array('id', 'ref', 'nombre'),
             'contain' => '',
-            'conditions' => array('Articulo.nombre LIKE' => '%'.$this->params['url']['q'].'%'),
-        ));
+            'limit' => $this->params['url']['page_limit'],
+            'page' => $this->params['url']['page'],
+            'conditions' => array(
+                'OR' => array('Articulo.nombre LIKE' => '%' . $this->params['url']['q'] . '%', 'Articulo.ref LIKE' => '%' . $this->params['url']['q'] . '%')
+            ),
+                ));
+        $total = $this->Articulo->find('count', array(
+            'conditions' => array(
+                'OR' => array('Articulo.nombre LIKE' => '%' . $this->params['url']['q'] . '%', 'Articulo.ref LIKE' => '%' . $this->params['url']['q'] . '%')
+            ),
+                ));
         $articulos_array = array();
         foreach ($articulos as $articulo) {
             $articulos_array[] = array("id" => $articulo["Articulo"]["id"], "nombre" => $articulo["Articulo"]["nombre"], "ref" => $articulo["Articulo"]["ref"]);
         }
-        $json['results'] = $articulos_array;
+        $json['articulos'] = $articulos_array;
+        $json['total'] = $total;
         $this->set('articulos', $json);
+        $this->render('json');
     }
-    function prueba(){
-        
+
+    function json_basico() {
+        Configure::write('debug', 0);
+        $this->layout = 'ajax';
+        $articulos = $this->Articulo->find('all', array(
+            'fields' => array('id', 'ref', 'nombre'),
+            'contain' => '',
+            'conditions' => array(
+                'OR' => array('Articulo.nombre LIKE' => '%' . $this->params['url']['q'] . '%', 'Articulo.ref LIKE' => '%' . $this->params['url']['q'] . '%')
+            ),
+                ));
+        $articulos_array = array();
+        foreach ($articulos as $articulo) {
+            $articulos_array[] = array("id" => $articulo["Articulo"]["id"], "nombre" => $articulo["Articulo"]["nombre"], "ref" => $articulo["Articulo"]["ref"]);
+        }
+        $json['articulos'] = $articulos_array;
+        $this->set('articulos', $json);
+        $this->render('json');
+    }
+
+    function prueba() {
+        if (!empty($_POST)) {
+            die(pr($_POST));
+        }
     }
 
 }

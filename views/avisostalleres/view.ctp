@@ -132,9 +132,9 @@
                 <tr <?php echo $class ?>>
                     <td>Orden</td>
                     <td><?php echo $ordene['numero'] ?></td>
-                    <td><?php echo !empty($ordene['fecha'])? $this->Time->format('d-m-Y',$ordene['fecha']) : '' ?></td>
+                    <td><?php echo!empty($ordene['fecha']) ? $this->Time->format('d-m-Y', $ordene['fecha']) : '' ?></td>
                     <td><?php echo $avisostallere['Cliente']['nombre'] ?></td>
-                    <td><?php echo $this->Html->link('Ver',array('controller'=>'ordenes','action'=>'view',$ordene['id']),array('class'=>'button_brownie')) ?></td>
+                    <td><?php echo $this->Html->link('Ver', array('controller' => 'ordenes', 'action' => 'view', $ordene['id']), array('class' => 'button_brownie')) ?></td>
                 </tr>
             <?php endforeach; ?>
             <?php
@@ -147,9 +147,9 @@
                 <tr <?php echo $class ?>>
                     <td>Presupuesto a Cliente</td>
                     <td><?php echo $presupuestoscliente['numero'] ?></td>
-                    <td><?php echo !empty($presupuestoscliente['fecha'])? $this->Time->format('d-m-Y',$presupuestoscliente['fecha']) : '' ?></td>
+                    <td><?php echo!empty($presupuestoscliente['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['fecha']) : '' ?></td>
                     <td><?php echo $presupuestoscliente['Cliente']['nombre'] ?></td>
-                    <td><?php echo $this->Html->link('Ver',array('controller'=>'presupuestosclientes','action'=>'view',$presupuestoscliente['id']),array('class'=>'button_brownie')) ?></td>
+                    <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosclientes', 'action' => 'view', $presupuestoscliente['id']), array('class' => 'button_brownie')) ?></td>
                 </tr>
             <?php endforeach; ?>
             <?php
@@ -162,10 +162,25 @@
                 <tr <?php echo $class ?>>
                     <td>Presupuesto a Proveedor</td>
                     <td><?php echo $presupuestosproveedore['numero'] ?></td>
-                    <td><?php echo !empty($presupuestosproveedore['fecha'])? $this->Time->format('d-m-Y',$presupuestosproveedore['fecha']) : '' ?></td>
+                    <td><?php echo!empty($presupuestosproveedore['fecha']) ? $this->Time->format('d-m-Y', $presupuestosproveedore['fecha']) : '' ?></td>
                     <td><?php echo $presupuestosproveedore['Proveedore']['nombre'] ?></td>
-                    <td><?php echo $this->Html->link('Ver',array('controller'=>'presupuestosproveedores','action'=>'view',$presupuestosproveedore['id']),array('class'=>'button_brownie')) ?></td>
+                    <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosproveedores', 'action' => 'view', $presupuestosproveedore['id']), array('class' => 'button_brownie')) ?></td>
                 </tr>
+                <?php
+                foreach ($presupuestosproveedore['Presupuestoscliente'] as $presupuestoscliente):
+                    $class = null;
+                    $i++;
+                    if ($i % 2 == 0)
+                        $class = ' class="alt"';
+                    ?>
+                    <tr <?php echo $class ?>>
+                        <td>Presupuesto a Cliente</td>
+                        <td><?php echo $presupuestoscliente['numero'] ?></td>
+                        <td><?php echo!empty($presupuestoscliente['fecha']) ? $this->Time->format('d-m-Y', $presupuestoscliente['fecha']) : '' ?></td>
+                        <td><?php echo $presupuestoscliente['Cliente']['nombre'] ?></td>
+                        <td><?php echo $this->Html->link('Ver', array('controller' => 'presupuestosclientes', 'action' => 'view', $presupuestoscliente['id']), array('class' => 'button_brownie')) ?></td>
+                    </tr>
+                <?php endforeach; ?>
             <?php endforeach; ?>
         </tbody>
     </table>

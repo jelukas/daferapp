@@ -1,7 +1,7 @@
 <fieldset>
     <?php echo $this->Form->create('Ordene', array('action' => 'imputar')); ?>
     <legend><?php __('IMPUTACIÓN A LA ORDEN'); ?><?php echo (!empty($ordene_id)) ? ' ' . $ordene_id : '' ?></legend>
-    <h2><?php __('Pedido cliente' . ' ' . $pedidoscliente['Pedidoscliente']['id']); ?></h2>
+    <h2><?php __('Pedido cliente' . ' ' . $pedidoscliente['Pedidoscliente']['numero']); ?></h2>
     <dl>
         <?php
         $i = 0;
@@ -20,11 +20,14 @@
     </dl>
     <?php echo (!empty($ordene_id)) ? $this->Form->input('id', array('value' => $ordene_id)) : '' ?>
     <?php
-    if (!empty($avisostallere_id)) {
-        echo '<h3>Se va ha crear una Orden nueva para el Aviso ' . $avisostallere_id . '</h3>';
-        echo $this->Form->input('avisostallere_id', array('type' => 'hidden', 'value' => $avisostallere_id));
+    if (!empty($avisostallere)) {
+        echo '<h3>Se va ha crear una Orden nueva para el Aviso ' . $avisostallere['numero'] . '</h3>';
+        echo $this->Form->input('avisostallere_id', array('type' => 'hidden', 'value' =>  $avisostallere['id']));
         echo $this->Form->input('almacene_id', array('type' => 'hidden', 'value' => $almacene_id));
         echo $this->Form->input('fecha_prevista_reparacion');
+        echo $this->Form->input('cliente_id', array('type' => 'hidden','value' => $pedidoscliente['Presupuestoscliente']['cliente_id'])); 
+        echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden','value' => $pedidoscliente['Presupuestoscliente']['centrostrabajo_id'])); 
+        echo $this->Form->input('maquina_id', array('type' => 'hidden','value' => $pedidoscliente['Presupuestoscliente']['maquina_id'])); 
         echo $this->Form->input('observaciones');
     }
     ?>

@@ -16,16 +16,6 @@ class Albaranescliente extends AppModel {
             //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
-        'numeroalbaran' => array(
-            'numeric' => array(
-                'rule' => array('numeric'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
-            ),
-        ),
     );
     //The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -125,21 +115,9 @@ class Albaranescliente extends AppModel {
     );
 
     function dime_siguiente_numero() {
-        $query = 'SELECT MAX(a.numero)+1 as siguiente  FROM albaranesclientes a ';
+        $query = 'SELECT COALESCE(MAX(a.numero)+1,1) as siguiente  FROM albaranesclientes a ';
         $resultado = $this->query($query);
         return $resultado[0][0]['siguiente'];
-    }
-
-    function beforeSave($options) {
-        if (empty($this->data['Albaranescliente']['id'])) {
-            $query = 'SELECT MAX(a.numero)+1 as siguiente  FROM albaranesclientes a ';
-            $resultado = $this->query($query);
-            if (!empty($resultado[0][0]['siguiente']))
-                $this->data['Albaranescliente']['numero'] = $resultado[0][0]['siguiente'];
-            else
-                $this->data['Albaranescliente']['numero'] = 1;
-        }
-        return true;
     }
 
     function afterSave($created) {
@@ -147,7 +125,7 @@ class Albaranescliente extends AppModel {
             'contain' => 'Comerciale',
             'conditions' => array('Albaranescliente.id' => $this->id)));
         $comision = redondear_dos_decimal($albaranescliente['Albaranescliente']['precio'] * ($albaranescliente['Comerciale']['porcentaje_comision'] / 100 ));
-        $query = 'UPDATE albaranesclientes a SET a.comision = '.$comision.' WHERE a.id = '.$this->id;
+        $query = 'UPDATE albaranesclientes a SET a.comision = ' . $comision . ' WHERE a.id = ' . $this->id;
         $resultado = $this->query($query);
     }
 

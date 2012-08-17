@@ -3,7 +3,7 @@
 class AvisostalleresController extends AppController {
 
     var $name = 'Avisostalleres';
-    var $helpers = array('Html', 'Form', 'Ajax', 'Js','Time','Autocomplete');
+    var $helpers = array('Html', 'Form', 'Ajax', 'Js', 'Time', 'Autocomplete');
     var $components = array('RequestHandler', 'FileUpload');
 
     function beforeFilter() {
@@ -23,11 +23,22 @@ class AvisostalleresController extends AppController {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid avisostallere', true));
+            $this->flashWarnings(__('Invalid avisostallere', true));
             $this->redirect(array('action' => 'index'));
         }
         $estadosavisostalleres = $this->Avisostallere->Estadosavisostallere->find('list');
-        $this->set('avisostallere', $this->Avisostallere->find('first',array('contain'=>array('Cliente','Centrostrabajo','Maquina','Estadosavisostallere','Ordene','Presupuestoscliente'=>'Cliente','Presupuestosproveedore' => 'Proveedore'),'conditions'=>array('Avisostallere.id' => $id))));
+        $this->set('avisostallere', $this->Avisostallere->find(
+                        'first', array(
+                    'contain' => array(
+                        'Cliente',
+                        'Centrostrabajo',
+                        'Maquina',
+                        'Estadosavisostallere',
+                        'Ordene',
+                        'Presupuestoscliente' => 'Cliente',
+                        'Presupuestosproveedore' => array('Proveedore','Presupuestoscliente' => 'Cliente')),
+                    'conditions' => array('Avisostallere.id' => $id)))
+        );
         $numOrdenes = $this->Avisostallere->Ordene->find('count', array('conditions' => array('Ordene.avisostallere_id' => $id)));
         $this->set('numOrdenes', $numOrdenes);
     }
@@ -35,7 +46,7 @@ class AvisostalleresController extends AppController {
     function add() {
         if (!empty($this->data)) {
             $this->Avisostallere->create();
-            if ($this->Avisostallere->save($this->data)) {
+            if ($this->Avisostallere->save($this->data, array('validate' => True))) {
                 /* Guarda fichero */
                 if ($this->FileUpload->finalFile != null) {
                     $this->Avisostallere->saveField('documento', $this->FileUpload->finalFile);
@@ -44,17 +55,18 @@ class AvisostalleresController extends AppController {
                 $this->Session->setFlash(__('El aviso de taller ha sido creado correctamente', true));
                 $this->redirect(array('action' => 'view', $this->Avisostallere->id));
             } else {
-                $this->Session->setFlash(__('El aviso de taller no ha podido ser creado. Vuelva a intentarlo.', true));
+                $this->flashWarnings(__('El aviso de taller no ha podido ser creado. Vuelva a intentarlo.', true));
             }
         }
         $estadosavisostalleres = $this->Avisostallere->Estadosavisostallere->find('list');
+        $clientes = $this->Avisostallere->Cliente->find('list');
         $numero = $this->Avisostallere->dime_siguiente_numero();
-        $this->set(compact( 'estadosavisostalleres', 'numero'));
+        $this->set(compact('estadosavisostalleres', 'numero', 'clientes'));
     }
 
     function edit($id = null) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Aviso de Taller inválido', true));
+            $this->flashWarnings(__('Aviso de Taller inválido', true));
             $this->redirect(array('action' => 'index'));
         }
         if (!empty($this->data)) {
@@ -72,7 +84,7 @@ class AvisostalleresController extends AppController {
                 $this->Session->setFlash(__('El aviso de taller ha sido guardaddo correctamente.', true));
                 $this->redirect($this->referer());
             } else {
-                $this->Session->setFlash(__('El aviso de taller no ha podido ser guardado correctamente. Vuelva a intentarlo.', true));
+                $this->flashWarnings(__('El aviso de taller no ha podido ser guardado correctamente. Vuelva a intentarlo.', true));
             }
         }
         if (empty($this->data)) {
@@ -88,7 +100,7 @@ class AvisostalleresController extends AppController {
 
     function delete($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('ID no válido', true));
+            $this->flashWarnings(__('ID no válido', true));
             $this->redirect(array('action' => 'index'));
         }
         $upload = $this->Avisostallere->findById($id);
@@ -97,8 +109,8 @@ class AvisostalleresController extends AppController {
             $this->Session->setFlash(__('Aviso de taller eliminado correctamente', true));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Aviso de taller no eliminado', true));
-        $this->redirect(array('action' => 'index'));
+        $this->flashWarnings(__('Aviso de taller no eliminado', true));
+        $this->redirect($this->referer());
     }
 
     function search() {
@@ -132,11 +144,8 @@ class AvisostalleresController extends AppController {
 
     function mapa() {
         $this->Avisostallere->recursive = 1;
-
         $avisostalleres = $this->Avisostallere->findAllByEstadosavisostallere_id(array("1"));
         $estadosavisos = $this->Avisostallere->Estadosavisostallere->find('all');
-
-
         $this->set('avisostalleres', $avisostalleres);
         $this->set(compact('avisostalleres'));
     }
@@ -182,6 +191,7 @@ class AvisostalleresController extends AppController {
         $this->Avisostallere->saveField('estadosavisostallere_id', 4);
         $this->redirect(array('action' => 'mapa'));
     }
+
     function aceptar($id = null) {
         $this->Avisostallere->id = $id;
         $this->Avisostallere->saveField('fechaaceptacion', date('Y-m-d'));

@@ -24,18 +24,18 @@
             <tr>
                 <td><span><?php __('Cliente') ?></span></td>
                 <td>
-                    <?php echo $this->Html->link($ordene['Avisostallere']['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $ordene['Avisostallere']['Cliente']['id'])); ?>
-                    <?php echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['cliente_id'])); ?>
+                    <?php echo $this->Html->link($ordene['Cliente']['nombre'], array('controller' => 'clientes', 'action' => 'view', $ordene['Cliente']['id'])); ?>
+                    <?php echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $ordene['Ordene']['cliente_id'])); ?>
                 </td>
                 <td><span><?php __('Centro de Trabajo') ?></span></td>
                 <td>
-                    <?php echo $ordene['Avisostallere']['Centrostrabajo']['centrotrabajo'] ?>
-                    <?php echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['centrostrabajo_id'])); ?>
+                    <?php echo $ordene['Centrostrabajo']['centrotrabajo'] ?>
+                    <?php echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden', 'value' => $ordene['Ordene']['centrostrabajo_id'])); ?>
                 </td>
                 <td><span><?php __('Maquina') ?></span></td>
                 <td>
-                    <?php echo $this->Html->link($ordene['Avisostallere']['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $ordene['Avisostallere']['Maquina']['id'])); ?>
-                    <?php echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $ordene['Avisostallere']['maquina_id'])); ?>
+                    <?php echo $this->Html->link($ordene['Maquina']['nombre'], array('controller' => 'maquinas', 'action' => 'view', $ordene['Maquina']['id'])); ?>
+                    <?php echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $ordene['Ordene']['maquina_id'])); ?>
                 </td>
             </tr>
             <tr>

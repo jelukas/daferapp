@@ -98,12 +98,12 @@
                     <tr<?php echo $class; ?>>
                         <td><?php echo $articulo_pedidoproveedore['Articulo']['ref']; ?></td>
                         <td><?php echo $articulo_pedidoproveedore['Articulo']['nombre']; ?></td>
-                        <td><?php echo $articulo_pedidoproveedore['Tarea']['descripcion']; ?></td>
+                        <td><?php echo !empty($articulo_pedidoproveedore['Tarea'])?$articulo_pedidoproveedore['Tarea']['descripcion']:'No relacionado con Tarea de Orden'; ?></td>
                         <td><?php echo $articulo_pedidoproveedore['cantidad']; ?></td>
-                        <td><?php echo $articulo_pedidoproveedore['precio_proveedor']; ?></td>
-                        <td><?php echo $articulo_pedidoproveedore['descuento']; ?></td>
-                        <td><?php echo $articulo_pedidoproveedore['neto']; ?></td>
-                        <td><?php echo $articulo_pedidoproveedore['total']; ?></td>
+                        <td><?php echo redondear_dos_decimal($articulo_pedidoproveedore['precio_proveedor']); ?></td>
+                        <td><?php echo redondear_dos_decimal($articulo_pedidoproveedore['descuento']); ?></td>
+                        <td><?php echo redondear_dos_decimal($articulo_pedidoproveedore['neto']); ?></td>
+                        <td><?php echo redondear_dos_decimal($articulo_pedidoproveedore['total']); ?></td>
                         <?php $total += $articulo_pedidoproveedore['total']; ?>
                         <td class="actions">
                             <?php echo $this->Html->link(__('Editar', true), array('controller' => 'articulos_pedidosproveedores', 'action' => 'edit', $articulo_pedidoproveedore['id']), array('class' => 'popup')); ?>
@@ -116,17 +116,17 @@
                 <tr>
                     <td colspan="6"></td>
                     <td><span style="font-weight: bold">Base Imponible</span></td>
-                    <td><?php echo $total ?> &euro;</td>
+                    <td><?php echo redondear_dos_decimal($total) ?> &euro;</td>
                     <td>
                         <span style="font-weight: bold">Impuestos</span>
-                        <?php echo $total * ($pedidosproveedore['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100) ?> &euro;
+                        <?php echo redondear_dos_decimal($total * ($pedidosproveedore['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;
                     </td>
                 </tr>
                 <tr>
                     <td colspan="7"></td>
                     <td style="text-align: center">
                         <span style="font-weight: bold">Total Pedido</span>
-                        <?php echo $total + ($total * ($pedidosproveedore['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100)) ?> &euro;
+                        <?php echo redondear_dos_decimal($total + ($total * ($pedidosproveedore['Presupuestosproveedore']['Proveedore']['Tiposiva']['porcentaje_aplicable'] / 100))) ?> &euro;
                     </td>
                 </tr>
             </table>

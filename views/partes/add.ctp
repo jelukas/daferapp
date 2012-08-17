@@ -66,19 +66,19 @@
                     <th>Imputable</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('kilometrajereal_ida', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['distancia'])); ?></td>
-                    <td><?php echo $this->Form->input('kilometrajeimputable_ida', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['distancia'])); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajereal_ida', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['distancia'])); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajeimputable_ida', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['distancia'])); ?></td>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('kilometrajereal_vuelta', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['distancia'])); ?></td>
-                    <td><?php echo $this->Form->input('kilometrajeimputable_vuelta', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['distancia'])); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajereal_vuelta', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['distancia'])); ?></td>
+                    <td><?php echo $this->Form->input('kilometrajeimputable_vuelta', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['distancia'])); ?></td>
                 </tr>
             </table>
         </td>
         <td>
             <?php
             if ($tarea['Ordene']['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio')
-                echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['preciofijodesplazamiento']));
+                echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['preciofijodesplazamiento']));
             else
                 echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => 0));
             ?>
@@ -112,8 +112,8 @@
                     <th>Imputadas</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->Form->input('dietasreales', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['dietas'])); ?></td>
-                    <td><?php echo $this->Form->input('dietasimputables', array('label' => false, 'value' => $tarea['Ordene']['Avisostallere']['Centrostrabajo']['dietas'])); ?></td>
+                    <td><?php echo $this->Form->input('dietasreales', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['dietas'])); ?></td>
+                    <td><?php echo $this->Form->input('dietasimputables', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['dietas'])); ?></td>
                 </tr>
             </table>
         </td>

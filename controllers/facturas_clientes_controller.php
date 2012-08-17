@@ -4,7 +4,7 @@ class FacturasClientesController extends AppController {
 
     var $name = 'FacturasClientes';
     var $components = array('FileUpload');
-    var $helpers = array('Autocomplete');
+    var $helpers = array('Autocomplete', 'Time');
 
     function beforeFilter() {
         parent::beforeFilter();
@@ -36,7 +36,7 @@ class FacturasClientesController extends AppController {
             $conditions['FacturasCliente.tiposiva_id ='] = $this->params['url']['tiposiva_id'];
         }
 
-
+        $this->paginate = array('limit' => 20, 'contain' => array('Estadosfacturascliente', 'Cliente'));
         $facturasClientes = $this->paginate('FacturasCliente', $conditions);
         $this->set('facturasClientes', $facturasClientes);
         if (!empty($this->params['url']['pdf'])) {
@@ -50,7 +50,18 @@ class FacturasClientesController extends AppController {
             $this->flashWarnings(__('Invalid facturas cliente', true));
             $this->redirect($this->referer());
         }
-        $this->set('facturasCliente', $this->FacturasCliente->find('first', array('contain' => array('Cliente', 'Albaranescliente','Albaranesclientesreparacione'), 'conditions' => array('FacturasCliente.id' => $id))));
+        $this->set('facturasCliente', $this->FacturasCliente->find(
+                        'first', array(
+                    'contain' => array(
+                        'Estadosfacturascliente',
+                        'Cliente' => array('Formapago', 'Cuentasbancaria'),
+                        'Albaranescliente' => array('Tiposiva', 'Cliente'),
+                        'Albaranesclientesreparacione' => array('Tiposiva', 'Cliente')
+                    ),
+                    'conditions' => array('FacturasCliente.id' => $id)
+                        )
+                )
+        );
     }
 
     function add() {
@@ -98,6 +109,8 @@ class FacturasClientesController extends AppController {
         if (empty($this->data)) {
             $this->data = $this->FacturasCliente->read(null, $id);
         }
+        $this->set('estadosfacturasclientes', $this->FacturasCliente->Estadosfacturascliente->find('list'));
+        $this->set('clientes', $this->FacturasCliente->Cliente->find('list'));
     }
 
     function delete($id = null) {
@@ -116,39 +129,79 @@ class FacturasClientesController extends AppController {
         $this->redirect($this->referer());
     }
 
+    function facturacion() {
+        if (!empty($this->data)) {
+            $fecha_inicio = date('Y-m-d', strtotime($this->data['Filtro']['fecha_inicio']['year'] . '-' . $this->data['Filtro']['fecha_inicio']['month'] . '-' . $this->data['Filtro']['fecha_inicio']['day']));
+            $fecha_fin = date('Y-m-d', strtotime($this->data['Filtro']['fecha_fin']['year'] . '-' . $this->data['Filtro']['fecha_fin']['month'] . '-' . $this->data['Filtro']['fecha_fin']['day']));
+            $cliente_facturable_list = array();
+            if (!empty($this->data['Filtro']['todos'])) {
+                $conditions = array();
+                $conditions [] = array('1' => '1 AND ( (SELECT COUNT(Albaranescliente.id) FROM albaranesclientes Albaranescliente WHERE Albaranescliente.cliente_id = Cliente.id AND Albaranescliente.facturable = 1 AND Albaranescliente.estadosalbaranescliente_id = 2 AND Albaranescliente.fecha BETWEEN "' . $fecha_inicio . '" AND "' . $fecha_fin . '") OR (SELECT COUNT(Albaranesclientesreparacione.id) FROM albaranesclientesreparaciones Albaranesclientesreparacione WHERE Albaranesclientesreparacione.cliente_id = Cliente.id  AND Albaranesclientesreparacione.facturable = 1 AND Albaranesclientesreparacione.estadosalbaranesclientesreparacione_id = 2 AND Albaranesclientesreparacione.fecha BETWEEN "' . $fecha_inicio . '" AND "' . $fecha_fin . '") ) > 0');
+                $clientes = $this->FacturasCliente->Cliente->find('all', array('contain' => '', 'conditions' => $conditions));
+                foreach ($clientes as $key => $cliente) {
+                    $this->FacturasCliente->Cliente->id = $cliente['Cliente']['id'];
+                    $cliente_facturable = $this->FacturasCliente->Cliente->get_cliente_facturable($fecha_inicio, $fecha_fin);
+                    $cliente_facturable_list[] = $cliente_facturable;
+                }
+            } else {
+                $conditions = array();
+                $conditions [] = array('Cliente.id' => $this->data['Filtro']['Cliente']);
+                $conditions [] = array('1' => '1 AND ( (SELECT COUNT(Albaranescliente.id) FROM albaranesclientes Albaranescliente WHERE Albaranescliente.cliente_id = Cliente.id AND Albaranescliente.facturable = 1 AND Albaranescliente.estadosalbaranescliente_id = 2 AND Albaranescliente.fecha BETWEEN "' . $fecha_inicio . '" AND "' . $fecha_fin . '") OR (SELECT COUNT(Albaranesclientesreparacione.id) FROM albaranesclientesreparaciones Albaranesclientesreparacione WHERE Albaranesclientesreparacione.cliente_id = Cliente.id  AND Albaranesclientesreparacione.facturable = 1 AND Albaranesclientesreparacione.estadosalbaranesclientesreparacione_id = 2 AND Albaranesclientesreparacione.fecha BETWEEN "' . $fecha_inicio . '" AND "' . $fecha_fin . '") ) > 0');
+                $clientes = $this->FacturasCliente->Cliente->find('all', array('contain' => '', 'conditions' => $conditions));
+                foreach ($clientes as $key => $cliente) {
+                    $this->FacturasCliente->Cliente->id = $cliente['Cliente']['id'];
+                    $cliente_facturable = $this->FacturasCliente->Cliente->get_cliente_facturable($fecha_inicio, $fecha_fin);
+                    $cliente_facturable_list[] = $cliente_facturable;
+                }
+            }
+            $siguiente_numero = $this->FacturasCliente->dime_siguiente_numero();
+            $this->set(compact('cliente_facturable_list','siguiente_numero'));
+            $this->render('facturacion_list');
+        }
+    }
+
     function facturar() {
         if (!empty($this->data)) {
             $facturascliente_ids = array();
             foreach ($this->data['facturable'] as $facturable) {
                 $this->FacturasCliente->create();
                 $facturas_cliente = array();
-                $cliente_id = null;
+                $cliente_id = $facturable['cliente_id'];
                 $fecha = date('Y-m-d H:i:s');
-                $total = 0;
+                $baseimponible = 0;
+                $impuestos = 0;
+
+                $facturas_cliente['FacturasCliente']['numero'] = $facturable['numero'];
                 $facturas_cliente['FacturasCliente']['fecha'] = $fecha;
-                $facturas_cliente['FacturasCliente']['total'] = $total;
-                $this->FacturasCliente->save($facturas_cliente);
-                if (!empty($facturable['albaranescliente']))
-                    foreach ($facturable['albaranescliente'] as $albarane_id) {
-                        $albranescliente = $this->FacturasCliente->Albaranescliente->find('first', array('contain' => array(), 'conditions' => array('Albaranescliente.id' => $albarane_id)));
-                        $this->FacturasCliente->Albaranescliente->id = $albranescliente['Albaranescliente']['id'];
-                        $this->FacturasCliente->Albaranescliente->saveField('facturas_cliente_id', $this->FacturasCliente->id);
-                        $cliente_id = $albranescliente['Albaranescliente']['cliente_id'];
-                        $total += $albranescliente['Albaranescliente']['precio'];
-                    }
-                if (!empty($facturable['albaranesclientesreparacione']))
-                    foreach ($facturable['albaranesclientesreparacione'] as $albaranereparacione_id) {
-                        $albranescliente = $this->FacturasCliente->Albaranesclientesreparacione->find('first', array('contain' => array(), 'conditions' => array('Albaranesclientesreparacione.id' => $albaranereparacione_id)));
-                        $this->FacturasCliente->Albaranesclientesreparacione->id = $albranescliente['Albaranesclientesreparacione']['id'];
-                        $this->FacturasCliente->Albaranesclientesreparacione->saveField('facturas_cliente_id', $this->FacturasCliente->id);
-                        $cliente_id = $albranescliente['Albaranesclientesreparacione']['cliente_id'];
-                        $total += $this->FacturasCliente->Albaranesclientesreparacione->get_precio_total_albaran();
-                    }
-                $this->FacturasCliente->saveField('cliente_id', $cliente_id);
-                $this->FacturasCliente->saveField('total', redondear_dos_decimal($total));
-                $facturascliente_ids[] = $this->FacturasCliente->id;
+                $facturas_cliente['FacturasCliente']['baseimponible'] = 0;
+                $facturas_cliente['FacturasCliente']['cliente_id'] = $cliente_id;
+                $facturas_cliente['FacturasCliente']['impuestos'] = 0;
+                $facturas_cliente['FacturasCliente']['total'] = 0;
+                if (!empty($facturable['albaranescliente']) || !empty($facturable['albaranesclientesreparacione'])) {
+                    $this->FacturasCliente->save($facturas_cliente);
+                    if (!empty($facturable['albaranescliente']))
+                        foreach ($facturable['albaranescliente'] as $albarane_id) {
+                            $albranescliente = $this->FacturasCliente->Albaranescliente->find('first', array('contain' => array(), 'conditions' => array('Albaranescliente.id' => $albarane_id)));
+                            $this->FacturasCliente->Albaranescliente->id = $albranescliente['Albaranescliente']['id'];
+                            $this->FacturasCliente->Albaranescliente->saveField('facturas_cliente_id', $this->FacturasCliente->id);
+                            $baseimponible += $albranescliente['Albaranescliente']['precio'];
+                            $impuestos += $albranescliente['Albaranescliente']['impuestos'];
+                        }
+                    if (!empty($facturable['albaranesclientesreparacione']))
+                        foreach ($facturable['albaranesclientesreparacione'] as $albaranereparacione_id) {
+                            $albranescliente = $this->FacturasCliente->Albaranesclientesreparacione->find('first', array('contain' => array('Tiposiva'), 'conditions' => array('Albaranesclientesreparacione.id' => $albaranereparacione_id)));
+                            $this->FacturasCliente->Albaranesclientesreparacione->id = $albranescliente['Albaranesclientesreparacione']['id'];
+                            $this->FacturasCliente->Albaranesclientesreparacione->saveField('facturas_cliente_id', $this->FacturasCliente->id);
+                            $baseimponible += $albranescliente['Albaranesclientesreparacione']['baseimponible'];
+                            $impuestos += $albranescliente['Albaranesclientesreparacione']['baseimponible'] * $albranescliente['Tiposiva']['porcentaje_aplicable'] / 100;
+                        }
+                    $this->FacturasCliente->saveField('baseimponible', redondear_dos_decimal($baseimponible));
+                    $this->FacturasCliente->saveField('impuestos', redondear_dos_decimal($impuestos));
+                    $this->FacturasCliente->saveField('total', redondear_dos_decimal($baseimponible + $impuestos));
+                    $facturascliente_ids[] = $this->FacturasCliente->id;
+                }
             }
-            $facturasClientes = $this->FacturasCliente->find('all', array('contain' => array('Cliente'), 'conditions' => array('FacturasCliente.id' => $facturascliente_ids)));
+            $facturasClientes = $this->FacturasCliente->find('all', array('contain' => array('Cliente', 'Estadosfacturascliente'), 'conditions' => array('FacturasCliente.id' => $facturascliente_ids)));
             $this->set(compact('facturasClientes'));
         } else {
             $this->flashWarnings(__('La Facturacion no puede ser realizada', true));
@@ -156,48 +209,22 @@ class FacturasClientesController extends AppController {
         }
     }
 
-    function quitar_albaran($albaranescliente_id) {
+    function quitar_albaran_repuestos($albaranescliente_id) {
         $albaranescliente = $this->FacturasCliente->Albaranescliente->find('first', array('contain' => array(), 'conditions' => array('Albaranescliente.id' => $albaranescliente_id)));
-        $facturasClientes = $this->FacturasCliente->find('first', array('contain' => array(), 'conditions' => array('FacturasCliente.id' => $albaranescliente['Albaranescliente']['facturas_cliente_id'])));
-        $this->FacturasCliente->id = $facturasClientes['FacturasCliente']['id'];
-        $this->FacturasCliente->saveField('total', redondear_dos_decimal($facturasClientes['FacturasCliente']['total'] - $albaranescliente['Albaranescliente']['precio']));
         $this->FacturasCliente->Albaranescliente->id = $albaranescliente['Albaranescliente']['id'];
         $this->FacturasCliente->Albaranescliente->saveField('facturas_cliente_id', null);
+        $this->FacturasCliente->id = $albaranescliente['Albaranescliente']['facturas_cliente_id'];
+        $this->FacturasCliente->recalcular_totales();
         $this->redirect($this->referer());
     }
 
-    function facturacion() {
-        if (!empty($this->data)) {
-            $fecha_inicio = date('Y-m-d', strtotime($this->data['Filtro']['fecha_inicio']['year'] . '-' . $this->data['Filtro']['fecha_inicio']['month'] . '-' . $this->data['Filtro']['fecha_inicio']['day']));
-            $fecha_fin = date('Y-m-d', strtotime($this->data['Filtro']['fecha_fin']['year'] . '-' . $this->data['Filtro']['fecha_fin']['month'] . '-' . $this->data['Filtro']['fecha_fin']['day']));
-            $cliente_facturable_list = array();
-            if (!empty($this->data['Filtro']['todos'])) {
-                /* Obtenemos los albaranes de todos los clientes comprendidos en el rango de fecha
-                 * y que se PUEDAN FACTURAR 
-                 */
-                $cliente_list = $this->FacturasCliente->Cliente->find('all', array('contain' => ''));
-                foreach ($cliente_list as $cliente) {
-                    $this->FacturasCliente->Cliente->id = $cliente['Cliente']['id'];
-                    $cliente_facturable = $this->FacturasCliente->Cliente->get_cliente_facturable($fecha_inicio, $fecha_fin);
-                    $cliente_facturable_list[] = $cliente_facturable;
-                }
-            } elseif (!empty($this->data['Filtro']['Cliente'])) {
-                /* Obtenemos los albaranes de los clientes selecionados comprendidos en el rango de fecha
-                 * y que se PUEDAN FACTURAR 
-                 */
-                $cliente_list = $this->FacturasCliente->Cliente->find(
-                        'all', array(
-                    'contain' => '',
-                    'conditions' => array('Cliente.id' => $this->data['Filtro']['Cliente'])));
-                foreach ($cliente_list as $cliente) {
-                    $this->FacturasCliente->Cliente->id = $cliente['Cliente']['id'];
-                    $cliente_facturable = $this->FacturasCliente->Cliente->get_cliente_facturable($fecha_inicio, $fecha_fin);
-                    $cliente_facturable_list[] = $cliente_facturable;
-                }
-            }
-            $this->set(compact('cliente_facturable_list'));
-            $this->render('facturacion_list');
-        }
+    function quitar_albaran_reparacion($albaranesclientesreparacione_id) {
+        $albaranescliente = $this->FacturasCliente->Albaranesclientesreparacione->find('first', array('contain' => array(), 'conditions' => array('Albaranesclientesreparacione.id' => $albaranesclientesreparacione_id)));
+        $this->FacturasCliente->Albaranesclientesreparacione->id = $albaranescliente['Albaranesclientesreparacione']['id'];
+        $this->FacturasCliente->Albaranesclientesreparacione->saveField('facturas_cliente_id', null);
+        $this->FacturasCliente->id = $albaranescliente['Albaranesclientesreparacione']['facturas_cliente_id'];
+        $this->FacturasCliente->recalcular_totales();
+        $this->redirect($this->referer());
     }
 
 }

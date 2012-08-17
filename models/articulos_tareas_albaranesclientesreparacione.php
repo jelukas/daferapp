@@ -41,39 +41,6 @@ class ArticulosTareasAlbaranesclientesreparacione extends AppModel {
         )
     );
 
-    function beforeSave($options) {
-        /* Las existencias del Articulo original deben disminuir o aumentar */
-
-        if (!empty($this->data['ArticulosTareasAlbaranesclientesreparacione']['id'])) {
-            /* Estamos modificando */
-            $articulos_tarea = $this->find('first', array('contain' => '', 'conditions' => array('ArticulosTareasAlbaranesclientesreparacione.id' => $this->data['ArticulosTareasAlbaranesclientesreparacione']['id'])));
-            $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosTareasAlbaranesclientesreparacione']['articulo_id'])));
-            $this->Articulo->id = $this->data['ArticulosTareasAlbaranesclientesreparacione']['articulo_id'];
-            $cantidad = $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['cantidad'] - $this->data['ArticulosTareasAlbaranesclientesreparacione']['cantidad'];
-            $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $cantidad);
-        } else {
-            /* Estamos creando */
-            $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['ArticulosTareasAlbaranesclientesreparacione']['articulo_id'])));
-            $this->Articulo->id = $this->data['ArticulosTareasAlbaranesclientesreparacione']['articulo_id'];
-            $cantidad = $this->data['ArticulosTareasAlbaranesclientesreparacione']['cantidad'] - $articulo['Articulo']['cantidad'];
-            $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] - $this->data['ArticulosTareasAlbaranesclientesreparacione']['cantidad']);
-        }
-        return true;
-    }
-
-    function beforeDelete() {
-        /* Las existencias del Articulo original deben aumentar */
-        $articulos_tarea = $this->find('first', array('contain' => '', 'conditions' => array('ArticulosTareasAlbaranesclientesreparacione.id' => $this->id)));
-        $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['articulo_id'])));
-        $this->Articulo->id = $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['articulo_id'];
-        $cantidad = $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['cantidad'] - $articulo['Articulo']['cantidad'];
-        $this->Articulo->saveField('existencias', $articulo['Articulo']['existencias'] + $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['cantidad']);
-        
-        $this->TareasAlbaranesclientesreparacione->id = $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['tareas_albaranesclientesreparacione_id'];
-        $this->TareasAlbaranesclientesreparacione->recalcularTotales();
-        return true;
-    }
-
     function afterSave($created) {
         $articulos_tarea = $this->find('first', array('conditions' => array('ArticulosTareasAlbaranesclientesreparacione.id' => $this->id)));
         $this->TareasAlbaranesclientesreparacione->id = $articulos_tarea['ArticulosTareasAlbaranesclientesreparacione']['tareas_albaranesclientesreparacione_id'];

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html lang="es-ES"
-      <head>
-              <?php echo $this->Html->charset(); ?>
+<html lang="es-ES">
+    <head>
+        <meta http-equiv="cache-control" content="no-store, no-cache, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-store, no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <?php echo $this->Html->charset(); ?>
         <title>
             <?php __('DAFER Gestión 1.0'); ?>
             <?php echo $title_for_layout; ?>
@@ -27,7 +30,7 @@
     <body>
         <div id="container">
             <div id="header">
-                <?php echo $this->Html->image('logo_dafer.png',array('url' =>array('controller' => 'pages','action' => 'index'))); ?>
+                <?php echo $this->Html->image('logo_dafer.png', array('url' => array('controller' => 'pages', 'action' => 'index'))); ?>
             </div>
             <?php require_once '../plugins/menu.php'; ?>
             <div id="content">
