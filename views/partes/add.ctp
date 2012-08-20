@@ -77,7 +77,7 @@
         </td>
         <td>
             <?php
-            if ($tarea['Ordene']['Avisostallere']['Centrostrabajo']['modofacturacion'] == 'preciofijio')
+            if ($tarea['Ordene']['Centrostrabajo']['modofacturacion'] == 'preciofijio')
                 echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => $tarea['Ordene']['Centrostrabajo']['preciofijodesplazamiento']));
             else
                 echo $this->Form->input('preciodesplazamiento', array('label' => false, 'value' => 0));

@@ -74,7 +74,7 @@ class TareasAlbaranesclientesreparacione extends AppModel {
     );
 
     function crear_desde_tarea_de_orden($tarea_id, $albaranesclientesreparacione_id) {
-        $tarea = $this->Albaranesclientesreparacione->Ordene->Tarea->find('first', array('contain' => array('Parte', 'Partestallere', 'ArticulosTarea'), 'conditions' => array('Tarea.id' => $tarea_id)));
+        $tarea = $this->Albaranesclientesreparacione->Ordene->Tarea->find('first', array('contain' => array('Parte', 'Partestallere', 'ArticulosTarea'=>'Articulo'), 'conditions' => array('Tarea.id' => $tarea_id)));
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione'] = $tarea['Tarea'];
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['albaranesclientesreparacione_id'] = $albaranesclientesreparacione_id;
         $tarea_albaranesclientesreparacione['TareasAlbaranesclientesreparacione']['tarea_id'] = $tarea['Tarea']['id'];
@@ -112,6 +112,7 @@ class TareasAlbaranesclientesreparacione extends AppModel {
             unset($tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['tarea_id']);
             $tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['tareas_albaranesclientesreparacione_id'] = $this->id;
             $tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['articulos_tarea_id'] = $articulos_tarea['id'];
+            $tareareparacion_articulo['ArticulosTareasAlbaranesclientesreparacione']['precio_unidad'] = $articulos_tarea['Articulo']['precio_sin_iva'];
             $this->ArticulosTareasAlbaranesclientesreparacione->create();
             $this->ArticulosTareasAlbaranesclientesreparacione->save($tareareparacion_articulo);
         }
@@ -168,7 +169,7 @@ class TareasAlbaranesclientesreparacione extends AppModel {
         if (!empty($tarea['ArticulosTareasAlbaranesclientesreparacione'])) {
             foreach ($tarea['ArticulosTareasAlbaranesclientesreparacione'] as $articulos_tarea) {
                 if ($articulos_tarea['id'] != $deleted_id) {
-                    $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'] += ($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) - (($articulos_tarea['cantidad'] * $articulos_tarea['Articulo']['precio_sin_iva']) * ($articulos_tarea['descuento'] / 100));
+                    $tarea['TareasAlbaranesclientesreparacione']['total_materiales_imputables'] += ($articulos_tarea['cantidad'] * $articulos_tarea['precio_unidad']) - (($articulos_tarea['cantidad'] * $articulos_tarea['precio_unidad']) * ($articulos_tarea['descuento'] / 100));
                     $tarea['TareasAlbaranesclientesreparacione']['total_materiales_costo'] += $articulos_tarea['cantidadreal'] * $articulos_tarea['Articulo']['ultimopreciocompra'];
                 }
             }

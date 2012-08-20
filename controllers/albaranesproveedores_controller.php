@@ -13,9 +13,6 @@ class AlbaranesproveedoresController extends AppController {
             $this->FileUpload->uploadDir = 'files/albaranesproveedore';
             $this->FileUpload->fields = array('name' => 'file_name', 'type' => 'file_type', 'size' => 'file_size');
         }
-        if ($this->params['action'] == 'index') {
-            $this->__list();
-        }
     }
 
     function index() {

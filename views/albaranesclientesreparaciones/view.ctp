@@ -414,13 +414,13 @@
                                             </td>
                                             <td><?php echo $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
                                             <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['ultimopreciocompra'] ?></td>
-                                            <td><?php echo $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
-                                            <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva'] ?></td>
+                                            <td><?php echo redondear_dos_decimal($articulo_tarea['precio_unidad']) ?></td>
+                                            <td><?php echo $articulo_tarea['cantidad'] * $articulo_tarea['precio_unidad'] ?></td>
                                             <td><?php echo $articulo_tarea['descuento'] ?> &percnt;</td>
                                             <td class="columna-presupuestado"><?php echo redondear_dos_decimal($articulo_tarea['presupuestado']); ?></td>
                                             <td>
                                                 <?php
-                                                $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) - (($articulo_tarea['cantidad'] * $articulo_tarea['Articulo']['precio_sin_iva']) * ($articulo_tarea['descuento'] / 100));
+                                                $totalcondescuento = ($articulo_tarea['cantidad'] * $articulo_tarea['precio_unidad']) - (($articulo_tarea['cantidad'] * $articulo_tarea['precio_unidad']) * ($articulo_tarea['descuento'] / 100));
                                                 echo redondear_dos_decimal($totalcondescuento);
                                                 ?>
                                             </td>

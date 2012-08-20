@@ -3,7 +3,8 @@
     <legend><?php __('Add Tareasalbaranescliente'); ?></legend>
     <label>Tipo de Tarea</label>
     <?php
-    $options = array('taller' => 'En taller', 'centro' => 'En el Centro de Trabajo', 'repuestos' => 'Repuestos');
+    //$options = array('taller' => 'En taller', 'centro' => 'En el Centro de Trabajo', 'repuestos' => 'Repuestos');
+    $options = array('repuestos' => 'Repuestos');
     echo $this->Form->select('tipo', $options, false, array('empty' => false));
     ?>
     <?php

@@ -44,7 +44,7 @@ class PartesController extends AppController {
                 $this->redirect($this->referer());
             }
         }
-        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $tarea_id)));
+        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Centrostrabajo')), 'conditions' => array('Tarea.id' => $tarea_id)));
         $mecanicos = $this->Parte->Mecanico->find('list');
         $this->set(compact('mecanicos', 'tarea_id', 'tarea'));
     }
@@ -75,7 +75,7 @@ class PartesController extends AppController {
         } else {
             $this->data = $this->Parte->read(null, $id);
         }
-        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Avisostallere' => 'Centrostrabajo')), 'conditions' => array('Tarea.id' => $this->data['Parte']['tarea_id'])));
+        $tarea = $this->Parte->Tarea->find('first', array('contain' => array('Ordene' => array('Centrostrabajo')), 'conditions' => array('Tarea.id' => $this->data['Parte']['tarea_id'])));
         $mecanicos = $this->Parte->Mecanico->find('list');
         $this->set(compact('mecanicos'));
     }

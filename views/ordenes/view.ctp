@@ -196,8 +196,8 @@
                                                 </td>
                                                 <td>
                                                     <?php
-                                                    echo $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta'];
-                                                    $total_horas_desplazamiento_imputable += $partecentro['horasdesplazamientoimputables_ida'] + $partecentro['horasdesplazamientoimputables_vuelta']
+                                                    echo redondear_dos_decimal($partecentro['total_horasdesplazamiento_imputable']);
+                                                    $total_horas_desplazamiento_imputable += $partecentro['total_horasdesplazamiento_imputable']
                                                     ?> h
                                                 </td>
                                                 <td>
@@ -218,8 +218,8 @@
                                                 </td>
                                                 <td>
                                                     <?php
-                                                    echo $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta'];
-                                                    $total_km_desplazamiento_imputable += $partecentro['kilometrajeimputable_ida'] + $partecentro['kilometrajeimputable_vuelta']
+                                                    echo redondear_dos_decimal($partecentro['total_kmdesplazamiento_imputable']);
+                                                    $total_km_desplazamiento_imputable += $partecentro['total_kmdesplazamiento_imputable']
                                                     ?> Km.
                                                 </td>
                                                 <td>
@@ -316,7 +316,7 @@
                                             <td colspan="2" class="beneficio_partes">Total Partes Imputable</td>
                                             <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable']; ?> €</td>
                                             <td colspan="2" class="beneficio_partes">Beneficio Neto</td>
-                                            <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] - $tarea['total_partes_real']; ?> € -- <?php echo redondear_dos_decimal((1 - ( $tarea['total_partes_real'] / $tarea['total_partes_imputable'])) * 100); ?> %</td>
+                                            <td colspan="2" class="beneficio_partes"><?php echo $tarea['total_partes_imputable'] - $tarea['total_partes_real']; ?> € -- <?php echo redondear_dos_decimal((1 - @( $tarea['total_partes_real'] / $tarea['total_partes_imputable'])) * 100); ?> %</td>
                                         <?php endif; ?>
                                     </tr>
                                 </table>

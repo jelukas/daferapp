@@ -21,6 +21,12 @@ class Parte extends AppModel {
         )
     );
 
+    function beforeSave(){
+        $this->data['Parte']['total_kmdesplazamiento_imputable'] = $this->data['Parte']['kilometrajeimputable_ida'] + $this->data['Parte']['kilometrajeimputable_vuelta'] ;
+        $this->data['Parte']['total_horasdesplazamiento_imputable'] = $this->data['Parte']['horasdesplazamientoimputables_ida'] + $this->data['Parte']['horasdesplazamientoimputables_vuelta'] ;
+        return true;
+    }
+    
     function afterSave($created) {
         $parte = $this->find('first', array('contain' => array('Tarea'), 'conditions' => array('Parte.id' => $this->id)));
         $this->Tarea->id = $parte['Parte']['tarea_id'];
