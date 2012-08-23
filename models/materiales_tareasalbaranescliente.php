@@ -56,8 +56,8 @@ class MaterialesTareasalbaranescliente extends AppModel {
             $this->Articulo->id = $this->data['MaterialesTareasalbaranescliente']['articulo_id'];
             $cantidad = $articulos_tarea['MaterialesTareasalbaranescliente']['cantidad'] - $this->data['MaterialesTareasalbaranescliente']['cantidad'];
             $existencias = $articulo['Articulo']['existencias'] + $cantidad;
-            if ($existencias <= 0) {
-                $this->session_message = 'No hay existencias suficientes del Artículo';
+            if ($existencias < 0) {
+                $this->session_message = 'No hay existencias suficientes del Artículo'.$articulo['Articulo']['ref'].' - '.$articulo['Articulo']['nombre'];
                 $guardar = False;
             } else {
                 $this->Articulo->saveField('existencias', $existencias);
@@ -68,8 +68,8 @@ class MaterialesTareasalbaranescliente extends AppModel {
             $articulo = $this->Articulo->find('first', array('contain' => '', 'conditions' => array('Articulo.id' => $this->data['MaterialesTareasalbaranescliente']['articulo_id'])));
             $this->Articulo->id = $this->data['MaterialesTareasalbaranescliente']['articulo_id'];
             $existencias = $articulo['Articulo']['existencias'] - $this->data['MaterialesTareasalbaranescliente']['cantidad'];
-            if ($existencias <= 0) {
-                $this->session_message = 'No hay existencias suficientes del Artículo';
+            if ($existencias < 0) {
+                $this->session_message = 'No hay existencias suficientes del Artículo'.$articulo['Articulo']['ref'].' - '.$articulo['Articulo']['nombre'];
                 $guardar = False;
             } else {
                 $this->Articulo->saveField('existencias', $existencias);

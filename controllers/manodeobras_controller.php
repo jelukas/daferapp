@@ -29,9 +29,9 @@ class ManodeobrasController extends AppController {
             }
         }
         $tarea = $this->Manodeobra->Tareaspresupuestocliente->find('first', array('contain' => array('Presupuestoscliente' => array('Centrostrabajo', 'Cliente')), 'conditions' => array('Tareaspresupuestocliente.id' => $tareaspresupuestocliente_id)));
+        $this->set('tareaspresupuestocliente', $tarea['Tareaspresupuestocliente']);
         if (!empty($tarea['Presupuestoscliente']['centrostrabajo_id'])) {
             $this->set('centrostrabajo', $tarea['Presupuestoscliente']['Centrostrabajo']);
-            $this->set('tareaspresupuestocliente', $tarea['Tareaspresupuestocliente']);
         }
         $this->set(compact('tareaspresupuestocliente_id'));
     }

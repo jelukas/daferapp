@@ -45,7 +45,9 @@
         </tr>
     </table>
     <?php echo $this->Form->create('Presupuestoscliente', array('action' => 'add')); ?>
-    <?php echo $this->Form->input('Cliente.id', array('type' => 'hidden', 'value' => $maquina['Centrostrabajo']['Cliente']['id'])); ?>
+    <?php echo $this->Form->input('cliente_id', array('type' => 'hidden', 'value' => $maquina['Centrostrabajo']['Cliente']['id'])); ?>
+    <?php echo $this->Form->input('centrostrabajo_id', array('type' => 'hidden', 'value' => $maquina['Centrostrabajo']['id'])); ?>
+    <?php echo $this->Form->input('maquina_id', array('type' => 'hidden', 'value' => $maquina['Maquina']['id'])); ?>
     <fieldset>
         <legend>
             Mantenimientos

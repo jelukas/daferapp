@@ -28,7 +28,7 @@ class PresupuestosclientesController extends AppController {
                 'Pedidoscliente',
                 'Tiposiva',
                 'Avisosrepuesto' => array('Cliente', 'Centrostrabajo', 'Maquina'),
-                'Presupuestosproveedore' =>array( 'Proveedore','Avisostallere'=>'Cliente','Avisosrepuesto'=>'Cliente'),
+                'Presupuestosproveedore' => array('Proveedore', 'Avisostallere' => 'Cliente', 'Avisosrepuesto' => 'Cliente'),
                 'Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina'),
                 'Ordene' => array('Avisostallere' => array('Cliente', 'Centrostrabajo', 'Maquina')),
                 'Tareaspresupuestocliente' => array(
@@ -55,9 +55,9 @@ class PresupuestosclientesController extends AppController {
             if (!empty($this->data['Articulosparamantenimiento'])) {
                 //Si viene el presupuesto desde una maquina para encargar los repuestos necesarios para el mantenimiento
                 $presupuestoscliente = array();
-                $presupuestoscliente['Presupuestoscliente']['cliente_id'] = $this->data['Cliente']['id'];
-                if (!empty($this->data['Centrostrabajo']['id']))
-                    $presupuestoscliente['Presupuestoscliente']['centrostrabajo_id'] = $this->data['Centrostrabajo']['id'];
+                $presupuestoscliente['Presupuestoscliente']['cliente_id'] = $this->data['Presupuestoscliente']['cliente_id'];
+                $presupuestoscliente['Presupuestoscliente']['centrostrabajo_id'] = $this->data['Presupuestoscliente']['centrostrabajo_id'];
+                $presupuestoscliente['Presupuestoscliente']['maquina_id'] = $this->data['Presupuestoscliente']['maquina_id'];
                 $presupuestoscliente['Presupuestoscliente']['precio_mat'] = 0;
                 $presupuestoscliente['Presupuestoscliente']['precio_obra'] = 0;
                 $presupuestoscliente['Presupuestoscliente']['precio'] = 0;

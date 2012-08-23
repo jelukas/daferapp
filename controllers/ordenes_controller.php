@@ -162,7 +162,9 @@ class OrdenesController extends AppController {
                                         $articulos_tarea['ArticulosTarea']['presupuestado'] = $materiale_modelo['MaterialesTareaspedidoscliente']['importe'];
                                         $articulos_tarea['ArticulosTarea']['cantidad_presupuestada'] = $materiale_modelo['MaterialesTareaspedidoscliente']['cantidad'];
                                         $articulos_tarea['ArticulosTarea']['descuento'] = $materiale_modelo['MaterialesTareaspedidoscliente']['descuento'];
+                                        $articulos_tarea['ArticulosTarea']['precio_unidad'] = $materiale_modelo['MaterialesTareaspedidoscliente']['precio_unidad'];
                                         $this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea);
+                                        die(pr($this->Ordene->Tarea->ArticulosTarea->invalidFields()));
                                     }
                                 }
                             }
@@ -211,22 +213,26 @@ class OrdenesController extends AppController {
                                         $articulos_tarea['ArticulosTarea']['presupuestado'] = $materiale_modelo['MaterialesTareaspedidoscliente']['importe'];
                                         $articulos_tarea['ArticulosTarea']['cantidad_presupuestada'] = $materiale_modelo['MaterialesTareaspedidoscliente']['cantidad'];
                                         $articulos_tarea['ArticulosTarea']['descuento'] = $materiale_modelo['MaterialesTareaspedidoscliente']['descuento'];
-                                        $this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea);
+                                        if(!$this->Ordene->Tarea->ArticulosTarea->save($articulos_tarea)){
+                                            $flash_message .= $this->Ordene->Tarea->ArticulosTarea->session_message.'<br/>';
+                                            $this->Ordene->Tarea->ArticulosTarea->session_message = null;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    $this->Session->setFlash('Imputacion a la Orden realizada <br/>'.$flash_message,true);
                     /* Fin de la Imputacion */
                 } else {
-                    $this->flashWarnings(__('The ordene could not be saved. Please, try again.'.pr($this->Orden->invalidFields()), true));
+                    $this->flashWarnings(__('The ordene could not be saved. Please, try again.' . pr($this->Orden->invalidFields()), true));
                     $this->redirect($this->referer());
                 }
             }
             $this->redirect(array('action' => 'view', $ordene_id));
         }
 
-        $pedidoscliente = $this->Ordene->Presupuestoscliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente'=>array('Cliente','Centrostrabajo','Maquina','Avisostallere'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $pedidoscliente_id)));
+        $pedidoscliente = $this->Ordene->Presupuestoscliente->Pedidoscliente->find('first', array('contain' => array('Presupuestoscliente' => array('Cliente', 'Centrostrabajo', 'Maquina', 'Avisostallere'), 'Tareaspedidoscliente' => array('MaterialesTareaspedidoscliente' => 'Articulo', 'ManodeobrasTareaspedidoscliente', 'TareaspedidosclientesOtrosservicio')), 'conditions' => array('Pedidoscliente.id' => $pedidoscliente_id)));
         if (!empty($pedidoscliente['Presupuestoscliente']['ordene_id'])) {
             // echo 'Imputamos las nuevas tareas que hemos selecionado a la orden';
             $ordene_id = $pedidoscliente['Presupuestoscliente']['ordene_id'];
@@ -238,7 +244,7 @@ class OrdenesController extends AppController {
             $presupuestosproveedore = $this->Ordene->Presupuestoscliente->Presupuestosproveedore->find('first', array('contain' => 'Avisostallere', 'conditions' => array('Presupuestosproveedore.id' => $pedidoscliente['Presupuestoscliente']['presupuestosproveedore_id'])));
             if (!empty($presupuestosproveedore['Presupuestosproveedore']['avisostallere_id'])) {
                 // echo 'Si viene el  presupuesto de proveedor de un Aviso de tallere';
-                $avisostallere = $presupuestosproveedore['Presupuestosproveedore']['Avisostallere'];
+                $avisostallere = $presupuestosproveedore['Avisostallere'];
                 $almacene_id = $presupuestosproveedore['Presupuestosproveedore']['almacene_id'];
             } elseif (!empty($presupuestosproveedore['Presupuestosproveedore']['ordene_id'])) {
                 // echo 'Si viene de Una orden el PResupuestos de Proveedore ';
